@@ -32,6 +32,14 @@
         "prefix": "references",
         "body": "<references xml:id=\"refs-$1\">\n\t$0\n</references>"
     },
+    "reading questions (division)": {
+        "prefix": "reading-questions",
+        "body": "<reading-questions xml:id=\"rqs-$1\">\n\t$0\n</reading-questions>"
+    },
+    "worksheet": {
+        "prefix": "worksheet",
+        "body": "<worksheet xml:id=\"ws-$1\">\n\t$0\n</worksheet>"
+    },
     "introduction": {
         "prefix": "introduction",
         "body": "<introduction>\n\t<p>\n\t\t$0\n\t</p>\n</introduction>"
@@ -384,6 +392,11 @@
     "exercise": {
         "prefix": "exercise",
         "body": "<exercise>\n\t$0\n</exercise>"
+    },
+    "pagebreak": {
+        "prefix": "pagebreak",
+        "body": "<pagebreak />\n",
+        "description": "pagebreak, for worksheets only."
     },
     "title": {
         "prefix": "title",
