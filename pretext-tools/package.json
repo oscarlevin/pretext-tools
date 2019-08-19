@@ -1,0 +1,37 @@
+{
+    "name": "pretext-tools",
+    "displayName": "PreTeXt-tools",
+    "description": "Language support and more for PreTeXt",
+    "version": "0.0.1",
+    "publisher": "oscarlevin",
+    "engines": {
+        "vscode": "^1.37.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Snippets"
+    ],
+    "contributes": {
+        "grammars": [
+            {
+                "scopeName": "text.xml.ptx",
+                "path": "./syntaxes/ptx.tmLanguage.json",
+                "injectTo": ["text.xml"]
+            }
+        ],
+        "snippets": [
+            {
+                "language": "xml",
+                "path": "./snippets/pretext.json"
+            },
+            {
+                "language": "xml",
+                "path": "./snippets/pretext-attributes.json"
+            },
+            {
+                "language": "xml",
+                "path": "./snippets/pretext-templates.json"
+            }
+        ]
+    }
+}

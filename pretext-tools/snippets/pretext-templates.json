@@ -1,0 +1,36 @@
+{
+  "exercise group": {
+    "prefix": "!exercise-group",
+    "body": "<exercisegroup>\n\n\t<introduction>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</introduction>\n\n\t<exercise>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t\n\t\t\t</p>\n\t\t</statement>\n\t</exercise>\n\n</exercisegroup>"
+  },
+  "pretext article template": {
+    "prefix": "!ptx-article",
+    "body": [
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+      "",
+      "<pretext>",
+      "  <article xml:id=\"$1\">",
+      "    <title>$2</title>",
+      "",
+      "    $0",
+      "",
+      "  </article>",
+      "</pretext>"
+    ]
+  },
+  "pretext book template": {
+    "prefix": "!ptx-article",
+    "body": [
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+      "",
+      "<pretext>",
+      "  <book xml:id=\"$1\">",
+      "    <title>$2</title>",
+      "",
+      "    $0",
+      "",
+      "  </book>",
+      "</pretext>"
+    ]
+  }
+}
