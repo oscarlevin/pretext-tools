@@ -29,6 +29,11 @@
     "body": "workspace=\"$1%\"$0",
     "description": "workspace, for exercise in worksheet (specify percentage of page to be left blank)."
   },
+  "number": {
+    "prefix": "@number",
+    "body": "number=\"$1\"$0",
+    "description": "number, for exercise in with static number."
+  },
   "text (for xref)": {
     "prefix": "@text",
     "body": "text=\"${1|type-local,type-global,type-hybrid,local,global,hybrid,phrase-global,phrase-hybrid,title|}\"$0",

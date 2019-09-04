@@ -7,10 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.1] - 2019-08-19
+## [0.1.3] - 2019-09-04
+### Added
+- new snippets: exercise-worksheet; exercise-numbered; @number; mdn.
+
+### Fixed
+- Set final tabstop for paragraphs to $0, so that additional snippets can be deployed.
+- Fixed bug causing !ptx-article to appear when not wanted. 
+
+## [0.1.2] - 2019-08-19
 ### Added
 - reading questions snippets
-- worksheets shippets (including @workspace and pagebreak)
+- worksheets snippets (including @workspace and pagebreak)
 
 ## [0.1.0] - 2019-08-18
 

@@ -16,10 +16,11 @@
       "",
       "  </article>",
       "</pretext>"
-    ]
+    ],
+    "description": "article template for empty/new PreTeXt document"
   },
   "pretext book template": {
-    "prefix": "!ptx-article",
+    "prefix": "!ptx-book",
     "body": [
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
       "",
@@ -31,6 +32,7 @@
       "",
       "  </book>",
       "</pretext>"
-    ]
+    ],
+    "description": "book template for empty/new PreTeXt document"
   }
 }

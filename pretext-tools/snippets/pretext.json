@@ -50,7 +50,7 @@
     },
     "p (paragraph)": {
         "prefix": "p",
-        "body": "<p>\n  $1\n</p>"
+        "body": "<p>\n  $0\n</p>"
     },
     "math-inline": {
         "prefix": "m",
@@ -67,6 +67,10 @@
     "mathdisplay": {
         "prefix": "md",
         "body": "<md>\n  <mrow>$1 \\\\amp $2</mrow>$0\n</md>"
+    },
+    "mathdisplay numbered": {
+        "prefix": "mdn",
+        "body": "<mdn>\n  <mrow>$1 \\\\amp $2</mrow>$0\n</mdn>"
     },
     "mrow": {
         "prefix": "mrow",
@@ -273,22 +277,22 @@
     },
     "identity": {
         "prefix": "ident",
-        "body": "<identity xml:id=\"ident-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</identity>",
+        "body": "<identity xml:id=\"ident-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</identity>",
         "description": "identity (theorem-like)."
     },
     "lemma": {
         "prefix": "lem",
-        "body": "<lemma xml:id=\"lem-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</lemma>",
+        "body": "<lemma xml:id=\"lem-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</lemma>",
         "description": "lemma (theorem-like)."
     },
     "proposition": {
         "prefix": "prop",
-        "body": "<proposition xml:id=\"prop-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</proposition>",
+        "body": "<proposition xml:id=\"prop-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</proposition>",
         "description": "proposition (theorem-like)."
     },
     "theorem": {
         "prefix": "thm",
-        "body": "<theorem xml:id=\"thm-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</theorem>\n$0",
+        "body": "<theorem xml:id=\"thm-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</theorem>\n$0",
         "description": "theorem (theorem-like)."
     },
     "example": {
@@ -387,11 +391,19 @@
     },
     "assemblage": {
         "prefix": "assemblage",
-        "body": "<assemblage xml:id=\"assemblage-$1\">\n\t<title>$2</title>\n\t<p>\n\t\t$3\n\t</p>\n</assemblage>"
+        "body": "<assemblage xml:id=\"assemblage-$1\">\n\t<title>$2</title>\n\t<p>\n\t\t$0\n\t</p>\n</assemblage>"
     },
     "exercise": {
         "prefix": "exercise",
         "body": "<exercise>\n\t$0\n</exercise>"
+    },
+    "exercise (worksheet)": {
+        "prefix": "exercise-worksheet",
+        "body": "<exercise workspace=\"$1%\">\n\t$0\n</exercise>"
+    },
+    "exercise (numbered)": {
+        "prefix": "exercise-numbered",
+        "body": "<exercise number=\"$1\">\n\t$0\n</exercise>"
     },
     "pagebreak": {
         "prefix": "pagebreak",
