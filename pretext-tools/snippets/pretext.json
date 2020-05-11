@@ -36,6 +36,10 @@
         "prefix": "reading-questions",
         "body": "<reading-questions xml:id=\"rqs-$1\">\n\t$0\n</reading-questions>"
     },
+    "solutions-division": {
+        "prefix": "division-solutions",
+        "body": "<solutions $1>\n\t$0\n<solutions>"
+    },
     "worksheet": {
         "prefix": "worksheet",
         "body": "<worksheet xml:id=\"ws-$1\">\n\t$0\n</worksheet>"
@@ -50,7 +54,7 @@
     },
     "p (paragraph)": {
         "prefix": "p",
-        "body": "<p>\n  $0\n</p>"
+        "body": "<p>\n\t$0\n</p>"
     },
     "math-inline": {
         "prefix": "m",
@@ -66,15 +70,15 @@
     },
     "mathdisplay": {
         "prefix": "md",
-        "body": "<md>\n  <mrow>$1 \\\\amp $2</mrow>$0\n</md>"
+        "body": "<md>\n\t<mrow>$1 \\\\amp $2</mrow>$0\n</md>"
     },
     "mathdisplay numbered": {
         "prefix": "mdn",
-        "body": "<mdn>\n  <mrow>$1 \\\\amp $2</mrow>$0\n</mdn>"
+        "body": "<mdn>\n\t<mrow>$1 \\\\amp $2</mrow>$0\n</mdn>"
     },
     "mrow": {
         "prefix": "mrow",
-        "body": "<mrow> $1 \\\\amp $2</mrow>$0"
+        "body": "<mrow>$1 \\\\amp $2</mrow>$0"
     },
     "Figure": {
         "prefix": "figure",
@@ -119,11 +123,11 @@
     },
     "table": {
         "prefix": "table",
-        "body": "<table>\n  <title>$1</title>\n  <tabular>\n    <row>\n      <cell>$2</cell>$0\n    </row>\n  </tabular>\n</table>"
+        "body": "<table>\n\t<title>$1</title>\n\t<tabular>\n\t\t<row>\n      <cell>$2</cell>$0\n\t\t</row>\n\t</tabular>\n</table>"
     },
     "tabular": {
         "prefix": "tabular",
-        "body": "<tabular>\n  <row>\n    <cell>$1</cell>$0\n  </row>\n</table>"
+        "body": "<tabular>\n\t<row>\n\t\t<cell>$1</cell>$0\n\t</row>\n</table>"
     },
     "row": {
         "prefix": "row",
@@ -160,7 +164,7 @@
     },
     "notation": {
         "prefix": "notation",
-        "body": "<notation>\n  <usage>${1:(in math mode)}</usage>\n  <description>$2</description>\n</notation>$0"
+        "body": "<notation>\n\t<usage>${1:(in math mode)}</usage>\n  <description>$2</description>\n</notation>$0"
     },
     "reference": {
         "prefix": "xref",
@@ -234,20 +238,23 @@
     },
     "definition-list": {
         "prefix": "dl",
-        "body": "<dl>\n  <li>\n    <title>$1</title>\n    <p>\n      $0\n    </p>\n  </li>\n</dl>"
+        "body": "<dl>\n\t<li>\n\t\t<title>$1</title>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</li>\n</dl>"
     },
     "enumerate (ordered list)": {
         "prefix": "ol",
-        "body": "<ol>\n  <li>\n    <p>\n      $0\n    </p>\n  </li>\n</ol>"
-
+        "body": "<ol>\n\t<li>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</li>\n</ol>"
     },
     "itemize (unordered list)": {
         "prefix": "ul",
-        "body": "<ul>\n  <li>\n    <p>\n      $0\n    </p>\n  </li>\n</ul>"
+        "body": "<ul>\n\t<li>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</li>\n</ul>"
     },
     "list item": {
         "prefix": "li",
-        "body": "<li>\n  <p>\n    $0\n  </p>\n</li>"
+        "body": "<li>\n\t<p>\n\t\t$0\n\t</p>\n</li>"
+    },
+    "item": {
+        "prefix": "item",
+        "body": "<li>\n\t$0\n</li>"
     },
     "list item (short, no p)": {
         "prefix": "li-short",
@@ -416,19 +423,19 @@
     },
     "statement": {
         "prefix": "statement",
-        "body": "<statement>\n  <p>\n    $0\n  </p>\n</statement>"
+        "body": "<statement>\n\t<p>\n\t\t$0\n\t</p>\n</statement>"
     },
     "solution": {
         "prefix": "solution",
-        "body": "<solution>\n  <p>\n    $0\n  </p>\n</solution>"
+        "body": "<solution>\n\t<p>\n\t\t$0\n\t</p>\n</solution>"
     },
     "hint": {
         "prefix": "hint",
-        "body": "<hint>\n  <p>\n    $0\n  </p>\n</hint>"
+        "body": "<hint>\n\t<p>\n\t\t$0\n\t</p>\n</hint>"
     },
     "answer": {
         "prefix": "answer",
-        "body": "<answer>\n  <p>\n    $0\n  </p>\n</answer>"
+        "body": "<answer>\n\t<p>\n\t\t$0\n\t</p>\n</answer>"
     },
     "WeBWorK (from server)": {
         "prefix": "ww-server",
@@ -466,5 +473,13 @@
     "xinclude": {
         "prefix": "xi:xinclude",
         "body": "<xi:include href=\"$1\" />$0"
+    },
+    "slide": {
+        "prefix": "slide",
+        "body": "<slide>\n\t$0\n</slide>"
+    },
+    "pause": {
+        "prefix": "pause",
+        "body": "pause=\"yes\""
     }
 }

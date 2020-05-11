@@ -9,12 +9,12 @@
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
       "",
       "<pretext>",
-      "  <article xml:id=\"$1\">",
-      "    <title>$2</title>",
+      "\t<article xml:id=\"$1\">",
+      "\t\t<title>$2</title>",
       "",
-      "    $0",
+      "\t\t$0",
       "",
-      "  </article>",
+      "\t</article>",
       "</pretext>"
     ],
     "description": "article template for empty/new PreTeXt document"
@@ -25,12 +25,12 @@
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
       "",
       "<pretext>",
-      "  <book xml:id=\"$1\">",
-      "    <title>$2</title>",
+      "\t<book xml:id=\"$1\">",
+      "\t\t<title>$2</title>",
       "",
-      "    $0",
+      "\t\t$0",
       "",
-      "  </book>",
+      "\t</book>",
       "</pretext>"
     ],
     "description": "book template for empty/new PreTeXt document"
