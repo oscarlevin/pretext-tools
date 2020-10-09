@@ -58,7 +58,7 @@
     },
     "math-inline": {
         "prefix": "m",
-        "body": "<m>$1</m>$0"
+        "body": "<m>${1:$TM_SELECTED_TEXT}</m>$0"
     },
     "math-equation": {
         "prefix": "me",
@@ -176,7 +176,15 @@
     },
     "url": {
         "prefix": "url",
-        "body": "<url href=\"$1\">$2</url>"
+        "body": "<url href=\"$1\">$2</url>$0"
+    },
+    "url-empty": {
+        "prefix": "url-empty",
+        "body": "<url href=\"$1\" />$0"
+    },
+    "email": {
+        "prefix": "email",
+        "body": "<email>$1</email>$0"
     },
     "footnote": {
         "prefix": "fn",
@@ -228,6 +236,18 @@
         "prefix": "em",
         "body": "<em>$1</em>$0"
     },
+    "delete": {
+        "prefix": "delete",
+        "body": "<delete>$1</delete>$0"
+    },
+    "insert": {
+        "prefix": "insert",
+        "body": "<insert>$1</insert>$0"
+    },
+    "stale": {
+        "prefix": "stale",
+        "body": "<stale>$1</stale>$0"
+    },
     "alert": {
         "prefix": "alert",
         "body": "<alert>$1</alert>$0"
@@ -251,6 +271,22 @@
     "initialism": {
         "prefix": "init",
         "body": "<init>$1</init>$0"
+    },
+    "foreign": {
+        "prefix": "foreign",
+        "body": "<foreign>$1</foreign>$0"
+    },
+    "taxon": {
+        "prefix": "taxon",
+        "body": "<taxon>$1</taxon>$0"
+    },
+    "pubtitle": {
+        "prefix": "pubtitle",
+        "body": "<pubtitle>$1</pubtitle>$0"
+    },
+    "articletitle": {
+        "prefix": "articletitle",
+        "body": "<articletitle>$1</articletitle>$0"
     },
     "definition-list": {
         "prefix": "dl",
@@ -498,8 +534,18 @@
         "prefix": "tag",
         "body": "<tag>$1</tag>$0"
     },
+    "tage": {
+        "prefix": "tage",
+        "body": "<tage>$1</tage>$0",
+        "description": "empty tag"
+    },
     "attribute": {
-        "prefix": "attribute",
+        "prefix": "attr",
+        "body": "<attr>$1</attr>$0"
+    },
+    "fillin": {
+        "prefix": "fillin",
+        "body": "<fillin characters=\"${1:5}\" />$0"
     },
     "slide": {
         "prefix": "slide",
