@@ -3,13 +3,22 @@
 	"injectionSelector": "L:text.xml -comment",
 	"patterns": [
 		{
-			"begin": "<(m|me|men|md|mdn|usage)>",
+			"begin": "(<)(m|me|men|md|mdn|usage)\\s?(permid=\"...\")?(>)",
 			"beginCaptures": {
-				"0": {
+				"1": {
+					"name": "entity.name.tag.localname.xml.math"
+				},
+				"2": {
+					"name": "entity.name.tag.localname.xml.math"
+				},
+				"3": {
+					"name": "comment.inline.permid"
+				},
+				"4": {
 					"name": "entity.name.tag.localname.xml.math"
 				}
 			},
-			"end": "</(\\1)>",
+			"end": "</(\\2)>",
 			"endCaptures": {
 				"0": {
 					"name": "entity.name.tag.localname.xml.math"
