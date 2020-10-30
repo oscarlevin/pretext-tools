@@ -72,7 +72,7 @@
 			]
 		},
 		{
-			"begin": "(<(\\b(em|term)\\b)>)",
+			"begin": "(<(\\b(em)\\b)>)",
 			"beginCaptures": {
 				"1": {
 					"name": "punctuation.definition.tag.xml"
@@ -82,7 +82,7 @@
 				}
 			},
 			"contentName": "markup.italic.emph.pretext",
-			"end": "(<\/(\\b(em|term)\\b)>)",
+			"end": "(<\/(\\b(em)\\b)>)",
 			"endCaptures": {
 				"1": {
 					"name": "punctuation.definition.tag.xml"
@@ -97,6 +97,91 @@
 				"include": "$base"
 					}
 				]
+		},
+		{
+			"begin": "(<(\\b(term|alert)\\b)>)",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.definition.tag.xml"
+				},
+				"2": {
+					"name": "entity.name.tag.localname.xml"
+				}
+			},
+			"contentName": "markup.bold.pretext",
+			"end": "(<\/(\\b(term|alert)\\b)>)",
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.definition.tag.xml"
+				},
+				"2": {
+					"name": "entity.name.tag.localname.xml"
+				}
+			},
+			"name": "meta.tag.xml",
+			"patterns": [
+				{
+					"include": "$base"
+				}
+			]
+		},
+		{
+			"begin": "(<(\\b(title)\\b)>)",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.definition.tag.xml"
+				},
+				"2": {
+					"name": "entity.name.tag.localname.xml"
+				}
+			},
+			"contentName": "markup.heading.2.pretext",
+			"end": "(<\/(\\b(title)\\b)>)",
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.definition.tag.xml"
+				},
+				"2": {
+					"name": "entity.name.tag.localname.xml"
+				}
+			},
+			"name": "meta.tag.xml",
+			"patterns": [
+				{
+					"include": "$base"
+				}
+			]
+		},
+		{
+			"begin": "(<(\\b(c|cd|pre|tag|tage|attr)\\b)>)",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.definition.tag.xml"
+				},
+				"2": {
+					"name": "entity.name.tag.localname.xml"
+				}
+			},
+			"contentName": "markup.raw.pretext",
+			"end": "(<\/(\\b(\\3)\\b)>)",
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.definition.tag.xml"
+				},
+				"2": {
+					"name": "entity.name.tag.localname.xml"
+				}
+			},
+			"name": "meta.tag.xml",
+			"patterns": [
+				{
+					"include": "$base"
+				}
+			]
+		},
+		{
+			"match": "<\\s",
+			"name": "invalid.illegal.bad-lt.xml"
 		},
 		{
 			"include": "#todo-keyword"
