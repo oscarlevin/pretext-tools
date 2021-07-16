@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2021-07-16
+
+### Added
+
+- New commands registered that allow you to build and view PreTeXt documents in various formats by calling the PreTeXt-CLI (which needs to be installed).
+
 ## [0.3.0] - 2020-10-30
 
 ### Added
 
-- new snippets: url, url-empty, email, code-display, cline, alert, delete, insert, stale, foreign, taxon, pubtitle, articletitle, youtube, tag, tage, attribute, fillin.
+- New snippets: url, url-empty, email, code-display, cline, alert, delete, insert, stale, foreign, taxon, pubtitle, articletitle, youtube, tag, tage, attribute, fillin.
 - If text is selected, using m snippet keeps selected text (inside m).
 - Grammar now selects stray less-than characters as illegal
 - Grammar now bolds terms and alerts, specifies titles, and marks up code as raw.
