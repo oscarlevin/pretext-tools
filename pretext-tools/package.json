@@ -13,7 +13,13 @@
         "Snippets"
     ],
     "activationEvents": [
-        "onCommand:pretext-tools.helloWorld"
+        "onCommand:pretext-tools.buildAny",
+        "onCommand:pretext-tools.buildHTML",
+        "onCommand:pretext-tools.buildPDF",
+        "onCommand:pretext-tools.newBook",
+        "onCommand:pretext-tools.newArticle",
+        "onCommand:pretext-tools.view",
+        "onCommand:pretext-tools.viewWatch"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -47,16 +53,47 @@
         ],
         "keybindings": [
             {
-                "command": "pretext-tools.helloWorld",
-                "key": "ctrl+K P",
-                "mac": "cmd+K P",
+                "command": "pretext-tools.buildAny",
+                "key": "ctrl+B",
+                "mac": "cmd+B",
                 "when": "editorTextFocus && editorLangId == 'XML'"
             }
         ],
         "commands": [
             {
-                "command": "pretext-tools.helloWorld",
-                "title": "Hello",
+                "command": "pretext-tools.buildAny",
+                "title": "Build",
+                "category": "PreTeXt Tools"
+            },
+            {
+                "command": "pretext-tools.buildHTML",
+                "title": "Build HTML",
+                "category": "PreTeXt Tools"
+            },
+            {
+                "command": "pretext-tools.buildPDF",
+                "title": "Build PDF",
+                "category": "PreTeXt Tools",
+                "description": "Build a pdf from PreTeXt document"
+            },
+            {
+                "command": "pretext-tools.newBook",
+                "title": "New Book",
+                "category": "PreTeXt Tools"
+            },
+            {
+                "command": "pretext-tools.newArticle",
+                "title": "New Article",
+                "category": "PreTeXt Tools"
+            },
+            {
+                "command": "pretext-tools.view",
+                "title": "View",
+                "category": "PreTeXt Tools"
+            },
+            {
+                "command": "pretext-tools.viewWatch",
+                "title": "View HTML and watch",
                 "category": "PreTeXt Tools"
             }
         ]
