@@ -2,7 +2,7 @@
     "name": "pretext-tools",
     "displayName": "PreTeXt-tools",
     "description": "Language support and more for PreTeXt",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "publisher": "oscarlevin",
     "repository": "https://github.com/oscarlevin/vscode-pretext/tree/master/pretext-tools",
     "engines": {
