@@ -3,6 +3,7 @@
     "displayName": "PreTeXt-tools",
     "description": "Language support and more for PreTeXt",
     "version": "0.4.1",
+    "license": "See license in LICENSE"
     "publisher": "oscarlevin",
     "repository": "https://github.com/oscarlevin/vscode-pretext/tree/master/pretext-tools",
     "engines": {
