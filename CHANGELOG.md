@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Most snippets now start with `<`
+- Location of repository on github
+
 ## [0.4.1] - 2021-07-28
 
 ### Fixed
