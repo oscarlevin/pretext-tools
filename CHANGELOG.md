@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2022-06-20
+
 ### Changed
 
 - Most snippets now start with `<`
-- Location of repository on github
+- Move of repository on github to just oscarlevin/pretext-tools
+
+### Fixed
+
+- Tabular snippet has correct closing tag
 
 ## [0.4.1] - 2021-07-28
 
