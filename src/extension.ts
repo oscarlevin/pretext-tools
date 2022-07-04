@@ -3,6 +3,9 @@
 import * as vscode from 'vscode';
 import { spawn } from 'child_process';
 import * as path from 'path';
+//import { test } from './project-manifest';
+// This forces a esm import: https://stackoverflow.com/questions/70620025/how-do-i-import-an-es6-javascript-module-in-my-vs-code-extension-written-in-type
+const testImportPromise = import("./project-manifest");
 
 
 
@@ -207,6 +210,12 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('pretext-tools.newArticle', () => {
 			var ptxCommand = "python -m pretext new article";
 			runPretext(ptxCommand);
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('pretext-tools.test', () => {
+			testImportPromise.then((test) => {test.test();});
 		})
 	);
 }
