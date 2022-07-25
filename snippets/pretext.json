@@ -53,16 +53,16 @@
         "body": "<conclusion>\n\t<p>\n\t\t$0\n\t</p>\n</conclusion>"
     },
     "p (paragraph)": {
-        "prefix": "<p>",
-        "body": "<p>\n\t$0\n</p>"
+        "prefix": ["<p>","p"],
+        "body": ["<p>\n\t$0","</p>"]
     },
     "math-inline": {
-        "prefix": "<m>",
+        "prefix": ["m","<m>","$"],
         "body": "<m>${1:$TM_SELECTED_TEXT}</m>$0"
     },
     "math-equation": {
         "prefix": "<me>",
-        "body": "<me>\n\t$1\n</me>\n$0"
+        "body": ["<me>","\t$1","</me>\n$0"]
     },
     "math-equation numbered": {
         "prefix": "<men>",
