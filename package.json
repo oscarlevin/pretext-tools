@@ -2,7 +2,7 @@
     "name": "pretext-tools",
     "displayName": "PreTeXt-tools",
     "description": "Language support and more for PreTeXt",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "license": "See license in LICENSE",
     "icon": "logo.png",
     "publisher": "oscarlevin",
@@ -148,7 +148,6 @@
                 "category": "PreTeXt Tools",
                 "description": "Checks for and installs the newest version of PreTeXt"
             }
-            
         ]
     },
     "scripts": {
