@@ -80,62 +80,41 @@
         "prefix": "<mrow>",
         "body": "<mrow>$1 \\\\amp $2</mrow>$0"
     },
-    "Figure": {
-        "prefix": "<figure>",
-        "body": "<figure xml:id=\"$1\">\n\t<caption>$2</caption>\n$0</figure>"
+    "code": {
+      "prefix": "<c>",
+      "body": "<c>${1:$TM_SELECTED_TEXT}</c>$0"
     },
-    "Figure w/ xml:id": {
-        "prefix": "<fig>-id",
-        "body": "<figure width=\"$1%\" xml:id=\"$2\">\n\t$0\n</figure>"
+    "code-display": {
+        "prefix": "<cd>",
+        "body": "<cd>\n\t<cline>$1</cline>$0\n</cd>"
     },
-    "image (not external)": {
-        "prefix": "<image>",
-        "body": "<image xml:id=\"$1\">\n\t<description>$2</description>\n\t$0\n</image>"
+    "cline": {
+        "prefix": "<cline>",
+        "body": "<cline>$1</cline>$0"
     },
-    "image (external)": {
-        "prefix": "<image source>",
-        "body": "<image source=\"${1:path (no extension)}\" width=\"$2%\">\n\t<description>${0:(for accessibility)}</description>\n</image>"
+    "console": {
+        "prefix": "<console>",
+        "body": "<console>\n\t<input>$1</input>\n</console>"
     },
-    "latex-image": {
-        "prefix": "<latex-image>",
-        "body": "<latex-image>\n\t\\\\begin{tikzpicture}\n\t\t$0\n\t\\\\end{tikzpicture}\n</latex-image>"
+    "pre": {
+        "prefix": "<pre>",
+        "body": "<pre>\n$0\n</pre>"
     },
-    "description": {
-        "prefix": "<description>",
-        "body": "<description>$1</description>$0"
+    "pre w cdata": {
+        "prefix": "<pre> CDATA",
+        "body": "<pre>\n<![CDATA[\n\t$0\n]]>\n</pre>"
     },
-    "caption": {
-        "prefix": "<caption>",
-        "body": "<caption>$1</caption>"
+    "cdata": {
+        "prefix": "CDATA",
+        "body": "<![CDATA[\n\t$0\n]]>"
     },
-    "sidebyside (plain)": {
-        "prefix": "<sidebyside> (plain)",
-        "body": "<sidebyside>\n\t$0\n</sidebyside>"
+    "<": {
+        "prefix": ["&lt;","<"],
+        "body": "&lt;"
     },
-    "sidebyside (options)": {
-        "prefix": "<sidebyside> w/options",
-        "body": "<sidebyside widths=\"$1\" margins=\"$2\" valign=\"${3|bottom,middle,top|}\">\n\t$0\n</sidebyside>"
-    },
-    "sbsgroup": {
-        "prefix": "<sbsgroup>",
-        "body": "<sbsgroup widths=\"$1\">\n\t<sidebyside>\n\t\t$0\n\t</sidebyside>\n</sbsgroup>",
-        "description": "sidebyside-group: for a grid layout with multiple rows of side-by-sides."
-    },
-    "table": {
-        "prefix": "<table>",
-        "body": "<table>\n\t<title>$1</title>\n\t<tabular>\n\t\t<row>\n      <cell>$2</cell>$0\n\t\t</row>\n\t</tabular>\n</table>"
-    },
-    "tabular": {
-        "prefix": "<tabular>",
-        "body": "<tabular>\n\t<row>\n\t\t<cell>$1</cell>$0\n\t</row>\n</tabular>"
-    },
-    "row": {
-        "prefix": "<row>",
-        "body": "<row>\n\t<cell>$1</cell>$0\n</row>"
-    },
-    "cell": {
-        "prefix": "<cell>",
-        "body": "<cell>$1</cell>$0"
+    "&": {
+        "prefix": ["&amp;","&"],
+        "body": "&amp;"
     },
     "sage": {
         "prefix": "<sage>",
@@ -179,7 +158,7 @@
         "body": "<url href=\"$1\">$2</url>$0"
     },
     "url-empty": {
-        "prefix": "<url> empty",
+        "prefix": "<url />",
         "body": "<url href=\"$1\" />$0"
     },
     "email": {
@@ -193,18 +172,6 @@
     "aside": {
         "prefix": "<aside>",
         "body": "<aside>\n\t$0\n</aside>"
-    },
-    "biographical (aside-like)": {
-        "prefix": "<biographical>",
-        "body": "<biographical>\n\t$0\n</biographical>"
-    },
-    "historical (aside-like)": {
-        "prefix": "<historical>",
-        "body": "<historical>\n\t$0\n</historical>"
-    },
-    "objectives": {
-        "prefix": "<objectives>",
-        "body": "<objectives>\n\t$0\n</objectives>\n"
     },
     "<env>": {
         "prefix": "<inline-environment>",
@@ -220,65 +187,54 @@
         "prefix": "xmlid",
         "body": "xml:id=\"$1\"$0"
     },
-    "code": {
-        "prefix": "<c>",
-        "body": "<c>$1</c>$0"
-    },
-    "code-display": {
-        "prefix": "<cd>",
-        "body": "<cd>\n\t<cline>$1</cline>$0\n</cd>"
-    },
-    "cline": {
-        "prefix": "<cline>",
-        "body": "<cline>$1</cline>$0"
-    },
+
     "emphasis": {
         "prefix": "<em>",
-        "body": "<em>$1</em>$0"
+        "body": "<em>${1:$TM_SELECTED_TEXT}</em>$0"
     },
     "delete": {
         "prefix": "<delete>",
-        "body": "<delete>$1</delete>$0"
+        "body": "<delete>${1:$TM_SELECTED_TEXT}</delete>$0"
     },
     "insert": {
         "prefix": "<insert>",
-        "body": "<insert>$1</insert>$0"
+        "body": "<insert>${1:$TM_SELECTED_TEXT}</insert>$0"
     },
     "stale": {
         "prefix": "<stale>",
-        "body": "<stale>$1</stale>$0"
+        "body": "<stale>${1:$TM_SELECTED_TEXT}</stale>$0"
     },
     "alert": {
         "prefix": "<alert>",
-        "body": "<alert>$1</alert>$0"
+        "body": "<alert>${1:$TM_SELECTED_TEXT}</alert>$0"
     },
     "quote": {
         "prefix": "<q>",
-        "body": "<q>$1</q>$0"
+        "body": "<q>${1:$TM_SELECTED_TEXT}</q>$0"
     },
     "term": {
         "prefix": "<term>",
-        "body": "<term>$1</term>$0"
+        "body": "<term>${1:$TM_SELECTED_TEXT}</term>$0"
     },
     "abbreviations": {
         "prefix": "<abbr>",
-        "body": "<abbr>$1</abbr>$0"
+        "body": "<abbr>${1:$TM_SELECTED_TEXT}</abbr>$0"
     },
     "acronym": {
         "prefix": "<acro>",
-        "body": "<acro>$1</acro>$0"
+        "body": "<acro>${1:$TM_SELECTED_TEXT}</acro>$0"
     },
     "initialism": {
         "prefix": "<init>",
-        "body": "<init>$1</init>$0"
+        "body": "<init>${1:$TM_SELECTED_TEXT}</init>$0"
     },
     "foreign": {
         "prefix": "<foreign>",
-        "body": "<foreign>$1</foreign>$0"
+        "body": "<foreign>${1:$TM_SELECTED_TEXT}</foreign>$0"
     },
     "taxon": {
         "prefix": "<taxon>",
-        "body": "<taxon>$1</taxon>$0"
+        "body": "<taxon>${1:$TM_SELECTED_TEXT}</taxon>$0"
     },
     "pubtitle": {
         "prefix": "<pubtitle>",
@@ -312,195 +268,14 @@
         "prefix": "<li> inline",
         "body": "<li>$1</li>$0"
     },
-    "algorithm": {
-        "prefix": "<algorithm>",
-        "body": [
-            "<algorithm xml:id=\"alg-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</algorithm>"
-        ],
-        "description": "algorithm (theorem-like)."
-    },
-    "claim": {
-        "prefix": "<claim>",
-        "body": "<claim xml:id=\"claim-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</claim>",
-        "description": "claim (theorem-like)."
-    },
-    "corollary": {
-        "prefix": "<corollary>",
-        "body": "<corollary xml:id=\"cor-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</corollary>",
-        "description": "corollary (theorem-like)."
-    },
-    "fact": {
-        "prefix": "<fact>",
-        "body": "<fact xml:id=\"fact-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</fact>",
-        "description": "fact (theorem-like)."
-    },
-    "identity": {
-        "prefix": "<identity>",
-        "body": "<identity xml:id=\"ident-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</identity>",
-        "description": "identity (theorem-like)."
-    },
-    "lemma": {
-        "prefix": "<lemma>",
-        "body": "<lemma xml:id=\"lem-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</lemma>",
-        "description": "lemma (theorem-like)."
-    },
-    "proposition": {
-        "prefix": "<proposition>",
-        "body": "<proposition xml:id=\"prop-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</proposition>",
-        "description": "proposition (theorem-like)."
-    },
-    "theorem": {
-        "prefix": "<theorem>",
-        "body": "<theorem xml:id=\"thm-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</theorem>\n",
-        "description": "theorem (theorem-like)."
-    },
-    "example": {
-        "prefix": "<example>",
-        "body": "<example>\n\t$0\n</example>",
-        "description": "example (example-like)"
-    },
-    "example+solution": {
-        "prefix": "<example>-solution",
-        "body": "<example>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n\t<solution>\n\t\t<p>\n\t\t\t\n\t\t</p>\n\t</solution>\n</example>",
-        "description": "example with solution (example-like)"
-    },
-    "problem": {
-        "prefix": "<problem>",
-        "body": "<problem>\n\t$0\n</problem>",
-        "description": "problem (example-like)"
-    },
-    "problem+solution": {
-        "prefix": "<problem><solution>",
-        "body": "<problem>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n\t<solution>\n\t\t<p>\n\t\t\t\n\t\t</p>\n\t</solution>\n</problem>",
-        "description": "problem with solution (example-like)"
-    },
-    "question": {
-        "prefix": "<question>",
-        "body": "<question>\n\t$0\n</question>",
-        "description": "question (example-like)"
-    },
-    "question+solution": {
-        "prefix": "<question>+solution",
-        "body": "<question>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n\t<solution>\n\t\t<p>\n\t\t\t\n\t\t</p>\n\t</solution>\n</question>",
-        "description": "question with solution (example-like)"
-    },
-    "assumption": {
-        "prefix": "<assumption>",
-        "body": "<assumption xml:id=\"assumption-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</assumption>",
-        "description": "assumption (axiom-like)"
-    },
-    "axiom": {
-        "prefix": "<axiom>",
-        "body": "<axiom xml:id=\"axiom-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</axiom>",
-        "description": "axiom (axiom-like)"
-    },
-    "conjecture": {
-        "prefix": "<conjecture>",
-        "body": "<conjecture xml:id=\"conj-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</conjecture>",
-        "description": "conjecture (axiom-like)"
-    },
-
-    "heuristic": {
-        "prefix": "<heuristic>",
-        "body": "<heuristic xml:id=\"heuristic-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</heuristic>",
-        "description": "heuristic (axiom-like)"
-    },
-    "hypothesis": {
-        "prefix": "<hypothesis>",
-        "body": "<hypothesis xml:id=\"hyp-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</hypothesis>",
-        "description": "hypothesis (axiom-like)"
-    },
-    "principle": {
-        "prefix": "<principle>",
-        "body": "<principle xml:id=\"principle-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</principle>",
-        "description": "principle (axiom-like)"
-    },
-    "proof": {
-        "prefix": "<proof>",
-        "body": "<proof>\n\t<p>\n\t\t$0\n\t</p>\n</proof>"
-    },
-    "definition": {
-        "prefix": "<definition>",
-        "body": "<definition xml:id=\"def-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</definition>"
-    },
-    "activity": {
-        "prefix": "<activity>",
-        "body": "<activity>\n\t$0\n</activity>",
-        "description": "activity (project-like)."
-    },
-    "exploration": {
-        "prefix": "<exploration>",
-        "body": "<exploration>\n\t$0\n</exploration>",
-        "description": "exploration (project-like)."
-    },
-    "investigation": {
-        "prefix": "<investigation>",
-        "body": "<investigation>\n\t$0\n</investigation>",
-        "description": "investigation (project-like)."
-    },
-    "project": {
-        "prefix": "<project>",
-        "body": "<project>\n\t$0\n</project>",
-        "description": "project (project-like)."
-    },
-    "task": {
-        "prefix": "<task>",
-        "body": "<task>\n\t<p>\n\t\t$0\n\t</p>\n</task>",
-        "description": "task (for breaking up project-like)."
-    },
-    "assemblage": {
-        "prefix": "<assemblage>",
-        "body": "<assemblage xml:id=\"assemblage-$1\">\n\t<title>$2</title>\n\t<p>\n\t\t$0\n\t</p>\n</assemblage>"
-    },
-    "exercise": {
-        "prefix": "<exercise>",
-        "body": "<exercise>\n\t$0\n</exercise>"
-    },
-    "exercise (worksheet)": {
-        "prefix": "<exercise workspace>",
-        "body": "<exercise workspace=\"$1%\">\n\t$0\n</exercise>"
-    },
-    "exercise (numbered)": {
-        "prefix": "<exercise number>",
-        "body": "<exercise number=\"$1\">\n\t$0\n</exercise>"
-    },
-    "pagebreak": {
-        "prefix": "<pagebreak />",
-        "body": "<pagebreak />\n",
-        "description": "pagebreak, for worksheets only."
-    },
     "title": {
         "prefix": "<title>",
         "body": "<title>$1</title>\n\n$0"
     },
-    "statement": {
-        "prefix": "<statement>",
-        "body": "<statement>\n\t<p>\n\t\t$0\n\t</p>\n</statement>"
-    },
-    "solution": {
-        "prefix": "<solution>",
-        "body": "<solution>\n\t<p>\n\t\t$0\n\t</p>\n</solution>"
-    },
-    "hint": {
-        "prefix": "<hint>",
-        "body": "<hint>\n\t<p>\n\t\t$0\n\t</p>\n</hint>"
-    },
-    "answer": {
-        "prefix": "<answer>",
-        "body": "<answer>\n\t<p>\n\t\t$0\n\t</p>\n</answer>"
-    },
-    "WeBWorK (from server)": {
-        "prefix": "<webwork source>",
-        "body": "<webwork source=\"$1\" />$0"
-    },
-    "WeBWorK (with pg code)": {
-        "prefix": "<webwork>",
-        "body": "<webwork>\n\t<setup>\n\t\t<pg-code>\n\t\t\t$0\n\t\t</pg-code>\n\t</setup>\n\n\t<statement>\n\t\t<p>\n\t\t\t\n\t\t</p>\n\t</statement>\n</webwork>"
-    },
-    "var": {
-        "prefix": "<var>",
-        "body": "<var name=\"$1\" width=\"$2\"/>$0",
-        "description": "var for WeBWorK"
+    "creator": {
+        "prefix": "<creator>",
+        "body": "<creator>$1</creator>$0",
+        "description": "creator, for use in axiom-like."
     },
     "latex": {
         "prefix": "<latex>",
@@ -519,24 +294,20 @@
         "body": "<webwork/>$0"
     },
     "<?xml... top of document": {
-        "prefix": "<?xml>",
+        "prefix": "<?xml...>",
         "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     },
     "xinclude": {
         "prefix": "<xi:xinclude>",
         "body": "<xi:include href=\"$1\" />$0"
     },
-    "youtube": {
-        "prefix": "<youtube>",
-        "body": "<video youtube=\"$1\"/>$0"
-    },
     "tag": {
         "prefix": "<tag>",
-        "body": "<tag>$1</tag>$0"
+        "body": "<tag>${1:$TM_SELECTED_TEXT}</tag>$0"
     },
     "tage": {
         "prefix": "<tage>",
-        "body": "<tage>$1</tage>$0",
+        "body": "<tage>${1:$TM_SELECTED_TEXT}</tage>$0",
         "description": "empty tag"
     },
     "attribute": {
@@ -550,9 +321,5 @@
     "slide": {
         "prefix": "<slide>",
         "body": "<slide>\n\t$0\n</slide>"
-    },
-    "pause": {
-        "prefix": "@pause",
-        "body": "pause=\"yes\""
     }
 }

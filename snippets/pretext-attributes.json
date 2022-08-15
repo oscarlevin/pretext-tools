@@ -43,6 +43,10 @@
     "prefix": "@xmlns:xi",
     "body": "xmlns:xi=\"http://www.w3.org/2001/XInclude\"",
     "description": "xinclud namespace: add to top division of xinclud-ed file."
+  },
+  "pause": {
+      "prefix": "@pause",
+      "body": "pause=\"yes\""
   }
 
 }

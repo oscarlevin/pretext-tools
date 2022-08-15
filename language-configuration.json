@@ -76,4 +76,18 @@
             "close": ">"
         }
     ],
+    "onEnterRules": [
+        {
+            "beforeText": "^\\s*<(p|statement|hint|answer|solution|li|row|ol|ul|theorem|section|chapter|subsection|part|subsubsection|paragraphs).*?>\\s*$",
+            "action": {
+                "indent": "indent"
+            }
+        },
+        {
+            "beforeText": "^\\s*</(section|chapter|subsection|part|subsubsection|paragraphs).*?>\\s*$",
+            "action": {
+                "indent": "outdent"
+            }
+        }
+    ]
 }

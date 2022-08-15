@@ -4,6 +4,7 @@
     "description": "Language support and more for PreTeXt",
     "version": "0.5.0",
     "license": "See license in LICENSE",
+    "icon": "logo.png",
     "publisher": "oscarlevin",
     "repository": "https://github.com/oscarlevin/pretext-tools",
     "engines": {
@@ -14,35 +15,54 @@
         "Snippets"
     ],
     "activationEvents": [
+        "onLanguage:pretext",
+        "workspaceContains:project.ptx",
         "onCommand:pretext-tools.test",
         "onCommand:pretext-tools.buildAny",
-        "onCommand:pretext-tools.buildHTML",
-        "onCommand:pretext-tools.buildPDF",
-        "onCommand:pretext-tools.newBook",
-        "onCommand:pretext-tools.newArticle",
+        "onCommand:pretext-tools.buildDefault",
+        "onCommand:pretext-tools.new",
         "onCommand:pretext-tools.view",
-        "onCommand:pretext-tools.viewWatch"
+        "onCommand:pretext-tools.viewWatch",
+        "onCommand:pretext-tools.generate",
+        "onCommand:pretext-tools.updatePTX",
+        "onCommand:pretext-tools.refresh"
     ],
     "main": "./out/extension.js",
     "contributes": {
+        "languages": [
+            {
+                "id": "pretext",
+                "aliases": [
+                    "PreTeXt",
+                    "ptx"
+                ],
+                "extensions": [
+                    ".ptx"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
         "grammars": [
             {
+                "language": "pretext",
                 "scopeName": "text.xml.ptx",
                 "path": "./syntaxes/ptx.tmLanguage.json",
                 "embeddedLanguages": {
+                    "text.xml": "xml",
                     "text.tex": "tex",
                     "text.tex.latex": "latex",
                     "source.asymptote": "asymptote"
-                },
-                "injectTo": [
-                    "text.xml"
-                ]
+                }
             }
         ],
         "snippets": [
             {
                 "language": "xml",
                 "path": "./snippets/pretext.json"
+            },
+            {
+                "language": "xml",
+                "path": "./snippets/pretext-blocks.json"
             },
             {
                 "language": "xml",
@@ -56,41 +76,50 @@
         "keybindings": [
             {
                 "command": "pretext-tools.buildAny",
-                "key": "ctrl+B",
-                "mac": "cmd+B",
-                "when": "editorTextFocus && editorLangId == 'XML'"
+                "key": "ctrl+alt+b",
+                "mac": "cmd+alt+b",
+                "when": "editorTextFocus && editorLangId == 'pretext'"
+            },
+            {
+                "command": "pretext-tools.view",
+                "key": "ctrl+alt+v",
+                "mac": "cmd+alt+v",
+                "when": "editorTextFocus && editorLangId == 'pretext'"
+            },
+            {
+                "command": "pretext-tools.generate",
+                "key": "ctrl+alt+g",
+                "mac": "cmd+alt+g",
+                "when": "editorTextFocus && editorLangId == 'pretext'"
+            },
+            {
+                "command": "pretext-tools.new",
+                "key": "ctrl+alt+n",
+                "mac": "cmd+alt+n",
+                "when": "editorTextFocus && editorLangId == 'pretext'"
             }
         ],
         "commands": [
             {
+                "command": "pretext-tools.refresh",
+                "title": "Refresh target list",
+                "category": "PreTeXt Tools"
+            },
+            {
                 "command": "pretext-tools.buildAny",
                 "title": "Build",
-                "category": "PreTeXt Tools"
-            },
-            {
-                "command": "pretext-tools.test",
-                "title": "test",
-                "category": "PreTeXt Tools"
-            },
-            {
-                "command": "pretext-tools.buildHTML",
-                "title": "Build HTML",
-                "category": "PreTeXt Tools"
-            },
-            {
-                "command": "pretext-tools.buildPDF",
-                "title": "Build PDF",
                 "category": "PreTeXt Tools",
-                "description": "Build a pdf from PreTeXt document"
+                "description": "Build selected target from the project.ptx manifest."
             },
             {
-                "command": "pretext-tools.newBook",
-                "title": "New Book",
-                "category": "PreTeXt Tools"
+                "command": "pretext-tools.buildDefault",
+                "title": "Build default target",
+                "category": "PreTeXt Tools",
+                "description": "Build the default target (first in the project.ptx manifest)."
             },
             {
-                "command": "pretext-tools.newArticle",
-                "title": "New Article",
+                "command": "pretext-tools.new",
+                "title": "New Project",
                 "category": "PreTeXt Tools"
             },
             {
@@ -102,7 +131,24 @@
                 "command": "pretext-tools.viewWatch",
                 "title": "View HTML and watch",
                 "category": "PreTeXt Tools"
+            },
+            {
+                "command": "pretext-tools.generate",
+                "title": "Generate assets",
+                "category": "PreTeXt Tools"
+            },
+            {
+                "command": "pretext-tools.deploy",
+                "title": "Deploy to GitHub",
+                "category": "PreTeXt Tools"
+            },
+            {
+                "command": "pretext-tools.updatePTX",
+                "title": "Update installed PreTeXt version",
+                "category": "PreTeXt Tools",
+                "description": "Checks for and installs the newest version of PreTeXt"
             }
+            
         ]
     },
     "scripts": {

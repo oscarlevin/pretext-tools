@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- PreTeXt is now a language, autodetected on ".ptx" files.
+- New keybindings for build, view, and generate.
+- Reorganized functions that call the CLI.
+- CLI functions get list of targets from the project manifest.
+- Checks for the CLI being installed; otherwise tries to install it.
+- New snippets: console, creator, pre, cdata, <, &, all remark-like blocks, outcomes, computation, technology.
+- More tags now wrap selected text (e.g., c, em, term, etc)
+
 ## [0.5.0] - 2022-06-20
 
 ### Changed

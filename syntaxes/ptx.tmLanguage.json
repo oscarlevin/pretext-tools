@@ -1,15 +1,14 @@
 {
 	"scopeName": "text.xml.ptx",
-	"injectionSelector": "L:text.xml -comment",
 	"patterns": [
 		{
 			"begin": "(<)(m|me|men|mrow|usage)(\\s(?:(?!permid=\"...\").)*\\s)?\\s*(permid=\"...\")?(\\s.*?)?(>)",
 			"beginCaptures": {
 				"1": {
-					"name": "entity.name.tag.localname.xml.math"
+					"name": "entity.name.tag.localname.ptx.math"
 				},
 				"2": {
-					"name": "entity.name.tag.localname.xml.math"
+					"name": "entity.name.tag.localname.ptx.math"
 				},
 				"3": {
 					"patterns": [
@@ -29,13 +28,13 @@
 					]
 				},
 				"6": {
-					"name": "entity.name.tag.localname.xml.math"
+					"name": "entity.name.tag.localname.ptx.math"
 				}
 			},
 			"end": "</(\\2)>",
 			"endCaptures": {
 				"0": {
-					"name": "entity.name.tag.localname.xml.math"
+					"name": "entity.name.tag.localname.ptx.math"
 				}
 			},
 			"patterns": [
@@ -52,10 +51,10 @@
 			"begin": "(<)(md|mdn)(\\s(?:(?!permid=\"...\").)*\\s)?\\s*(permid=\"...\")?(\\s.*?)?(>)",
 			"beginCaptures": {
 				"1": {
-					"name": "entity.name.tag.localname.xml.math"
+					"name": "entity.name.tag.localname.ptx.math"
 				},
 				"2": {
-					"name": "entity.name.tag.localname.xml.math"
+					"name": "entity.name.tag.localname.ptx.math"
 				},
 				"3": {
 					"patterns": [
@@ -75,13 +74,13 @@
 					]
 				},
 				"6": {
-					"name": "entity.name.tag.localname.xml.math"
+					"name": "entity.name.tag.localname.ptx.math"
 				}
 			},
 			"end": "</\\2>",
 			"endCaptures": {
 				"0": {
-					"name": "entity.name.tag.localname.xml.math"
+					"name": "entity.name.tag.localname.ptx.math"
 				}
 			},
 			"patterns": [
@@ -154,7 +153,7 @@
 				"include": "$base"
 					}
 				]
-		},
+			},
 		{
 			"begin": "(<(\\b(term|alert)\\b)>)",
 			"beginCaptures": {
@@ -242,6 +241,9 @@
 		},
 		{
 			"include": "#todo-keyword"
+		},
+		{
+			"include":"text.xml"
 		}
 	],
 	"repository": {

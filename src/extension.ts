@@ -1,47 +1,161 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { spawn } from 'child_process';
+import { exec, execSync, spawn } from 'child_process';
 import * as path from 'path';
-//import { test } from './project-manifest';
-// This forces a esm import: https://stackoverflow.com/questions/70620025/how-do-i-import-an-es6-javascript-module-in-my-vs-code-extension-written-in-type
-const testImportPromise = import("./project-manifest");
-
 
 
 var pretextOutputChannel = vscode.window.createOutputChannel('PreTeXt Tools');
 
-function getCwd() {
+
+function getDir(myPath:string="") {
+	if (myPath !== "") {
+		console.log('Dir ',myPath,' passed as argument');
+		return myPath;
+	} 
 	if (vscode.workspace.workspaceFolders !== undefined) {
-		console.log('Got cwd from worksapce folder');
-		return vscode.workspace.workspaceFolders[0].uri.fsPath;
+		myPath = vscode.workspace.workspaceFolders[0].uri.fsPath;
+		console.log('Dir ', myPath, ' set by worksapce folder');
+		return myPath;
 	} else if (vscode.window.activeTextEditor !== undefined) {
-		console.log('Got cwd from active text editor');
-		return path.dirname(vscode.window.activeTextEditor.document.uri.fsPath);
+		myPath = path.dirname(vscode.window.activeTextEditor.document.uri.fsPath);
+		console.log('Dir ', myPath, ' set by active text editor');
+		return myPath;
 	} else {
 		console.log('No active editor or workspace folder.');
-		vscode.window.showErrorMessage('No current editor or workspace found.');
+   	vscode.window.showOpenDialog({
+				openLabel: 'Select root folder of your project...',
+        canSelectMany: false,
+        canSelectFiles: false,
+        canSelectFolders: true
+				}).then(fileUri => {
+			 if (fileUri && fileUri[0]) {
+           console.log('Selected file: ' + fileUri[0].fsPath);
+					 return fileUri[0].fsPath;
+       }
+   });
 	}
 }
 
-function runPretext(ptxCommand: string): void {
+function installPretext(){
+	// Here we will attempt to pip install pretext, upgraded to the most recent version.  This will happen if pretext is not found, or if a user requests it through a command.
+	// first check for python and pip:
+	console.log("inside installPretext().");
+	let pythonExec = '';
+	for (let command of ['python3','python']){
+		try {
+			let pythonVersion = execSync(command+" --version").toString();
+			console.log("Python version result: ", pythonVersion);
+			if (pythonVersion.toLowerCase().includes("python 2")) {
+				throw new Error(command + " is python 2");
+			} 
+			pythonExec = command;
+		} catch (err) {
+			console.log("Error: ", err);
+		}
+	}
+	let pipExec = '';
+	for (let command of ['pip3','pip']){
+		try {
+			let pipVersion = execSync(command+" --version").toString();
+			console.log("pip version result: ", pipVersion);
+			pipExec = command;
+		} catch (err) {
+			console.log("Error: ", err);
+		}
+	}
+	if (pythonExec === '') {
+		vscode.window.showErrorMessage("You do not appear to have python installed.  Please download and install python (and make sure to add python to your path.");
+	}
+	// Now try to install pretext (using 1.0 command):
+	try {
+		execSync(pythonExec + ' -m ' + pipExec + ' install --upgrade pretext');
+		vscode.window.showInformationMessage("Successfully installed or upgraded pretext.");
+	} catch (err) {
+		vscode.window.showErrorMessage("Unable to install PreTeXt using pip.  Please see the pretext documentation for further assistance.");
+		console.log(err);
+	}
+}
+
+function getPtxExec() {
+	// Here we will try to guess the name of the pretext command, be it `pretext`, `python -m pretext`, or `python3 -m pretext`.
+	let ptxExec = '';
+	for (let command of ['pretext','python -m pretext','python3 -m pretext']){
+		try {
+			let ptxVersion = execSync(command+" --version").toString();
+			console.log("Using PreTeXt version", ptxVersion);
+			return command;
+		} catch (err) {
+			console.log(command+' not found');
+		}
+	}
+	if (ptxExec === '') {
+		vscode.window.showWarningMessage("It doesn't look like you have pretext installed.  We will now try to install it for you.");
+		try {
+			installPretext();
+			ptxExec = getPtxExec();
+		} catch (err) {
+			console.log("Unable to install PreTeXt.  Error: ", err);
+		}
+	}
+	return ptxExec;
+}
+
+export const ptxExec:string = getPtxExec();
+
+
+function getTargets() {
+	// Define a constant that holds the names of targets listed in project.ptx
+	// execSync returns stdout from executing the command.  We then convert to a string, split on new lines, and remove any blanks, to create an array of the target names.
+	// See also https://stackoverflow.com/questions/41001360/saving-the-output-of-a-child-process-in-a-variable-in-the-parent-in-nodejs
+	let filePath = getDir();
+	try {
+		let targets = execSync(ptxExec+" --targets", {cwd: filePath}).toString().split(/\r?\n/).filter(Boolean);
+		// Set up dictionary for quickselect:
+		let targetSelection = [];
+		for (let target of targets) {
+					targetSelection.push(
+						{
+							label: target,
+							description: 'Build source as '+target,
+						}
+					);
+				}
+		return targetSelection;
+	}
+	catch (err) {
+		console.log("getTargets() Error: \n",err);
+		return [];
+	}		
+}
+
+// export const targetNames:string[] = getTargets();
+
+// The main function to run pretext commands:
+async function runPretext(ptxExec:string, ptxCommand:string, ptxOptions:string, passedPath:string=""): Promise<void> {
 	// var editor = vscode.window.activeTextEditor;
 	// var fullName = path.normalize(editor.document.fileName);
 	// var filePath = path.dirname(fullName);
-	var filePath = getCwd();
+	let fullCommand = ptxExec+' '+ptxCommand+' '+ptxOptions;
+	var filePath = getDir(passedPath);
 	console.log('cwd = '+filePath);
 	if (filePath !== undefined && filePath !== '.') {
-
 		pretextOutputChannel.show();
-		pretextOutputChannel.append('Now running `' + ptxCommand +'` ...\n');
-		var process = spawn(ptxCommand, [], { cwd: filePath, shell: true });
+		pretextOutputChannel.append('Now running `' + fullCommand +'` ...\n');
+		var process = spawn(fullCommand, [], { cwd: filePath, shell: true });
 		// console.log("stdout:", proc.stdout);
-		process.stdout.on('data', function (data) {
-			console.log(`stdout:${data}`);
+		process.stderr.on('data', function (data) {
+			console.log(`log: ${data}`);
 			var outputLines = data.toString().split(/\r?\n/);
 			for (const line of outputLines) {
 				console.log(line + '\n');
-				pretextOutputChannel.append(line + '\n');
+				if (line.startsWith("http://localhost:")) {
+					pretextOutputChannel.append(line + '\n');
+					pretextOutputChannel.append('(this local server will remain running until you close vs code)\n');
+					return;
+				} else {
+					pretextOutputChannel.append(line + '\n');
+				}
 				if (line.startsWith("error") || line.startsWith("critical")) {
 					vscode.window.showErrorMessage(line);
 					// } else if (line.startsWith("warning")) {
@@ -52,170 +166,131 @@ function runPretext(ptxCommand: string): void {
 				}
 			});
 			
-			process.stderr.on('data', function (data) {
-				pretextOutputChannel.show();
-				console.log('stderr is: ');
-				console.log(data.toString());
-				if (data.toString() !== "") {
-					vscode.window.showErrorMessage( data.toString());
-					pretextOutputChannel.append(data.toString() + '\n');
-				}
-			});
-			
 			process.on('exit', function (code){
 				console.log( code?.toString());
-				pretextOutputChannel.append('\n ...PreTeXt command complete.\n');
+				pretextOutputChannel.appendLine('...PreTeXt command complete.');
 			});
 		};
 		};
-		
-function runViewCommand(ptxCommand: string): void {
-	// var editor = vscode.window.activeTextEditor;
-	// var fullName = path.normalize(editor.document.fileName);
-	// var filePath = path.dirname(fullName);
-	var filePath = getCwd();
-	if (filePath !== undefined && filePath !== '.') {
-		pretextOutputChannel.show();
-		pretextOutputChannel.append('Now running `' + ptxCommand +'` ...\n');
-		var process = spawn(ptxCommand, [], { cwd: filePath, shell: true });
-		// console.log("stdout:", proc.stdout);
-		process.stdout.on('data', function (data) {
-			console.log(`stdout:${data}`);
-			var outputLines = data.toString().split(/\r?\n/);
-			for (const line of outputLines) {
-				console.log(line + '\n');
-				if (line.startsWith("http://localhost:")) {
-					pretextOutputChannel.append(line + '\n');
-					pretextOutputChannel.append('(this local server will remain running until you close vs code)\n');
-					return;
-				} else {
-					pretextOutputChannel.append(line + ' ');
-				}
-			}
-		});
-		process.stderr.on('data', function (data) {
-				// pretextOutputChannel.show();
-				console.log('stderr: ' + data.toString());
-				// if (data.toString() !== "") {
-				// 	// vscode.window.showErrorMessage( data.toString());
-				// 	// pretextOutputChannel.append(data.toString() + '\n');
-				// }
-		});
-		process.on('exit', function (code){
-			console.log( code?.toString());
-			pretextOutputChannel.append('\n ...PreTeXt command complete.\n');
-		});
-	};
-};
-	
+
+async function runThenOpen(ptxExec:string, ptxCommand:string, ptxOptions:string, folder:string) {
+	await runPretext(ptxExec,ptxCommand,ptxOptions,folder);
+	vscode.commands.executeCommand('vscode.openFolder',path.join(folder,'new_pretext_project'));
+}		
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	
 	console.log('Congratulations, your extension "pretext-tools" is now active!');
-
+	console.log('PreTeXt exec command: ',ptxExec);
+	var targetSelection = getTargets();
+	console.log('Targets are now:'+ targetSelection.map(function(obj){return ' '+obj.label;}));
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('pretext-tools.buildAny', () => {
-			// Get command to run based on user selected target.
-			const buildCommand = [
-				{
-					label: 'html', 
-					description: 'Build source as html',
-					command: 'python -m pretext build html' 
-				},
-				{
-					label: 'pdf',
-					description: 'Build source as PDF',
-					command: 'python -m pretext build pdf'
-				},
-				{
-					label: 'diagrams/images',
-					description: 'Generate images defined in source',
-					command: 'python -m pretext build --diagrams --only-assets'
-				},
-				{
-					label: 'webwork',
-					description: 'Generate webwork-representations file (for projects containint webwork exercises)',
-					command: 'python -m pretext build --webwork --only-assets'
-				}
-			];
-			// TODO: add build targets from project manifest
+
 
 			// Show choice dialog and pass correct command to runPretext based on selection.
-			vscode.window.showQuickPick(buildCommand).then((qpSelection) => {
+			vscode.window.showQuickPick(targetSelection).then((qpSelection) => {
 				if (!qpSelection) {
 					return;
 				}
-				runPretext(qpSelection.command);
+				runPretext(ptxExec,'build',qpSelection.label);
+				// Move selected target to front of list for next command.
+				targetSelection = targetSelection.filter(item => item !== qpSelection);
+				targetSelection.unshift(qpSelection);
 			});
-		})
-	);
-
-	context.subscriptions.push(
-		vscode.commands.registerCommand('pretext-tools.buildHTML', () => {
-			var ptxCommand = "python -m pretext build html";
-			runPretext(ptxCommand);
 		})
 	);
 	
 	context.subscriptions.push(
-		vscode.commands.registerCommand('pretext-tools.buildPDF', () => {
-			var ptxCommand = "python -m pretext build pdf";
-			runPretext(ptxCommand);
+		vscode.commands.registerCommand('pretext-tools.buildDefault', () => {
+			runPretext(ptxExec,'build','');
+		})
+	);
+	
+	context.subscriptions.push(
+		vscode.commands.registerCommand('pretext-tools.generate', () => {
+			runPretext(ptxExec,'generate','');
 		})
 	);
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('pretext-tools.view', () => {
-			const viewCommand = [
-				{
-					label: 'html',
-					description: 'View html',
-					command: 'python -m pretext view html'
-				},
-				{
-					label: 'pdf',
-					description: 'View PDF',
-					command: 'python -m pretext build pdf'
-				}
-			];
-			// TODO: add build targets from project manifest
 
 			// Show choice dialog and pass correct command to runPretext based on selection.
-			vscode.window.showQuickPick(viewCommand).then((qpSelection) => {
+			vscode.window.showQuickPick(targetSelection).then((qpSelection) => {
 				if (!qpSelection) {
 					return;
 				}
-				runViewCommand(qpSelection.command);
+				runPretext(ptxExec,'view',qpSelection.label);
+				// Move selected target to front of list for next command.
+				targetSelection = targetSelection.filter(item => item !== qpSelection);
+				targetSelection.unshift(qpSelection);
 			});
 		})
 	);
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('pretext-tools.viewWatch', () => {
-			var ptxCommand = "python -m pretext view --watch";
-			runViewCommand(ptxCommand);
+			runPretext(ptxExec,'view','--watch');
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('pretext-tools.newBook', () => {
-			var ptxCommand = "python -m pretext new book";
-			runPretext(ptxCommand);
+		vscode.commands.registerCommand('pretext-tools.new', () => {
+			let viewCommand = [];
+			for (let template of ['article','book','slideshow']) {
+				viewCommand.push(
+					{
+						label: template,
+						description: 'New '+template,
+					},
+				);
+			};
+			// Show choice dialog and pass correct command to runPretext based on selection.
+			vscode.window.showQuickPick(viewCommand).then((qpSelection) => {
+				if (!qpSelection) {
+					return;
+				}
+				vscode.window.showOpenDialog({
+					openLabel: 'Select folder that will hold your project...',
+					canSelectMany: false,
+					canSelectFiles: false,
+					canSelectFolders: true
+				}).then(fileUri => {
+					if (fileUri && fileUri[0]) {
+							var projectFolder = fileUri[0].fsPath; 
+							console.log('Selected folder: ', projectFolder);
+							runThenOpen(ptxExec,'new',qpSelection.label,projectFolder);
+					}
+				});
+			});
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('pretext-tools.newArticle', () => {
-			var ptxCommand = "python -m pretext new article";
-			runPretext(ptxCommand);
+		vscode.commands.registerCommand('pretext-tools.deploy', () => {
+			runPretext(ptxExec,'deploy','');
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('pretext-tools.test', () => {
-			testImportPromise.then((test) => {test.test();});
+		vscode.commands.registerCommand('pretext-tools.updatePTX', () => {
+			console.log("Checking for new version of PreTeXt to install");
+			pretextOutputChannel.appendLine("Checking for new version of PreTeXt to install");
+			installPretext();
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('pretext-tools.refresh',() => {
+			pretextOutputChannel.appendLine("Refreshing target list.");
+			console.log("Refreshing target list.");
+			targetSelection = getTargets();
+			console.log('Targets are now:'+ targetSelection.map(function(obj){return ' '+obj.label;}));
+			vscode.window.showInformationMessage('Refreshed list of targets.  Targets are now:'+ targetSelection.map(function(obj){return ' '+obj.label;}));
 		})
 	);
 }
