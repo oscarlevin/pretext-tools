@@ -23,7 +23,9 @@ Having a document identified as a PreTeXt document will give you:
 
 ### Snippets
 
-PreTeXt has a lot of markup to describe the structure of the document.  To vastly speed up the authoring of the documents, the extension provides _snippets_ for almost all of the supported tags and attributes of PreTeXt.  As you type, if you start typing a tag, such as `<theorem>`, autocomplete will pop up a menu at your cursor suggesting this tag.  If you hit ENTER (or if configured, TAB), then the snippet will expand and put your cursor in the right spot to start typing the statement of the theorem.
+PreTeXt has a lot of markup to describe the structure of the document.  To vastly speed up the authoring of the documents, the extension provides _snippets_ for almost all of the supported tags and attributes of PreTeXt.  As you type, if you start typing a tag, such as `<example>`, autocomplete will pop up a menu at your cursor suggesting this tag.  If you hit ENTER (or if configured, TAB), then the snippet will expand and put your cursor in the right spot to start typing the statement of the example.
+
+![animation showing snippets](assets/snippets.gif "snippet example")
 
 Some shorter snippets also allow you to tab out of them.  For example, start typing `<m>` and hit enter.  Your cursor will be between the start and end tags.  When you are done typing your math, hit tab to jump out of the tags so you can keep typing.
 

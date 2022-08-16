@@ -168,7 +168,7 @@ async function runPretext(ptxExec:string, ptxCommand:string, ptxOptions:string, 
 			
 			process.on('exit', function (code){
 				console.log( code?.toString());
-				pretextOutputChannel.appendLine('...PreTeXt command complete.');
+				pretextOutputChannel.appendLine('...PreTeXt command finished.');
 			});
 		};
 		};
