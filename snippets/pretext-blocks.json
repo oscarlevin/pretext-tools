@@ -158,9 +158,9 @@
         "description": "project (project-like)."
     },
     "convention (remark-like)": {
-      "prefix": "<convention>",
-      "body": "<convention>\n\t$0\n</convention>",
-      "description": "convention (remark-like)"
+        "prefix": "<convention>",
+        "body": "<convention>\n\t$0\n</convention>",
+        "description": "convention (remark-like)"
     },
     "insight (remark-like)": {
         "prefix": "<insight>",
@@ -168,23 +168,23 @@
         "description": "insight (remark-like)"
     },
     "note (remark-like)": {
-      "prefix": "<note>",
-      "body": "<note>\n\t$0\n</note>",
-      "description": "note (remark-like)"
+        "prefix": "<note>",
+        "body": "<note>\n\t$0\n</note>",
+        "description": "note (remark-like)"
     },
     "observation (remark-like)": {
-      "prefix": "<observation>",
-      "body": "<observation>\n\t$0\n</observation>",
-      "description": "observation (remark-like)"
+        "prefix": "<observation>",
+        "body": "<observation>\n\t$0\n</observation>",
+        "description": "observation (remark-like)"
     },
     "remark": {
         "prefix": "<remark>",
         "body": "<remark>\n\t$0\n</remark>"
     },
     "warning (remark-like)": {
-      "prefix": "<warning>",
-      "body": "<warning>\n\t$0\n</warning>",
-      "description": "warning (remark-like)"
+        "prefix": "<warning>",
+        "body": "<warning>\n\t$0\n</warning>",
+        "description": "warning (remark-like)"
     },
     "task": {
         "prefix": "<task>",
@@ -241,7 +241,7 @@
         "body": "<var name=\"$1\" width=\"$2\"/>$0",
         "description": "var for WeBWorK"
     },
-        "table": {
+    "table": {
         "prefix": "<table>",
         "body": "<table>\n\t<title>$1</title>\n\t<tabular>\n\t\t<row>\n      <cell>$2</cell>$0\n\t\t</row>\n\t</tabular>\n</table>"
     },
@@ -287,7 +287,7 @@
         "body": "<caption>$1</caption>"
     },
     "youtube": {
-        "prefix": ["<youtube>","<video>"],
+        "prefix": ["<youtube>", "<video>"],
         "body": "<video youtube=\"$1\"/>$0"
     },
     "sidebyside (plain)": {
