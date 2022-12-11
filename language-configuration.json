@@ -1,7 +1,7 @@
 {
     "comments": {
         // symbols used for start and end a block comment. Remove this entry if your language does not support block comments
-        "blockComment": [ "<!--", "-->" ]
+        "blockComment": ["<!--", "-->"]
     },
     // symbols used as brackets
     "brackets": [
@@ -35,18 +35,12 @@
         {
             "open": "<!--",
             "close": "-->",
-            "notIn": [
-                "comment",
-                "string"
-            ]
+            "notIn": ["comment", "string"]
         },
         {
             "open": "<![CDATA[",
             "close": "]]>",
-            "notIn": [
-                "comment",
-                "string"
-            ]
+            "notIn": ["comment", "string"]
         }
     ],
     // symbols that that can be used to surround a selection

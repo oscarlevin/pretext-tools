@@ -1,52 +1,51 @@
 {
-  "columns attribute": {
-    "prefix": "@cols",
-    "body": "cols=\"$1\"$0",
-    "description": "columns attribute for lists and exercisegroup.  e.g. cols=\"3\""
-  },
-  "width attribute": {
-    "prefix": "@width",
-    "body": "width=\"$1%\"$0",
-    "description": "width attribute for images and side-by-sides"
-  },
-  "widths attribute": {
-    "prefix": "@widths",
-    "body": "widths=\"$1\"$0",
-    "description": "widths attribute for side-by-sides, e.g. widths=\"20% 80%\""
-  },
-  "margins": {
-    "prefix": "@margins",
-    "body": "margins=\"$1\"",
-    "description": "margins attribute for side-by-sides, e.g. margins=\"5% 10%\""
-  },
-  "valign": {
-    "prefix": "@valign",
-    "body": "valign=\"${1|bottom,middle,top|}\"",
-    "description": "vertical align attribute for side-by-side and tabulars."
-  },
-  "workspace": {
-    "prefix": "@workspace",
-    "body": "workspace=\"$1%\"$0",
-    "description": "workspace, for exercise in worksheet (specify percentage of page to be left blank)."
-  },
-  "number": {
-    "prefix": "@number",
-    "body": "number=\"$1\"$0",
-    "description": "number, for exercise in with static number."
-  },
-  "text (for xref)": {
-    "prefix": "@text",
-    "body": "text=\"${1|type-local,type-global,type-hybrid,local,global,hybrid,phrase-global,phrase-hybrid,title|}\"$0",
-    "description": "text attribute, to specify style of cross-reference text."
-  },
-  "xinclude namespace": {
-    "prefix": "@xmlns:xi",
-    "body": "xmlns:xi=\"http://www.w3.org/2001/XInclude\"",
-    "description": "xinclud namespace: add to top division of xinclud-ed file."
-  },
-  "pause": {
-      "prefix": "@pause",
-      "body": "pause=\"yes\""
-  }
-
+    "columns attribute": {
+        "prefix": "@cols",
+        "body": "cols=\"$1\"$0",
+        "description": "columns attribute for lists and exercisegroup.  e.g. cols=\"3\""
+    },
+    "width attribute": {
+        "prefix": "@width",
+        "body": "width=\"$1%\"$0",
+        "description": "width attribute for images and side-by-sides"
+    },
+    "widths attribute": {
+        "prefix": "@widths",
+        "body": "widths=\"$1\"$0",
+        "description": "widths attribute for side-by-sides, e.g. widths=\"20% 80%\""
+    },
+    "margins": {
+        "prefix": "@margins",
+        "body": "margins=\"$1\"",
+        "description": "margins attribute for side-by-sides, e.g. margins=\"5% 10%\""
+    },
+    "valign": {
+        "prefix": "@valign",
+        "body": "valign=\"${1|bottom,middle,top|}\"",
+        "description": "vertical align attribute for side-by-side and tabulars."
+    },
+    "workspace": {
+        "prefix": "@workspace",
+        "body": "workspace=\"$1%\"$0",
+        "description": "workspace, for exercise in worksheet (specify percentage of page to be left blank)."
+    },
+    "number": {
+        "prefix": "@number",
+        "body": "number=\"$1\"$0",
+        "description": "number, for exercise in with static number."
+    },
+    "text (for xref)": {
+        "prefix": "@text",
+        "body": "text=\"${1|type-local,type-global,type-hybrid,local,global,hybrid,phrase-global,phrase-hybrid,title|}\"$0",
+        "description": "text attribute, to specify style of cross-reference text."
+    },
+    "xinclude namespace": {
+        "prefix": "@xmlns:xi",
+        "body": "xmlns:xi=\"http://www.w3.org/2001/XInclude\"",
+        "description": "xinclud namespace: add to top division of xinclud-ed file."
+    },
+    "pause": {
+        "prefix": "@pause",
+        "body": "pause=\"yes\""
+    }
 }
