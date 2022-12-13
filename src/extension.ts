@@ -4,6 +4,11 @@ import * as vscode from "vscode";
 import { exec, execSync, spawn } from "child_process";
 import * as path from "path";
 
+import {
+    activate as lspActivate,
+    deactivate as lspDeactivate,
+} from "./lsp-client/main";
+
 var pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
 
 function getDir(myPath: string = "") {
@@ -212,6 +217,10 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(
         'Congratulations, your extension "pretext-tools" is now active!'
     );
+
+    // Start the LSP
+    lspActivate(context);
+
     console.log("PreTeXt exec command: ", ptxExec);
     var targetSelection = getTargets();
     console.log(
@@ -349,4 +358,6 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+    lspDeactivate();
+}
