@@ -28,6 +28,9 @@
         "onCommand:pretext-tools.refresh"
     ],
     "main": "./out/extension.js",
+    "extensionDependencies": [
+      "redhat.vscode-xml"
+    ],
     "contributes": {
         "languages": [
             {
@@ -147,6 +150,11 @@
                 "title": "Update installed PreTeXt version",
                 "category": "PreTeXt Tools",
                 "description": "Checks for and installs the newest version of PreTeXt"
+            }
+        ],
+        "xmlLanguageParticipants": [
+            {
+                "languageId": "pretext"
             }
         ]
     },
