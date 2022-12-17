@@ -51,7 +51,6 @@
                 "scopeName": "text.xml.ptx",
                 "path": "./syntaxes/ptx.tmLanguage.json",
                 "embeddedLanguages": {
-                    "text.xml": "xml",
                     "text.tex": "tex",
                     "text.tex.latex": "latex",
                     "source.asymptote": "asymptote"
@@ -60,19 +59,19 @@
         ],
         "snippets": [
             {
-                "language": "xml",
+                "language": "pretext",
                 "path": "./snippets/pretext.json"
             },
             {
-                "language": "xml",
+                "language": "pretext",
                 "path": "./snippets/pretext-blocks.json"
             },
             {
-                "language": "xml",
+                "language": "pretext",
                 "path": "./snippets/pretext-attributes.json"
             },
             {
-                "language": "xml",
+                "language": "pretext",
                 "path": "./snippets/pretext-templates.json"
             }
         ],
@@ -111,6 +110,7 @@
             {
                 "command": "pretext-tools.buildAny",
                 "title": "Build",
+                "icon": "$(debug-start)",
                 "category": "PreTeXt Tools",
                 "description": "Build selected target from the project.ptx manifest."
             },
@@ -157,11 +157,51 @@
                 "languageId": "pretext"
             }
         ],
+        "configurationDefaults": {
+            "xml.fileAssociations": [{  
+                "pattern": "**/source/*.ptx",
+                "systemId": "https://raw.githubusercontent.com/PreTeXtBook/pretext/master/schema/pretext.rng"
+            }]   
+        },
         "menus":{
             "editor/title/run": [
                 {
                     "command": "pretext-tools.buildAny"
                 }   
+            ],
+            "view/title": [
+                {
+                    "command": "pretext-tools.view"
+                }   
+            ]
+        },
+        "viewsContainers": {
+            "activitybar": [
+                {
+                "id": "pretext-tools-activitybar",
+                "title": "PTX",
+                "icon": "./assets/activity-bar.svg"
+                }
+            ]
+        },
+        "views": {
+            "pretext-tools-activitybar": [
+                {
+                "id": "pretext-tools-commands",
+                "name": "Commands",
+                "when": "always"
+                },
+                {
+                "id": "pretext-tools-structure",
+                "name": "Structure",
+                "when": "pretext-tools:enabled"
+                },
+                {
+                "id": "latex-workshop-snippet-view",
+                "type": "webview",
+                "when": "latex-workshop:enabled",
+                "name": "Snippet View"
+                }
             ]
         },
         "configuration":[
@@ -171,7 +211,7 @@
                     "pretext-tools.view.previewInVSCode": {
                         "type":"boolean",
                         "default": true,
-                        "description": "Preview output inside VS Code rather than external browser."
+                        "description": "Not yet implemented"
                     }
                 }
             }

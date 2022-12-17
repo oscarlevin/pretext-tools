@@ -20,6 +20,7 @@ Having a document identified as a PreTeXt document will give you:
 - Syntax highlighting
 - Access to snippets (auto-complete)
 - Access to keyboard shortcuts for PreTeXt commands.
+- Schema validation (via required vscode-xml extension)
 
 ### Snippets
 
@@ -43,9 +44,9 @@ Here are some options that I find make snippets more useful.  For each of these,
 
 ### Running PreTeXt
 
-To build and view projects, and to generate assets, the extension calls the PreTeXt-CLI.  Of course, you can open a terminal in VS Code (CTRL+\`) and type `pretext build web`, but you can also get more visual feedback by using the keyboard shortcut Ctrl+Alt+B.  This will open up a context menu asking you which target you want to build.  Select it and your project will be built for that target.  Ctrl+Alt+V will ask you which project you want to view, and Ctrl+Alt+G will ask you what to generate.
+To build and view projects, and to generate assets, the extension calls the PreTeXt-CLI.  Of course, you can open a terminal in VS Code (CTRL+\`) and type `pretext build web`, but you can also get more visual feedback by using the keyboard shortcut Ctrl+Alt+B, clicking the "run" arrow on the top-right of the editor, or selecting `PreTeXt Tools: Build` from the command pallet (CTRL+SHIFT+P).  This will open up a context menu asking you which target you want to build.  Select it and your project will be built for that target.  Ctrl+Alt+V will ask you which project you want to view, and Ctrl+Alt+G will ask you what to generate.
 
-There are additional commands that are accessible through the command pallet.  Type Ctrl+Shift+P and start typing "PreTeXt-Tools" to see all of them.
+There are additional commands that are accessible through the command pallet.  Type Ctrl+Shift+P and start typing "PreTeXt Tools" to see all of them.
 
 In particular, if you are working with multiple projects in the same window, you might need to refresh your list of targets (this list is determined by looking at the `project.ptx` manifest, but is set once when a project is opened).
 

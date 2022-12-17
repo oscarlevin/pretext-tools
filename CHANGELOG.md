@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Support for PreTeXt schema validation via (now required) vscode-xml extension
+- Build icon on top of editor
+
+### Fixed
+
+- Snippets only appear on pretext document, not any XML document
+
+
 ## [0.6.0]
 
 ### Added
