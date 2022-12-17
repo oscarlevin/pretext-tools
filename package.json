@@ -2,7 +2,7 @@
     "name": "pretext-tools",
     "displayName": "PreTeXt-tools",
     "description": "Language support and more for PreTeXt",
-    "version": "0.6.1",
+    "version": "0.7.0",
     "license": "See license in LICENSE",
     "icon": "logo.png",
     "publisher": "oscarlevin",
@@ -29,7 +29,7 @@
     ],
     "main": "./out/extension.js",
     "extensionDependencies": [
-      "redhat.vscode-xml"
+        "redhat.vscode-xml"
     ],
     "contributes": {
         "languages": [
@@ -158,58 +158,60 @@
             }
         ],
         "configurationDefaults": {
-            "xml.fileAssociations": [{  
-                "pattern": "**/source/*.ptx",
-                "systemId": "https://raw.githubusercontent.com/PreTeXtBook/pretext/master/schema/pretext.rng"
-            }]   
+            "xml.fileAssociations": [
+                {
+                    "pattern": "**/source/*.ptx",
+                    "systemId": "https://raw.githubusercontent.com/PreTeXtBook/pretext/master/schema/pretext.rng"
+                }
+            ]
         },
-        "menus":{
+        "menus": {
             "editor/title/run": [
                 {
                     "command": "pretext-tools.buildAny"
-                }   
+                }
             ],
             "view/title": [
                 {
                     "command": "pretext-tools.view"
-                }   
+                }
             ]
         },
         "viewsContainers": {
             "activitybar": [
                 {
-                "id": "pretext-tools-activitybar",
-                "title": "PTX",
-                "icon": "./assets/activity-bar.svg"
+                    "id": "pretext-tools-activitybar",
+                    "title": "PTX",
+                    "icon": "./assets/activity-bar.svg"
                 }
             ]
         },
         "views": {
             "pretext-tools-activitybar": [
                 {
-                "id": "pretext-tools-commands",
-                "name": "Commands",
-                "when": "always"
+                    "id": "pretext-tools-commands",
+                    "name": "Commands",
+                    "when": "always"
                 },
                 {
-                "id": "pretext-tools-structure",
-                "name": "Structure",
-                "when": "pretext-tools:enabled"
+                    "id": "pretext-tools-structure",
+                    "name": "Structure",
+                    "when": "pretext-tools:enabled"
                 },
                 {
-                "id": "latex-workshop-snippet-view",
-                "type": "webview",
-                "when": "latex-workshop:enabled",
-                "name": "Snippet View"
+                    "id": "latex-workshop-snippet-view",
+                    "type": "webview",
+                    "when": "latex-workshop:enabled",
+                    "name": "Snippet View"
                 }
             ]
         },
-        "configuration":[
+        "configuration": [
             {
                 "title": "PreTeXt",
                 "properties": {
                     "pretext-tools.view.previewInVSCode": {
-                        "type":"boolean",
+                        "type": "boolean",
                         "default": true,
                         "description": "Not yet implemented"
                     }
