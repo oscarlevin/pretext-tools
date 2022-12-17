@@ -148,6 +148,36 @@
                 "category": "PreTeXt Tools",
                 "description": "Checks for and installs the newest version of PreTeXt"
             }
+        ],
+        "menus":{
+            "editor/title/run": [
+                {
+                    "command": "pretext-tools.buildAny"
+                }   
+            ]
+        },
+        "configuration":[
+            {
+                "title": "PreTeXt",
+                "properties": {
+                    "pretext-tools.veiw.previewInVSCode": {
+                        "type":"boolean",
+                        "default": true,
+                        "description": "Preview output inside VS Code rather than external browser."
+                    },
+                    "pretext-tools.testPairs": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "default": {
+                            ".ptx":"pretext",
+                            ".xml":"XML"
+                        },
+                        "description": "Dictionary items specifying the ..."
+                    }
+                }
+            }
         ]
     },
     "scripts": {
@@ -163,7 +193,7 @@
     },
     "devDependencies": {
         "@types/glob": "^7.2.0",
-        "@types/mocha": "^9.1.1",
+        "@types/mocha": "^10.0.0",
         "@types/node": "16.x",
         "@types/vscode": "^1.68.0",
         "@typescript-eslint/eslint-plugin": "^5.27.0",

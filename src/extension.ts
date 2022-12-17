@@ -212,6 +212,12 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(
         'Congratulations, your extension "pretext-tools" is now active!'
     );
+    const activeEditor = vscode.window.activeTextEditor;
+    console.log(activeEditor?.document.fileName);
+    const configuration = vscode.workspace.getConfiguration('pretext-tools');
+    console.log(
+        'The value of your setting is', configuration.get('veiw.previewInVSCode')
+    );
     console.log("PreTeXt exec command: ", ptxExec);
     var targetSelection = getTargets();
     console.log(
