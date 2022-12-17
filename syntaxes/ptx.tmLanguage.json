@@ -21,6 +21,7 @@
                     "name": "comment.inline.permid"
                 },
                 "5": {
+                    "name": "text.tex.math",
                     "patterns": [
                         {
                             "include": "text.xml#tagStuff"

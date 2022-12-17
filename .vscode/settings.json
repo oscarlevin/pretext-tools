@@ -14,5 +14,24 @@
         "outfile",
         "unist",
         "xast"
+    ],
+    "spellright.language": [
+        "en"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext",
+        "pretext",
+        "typescript",
+        "json"
+    ],
+    "spellright.parserByClass": {
+        "pretext": {
+            "parser": "xml"
+        }
+    },
+    "cSpell.enableFiletypes": [
+        "pretext"
     ]
 }

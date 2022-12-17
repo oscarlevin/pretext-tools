@@ -221,6 +221,12 @@ export function activate(context: vscode.ExtensionContext) {
     // Start the LSP
     lspActivate(context);
 
+    const activeEditor = vscode.window.activeTextEditor;
+    console.log(activeEditor?.document.fileName);
+    const configuration = vscode.workspace.getConfiguration('pretext-tools');
+    console.log(
+        'The value of your setting is', configuration.get('veiw.previewInVSCode')
+    );
     console.log("PreTeXt exec command: ", ptxExec);
     var targetSelection = getTargets();
     console.log(

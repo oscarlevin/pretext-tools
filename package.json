@@ -2,7 +2,7 @@
     "name": "pretext-tools",
     "displayName": "PreTeXt-tools",
     "description": "Language support and more for PreTeXt",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "license": "See license in LICENSE",
     "icon": "logo.png",
     "publisher": "oscarlevin",
@@ -28,6 +28,9 @@
         "onCommand:pretext-tools.refresh"
     ],
     "main": "./out/extension.js",
+    "extensionDependencies": [
+      "redhat.vscode-xml"
+    ],
     "contributes": {
         "languages": [
             {
@@ -49,7 +52,6 @@
                 "scopeName": "text.xml.ptx",
                 "path": "./syntaxes/ptx.tmLanguage.json",
                 "embeddedLanguages": {
-                    "text.xml": "xml",
                     "text.tex": "tex",
                     "text.tex.latex": "latex",
                     "source.asymptote": "asymptote"
@@ -58,19 +60,19 @@
         ],
         "snippets": [
             {
-                "language": "xml",
+                "language": "pretext",
                 "path": "./snippets/pretext.json"
             },
             {
-                "language": "xml",
+                "language": "pretext",
                 "path": "./snippets/pretext-blocks.json"
             },
             {
-                "language": "xml",
+                "language": "pretext",
                 "path": "./snippets/pretext-attributes.json"
             },
             {
-                "language": "xml",
+                "language": "pretext",
                 "path": "./snippets/pretext-templates.json"
             }
         ],
@@ -109,6 +111,7 @@
             {
                 "command": "pretext-tools.buildAny",
                 "title": "Build",
+                "icon": "$(debug-start)",
                 "category": "PreTeXt Tools",
                 "description": "Build selected target from the project.ptx manifest."
             },
@@ -148,6 +151,70 @@
                 "title": "Update installed PreTeXt version",
                 "category": "PreTeXt Tools",
                 "description": "Checks for and installs the newest version of PreTeXt"
+            }
+        ],
+        "xmlLanguageParticipants": [
+            {
+                "languageId": "pretext"
+            }
+        ],
+        "configurationDefaults": {
+            "xml.fileAssociations": [{  
+                "pattern": "**/source/*.ptx",
+                "systemId": "https://raw.githubusercontent.com/PreTeXtBook/pretext/master/schema/pretext.rng"
+            }]   
+        },
+        "menus":{
+            "editor/title/run": [
+                {
+                    "command": "pretext-tools.buildAny"
+                }   
+            ],
+            "view/title": [
+                {
+                    "command": "pretext-tools.view"
+                }   
+            ]
+        },
+        "viewsContainers": {
+            "activitybar": [
+                {
+                "id": "pretext-tools-activitybar",
+                "title": "PTX",
+                "icon": "./assets/activity-bar.svg"
+                }
+            ]
+        },
+        "views": {
+            "pretext-tools-activitybar": [
+                {
+                "id": "pretext-tools-commands",
+                "name": "Commands",
+                "when": "always"
+                },
+                {
+                "id": "pretext-tools-structure",
+                "name": "Structure",
+                "when": "pretext-tools:enabled"
+                },
+                {
+                "id": "latex-workshop-snippet-view",
+                "type": "webview",
+                "when": "latex-workshop:enabled",
+                "name": "Snippet View"
+                }
+            ]
+        },
+        "configuration":[
+            {
+                "title": "PreTeXt",
+                "properties": {
+                    "pretext-tools.view.previewInVSCode": {
+                        "type":"boolean",
+                        "default": true,
+                        "description": "Not yet implemented"
+                    }
+                }
             }
         ]
     },
