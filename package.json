@@ -168,21 +168,10 @@
             {
                 "title": "PreTeXt",
                 "properties": {
-                    "pretext-tools.veiw.previewInVSCode": {
+                    "pretext-tools.view.previewInVSCode": {
                         "type":"boolean",
                         "default": true,
                         "description": "Preview output inside VS Code rather than external browser."
-                    },
-                    "pretext-tools.testPairs": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "string"
-                        },
-                        "default": {
-                            ".ptx":"pretext",
-                            ".xml":"XML"
-                        },
-                        "description": "Dictionary items specifying the ..."
                     }
                 }
             }
