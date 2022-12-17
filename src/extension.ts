@@ -18,7 +18,7 @@ function getDir(myPath: string = "") {
     }
     if (vscode.workspace.workspaceFolders !== undefined) {
         myPath = vscode.workspace.workspaceFolders[0].uri.fsPath;
-        console.log("Dir ", myPath, " set by worksapce folder");
+        console.log("Dir ", myPath, " set by workspace folder");
         return myPath;
     } else if (vscode.window.activeTextEditor !== undefined) {
         myPath = path.dirname(
@@ -132,7 +132,7 @@ function getTargets() {
             .toString()
             .split(/\r?\n/)
             .filter(Boolean);
-        // Set up dictionary for quickselect:
+        // Set up dictionary for quick-select:
         let targetSelection = [];
         for (let target of targets) {
             targetSelection.push({
