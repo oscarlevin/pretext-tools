@@ -222,9 +222,9 @@ export function activate(context: vscode.ExtensionContext) {
     var targetSelection = getTargets();
     console.log(
         "Targets are now:" +
-            targetSelection.map(function (obj) {
-                return " " + obj.label;
-            })
+        targetSelection.map(function (obj) {
+            return " " + obj.label;
+        })
     );
 
     context.subscriptions.push(
@@ -340,19 +340,19 @@ export function activate(context: vscode.ExtensionContext) {
             targetSelection = getTargets();
             console.log(
                 "Targets are now:" +
-                    targetSelection.map(function (obj) {
-                        return " " + obj.label;
-                    })
+                targetSelection.map(function (obj) {
+                    return " " + obj.label;
+                })
             );
             vscode.window.showInformationMessage(
                 "Refreshed list of targets.  Targets are now:" +
-                    targetSelection.map(function (obj) {
-                        return " " + obj.label;
-                    })
+                targetSelection.map(function (obj) {
+                    return " " + obj.label;
+                })
             );
         })
     );
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
