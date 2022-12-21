@@ -2,7 +2,7 @@
     "name": "pretext-tools",
     "displayName": "PreTeXt-tools",
     "description": "Language support and more for PreTeXt",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "license": "See license in LICENSE",
     "icon": "logo.png",
     "publisher": "oscarlevin",
@@ -53,7 +53,7 @@
                 "embeddedLanguages": {
                     "text.tex": "tex",
                     "text.tex.latex": "latex",
-                    "support.class.math.block.environment.latex":"latex",
+                    "support.class.math.block.environment.latex": "latex",
                     "source.asymptote": "asymptote"
                 }
             }
