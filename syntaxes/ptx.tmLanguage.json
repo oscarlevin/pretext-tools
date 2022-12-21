@@ -21,10 +21,10 @@
                     "name": "comment.inline.permid"
                 },
                 "5": {
-                    "name": "text.tex.math",
+                    "name": "support.class.math.block.environment.latex",
                     "patterns": [
                         {
-                            "include": "text.xml#tagStuff"
+                            "include": "text.tex#math"
                         }
                     ]
                 },

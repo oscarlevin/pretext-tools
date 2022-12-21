@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.7.1] - 2022-12-21
+
+### Fixed
+
+- Fixed file pattern for schema checking
+- Set default configuration of XML package to follow xinclude elements.
+- Improved a few snippets
+
+## [0.7.0]
+
 ### Added
 
 - Support for PreTeXt schema validation via (now required) vscode-xml extension
@@ -15,7 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Snippets only appear on pretext document, not any XML document
-
 
 ## [0.6.0]
 

@@ -53,6 +53,7 @@
                 "embeddedLanguages": {
                     "text.tex": "tex",
                     "text.tex.latex": "latex",
+                    "support.class.math.block.environment.latex":"latex",
                     "source.asymptote": "asymptote"
                 }
             }
@@ -160,10 +161,11 @@
         "configurationDefaults": {
             "xml.fileAssociations": [
                 {
-                    "pattern": "**/source/*.ptx",
+                    "pattern": "**/source/**.ptx",
                     "systemId": "https://raw.githubusercontent.com/PreTeXtBook/pretext/master/schema/pretext.rng"
                 }
-            ]
+            ],
+            "xml.validation.xInclude.enabled": true
         },
         "menus": {
             "editor/title/run": [

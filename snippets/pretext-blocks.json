@@ -188,8 +188,8 @@
     },
     "task": {
         "prefix": "<task>",
-        "body": "<task>\n\t<p>\n\t\t$0\n\t</p>\n</task>",
-        "description": "task (for breaking up project-like)."
+        "body": "<task>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>",
+        "description": "task (for parts of an exercise)."
     },
     "assemblage": {
         "prefix": "<assemblage>",
@@ -234,11 +234,11 @@
     },
     "WeBWorK (with pg code)": {
         "prefix": "<webwork>",
-        "body": "<webwork>\n\t<setup>\n\t\t<pg-code>\n\t\t\t$0\n\t\t</pg-code>\n\t</setup>\n\n\t<statement>\n\t\t<p>\n\t\t\t\n\t\t</p>\n\t</statement>\n</webwork>"
+        "body": "<webwork>\n\t<pg-code>\n\t\t$0\n\t</pg-code>\n\n\t<statement>\n\t\t<p>\n\t\t\t\n\t\t</p>\n\t</statement>\n</webwork>"
     },
     "var": {
         "prefix": "<var>",
-        "body": "<var name=\"$1\" width=\"$2\"/>$0",
+        "body": "<var name=\"$1\"/>$0",
         "description": "var for WeBWorK"
     },
     "table": {
