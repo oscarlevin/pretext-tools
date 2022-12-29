@@ -8,7 +8,7 @@
     "publisher": "oscarlevin",
     "repository": "https://github.com/oscarlevin/pretext-tools",
     "engines": {
-        "vscode": "^1.68.0"
+        "vscode": "^1.74.0"
     },
     "categories": [
         "Programming Languages",
@@ -129,6 +129,7 @@
             {
                 "command": "pretext-tools.view",
                 "title": "View",
+                "icon": "$(open-preview)",
                 "category": "PreTeXt Tools"
             },
             {
@@ -168,43 +169,25 @@
             "xml.validation.xInclude.enabled": true
         },
         "menus": {
-            "editor/title/run": [
+            "editor/title": [
                 {
-                    "command": "pretext-tools.buildAny"
-                }
-            ],
-            "view/title": [
+                    "command": "pretext-tools.buildAny",
+                    "group": "navigation",
+                    "when": "resourceLangId == pretext"
+                },
                 {
-                    "command": "pretext-tools.view"
-                }
-            ]
-        },
-        "viewsContainers": {
-            "activitybar": [
-                {
-                    "id": "pretext-tools-activitybar",
-                    "title": "PTX",
-                    "icon": "./assets/activity-bar.svg"
+                    "command": "pretext-tools.view",
+                    "group": "navigation",
+                    "when": "resourceLangId == pretext"
                 }
             ]
         },
         "views": {
-            "pretext-tools-activitybar": [
+            "explorer": [
                 {
                     "id": "pretext-tools-commands",
-                    "name": "Commands",
-                    "when": "always"
-                },
-                {
-                    "id": "pretext-tools-structure",
-                    "name": "Structure",
-                    "when": "pretext-tools:enabled"
-                },
-                {
-                    "id": "latex-workshop-snippet-view",
-                    "type": "webview",
-                    "when": "latex-workshop:enabled",
-                    "name": "Snippet View"
+                    "name": "PreTeXt Commands",
+                    "when": "resourceLangId == pretext"
                 }
             ]
         },

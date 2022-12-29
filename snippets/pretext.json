@@ -101,7 +101,7 @@
         "body": "<pre>\n$0\n</pre>"
     },
     "pre w cdata": {
-        "prefix": "<pre> CDATA",
+        "prefix": "<pre>_CDATA",
         "body": "<pre>\n<![CDATA[\n\t$0\n]]>\n</pre>"
     },
     "cdata": {
@@ -158,7 +158,7 @@
         "body": "<url href=\"$1\">$2</url>$0"
     },
     "url-empty": {
-        "prefix": "<url />",
+        "prefix": "<url/>",
         "body": "<url href=\"$1\" />$0"
     },
     "email": {
@@ -168,10 +168,6 @@
     "footnote": {
         "prefix": "<fn>",
         "body": "<fn>$0</fn>"
-    },
-    "aside": {
-        "prefix": "<aside>",
-        "body": "<aside>\n\t$0\n</aside>"
     },
     "<env>": {
         "prefix": "<inline-environment>",

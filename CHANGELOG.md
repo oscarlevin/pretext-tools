@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Menu of available commands shows in explorer view.
+- New snippets to create template part, chapter, section, exercises subfiles.
+
 ## [0.7.1] - 2022-12-21
 
 ### Fixed

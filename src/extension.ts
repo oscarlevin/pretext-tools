@@ -3,6 +3,8 @@
 import * as vscode from "vscode";
 import { exec, execSync, spawn } from "child_process";
 import * as path from "path";
+import { PretextCommandMenuProvider } from "./commandsMenu"
+
 
 var pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
 
@@ -36,6 +38,7 @@ function getDir(myPath: string = "") {
                     return fileUri[0].fsPath;
                 }
             });
+        return "";
     }
 }
 
@@ -157,7 +160,7 @@ async function runPretext(
     let fullCommand = ptxExec + " " + ptxCommand + " " + ptxOptions;
     var filePath = getDir(passedPath);
     console.log("cwd = " + filePath);
-    if (filePath !== undefined && filePath !== ".") {
+    if (filePath !== "" && filePath !== ".") {
         pretextOutputChannel.show();
         pretextOutputChannel.append("Now running `" + fullCommand + "` ...\n");
         var process = spawn(fullCommand, [], { cwd: filePath, shell: true });
@@ -182,6 +185,7 @@ async function runPretext(
                     // 	vscode.window.showWarningMessage(line);
                 } else if (line.startsWith("Success")) {
                     vscode.window.showInformationMessage(line);
+                    // vscode.commands.executeCommand("livePreview.start.preview.atFile",vscode.Uri.file(path.join(filePath,"\\output\\web")));
                 }
             }
         });
@@ -212,6 +216,10 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(
         'Congratulations, your extension "pretext-tools" is now active!'
     );
+    vscode.window.createTreeView('pretext-tools-commands', {
+        treeDataProvider: new PretextCommandMenuProvider()
+    });
+    // vscode.window.createTreeView('pretext-tools-commands',<TreeDataProvider>);
     const activeEditor = vscode.window.activeTextEditor;
     console.log(activeEditor?.document.fileName);
     const configuration = vscode.workspace.getConfiguration('pretext-tools');
