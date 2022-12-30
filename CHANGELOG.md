@@ -10,7 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Menu of available commands shows in explorer view.
+- Support for Live Preview and CodeChat to view output.  User is asked which of the available methods to use, or can select a default in settings.
 - New snippets to create template part, chapter, section, exercises subfiles.
+
+### Changed
+
+- Commands now categorized as "PreTeXt" instead of "PreTeXt Tools".
+- Generate command now asks for target for which assets should be generated.
 
 ## [0.7.1] - 2022-12-21
 

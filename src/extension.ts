@@ -45,7 +45,6 @@ function getDir(myPath: string = "") {
 function installPretext() {
     // Here we will attempt to pip install pretext, upgraded to the most recent version.  This will happen if pretext is not found, or if a user requests it through a command.
     // first check for python and pip:
-    console.log("inside installPretext().");
     let pythonExec = "";
     for (let command of ["python3", "python"]) {
         try {
@@ -71,7 +70,7 @@ function installPretext() {
     }
     if (pythonExec === "") {
         vscode.window.showErrorMessage(
-            "You do not appear to have python installed.  Please download and install python (and make sure to add python to your path."
+            "You do not appear to have python installed.  Please download and install python (and make sure to add python to your path)."
         );
     }
     // Now try to install pretext (using 1.0 command):
@@ -216,6 +215,7 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(
         'Congratulations, your extension "pretext-tools" is now active!'
     );
+
     vscode.window.createTreeView('pretext-tools-commands', {
         treeDataProvider: new PretextCommandMenuProvider()
     });
@@ -260,12 +260,64 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("pretext-tools.generate", () => {
-            runPretext(ptxExec, "generate", "");
+            // Show choice dialog and pass correct command to runPretext based on selection.
+            vscode.window.showQuickPick(targetSelection).then((qpSelection) => {
+                if (!qpSelection) {
+                    return;
+                }
+                runPretext(ptxExec, "generate -t", qpSelection.label);
+                // Move selected target to front of list for next command.
+                targetSelection = targetSelection.filter(
+                    (item) => item !== qpSelection
+                );
+                targetSelection.unshift(qpSelection);
+            });
+        })
+    );
+
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("pretext-tools.view", () => {
+            const selectedViewMethod: string = vscode.workspace.getConfiguration('pretext-tools').get("viewMethod") || 'Ask';
+            // Create and use a quick-select box if user has not set a configuration for view:
+            if (selectedViewMethod === "Ask") {
+                let viewMethods = [];
+                if (vscode.extensions.getExtension('ms-vscode.live-server')) {
+                    viewMethods.push({ label: "Use Live Preview", command: 'pretext-tools.viewLivePreview' });
+                }
+                if (vscode.extensions.getExtension('CodeChat.codechat')) {
+                    viewMethods.push({ label: "Use CodeChat", command: "pretext-tools.viewCodeChat" });
+                }
+                if (viewMethods.length > 0) {
+                    viewMethods.push({ label: "Use PreTeXt's view command", command: "pretext-tools.viewCLI" });
+                    vscode.window.showQuickPick(viewMethods).then((qpSelection) => {
+                        if (!qpSelection) {
+                            return;
+                        }
+                        vscode.commands.executeCommand(qpSelection.command);
+                    })
+                } else {
+                    vscode.commands.executeCommand('pretext-tools.viewCLI');
+                }
+            } else {
+                // otherwise honor the users setting choice.
+                switch (selectedViewMethod) {
+                    case 'Live Preview':
+                        vscode.commands.executeCommand('pretext-tools.viewLivePreview');
+                        break;
+                    case 'CodeChat':
+                        vscode.commands.executeCommand('pretext-tools.viewCodeChat');
+                        break;
+                    case 'PreTeXT-CLI View':
+                        vscode.commands.executeCommand('pretext-tools.viewCLI');
+                        break;
+                }
+            }
         })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("pretext-tools.view", () => {
+        vscode.commands.registerCommand("pretext-tools.viewCLI", () => {
             // Show choice dialog and pass correct command to runPretext based on selection.
             vscode.window.showQuickPick(targetSelection).then((qpSelection) => {
                 if (!qpSelection) {
@@ -278,6 +330,28 @@ export function activate(context: vscode.ExtensionContext) {
                 );
                 targetSelection.unshift(qpSelection);
             });
+        })
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("pretext-tools.viewCodeChat", () => {
+            if (vscode.extensions.getExtension("CodeChat.codechat")) {
+                vscode.commands.executeCommand("extension.codeChatActivate");
+            } else {
+                vscode.window.showErrorMessage("Unable to start CodeChat preview.  Is the 'CodeChat' extension and CodeChat_Server (through pip) installed?");
+            }
+
+        })
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("pretext-tools.viewLivePreview", () => {
+            if (vscode.extensions.getExtension("ms-vscode.live-server")) {
+                let uri = vscode.Uri.file(path.join(getDir(), 'output\\web\\index.html'));
+                vscode.commands.executeCommand("livePreview.start.preview.atFile", uri);
+            } else {
+                vscode.window.showErrorMessage("Unable to start Live Preview.  Is the 'Live Preview' extension installed?")
+            }
         })
     );
 

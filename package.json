@@ -106,51 +106,52 @@
             {
                 "command": "pretext-tools.refresh",
                 "title": "Refresh target list",
-                "category": "PreTeXt Tools"
+                "category": "PreTeXt"
             },
             {
                 "command": "pretext-tools.buildAny",
-                "title": "Build",
+                "title": "Build (select target)",
                 "icon": "$(debug-start)",
-                "category": "PreTeXt Tools",
+                "category": "PreTeXt",
                 "description": "Build selected target from the project.ptx manifest."
             },
             {
                 "command": "pretext-tools.buildDefault",
                 "title": "Build default target",
-                "category": "PreTeXt Tools",
+                "category": "PreTeXt",
                 "description": "Build the default target (first in the project.ptx manifest)."
             },
             {
                 "command": "pretext-tools.new",
                 "title": "New Project",
-                "category": "PreTeXt Tools"
+                "category": "PreTeXt"
             },
             {
                 "command": "pretext-tools.view",
                 "title": "View",
                 "icon": "$(open-preview)",
-                "category": "PreTeXt Tools"
+                "category": "PreTeXt"
             },
             {
                 "command": "pretext-tools.viewWatch",
                 "title": "View HTML and watch",
-                "category": "PreTeXt Tools"
+                "category": "PreTeXt"
             },
             {
                 "command": "pretext-tools.generate",
                 "title": "Generate assets",
-                "category": "PreTeXt Tools"
+                "icon": "$(symbol-color)",
+                "category": "PreTeXt"
             },
             {
                 "command": "pretext-tools.deploy",
                 "title": "Deploy to GitHub",
-                "category": "PreTeXt Tools"
+                "category": "PreTeXt"
             },
             {
                 "command": "pretext-tools.updatePTX",
                 "title": "Update installed PreTeXt version",
-                "category": "PreTeXt Tools",
+                "category": "PreTeXt",
                 "description": "Checks for and installs the newest version of PreTeXt"
             }
         ],
@@ -176,6 +177,11 @@
                     "when": "resourceLangId == pretext"
                 },
                 {
+                    "command": "pretext-tools.generate",
+                    "group": "navigation",
+                    "when": "resourceLangId == pretext"
+                },
+                {
                     "command": "pretext-tools.view",
                     "group": "navigation",
                     "when": "resourceLangId == pretext"
@@ -195,10 +201,22 @@
             {
                 "title": "PreTeXt",
                 "properties": {
-                    "pretext-tools.view.previewInVSCode": {
-                        "type": "boolean",
-                        "default": true,
-                        "description": "Not yet implemented"
+                    "pretext-tools.viewMethod": {
+                        "type": "string",
+                        "default": "Ask",
+                        "enum": [
+                            "Ask",
+                            "Live Preview",
+                            "CodeChat",
+                            "PreTeXT-CLI View"
+                        ],
+                        "markdownEnumDescriptions": [
+                            "Ask for view method each time (default).",
+                            "Use VS Code's [Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server) extension to view the 'web' target in a separate tab of VS Code. Only works if you have installed the Live Preview extension",
+                            "Use CodeChat to view the 'web' target in a separate tab of VS Code.  Auto-refreshes when a ptx files is saved (not recommended for large projects).  Requires CodeChat extension and CodeChat_Server installed via pip.",
+                            "Use the `pretext view` command from the PreTeXt CLI.  Works with all targets.  Opens the output in a separate application."
+                        ],
+                        "markdownDescription": "Select which method to use when viewing the output of a pretext project.  Leaving this at the default will ask for available methods each time.  Your choice will likely depend on the size of your project and whether you are building output other than the 'web' target."
                     }
                 }
             }
