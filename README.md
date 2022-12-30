@@ -6,8 +6,10 @@ A Visual Studio Code extension to make writing PreTeXt documents easier.
 
 - Defines the PreTeXt language, automatically selecting it for `.ptx` files.  
 - Syntax highlighting and indentation based on XML, plus some additions like recognizing math as LaTeX and "hiding" permid attributes as comments.
-- A large collection of snippets for most PreTeXt elements. 
-- A front-end for the [PreTeXt-CLI](https://github.com/PreTeXtBook/pretext-cli), with commands available through the command pallet (Ctrl+Shift+P) and keyboard shortcuts (Ctrl-Alt-B to build, Ctrl-Alt-V to view, etc.)
+- Schema support via the vscode-xml extension (which also provides many xml tools).
+- A large collection of snippets for most PreTeXt elements.
+- A front-end for the [PreTeXt-CLI](https://github.com/PreTeXtBook/pretext-cli), with commands available through a menu in the side explorere, the command pallet (Ctrl+Shift+P), and keyboard shortcuts (Ctrl-Alt-B to build, Ctrl-Alt-V to view, etc.).
+- Support for the Live Preview and CodeChat extensions to view output, as well as via the PreTeXt-CLI.
 
 ## Usage
 
@@ -34,6 +36,8 @@ Short tags like `<m>` and `<c>` and `<em>` can also be used to wrap selected con
 
 Attributes are available if you start typing with "@".
 
+If you open a new empty document that you will include via `xi:include`, save it with a `.ptx` extension and then fill in the structure using a "!" snippet.
+
 To see a complete list of available snippets, hit Ctrl+Space.
 
 Here are some options that I find make snippets more useful.  For each of these, open settings in VS code and search for them.
@@ -41,12 +45,13 @@ Here are some options that I find make snippets more useful.  For each of these,
 - Emmet: Excluded Languages.  I exclude PreTeXt Emmet for PreTeXt, since the snippets behave better.
 - Editor: Snippets Suggestions.  I set this to "top" so that the snippets are shown before other autocomplete suggestions.
 - Editor: Tab Completion. I set this to "only snippets" so that I can hit TAB or ENTER to select the snippet.
+- If you get too many snippet suggestions, experiment with the quick-suggest and completion settings.  Please contribute suggestions on the best configuration if you find something that works well.
 
 ### Running PreTeXt
 
-To build and view projects, and to generate assets, the extension calls the PreTeXt-CLI.  Of course, you can open a terminal in VS Code (CTRL+\`) and type `pretext build web`, but you can also get more visual feedback by using the keyboard shortcut Ctrl+Alt+B, clicking the "run" arrow on the top-right of the editor, or selecting `PreTeXt Tools: Build` from the command pallet (CTRL+SHIFT+P).  This will open up a context menu asking you which target you want to build.  Select it and your project will be built for that target.  Ctrl+Alt+V will ask you which project you want to view, and Ctrl+Alt+G will ask you what to generate.
+To build and view projects, and to generate assets, the extension calls the PreTeXt-CLI.  Of course, you can open a terminal in VS Code (CTRL+\`) and type `pretext build web`, but you can also get more visual feedback by using the keyboard shortcut Ctrl+Alt+B, clicking the "run" arrow on the top-right of the editor, or selecting `PreTeXt Tools: Build` from the side menu or command pallet (CTRL+SHIFT+P).  This will open up a context menu asking you which target you want to build.  Select it and your project will be built for that target.  Ctrl+Alt+V will ask you which project you want to view, and Ctrl+Alt+G will ask you what to generate.
 
-There are additional commands that are accessible through the command pallet.  Type Ctrl+Shift+P and start typing "PreTeXt Tools" to see all of them.
+There are additional commands that are accessible through the side menu and command pallet.  Type Ctrl+Shift+P and start typing "PreTeXt" to see all of them.
 
 In particular, if you are working with multiple projects in the same window, you might need to refresh your list of targets (this list is determined by looking at the `project.ptx` manifest, but is set once when a project is opened).
 
