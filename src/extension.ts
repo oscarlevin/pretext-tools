@@ -3,8 +3,7 @@
 import * as vscode from "vscode";
 import { exec, execSync, spawn } from "child_process";
 import * as path from "path";
-import { PretextCommandMenuProvider } from "./commandsMenu"
-
+import { PretextCommandMenuProvider } from "./commandsMenu";
 
 var pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
 
@@ -216,23 +215,24 @@ export function activate(context: vscode.ExtensionContext) {
         'Congratulations, your extension "pretext-tools" is now active!'
     );
 
-    vscode.window.createTreeView('pretext-tools-commands', {
-        treeDataProvider: new PretextCommandMenuProvider()
+    vscode.window.createTreeView("pretext-tools-commands", {
+        treeDataProvider: new PretextCommandMenuProvider(),
     });
     // vscode.window.createTreeView('pretext-tools-commands',<TreeDataProvider>);
     const activeEditor = vscode.window.activeTextEditor;
     console.log(activeEditor?.document.fileName);
-    const configuration = vscode.workspace.getConfiguration('pretext-tools');
+    const configuration = vscode.workspace.getConfiguration("pretext-tools");
     console.log(
-        'The value of your setting is', configuration.get('veiw.previewInVSCode')
+        "The value of your setting is",
+        configuration.get("veiw.previewInVSCode")
     );
     console.log("PreTeXt exec command: ", ptxExec);
     var targetSelection = getTargets();
     console.log(
         "Targets are now:" +
-        targetSelection.map(function (obj) {
-            return " " + obj.label;
-        })
+            targetSelection.map(function (obj) {
+                return " " + obj.label;
+            })
     );
 
     context.subscriptions.push(
@@ -275,41 +275,58 @@ export function activate(context: vscode.ExtensionContext) {
         })
     );
 
-
     context.subscriptions.push(
         vscode.commands.registerCommand("pretext-tools.view", () => {
-            const selectedViewMethod: string = vscode.workspace.getConfiguration('pretext-tools').get("viewMethod") || 'Ask';
+            const selectedViewMethod: string =
+                vscode.workspace
+                    .getConfiguration("pretext-tools")
+                    .get("viewMethod") || "Ask";
             // Create and use a quick-select box if user has not set a configuration for view:
             if (selectedViewMethod === "Ask") {
                 let viewMethods = [];
-                if (vscode.extensions.getExtension('ms-vscode.live-server')) {
-                    viewMethods.push({ label: "Use Live Preview", command: 'pretext-tools.viewLivePreview' });
+                if (vscode.extensions.getExtension("ms-vscode.live-server")) {
+                    viewMethods.push({
+                        label: "Use Live Preview",
+                        command: "pretext-tools.viewLivePreview",
+                    });
                 }
-                if (vscode.extensions.getExtension('CodeChat.codechat')) {
-                    viewMethods.push({ label: "Use CodeChat", command: "pretext-tools.viewCodeChat" });
+                if (vscode.extensions.getExtension("CodeChat.codechat")) {
+                    viewMethods.push({
+                        label: "Use CodeChat",
+                        command: "pretext-tools.viewCodeChat",
+                    });
                 }
                 if (viewMethods.length > 0) {
-                    viewMethods.push({ label: "Use PreTeXt's view command", command: "pretext-tools.viewCLI" });
-                    vscode.window.showQuickPick(viewMethods).then((qpSelection) => {
-                        if (!qpSelection) {
-                            return;
-                        }
-                        vscode.commands.executeCommand(qpSelection.command);
-                    })
+                    viewMethods.push({
+                        label: "Use PreTeXt's view command",
+                        command: "pretext-tools.viewCLI",
+                    });
+                    vscode.window
+                        .showQuickPick(viewMethods)
+                        .then((qpSelection) => {
+                            if (!qpSelection) {
+                                return;
+                            }
+                            vscode.commands.executeCommand(qpSelection.command);
+                        });
                 } else {
-                    vscode.commands.executeCommand('pretext-tools.viewCLI');
+                    vscode.commands.executeCommand("pretext-tools.viewCLI");
                 }
             } else {
                 // otherwise honor the users setting choice.
                 switch (selectedViewMethod) {
-                    case 'Live Preview':
-                        vscode.commands.executeCommand('pretext-tools.viewLivePreview');
+                    case "Live Preview":
+                        vscode.commands.executeCommand(
+                            "pretext-tools.viewLivePreview"
+                        );
                         break;
-                    case 'CodeChat':
-                        vscode.commands.executeCommand('pretext-tools.viewCodeChat');
+                    case "CodeChat":
+                        vscode.commands.executeCommand(
+                            "pretext-tools.viewCodeChat"
+                        );
                         break;
-                    case 'PreTeXT-CLI View':
-                        vscode.commands.executeCommand('pretext-tools.viewCLI');
+                    case "PreTeXT-CLI View":
+                        vscode.commands.executeCommand("pretext-tools.viewCLI");
                         break;
                 }
             }
@@ -338,19 +355,27 @@ export function activate(context: vscode.ExtensionContext) {
             if (vscode.extensions.getExtension("CodeChat.codechat")) {
                 vscode.commands.executeCommand("extension.codeChatActivate");
             } else {
-                vscode.window.showErrorMessage("Unable to start CodeChat preview.  Is the 'CodeChat' extension and CodeChat_Server (through pip) installed?");
+                vscode.window.showErrorMessage(
+                    "Unable to start CodeChat preview.  Is the 'CodeChat' extension and CodeChat_Server (through pip) installed?"
+                );
             }
-
         })
     );
 
     context.subscriptions.push(
         vscode.commands.registerCommand("pretext-tools.viewLivePreview", () => {
             if (vscode.extensions.getExtension("ms-vscode.live-server")) {
-                let uri = vscode.Uri.file(path.join(getDir(), 'output\\web\\index.html'));
-                vscode.commands.executeCommand("livePreview.start.preview.atFile", uri);
+                let uri = vscode.Uri.file(
+                    path.join(getDir(), "output\\web\\index.html")
+                );
+                vscode.commands.executeCommand(
+                    "livePreview.start.preview.atFile",
+                    uri
+                );
             } else {
-                vscode.window.showErrorMessage("Unable to start Live Preview.  Is the 'Live Preview' extension installed?")
+                vscode.window.showErrorMessage(
+                    "Unable to start Live Preview.  Is the 'Live Preview' extension installed?"
+                );
             }
         })
     );
@@ -422,19 +447,19 @@ export function activate(context: vscode.ExtensionContext) {
             targetSelection = getTargets();
             console.log(
                 "Targets are now:" +
-                targetSelection.map(function (obj) {
-                    return " " + obj.label;
-                })
+                    targetSelection.map(function (obj) {
+                        return " " + obj.label;
+                    })
             );
             vscode.window.showInformationMessage(
                 "Refreshed list of targets.  Targets are now:" +
-                targetSelection.map(function (obj) {
-                    return " " + obj.label;
-                })
+                    targetSelection.map(function (obj) {
+                        return " " + obj.label;
+                    })
             );
         })
     );
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate() {}
