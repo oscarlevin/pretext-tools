@@ -193,7 +193,8 @@
                 {
                     "id": "pretext-tools-commands",
                     "name": "PreTeXt Commands",
-                    "when": "resourceLangId == pretext"
+                    "when": "resourceLangId == pretext",
+                    "visibility": "visible"
                 }
             ]
         },

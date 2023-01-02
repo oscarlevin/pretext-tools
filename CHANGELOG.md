@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.8.1] - 2023-1-2
+
+### Fixed
+
+- Pretext commands menu will be expanded by default first time it is used.
+
 ## [0.8.0] - 2022-12-21
 
 ### Added
