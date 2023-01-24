@@ -1,8 +1,9 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from "vscode";
-import { exec, execSync, spawn } from "child_process";
+import { execSync, spawn } from "child_process";
+import { homedir } from "os";
 import * as path from "path";
+import * as vscode from "vscode";
 import { PretextCommandMenuProvider } from "./commandsMenu";
 
 var pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
@@ -208,24 +209,59 @@ async function runThenOpen(
     );
 }
 
+function setSchema(schemaPath: string = "") {
+    if (schemaPath === "") {
+        const userHomeDir: string = homedir();
+        const schemaConfig = vscode.workspace
+            .getConfiguration("pretext-tools")
+            .get("schemaVersion");
+        console.log(schemaConfig);
+        switch (schemaConfig) {
+            case "Stable":
+                var schemaPath = path.join(
+                    userHomeDir,
+                    ".ptx",
+                    "schema",
+                    "pretext.rng"
+                );
+                break;
+            case "Experimental":
+                var schemaPath = path.join(
+                    userHomeDir,
+                    ".ptx",
+                    "schema",
+                    "pretext-dev.rng"
+                );
+                break;
+        }
+    }
+    const configuration = vscode.workspace.getConfiguration("xml");
+    let schemas: any = configuration.get("fileAssociations");
+    for (let dicts of schemas) {
+        if (dicts["pattern"] === "**/source/**.ptx") {
+            console.log("The value of your setting is", dicts);
+            dicts["systemId"] = schemaPath;
+            break;
+        }
+    }
+    console.log("Configuration is now: ", schemas);
+    configuration.update("fileAssociations", schemas);
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
     console.log(
         'Congratulations, your extension "pretext-tools" is now active!'
     );
-
+    setSchema();
     vscode.window.createTreeView("pretext-tools-commands", {
         treeDataProvider: new PretextCommandMenuProvider(),
     });
-    // vscode.window.createTreeView('pretext-tools-commands',<TreeDataProvider>);
+
     const activeEditor = vscode.window.activeTextEditor;
     console.log(activeEditor?.document.fileName);
-    const configuration = vscode.workspace.getConfiguration("pretext-tools");
-    console.log(
-        "The value of your setting is",
-        configuration.get("veiw.previewInVSCode")
-    );
+
     console.log("PreTeXt exec command: ", ptxExec);
     var targetSelection = getTargets();
     console.log(

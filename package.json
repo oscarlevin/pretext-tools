@@ -204,7 +204,6 @@
                 {
                     "id": "pretext-tools-commands",
                     "name": "PreTeXt Commands",
-                    "when": "resourceLangId == pretext",
                     "visibility": "visible"
                 }
             ]
@@ -229,6 +228,19 @@
                             "Use the `pretext view` command from the PreTeXt CLI.  Works with all targets.  Opens the output in a separate application."
                         ],
                         "markdownDescription": "Select which method to use when viewing the output of a pretext project.  Leaving this at the default will ask for available methods each time.  Your choice will likely depend on the size of your project and whether you are building output other than the 'web' target."
+                    },
+                    "pretext-tools.schemaVersion": {
+                        "type": "string",
+                        "default": "Stable",
+                        "enum": [
+                            "Stable",
+                            "Experimental"
+                        ],
+                        "markdownEnumDescriptions": [
+                            "Use the stable schema matching your installed version of PreTeXt (default).",
+                            "Use the experimental/development schema matching your installed version of PreTeXt."
+                        ],
+                        "markdownDescription": "Select the version of the PreTeXt schema to validate against.  If you are using newer features, you might try to experimental schema, which isn't as stable, but will give you fewer warnings.  *Reload your workspace for these changes to take effect.*"
                     }
                 }
             }

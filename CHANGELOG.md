@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Setting to decide schema version (Stable/Experimental) ready for updated schema from the CLI.
 - Set default value for `xml.references` so that `<xref ref="foo"/>` is linked to `@xml:id="foo"`.
 
 ### Fixed
 
 - Snippets that insert sanitized version of title as the xml:id remove all punctuation.
+- PreTeXt Commands menu persists as long as extension is active.
 
 ## [0.8.1] - 2023-1-2
 

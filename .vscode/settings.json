@@ -26,5 +26,8 @@
     },
     "cSpell.enableFiletypes": [
         "pretext"
-    ]
+    ],
+    "editor.quickSuggestions": {
+        "strings": "on"
+    }
 }
