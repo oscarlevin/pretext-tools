@@ -1,23 +1,23 @@
 {
     "part (division)": {
         "prefix": "<part>",
-        "body": "<part xml:id=\"part-${1/^(\\w+)|\\s(\\w+)|['](\\w*)|\\W*$/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/g}\">\n\t<title>$1</title>\n\t$0\n</part>"
+        "body": "<part xml:id=\"part-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</part>"
     },
     "chapter (division)": {
         "prefix": "<chapter>",
-        "body": "<chapter xml:id=\"ch-${1/^(\\w+)|\\s(\\w+)|['](\\w*)|\\W*$/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/g}\">\n\t<title>$1</title>\n\t$0\n</chapter>"
+        "body": "<chapter xml:id=\"ch-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</chapter>"
     },
     "section (division)": {
         "prefix": "<section>",
-        "body": "<section xml:id=\"sec-${1/^(\\w+)|\\s(\\w+)|['](\\w*)|\\W*$/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/g}\">\n\t<title>$1</title>\n\t$0\n</section>"
+        "body": "<section xml:id=\"sec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</section>"
     },
     "subsection (division)": {
         "prefix": "<subsection>",
-        "body": "<subsection xml:id=\"subsec-${1/^(\\w+)|\\s(\\w+)|['](\\w*)|\\W*$/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/g}\">\n\t<title>$1</title>\n\t$0\n</subsection>"
+        "body": "<subsection xml:id=\"subsec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</subsection>"
     },
     "subsubsection (division)": {
         "prefix": "<subsubsection>",
-        "body": "<subsubsection xml:id=\"subsubsec-${1/^(\\w+)|\\s(\\w+)|['](\\w*)|\\W*$/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/g}\">\n\t<title>$1</title>\n\t$0\n</subsubsection>"
+        "body": "<subsubsection xml:id=\"subsubsec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</subsubsection>"
     },
     "exercises (division)": {
         "prefix": "<exercises>-division",
@@ -243,6 +243,10 @@
     "definition-list": {
         "prefix": "<dl>",
         "body": "<dl>\n\t<li>\n\t\t<title>$1</title>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</li>\n</dl>"
+    },
+    "definition-list item": {
+        "prefix": "<li-d>",
+        "body": "<li>\n\t<title>$1</title>\n\t<p>\n\t\t$0\n\t</p>\n</li>\n</dl>"
     },
     "enumerate (ordered list)": {
         "prefix": "<ol>",

@@ -167,6 +167,17 @@
                     "systemId": "https://raw.githubusercontent.com/PreTeXtBook/pretext/master/schema/pretext.rng"
                 }
             ],
+            "xml.references": [
+                {
+                    "pattern": "**/source/**.ptx",
+                    "expressions": [
+                        {
+                            "from": "xref/@ref",
+                            "to": "@xml:id"
+                        }
+                    ]
+                }
+            ],
             "xml.validation.xInclude.enabled": true
         },
         "menus": {

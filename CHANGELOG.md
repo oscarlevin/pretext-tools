@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Set default value for `xml.references` so that `<xref ref="foo"/>` is linked to `@xml:id="foo"`.
+
+### Fixed
+
+- Snippets that insert sanitized version of title as the xml:id remove all punctuation.
+
 ## [0.8.1] - 2023-1-2
 
 ### Fixed
