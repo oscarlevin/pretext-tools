@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.9.0]
+
 ### Added
 
 - Setting to decide schema version (Stable/Experimental) ready for updated schema from the CLI.
