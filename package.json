@@ -204,7 +204,8 @@
                 {
                     "id": "pretext-tools-commands",
                     "name": "PreTeXt Commands",
-                    "visibility": "visible"
+                    "visibility": "visible",
+                    "when": "pretext-tools.insideProject"
                 }
             ]
         },

@@ -3,8 +3,10 @@
 import { execSync, spawn } from "child_process";
 import { homedir } from "os";
 import * as path from "path";
+import * as fs from "fs";
 import * as vscode from "vscode";
 import { PretextCommandMenuProvider } from "./commandsMenu";
+import { Uri } from "vscode";
 
 var pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
 
@@ -160,15 +162,21 @@ async function runPretext(
     var filePath = getDir(passedPath);
     console.log("cwd = " + filePath);
     if (filePath !== "" && filePath !== ".") {
-        pretextOutputChannel.show();
+        pretextOutputChannel.clear();
         pretextOutputChannel.append("Now running `" + fullCommand + "` ...\n");
         var process = spawn(fullCommand, [], { cwd: filePath, shell: true });
-        // console.log("stdout:", proc.stdout);
+        // console.log("stdout:", String(process.stdout));
+        // console.log("stderr:", String(process.stderr));
+        // console.log("stdio1-2:", String(process.stdio[1]), String(process.stdio[2]));
+        process.stdout.on("data", function (data) {
+            console.log(`${data}`);
+            pretextOutputChannel.append(`${data}`);
+        });
         process.stderr.on("data", function (data) {
-            console.log(`log: ${data}`);
+            console.log(`${data}`);
             var outputLines = data.toString().split(/\r?\n/);
             for (const line of outputLines) {
-                console.log(line + "\n");
+                // console.log(line + "\n");
                 if (line.startsWith("http://localhost:")) {
                     pretextOutputChannel.append(line + "\n");
                     pretextOutputChannel.append(
@@ -254,11 +262,37 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(
         'Congratulations, your extension "pretext-tools" is now active!'
     );
-    setSchema();
+
+    
+
+    function isProject(): boolean {
+        const projectPath = path.join(getDir(), "project.ptx");
+        try {
+            console.log(projectPath);
+            fs.accessSync(projectPath);
+        } catch (err) {
+            return false;
+        }
+        return true;
+    }
+
+    if (isProject()) {
+        vscode.commands.executeCommand(
+            "setContext",
+            "pretext-tools.insideProject",
+            true
+        );
+    } else {
+        vscode.commands.executeCommand(
+            "setContext",
+            "pretext-tools.insideProject",
+            false
+        );
+    }
+
     vscode.window.createTreeView("pretext-tools-commands", {
         treeDataProvider: new PretextCommandMenuProvider(),
     });
-
     const activeEditor = vscode.window.activeTextEditor;
     console.log(activeEditor?.document.fileName);
 

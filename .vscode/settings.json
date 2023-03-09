@@ -29,5 +29,11 @@
     ],
     "editor.quickSuggestions": {
         "strings": "on"
-    }
+    },
+    "xml.fileAssociations": [
+        {
+            "pattern": "**/source/**.ptx",
+            "systemId": "C:\\Users\\oscar.levin\\.ptx\\schema\\pretext.rng"
+        }
+    ]
 }
