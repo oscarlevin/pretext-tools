@@ -193,14 +193,31 @@ async function runPretext(
                     pretextOutputChannel.append(line + "\n");
                 }
                 if (line.startsWith("error") || line.startsWith("critical")) {
-                    vscode.window.showErrorMessage(line);
+                    vscode.window
+                        .showErrorMessage(line, "Show Log", "Dismiss")
+                        .then((option) => {
+                            if (option === "Show Log") {
+                                pretextOutputChannel.show();
+                            }
+                        });
                     status = "error";
-                    // } else if (line.startsWith("warning")) {
-                    // 	vscode.window.showWarningMessage(line);
                 } else if (line.startsWith("Success")) {
-                    vscode.window.showInformationMessage(line);
+                    if (ptxCommand === "build") {
+                        vscode.window
+                            .showInformationMessage(
+                                line,
+                                "View output",
+                                "Dismiss"
+                            )
+                            .then((option) => {
+                                if (option === "View output") {
+                                    vscode.commands.executeCommand(
+                                        "pretext-tools.view"
+                                    );
+                                }
+                            });
+                    }
                     status = "success";
-                    // vscode.commands.executeCommand("livePreview.start.preview.atFile",vscode.Uri.file(path.join(filePath,"\\output\\web")));
                 }
             }
         });

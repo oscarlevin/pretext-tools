@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Status bar item: click to select a pretext command; shows when pretext is running; displays success/warnings (and opens output channel if clicked while running or on warning).
+- View output/dismiss buttons on success message popup.
+- Show log/dismiss buttons on error message popup.
 
 ### Fixed
 
