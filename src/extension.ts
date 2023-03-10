@@ -1,15 +1,18 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import { execSync, spawn } from "child_process";
+import * as fs from "fs";
 import { homedir } from "os";
 import * as path from "path";
-import * as fs from "fs";
 import * as vscode from "vscode";
-import { PretextCommandMenuProvider } from "./commandsMenu";
 import { Uri } from "vscode";
+import { PretextCommandMenuProvider } from "./commandsMenu";
 
+// Set up vscode elements
 var pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
+let pretextStatusBarItem: vscode.StatusBarItem;
 
+// Utility functions (eventually move to separate file)
 function getDir(myPath: string = "") {
     if (myPath !== "") {
         console.log("Dir ", myPath, " passed as argument");
@@ -158,7 +161,9 @@ async function runPretext(
     // var editor = vscode.window.activeTextEditor;
     // var fullName = path.normalize(editor.document.fileName);
     // var filePath = path.dirname(fullName);
+    updateStatusBarItem("running");
     let fullCommand = ptxExec + " " + ptxCommand + " " + ptxOptions;
+    let status = "ready"; //for statusbaritem
     var filePath = getDir(passedPath);
     console.log("cwd = " + filePath);
     if (filePath !== "" && filePath !== ".") {
@@ -182,16 +187,19 @@ async function runPretext(
                     pretextOutputChannel.append(
                         "(this local server will remain running until you close vs code)\n"
                     );
+                    updateStatusBarItem(status);
                     return;
                 } else {
                     pretextOutputChannel.append(line + "\n");
                 }
                 if (line.startsWith("error") || line.startsWith("critical")) {
                     vscode.window.showErrorMessage(line);
+                    status = "error";
                     // } else if (line.startsWith("warning")) {
                     // 	vscode.window.showWarningMessage(line);
                 } else if (line.startsWith("Success")) {
                     vscode.window.showInformationMessage(line);
+                    status = "success";
                     // vscode.commands.executeCommand("livePreview.start.preview.atFile",vscode.Uri.file(path.join(filePath,"\\output\\web")));
                 }
             }
@@ -200,6 +208,7 @@ async function runPretext(
         process.on("exit", function (code) {
             console.log(code?.toString());
             pretextOutputChannel.appendLine("...PreTeXt command finished.");
+            updateStatusBarItem(status);
         });
     }
 }
@@ -256,14 +265,40 @@ function setSchema(schemaPath: string = "") {
     configuration.update("fileAssociations", schemas);
 }
 
+function updateStatusBarItem(state?: string): void {
+    pretextStatusBarItem.show();
+    if (state === "ready" || state === undefined) {
+        pretextStatusBarItem.text = `$(debug-run) PreTeXt`;
+        pretextStatusBarItem.tooltip = `Run PreTeXt command`;
+        pretextStatusBarItem.command = `pretext-tools.selectPretextCommand`;
+    } else if (state === "running") {
+        pretextStatusBarItem.text = `$(loading~spin) PreTeXt`;
+        pretextStatusBarItem.tooltip = `running pretext ...`;
+        pretextStatusBarItem.command = `pretext-tools.showLog`;
+    } else if (state === "success") {
+        pretextStatusBarItem.text = `$(pass) PreTeXt`;
+        pretextStatusBarItem.tooltip = `Success!`;
+        pretextStatusBarItem.command = `pretext-tools.selectPretextCommand`;
+    } else if (state === "error") {
+        pretextStatusBarItem.text = `$(warning) PTX`;
+        pretextStatusBarItem.tooltip = `Something went wrong; click for log`;
+        pretextStatusBarItem.command = `pretext-tools.showLog`;
+    }
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    console.log(
-        'Congratulations, your extension "pretext-tools" is now active!'
-    );
+    console.log('Extension "pretext-tools" is now active!');
 
-    
+    pretextStatusBarItem = vscode.window.createStatusBarItem(
+        vscode.StatusBarAlignment.Left,
+        -100
+    );
+    context.subscriptions.push(pretextStatusBarItem);
+    updateStatusBarItem();
+
+    console.log(vscode.commands.getCommands());
 
     function isProject(): boolean {
         const projectPath = path.join(getDir(), "project.ptx");
@@ -303,6 +338,13 @@ export function activate(context: vscode.ExtensionContext) {
             targetSelection.map(function (obj) {
                 return " " + obj.label;
             })
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("pretext-tools.showLog", () => {
+            pretextOutputChannel.show();
+            updateStatusBarItem();
+        })
     );
 
     context.subscriptions.push(
@@ -528,6 +570,48 @@ export function activate(context: vscode.ExtensionContext) {
                     })
             );
         })
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand(
+            "pretext-tools.selectPretextCommand",
+            () => {
+                let pretextCommandList = [
+                    {
+                        label: "Build using default target",
+                        command: "pretext-tools.buildDefault",
+                    },
+                    {
+                        label: "Build project",
+                        description: "select target",
+                        command: "pretext-tools.buildAny",
+                    },
+                    {
+                        label: "Generate assets",
+                        description: "select target",
+                        command: "pretext-tools.generate",
+                    },
+                    {
+                        label: "View",
+                        description: "Select target to view",
+                        command: "pretext-tools.view",
+                    },
+                    {
+                        label: "Deploy",
+                        description: "to GitHub Pages",
+                        command: "pretext-tools.deploy",
+                    },
+                ];
+                vscode.window
+                    .showQuickPick(pretextCommandList)
+                    .then((qpSelection) => {
+                        if (!qpSelection) {
+                            return;
+                        }
+                        vscode.commands.executeCommand(qpSelection.command);
+                    });
+            }
+        )
     );
 }
 

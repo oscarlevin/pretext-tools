@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Status bar item: click to select a pretext command; shows when pretext is running; displays success/warnings (and opens output channel if clicked while running or on warning).
+
+### Fixed
+
+- All output (both stdout and stderr) shown in output channel.
+
+### Changed
+
+- Output channel not shown by default.
+
 ## [0.9.0]
 
 ### Added
