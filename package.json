@@ -199,16 +199,6 @@
                 }
             ]
         },
-        "views": {
-            "explorer": [
-                {
-                    "id": "pretext-tools-commands",
-                    "name": "PreTeXt Commands",
-                    "visibility": "visible",
-                    "when": "pretext-tools.insideProject"
-                }
-            ]
-        },
         "configuration": [
             {
                 "title": "PreTeXt",

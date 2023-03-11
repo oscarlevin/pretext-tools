@@ -6,7 +6,6 @@ import { homedir } from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 import { Uri } from "vscode";
-import { PretextCommandMenuProvider } from "./commandsMenu";
 
 // Set up vscode elements
 let pretextOutputChannel: vscode.OutputChannel;
@@ -45,11 +44,10 @@ let pretextCommandList = [
         description: "Use to debug a failed command",
         command: "pretext-tools.selectPretextCommand",
     },
-
 ];
 
-function setupTerminal(terminal:vscode.Terminal):vscode.Terminal {
-    if (!terminal){
+function setupTerminal(terminal: vscode.Terminal): vscode.Terminal {
+    if (!terminal) {
         terminal = vscode.window.createTerminal("PreTeXt Terminal");
     }
     terminal.show();
@@ -351,7 +349,6 @@ export function activate(context: vscode.ExtensionContext) {
     // Set up vscode elements
     pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
 
-
     pretextStatusBarItem = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Left,
         -100
@@ -361,34 +358,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     console.log(vscode.commands.getCommands());
 
-    function isProject(): boolean {
-        const projectPath = path.join(getDir(), "project.ptx");
-        try {
-            console.log(projectPath);
-            fs.accessSync(projectPath);
-        } catch (err) {
-            return false;
-        }
-        return true;
-    }
-
-    if (isProject()) {
-        vscode.commands.executeCommand(
-            "setContext",
-            "pretext-tools.insideProject",
-            true
-        );
-    } else {
-        vscode.commands.executeCommand(
-            "setContext",
-            "pretext-tools.insideProject",
-            false
-        );
-    }
-
-    vscode.window.createTreeView("pretext-tools-commands", {
-        treeDataProvider: new PretextCommandMenuProvider(),
-    });
     const activeEditor = vscode.window.activeTextEditor;
     console.log(activeEditor?.document.fileName);
 
@@ -410,139 +379,180 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("pretext-tools.buildAny", (runInTerminal:boolean = false) => {
-            // Show choice dialog and pass correct command to runPretext based on selection.
-            vscode.window.showQuickPick(targetSelection).then((qpSelection) => {
-                if (!qpSelection) {
-                    return;
-                }
-                if (runInTerminal){
-                    pretextTerminal = setupTerminal(pretextTerminal);
-                    console.log(pretextTerminal.state);
-                    pretextTerminal.sendText("pretext build "+qpSelection.label);
-                } else {
-                    runPretext(ptxExec, "build", qpSelection.label);
-                }
-                // Move selected target to front of list for next command.
-                targetSelection = targetSelection.filter(
-                    (item) => item !== qpSelection
-                );
-                targetSelection.unshift(qpSelection);
-            });
-        })
-    );
-
-    context.subscriptions.push(
-        vscode.commands.registerCommand("pretext-tools.buildDefault", (runInTerminal:boolean = false) => {
-            if (runInTerminal){
-                pretextTerminal = setupTerminal(pretextTerminal);
-                pretextTerminal.sendText("pretext build");
-            } else {
-                runPretext(ptxExec, "build", "");
+        vscode.commands.registerCommand(
+            "pretext-tools.buildAny",
+            (runInTerminal: boolean = false) => {
+                // Show choice dialog and pass correct command to runPretext based on selection.
+                vscode.window
+                    .showQuickPick(targetSelection)
+                    .then((qpSelection) => {
+                        if (!qpSelection) {
+                            return;
+                        }
+                        if (runInTerminal) {
+                            pretextTerminal = setupTerminal(pretextTerminal);
+                            console.log(pretextTerminal.state);
+                            pretextTerminal.sendText(
+                                "pretext build " + qpSelection.label
+                            );
+                        } else {
+                            runPretext(ptxExec, "build", qpSelection.label);
+                        }
+                        // Move selected target to front of list for next command.
+                        targetSelection = targetSelection.filter(
+                            (item) => item !== qpSelection
+                        );
+                        targetSelection.unshift(qpSelection);
+                    });
             }
-        })
+        )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("pretext-tools.generate", (runInTerminal:boolean = false) => {
-            // Show choice dialog and pass correct command to runPretext based on selection.
-            vscode.window.showQuickPick(targetSelection).then((qpSelection) => {
-                if (!qpSelection) {
-                    return;
-                }
-                if (runInTerminal){
+        vscode.commands.registerCommand(
+            "pretext-tools.buildDefault",
+            (runInTerminal: boolean = false) => {
+                if (runInTerminal) {
                     pretextTerminal = setupTerminal(pretextTerminal);
-                    pretextTerminal.sendText("pretext generate -t "+qpSelection.label);
+                    pretextTerminal.sendText("pretext build");
                 } else {
-                    runPretext(ptxExec, "generate -t", qpSelection.label);
+                    runPretext(ptxExec, "build", "");
                 }
-                // Move selected target to front of list for next command.
-                targetSelection = targetSelection.filter(
-                    (item) => item !== qpSelection
-                );
-                targetSelection.unshift(qpSelection);
-            });
-        })
+            }
+        )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("pretext-tools.view", (runInTerminal:boolean = false) => {
-            const selectedViewMethod: string =
-                vscode.workspace
-                    .getConfiguration("pretext-tools")
-                    .get("viewMethod") || "Ask";
-            // Create and use a quick-select box if user has not set a configuration for view:
-            if (selectedViewMethod === "Ask") {
-                let viewMethods = [];
-                if (vscode.extensions.getExtension("ms-vscode.live-server")) {
-                    viewMethods.push({
-                        label: "Use Live Preview",
-                        command: "pretext-tools.viewLivePreview",
+        vscode.commands.registerCommand(
+            "pretext-tools.generate",
+            (runInTerminal: boolean = false) => {
+                // Show choice dialog and pass correct command to runPretext based on selection.
+                vscode.window
+                    .showQuickPick(targetSelection)
+                    .then((qpSelection) => {
+                        if (!qpSelection) {
+                            return;
+                        }
+                        if (runInTerminal) {
+                            pretextTerminal = setupTerminal(pretextTerminal);
+                            pretextTerminal.sendText(
+                                "pretext generate -t " + qpSelection.label
+                            );
+                        } else {
+                            runPretext(
+                                ptxExec,
+                                "generate -t",
+                                qpSelection.label
+                            );
+                        }
+                        // Move selected target to front of list for next command.
+                        targetSelection = targetSelection.filter(
+                            (item) => item !== qpSelection
+                        );
+                        targetSelection.unshift(qpSelection);
                     });
-                }
-                if (vscode.extensions.getExtension("CodeChat.codechat")) {
-                    viewMethods.push({
-                        label: "Use CodeChat",
-                        command: "pretext-tools.viewCodeChat",
-                    });
-                }
-                if (viewMethods.length > 0) {
-                    viewMethods.push({
-                        label: "Use PreTeXt's view command",
-                        command: "pretext-tools.viewCLI",
-                    });
-                    vscode.window
-                        .showQuickPick(viewMethods)
-                        .then((qpSelection) => {
-                            if (!qpSelection) {
-                                return;
-                            }
-                            vscode.commands.executeCommand(qpSelection.command);
+            }
+        )
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand(
+            "pretext-tools.view",
+            (runInTerminal: boolean = false) => {
+                const selectedViewMethod: string =
+                    vscode.workspace
+                        .getConfiguration("pretext-tools")
+                        .get("viewMethod") || "Ask";
+                // Create and use a quick-select box if user has not set a configuration for view:
+                if (selectedViewMethod === "Ask") {
+                    let viewMethods = [];
+                    if (
+                        vscode.extensions.getExtension("ms-vscode.live-server")
+                    ) {
+                        viewMethods.push({
+                            label: "Use Live Preview",
+                            command: "pretext-tools.viewLivePreview",
                         });
+                    }
+                    if (vscode.extensions.getExtension("CodeChat.codechat")) {
+                        viewMethods.push({
+                            label: "Use CodeChat",
+                            command: "pretext-tools.viewCodeChat",
+                        });
+                    }
+                    if (viewMethods.length > 0) {
+                        viewMethods.push({
+                            label: "Use PreTeXt's view command",
+                            command: "pretext-tools.viewCLI",
+                        });
+                        vscode.window
+                            .showQuickPick(viewMethods)
+                            .then((qpSelection) => {
+                                if (!qpSelection) {
+                                    return;
+                                }
+                                vscode.commands.executeCommand(
+                                    qpSelection.command
+                                );
+                            });
+                    } else {
+                        vscode.commands.executeCommand(
+                            "pretext-tools.viewCLI",
+                            runInTerminal
+                        );
+                    }
                 } else {
-                    vscode.commands.executeCommand("pretext-tools.viewCLI",runInTerminal);
-                }
-            } else {
-                // otherwise honor the users setting choice.
-                switch (selectedViewMethod) {
-                    case "Live Preview":
-                        vscode.commands.executeCommand(
-                            "pretext-tools.viewLivePreview"
-                        );
-                        break;
-                    case "CodeChat":
-                        vscode.commands.executeCommand(
-                            "pretext-tools.viewCodeChat"
-                        );
-                        break;
-                    case "PreTeXT-CLI View":
-                        vscode.commands.executeCommand("pretext-tools.viewCLI",runInTerminal);
-                        break;
+                    // otherwise honor the users setting choice.
+                    switch (selectedViewMethod) {
+                        case "Live Preview":
+                            vscode.commands.executeCommand(
+                                "pretext-tools.viewLivePreview"
+                            );
+                            break;
+                        case "CodeChat":
+                            vscode.commands.executeCommand(
+                                "pretext-tools.viewCodeChat"
+                            );
+                            break;
+                        case "PreTeXT-CLI View":
+                            vscode.commands.executeCommand(
+                                "pretext-tools.viewCLI",
+                                runInTerminal
+                            );
+                            break;
+                    }
                 }
             }
-        })
+        )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("pretext-tools.viewCLI", (runInTerminal:boolean = false) => {
-            // Show choice dialog and pass correct command to runPretext based on selection.
-            vscode.window.showQuickPick(targetSelection).then((qpSelection) => {
-                if (!qpSelection) {
-                    return;
-                }
-                if (runInTerminal){
-                    pretextTerminal = setupTerminal(pretextTerminal);
-                    pretextTerminal.sendText("pretext view "+qpSelection.label);
-                } else {
-                    runPretext(ptxExec, "view", qpSelection.label);
-                }
-                // Move selected target to front of list for next command.
-                targetSelection = targetSelection.filter(
-                    (item) => item !== qpSelection
-                );
-                targetSelection.unshift(qpSelection);
-            });
-        })
+        vscode.commands.registerCommand(
+            "pretext-tools.viewCLI",
+            (runInTerminal: boolean = false) => {
+                // Show choice dialog and pass correct command to runPretext based on selection.
+                vscode.window
+                    .showQuickPick(targetSelection)
+                    .then((qpSelection) => {
+                        if (!qpSelection) {
+                            return;
+                        }
+                        if (runInTerminal) {
+                            pretextTerminal = setupTerminal(pretextTerminal);
+                            pretextTerminal.sendText(
+                                "pretext view " + qpSelection.label
+                            );
+                        } else {
+                            runPretext(ptxExec, "view", qpSelection.label);
+                        }
+                        // Move selected target to front of list for next command.
+                        targetSelection = targetSelection.filter(
+                            (item) => item !== qpSelection
+                        );
+                        targetSelection.unshift(qpSelection);
+                    });
+            }
+        )
     );
 
     context.subscriptions.push(
@@ -620,14 +630,17 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("pretext-tools.deploy", (runInTerminal:boolean = false) => {
-            if (runInTerminal){
-                pretextTerminal = setupTerminal(pretextTerminal);
-                pretextTerminal.sendText('pretext deploy');
-            } else {
-                runPretext(ptxExec, "deploy", "");
+        vscode.commands.registerCommand(
+            "pretext-tools.deploy",
+            (runInTerminal: boolean = false) => {
+                if (runInTerminal) {
+                    pretextTerminal = setupTerminal(pretextTerminal);
+                    pretextTerminal.sendText("pretext deploy");
+                } else {
+                    runPretext(ptxExec, "deploy", "");
+                }
             }
-        })
+        )
     );
 
     context.subscriptions.push(
@@ -663,21 +676,24 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand(
             "pretext-tools.selectPretextCommand",
-            (runInTerminal:boolean = false) => {
+            (runInTerminal: boolean = false) => {
                 // Switch commands between modes:
-                if (runInTerminal){
-                    for (let command of pretextCommandList){
+                if (runInTerminal) {
+                    for (let command of pretextCommandList) {
                         command.label = command.label + " (terminal)";
                     }
-                    pretextCommandList[pretextCommandList.length-1] = {
+                    pretextCommandList[pretextCommandList.length - 1] = {
                         label: "Run commands in quiet mode",
                         description: "(default)",
                         command: "pretext-tools.selectPretextCommand",
                     };
                 } else {
-                    for (let command of pretextCommandList){
-                        command.label = command.label.replace(" (terminal)", "");
-                    pretextCommandList[pretextCommandList.length-1] = {
+                    for (let command of pretextCommandList) {
+                        command.label = command.label.replace(
+                            " (terminal)",
+                            ""
+                        );
+                        pretextCommandList[pretextCommandList.length - 1] = {
                             label: "Run commands in terminal mode",
                             description: "Use to debug a failed command",
                             command: "pretext-tools.selectPretextCommand",
@@ -691,10 +707,19 @@ export function activate(context: vscode.ExtensionContext) {
                         if (!qpSelection) {
                             return;
                         }
-                        if (qpSelection.command === "pretext-tools.selectPretextCommand"){
-                            vscode.commands.executeCommand(qpSelection.command, !runInTerminal);
+                        if (
+                            qpSelection.command ===
+                            "pretext-tools.selectPretextCommand"
+                        ) {
+                            vscode.commands.executeCommand(
+                                qpSelection.command,
+                                !runInTerminal
+                            );
                         } else {
-                            vscode.commands.executeCommand(qpSelection.command,runInTerminal);
+                            vscode.commands.executeCommand(
+                                qpSelection.command,
+                                runInTerminal
+                            );
                         }
                     });
             }
@@ -704,7 +729,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-    if (pretextTerminal){
+    if (pretextTerminal) {
         pretextTerminal.dispose();
     }
 }
