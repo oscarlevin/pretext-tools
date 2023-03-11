@@ -680,11 +680,15 @@ export function activate(context: vscode.ExtensionContext) {
                 // Switch commands between modes:
                 if (runInTerminal) {
                     for (let command of pretextCommandList) {
+                        command.label = command.label.replace(
+                            " (terminal)",
+                            ""
+                        );
                         command.label = command.label + " (terminal)";
                     }
                     pretextCommandList[pretextCommandList.length - 1] = {
                         label: "Run commands in quiet mode",
-                        description: "(default)",
+                        description: "(default mode)",
                         command: "pretext-tools.selectPretextCommand",
                     };
                 } else {

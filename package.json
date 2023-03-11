@@ -17,7 +17,6 @@
     "activationEvents": [
         "onLanguage:pretext",
         "workspaceContains:project.ptx",
-        "onCommand:pretext-tools.test",
         "onCommand:pretext-tools.buildAny",
         "onCommand:pretext-tools.buildDefault",
         "onCommand:pretext-tools.new",
@@ -109,6 +108,13 @@
                 "category": "PreTeXt"
             },
             {
+                "command": "pretext-tools.selectPretextCommand",
+                "title": "Run PreTeXt",
+                "icon": "$(debug-start)",
+                "category": "PreTeXt",
+                "description": "Run selected PreTeXt command"
+            },
+            {
                 "command": "pretext-tools.buildAny",
                 "title": "Build (select target)",
                 "icon": "$(debug-start)",
@@ -183,17 +189,7 @@
         "menus": {
             "editor/title": [
                 {
-                    "command": "pretext-tools.buildAny",
-                    "group": "navigation",
-                    "when": "resourceLangId == pretext"
-                },
-                {
-                    "command": "pretext-tools.generate",
-                    "group": "navigation",
-                    "when": "resourceLangId == pretext"
-                },
-                {
-                    "command": "pretext-tools.view",
+                    "command": "pretext-tools.selectPretextCommand",
                     "group": "navigation",
                     "when": "resourceLangId == pretext"
                 }

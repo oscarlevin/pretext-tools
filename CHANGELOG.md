@@ -7,19 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.10.0] - 2023-03-11
+
 ### Added
 
 - Status bar item: click to select a pretext command; shows when pretext is running; displays success/warnings (and opens output channel if clicked while running or on warning).
+- Debug mode: clicking status bar or run icon includes option to run pretext commands in a terminal, allowing a user to interact or debug issues.
 - View output/dismiss buttons on success message popup.
 - Show log/dismiss buttons on error message popup.
 
 ### Fixed
 
 - All output (both stdout and stderr) shown in output channel.
+- Better status messages for warnings and success messages.
 
 ### Changed
 
 - Output channel not shown by default.
+- Removed PreTeXt-Commands menu (functionality replaced by status bar button)
 
 ## [0.9.0]
 
@@ -33,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Snippets that insert sanitized version of title as the xml:id remove all punctuation.
 - PreTeXt Commands menu persists as long as extension is active.
 
-## [0.8.1] - 2023-1-2
+## [0.8.1] - 2023-01-02
 
 ### Fixed
 
