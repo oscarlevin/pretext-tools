@@ -216,6 +216,11 @@
                         ],
                         "markdownDescription": "Select which method to use when viewing the output of a pretext project.  Leaving this at the default will ask for available methods each time.  Your choice will likely depend on the size of your project and whether you are building output other than the 'web' target."
                     },
+                    "pretext-tools.installPretext": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Whether pretext-tools should try to use pip to install PreTeXt if it cannot find it."
+                    },
                     "pretext-tools.schemaVersion": {
                         "type": "string",
                         "default": "Stable",

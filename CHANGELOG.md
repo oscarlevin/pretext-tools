@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+
+## [0.10.1] - 2023-04-28
+
+### Fixed
+
+- If pretext is not installed, ask user whether they want to try to install, with option to stop asking.
+
 ## [0.10.0] - 2023-03-11
 
 ### Added

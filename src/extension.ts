@@ -123,13 +123,16 @@ function installPretext() {
     try {
         execSync(pythonExec + " -m " + pipExec + " install --upgrade pretext");
         vscode.window.showInformationMessage(
-            "Successfully installed or upgraded pretext."
+            "Successfully installed or upgraded pretext.",
+            "Dismiss"
         );
     } catch (err) {
         vscode.window.showErrorMessage(
-            "Unable to install PreTeXt using pip.  Please see the pretext documentation for further assistance."
+            "Unable to install PreTeXt using pip.  Please see the pretext documentation for further assistance.",
+            "Dismiss"
         );
         console.log(err);
+        throw new Error("Installation failed");
     }
 }
 
@@ -149,16 +152,32 @@ function getPtxExec() {
             console.log(command + " not found");
         }
     }
-    if (ptxExec === "") {
-        vscode.window.showWarningMessage(
-            "It doesn't look like you have pretext installed.  We will now try to install it for you."
-        );
-        try {
-            installPretext();
-            ptxExec = getPtxExec();
-        } catch (err) {
-            console.log("Unable to install PreTeXt.  Error: ", err);
-        }
+    if (
+        ptxExec === "" &&
+        vscode.workspace.getConfiguration("pretext-tools").get("installPretext")
+    ) {
+        vscode.window
+            .showWarningMessage(
+                "It doesn't look like you have pretext installed.  Would you like to try to install it now?",
+                "Yes",
+                "No",
+                "No (stop asking)"
+            )
+            .then((option) => {
+                if (option === "Yes") {
+                    try {
+                        installPretext();
+                        console.log("Finished attempting to install PreTeXt");
+                        return getPtxExec();
+                    } catch (err) {
+                        console.log("Unable to install PreTeXt.  Error: ", err);
+                    }
+                } else if (option === "No (stop asking)") {
+                    vscode.workspace
+                        .getConfiguration("pretext-tools")
+                        .update("installPretext", false);
+                }
+            });
     }
     return ptxExec;
 }
@@ -362,6 +381,10 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(activeEditor?.document.fileName);
 
     console.log("PreTeXt exec command: ", ptxExec);
+    // set ptxInstalled variable to whether ptx is installed
+    let ptxInstalled = (ptxExec !== "");
+    console.log("Pretext is installed is:", ptxInstalled);
+
     var targetSelection = getTargets();
     console.log(
         "Targets are now:" +
@@ -649,7 +672,11 @@ export function activate(context: vscode.ExtensionContext) {
             pretextOutputChannel.appendLine(
                 "Checking for new version of PreTeXt to install"
             );
-            installPretext();
+            try {
+                installPretext();
+            } catch {
+                console.log("Unable to update pretext");
+            }
         })
     );
 
