@@ -6,6 +6,9 @@ import { homedir } from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 import { Uri } from "vscode";
+import { convertToPretext } from "./convert";
+
+
 
 // Set up vscode elements
 let pretextOutputChannel: vscode.OutputChannel;
@@ -755,6 +758,14 @@ export function activate(context: vscode.ExtensionContext) {
                     });
             }
         )
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("pretext-tools.convertToPretext", () => {
+            console.log("Converting to PreTeXt");
+            pretextOutputChannel.appendLine("Converting to PreTeXt");
+            convertToPretext();
+        })
     );
 }
 

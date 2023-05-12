@@ -24,7 +24,8 @@
         "onCommand:pretext-tools.viewWatch",
         "onCommand:pretext-tools.generate",
         "onCommand:pretext-tools.updatePTX",
-        "onCommand:pretext-tools.refresh"
+        "onCommand:pretext-tools.refresh",
+        "onCommand:pretext-tools.convertToPretext"
     ],
     "main": "./out/extension.js",
     "extensionDependencies": [
@@ -159,6 +160,12 @@
                 "title": "Update installed PreTeXt version",
                 "category": "PreTeXt",
                 "description": "Checks for and installs the newest version of PreTeXt"
+            },
+            {
+                "command": "pretext-tools.convertToPretext",
+                "title": "Convert file to PreTeXt (using pandoc)",
+                "category": "PreTeXt",
+                "description": "Converts a selected file to PreTeXt using pandoc, which must be installed separately."
             }
         ],
         "xmlLanguageParticipants": [

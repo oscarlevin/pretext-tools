@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.11.0] - 2023-05-12
+
+### Added
+
+- New function to use pandoc to convert an arbitrary file to PreTeXt.  Pandoc must already be installed.
+
 
 ## [0.10.1] - 2023-04-28
 
