@@ -2,7 +2,7 @@
     "name": "pretext-tools",
     "displayName": "PreTeXt-tools",
     "description": "Language support and more for PreTeXt",
-    "version": "0.11.0",
+    "version": "0.11.1",
     "license": "See license in LICENSE",
     "icon": "logo.png",
     "publisher": "oscarlevin",
@@ -199,8 +199,7 @@
             ],
             "xml.validation.xInclude.enabled": true
         },
-        "menus": {
-        },
+        "menus": {},
         "configuration": [
             {
                 "title": "PreTeXt",
