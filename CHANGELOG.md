@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.11.1] - 2023-05-15
+
+### Added
+
+- `CTRL+ALT+p` now brings up the "run pretext command" selection menu
+
+### Removed
+
+- No longer have green "run" button at top of window (Pretext status bar button makes that redundant).
+
 ## [0.11.0] - 2023-05-12
 
 ### Added

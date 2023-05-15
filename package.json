@@ -100,6 +100,12 @@
                 "key": "ctrl+alt+n",
                 "mac": "cmd+alt+n",
                 "when": "editorTextFocus && editorLangId == 'pretext'"
+            },
+            {
+                "command": "pretext-tools.selectPretextCommand",
+                "key": "ctrl+alt+p",
+                "mac": "cmd+alt+p",
+                "when": "editorTextFocus && editorLangId == 'pretext'"
             }
         ],
         "commands": [
@@ -194,13 +200,6 @@
             "xml.validation.xInclude.enabled": true
         },
         "menus": {
-            "editor/title": [
-                {
-                    "command": "pretext-tools.selectPretextCommand",
-                    "group": "navigation",
-                    "when": "resourceLangId == pretext"
-                }
-            ]
         },
         "configuration": [
             {
