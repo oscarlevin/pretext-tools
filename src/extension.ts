@@ -8,8 +8,6 @@ import * as vscode from "vscode";
 import { Uri } from "vscode";
 import { convertToPretext } from "./convert";
 
-
-
 // Set up vscode elements
 let pretextOutputChannel: vscode.OutputChannel;
 let pretextStatusBarItem: vscode.StatusBarItem;
@@ -385,7 +383,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     console.log("PreTeXt exec command: ", ptxExec);
     // set ptxInstalled variable to whether ptx is installed
-    let ptxInstalled = (ptxExec !== "");
+    let ptxInstalled = ptxExec !== "";
     console.log("Pretext is installed is:", ptxInstalled);
 
     var targetSelection = getTargets();
@@ -761,11 +759,14 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("pretext-tools.convertToPretext", () => {
-            console.log("Converting to PreTeXt");
-            pretextOutputChannel.appendLine("Converting to PreTeXt");
-            convertToPretext();
-        })
+        vscode.commands.registerCommand(
+            "pretext-tools.convertToPretext",
+            () => {
+                console.log("Converting to PreTeXt");
+                pretextOutputChannel.appendLine("Converting to PreTeXt");
+                convertToPretext();
+            }
+        )
     );
 }
 
