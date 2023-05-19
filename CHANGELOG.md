@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Check for pandoc passes even if pandoc 2 is installed.
+- "li-d" snippet fixed.
+- Fix workspace attribute and page block snippets.
 
 
 ## [0.11.1] - 2023-05-15

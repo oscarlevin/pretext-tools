@@ -246,7 +246,7 @@
     },
     "definition-list item": {
         "prefix": "<li-d>",
-        "body": "<li>\n\t<title>$1</title>\n\t<p>\n\t\t$0\n\t</p>\n</li>\n</dl>"
+        "body": "<li>\n\t<title>$1</title>\n\t<p>\n\t\t$0\n\t</p>\n</li>"
     },
     "enumerate (ordered list)": {
         "prefix": "<ol>",

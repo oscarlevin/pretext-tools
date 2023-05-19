@@ -26,8 +26,8 @@
     },
     "workspace": {
         "prefix": "@workspace",
-        "body": "workspace=\"$1%\"$0",
-        "description": "workspace, for exercise in worksheet (specify percentage of page to be left blank)."
+        "body": "workspace=\"$1\"$0",
+        "description": "workspace, for exercise in worksheet (specify in or cm)."
     },
     "number": {
         "prefix": "@number",

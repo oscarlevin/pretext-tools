@@ -273,6 +273,7 @@
         "fs.promises.exists": "^1.1.3",
         "unified": "^10.1.2",
         "unist-util-visit": "^4.1.0",
+        "vsce": "^1.97.0",
         "xast-util-from-xml": "^2.0.1",
         "xast-util-to-string": "^2.0.0",
         "xast-util-to-xml": "^3.0.0"

@@ -201,16 +201,16 @@
     },
     "exercise (worksheet)": {
         "prefix": "<exercise workspace=>",
-        "body": "<exercise workspace=\"$1%\">\n\t$0\n</exercise>"
+        "body": "<exercise workspace=\"$1\">\n\t$0\n</exercise>"
     },
     "exercise (numbered)": {
         "prefix": "<exercise number=>",
         "body": "<exercise number=\"$1\">\n\t$0\n</exercise>"
     },
-    "pagebreak": {
-        "prefix": "<pagebreak />",
-        "body": "<pagebreak />\n",
-        "description": "pagebreak, for worksheets only."
+    "page": {
+        "prefix": "<page>",
+        "body": "<page>\n\t$0\n</page>",
+        "description": "page division, for worksheets only."
     },
     "statement": {
         "prefix": "<statement>",
