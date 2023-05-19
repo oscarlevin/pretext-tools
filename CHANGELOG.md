@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.11.2] - 2023-05-19
+
+### Fixed
+
+- Check for pandoc passes even if pandoc 2 is installed.
+
+
 ## [0.11.1] - 2023-05-15
 
 ### Added

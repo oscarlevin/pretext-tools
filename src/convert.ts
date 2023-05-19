@@ -59,8 +59,8 @@ function runPandoc(inputfile: string) {
 
 function pandocInstalled() {
     console.log("Checking for Pandoc");
-    // console.log(execSync("pandoc --version").toString());
-    return execSync("pandoc --version").toString().includes("pandoc 3.");
+    let regex = /pandoc\s(2\.|3\.)/;
+    return regex.test(execSync("pandoc --version").toString());
 }
 
 function ensurePretextLua() {
