@@ -366,6 +366,8 @@ function updateStatusBarItem(state?: string): void {
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
     console.log('Extension "pretext-tools" is now active!');
+    setSchema();
+
     // Set up vscode elements
     pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
 
