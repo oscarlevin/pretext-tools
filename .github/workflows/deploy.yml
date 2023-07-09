@@ -31,6 +31,11 @@ jobs:
           npm install -g vsce
           npm install -g ovsx
 
+      - name: Set up git user
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
       - name: Package
         run: vsce package ${{ inputs.level }}
 
@@ -39,3 +44,13 @@ jobs:
 
       - name: Deploy to Open VSX
         run: ovsx publish -p ${{ secrets.OPEN_VSX_TOKEN }}
+
+      - name: Create Release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
