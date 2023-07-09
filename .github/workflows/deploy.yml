@@ -1,0 +1,41 @@
+name: Deploy Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      level:
+        description: "The level of release to make"
+        required: true
+        type: choice
+        default: "patch"
+        options:
+          - "patch"
+          - "minor"
+          - "major"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Package
+        run: vsce package ${{ inputs.level }}
+
+      - name: Deploy to VSMarketplace
+        run: vsce publish -p ${{ secrets.VS_MARKETPLACE_TOKEN }}
+
+      - name: Deploy to Open VSX
+        run: ovsx publish -p ${{ secrets.OPEN_VSX_TOKEN }}
