@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.11.3] - 2023-07-09
+
+### Fixed
+
+- Fix issue with schema not loading on activation.
+
 ## [0.11.2] - 2023-05-19
 
 ### Fixed
