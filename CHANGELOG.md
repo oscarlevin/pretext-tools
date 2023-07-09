@@ -21,7 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "li-d" snippet fixed.
 - Fix workspace attribute and page block snippets.
 
-
 ## [0.11.1] - 2023-05-15
 
 ### Added
@@ -36,8 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- New function to use pandoc to convert an arbitrary file to PreTeXt.  Pandoc must already be installed.
-
+- New function to use pandoc to convert an arbitrary file to PreTeXt. Pandoc must already be installed.
 
 ## [0.10.1] - 2023-04-28
 
@@ -87,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Menu of available commands shows in explorer view.
-- Support for Live Preview and CodeChat to view output.  User is asked which of the available methods to use, or can select a default in settings.
+- Support for Live Preview and CodeChat to view output. User is asked which of the available methods to use, or can select a default in settings.
 - New snippets to create template part, chapter, section, exercises subfiles.
 
 ### Changed
@@ -171,6 +169,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Now all snippets indent with tabs/spaces consistent with users settings.
 
 ## [0.1.3] - 2019-09-04
+
 ### Added
 
 - new snippets: exercise-worksheet; exercise-numbered; @number; mdn.
@@ -178,7 +177,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Set final tabstop for paragraphs to $0, so that additional snippets can be deployed.
-- Fixed bug causing !ptx-article to appear when not wanted. 
+- Fixed bug causing !ptx-article to appear when not wanted.
 
 ## [0.1.2] - 2019-08-19
 
@@ -189,7 +188,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2019-08-18
 
-### Initial release.  Added
+### Initial release. Added
 
 - Some basic extensions to the xml grammar:
   - permid attributes are highlighted as comments.
