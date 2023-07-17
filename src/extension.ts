@@ -41,6 +41,16 @@ let pretextCommandList = [
     command: "pretext-tools.deploy",
   },
   {
+    label: "Refresh targets",
+    description: "Refresh the list of targets",
+    command: "pretext-tools.refreshTargets",
+  },
+  {
+    label: "Convert to PreTeXt",
+    description: "Convert from other formats using Pandoc",
+    command: "pretext-tools.convert",
+  },
+  {
     label: "Run commands in terminal",
     description: "Use to debug a failed command",
     command: "pretext-tools.selectPretextCommand",
@@ -87,8 +97,9 @@ function getDir(myPath: string = "") {
   }
 }
 
-function installPretext() {
+async function installPretext(progress: vscode.Progress<{}>) {
   // Here we will attempt to pip install pretext, upgraded to the most recent version.  This will happen if pretext is not found, or if a user requests it through a command.
+
   // first check for python and pip:
   let pythonExec = "";
   for (let command of ["python3", "python"]) {
@@ -103,8 +114,9 @@ function installPretext() {
       console.log("Error: ", err);
     }
   }
+  progress.report({ message: "Checking pip version" });
   let pipExec = "";
-  for (let command of ["pip3", "pip"]) {
+  for (let command of ["pipx", "pip3", "pip"]) {
     try {
       let pipVersion = execSync(command + " --version").toString();
       console.log("pip version result: ", pipVersion);
@@ -119,6 +131,7 @@ function installPretext() {
     );
   }
   // Now try to install pretext (using 1.0 command):
+  progress.report({ message: "Installing pretext" });
   try {
     execSync(pythonExec + " -m " + pipExec + " install --upgrade pretext");
     vscode.window.showInformationMessage(
@@ -133,6 +146,7 @@ function installPretext() {
     console.log(err);
     throw new Error("Installation failed");
   }
+  progress.report({ message: "Done" });
 }
 
 function getPtxExec() {
@@ -161,7 +175,7 @@ function getPtxExec() {
       .then((option) => {
         if (option === "Yes") {
           try {
-            installPretext();
+            vscode.commands.executeCommand("pretext-tools.updatePTX");
             console.log("Finished attempting to install PreTeXt");
             return getPtxExec();
           } catch (err) {
@@ -565,7 +579,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("pretext-tools.viewLivePreview", () => {
       if (vscode.extensions.getExtension("ms-vscode.live-server")) {
         let uri = vscode.Uri.file(
-          path.join(getDir(), "output\\web\\index.html")
+          path.join(getDir(), "output", "web", "index.html")
         );
         vscode.commands.executeCommand("livePreview.start.preview.atFile", uri);
       } else {
@@ -585,7 +599,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.new", () => {
       let viewCommand = [];
-      for (let template of ["article", "book", "slideshow"]) {
+      for (let template of ["article", "book", "slideshow", "demo"]) {
         viewCommand.push({
           label: template,
           description: "New " + template,
@@ -630,15 +644,29 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.updatePTX", () => {
-      console.log("Checking for new version of PreTeXt to install");
-      pretextOutputChannel.appendLine(
-        "Checking for new version of PreTeXt to install"
+      console.log("Updating PreTeXt");
+      vscode.window.withProgress(
+        {
+          location: vscode.ProgressLocation.Window,
+        },
+        (progress) => {
+          progress.report({ message: "Checking for updates" });
+
+          return new Promise<void>((resolve) => {
+            console.log("Checking for new> version of PreTeXt to install");
+            pretextOutputChannel.appendLine(
+              "Checking for new version of PreTeXt to install"
+            );
+            try {
+              installPretext(progress);
+            } catch {
+              console.log("Unable to update pretext");
+            }
+            progress.report({ message: "Done" });
+            resolve();
+          });
+        }
       );
-      try {
-        installPretext();
-      } catch {
-        console.log("Unable to update pretext");
-      }
     })
   );
 

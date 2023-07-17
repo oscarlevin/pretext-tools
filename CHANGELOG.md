@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- New Button Menu Options: You can now refresh the list of targets and initiate a "Convert to PreTeXt" from the PreTeXt button menu.
+- Progress notification for `Update PreTeXt` command.
+
 ## [0.11.3] - 2023-07-09
 
 ### Fixed
