@@ -7,6 +7,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { Uri } from "vscode";
 import { convertToPretext } from "./convert";
+import { latexToPretext } from "./latextopretext";
 
 // Set up vscode elements
 let pretextOutputChannel: vscode.OutputChannel;
@@ -707,6 +708,27 @@ export function activate(context: vscode.ExtensionContext) {
       console.log("Converting to PreTeXt");
       pretextOutputChannel.appendLine("Converting to PreTeXt");
       convertToPretext();
+    })
+  );
+  context.subscriptions.push(
+    vscode.commands.registerCommand("pretext-tools.latexToPretext", () => {
+      const editor = vscode.window.activeTextEditor;
+
+      if (editor) {
+    
+        const selection = editor.selection;
+        const selectionRange = new vscode.Range(selection.start, selection.end);
+  
+        var initialText = editor.document.getText(selectionRange);
+  
+        var newText = latexToPretext(initialText);
+  
+  
+  
+        editor.edit(editbuilder => { editbuilder.replace(selectionRange, newText);});
+  
+  
+      }
     })
   );
 }

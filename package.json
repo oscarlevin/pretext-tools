@@ -162,6 +162,12 @@
         "title": "Convert file to PreTeXt (using pandoc)",
         "category": "PreTeXt",
         "description": "Converts a selected file to PreTeXt using pandoc, which must be installed separately."
+      },
+      {
+        "command": "pretext-tools.latexToPretext",
+        "title": "Convert Selected LaTex to PreTeXt",
+        "category": "PreTeXt",
+        "description": "Converts and Replaces a selection of LaTex to PreTeXt within VCS window."
       }
     ],
     "xmlLanguageParticipants": [
