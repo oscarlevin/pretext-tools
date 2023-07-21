@@ -715,19 +715,16 @@ export function activate(context: vscode.ExtensionContext) {
       const editor = vscode.window.activeTextEditor;
 
       if (editor) {
-    
         const selection = editor.selection;
         const selectionRange = new vscode.Range(selection.start, selection.end);
-  
+
         var initialText = editor.document.getText(selectionRange);
-  
+
         var newText = latexToPretext(initialText);
-  
-  
-  
-        editor.edit(editbuilder => { editbuilder.replace(selectionRange, newText);});
-  
-  
+
+        editor.edit((editbuilder) => {
+          editbuilder.replace(selectionRange, newText);
+        });
       }
     })
   );
