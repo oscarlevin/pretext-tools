@@ -42,15 +42,58 @@ function convertQuotation(text: string) {
   result = result.replace(/(`|')(.*?)(')/gs, "<sq>$2</sq>");
   return result;
 }
-
-//calls each conversion in extension
-export function latexToPretext(text: string) {
-  var result = text;
-
+function converter(text: string) {
+  let result = text;
   //result = convertParagraph(result);
   result = convertMath(result);
   result = convertTextMarkup(result);
   result = convertQuotation(result);
+
+  return result;
+}
+
+// Converts full text testing convert line by line//calls each conversion in extension
+// export function latexToPretext(text: string) {
+//   var result = text;
+
+//   //result = convertParagraph(result);
+//   result = convertMath(result);
+//   result = convertTextMarkup(result);
+//   result = convertQuotation(result);
+
+//   return result;
+// }
+export function latexToPretext(text: string) {
+  let textArray = text.split(/\r\n|\r|\n/);
+  var result = "";
+  let convertCheck = true;
+
+  for (let i = 0; i < text.split(/\r\n|\r|\n/).length; i++) {
+    //test i + 1 i - 0 .length(0)
+    if (textArray[i].trim().length == 0) {
+      console.log(i + 1 + ": " + textArray[i] + "empty");
+      result += "\n";
+      continue;
+    }
+    console.log(i + 1 + ": " + textArray[i]);
+    if (convertCheck) {
+      if (textArray[i].trim().startsWith("\\begin")) {
+        result += textArray[i].trim() + "\n";
+
+        convertCheck = false;
+      } else {
+        result += "<p>\n" + converter(textArray[i]).trim() + "\n</p>\n";
+      }
+    } else {
+      if (textArray[i].trim().startsWith("\\end")) {
+        result += textArray[i].trim() + "\n";
+
+        convertCheck = true;
+      } else {
+        result += textArray[i].trim() + "\n";
+      }
+    }
+  }
 
   return result;
 }
