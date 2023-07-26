@@ -10,16 +10,28 @@
   "engines": {
     "vscode": "^1.76.0"
   },
-  "categories": ["Programming Languages", "Snippets"],
-  "activationEvents": ["workspaceContains:project.ptx"],
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "workspaceContains:project.ptx"
+  ],
   "main": "./out/extension.js",
-  "extensionDependencies": ["redhat.vscode-xml"],
+  "extensionDependencies": [
+    "redhat.vscode-xml"
+  ],
   "contributes": {
     "languages": [
       {
         "id": "pretext",
-        "aliases": ["PreTeXt", "ptx"],
-        "extensions": [".ptx"],
+        "aliases": [
+          "PreTeXt",
+          "ptx"
+        ],
+        "extensions": [
+          ".ptx"
+        ],
         "configuration": "./language-configuration.json"
       }
     ],
@@ -191,7 +203,12 @@
           "pretext-tools.viewMethod": {
             "type": "string",
             "default": "Ask",
-            "enum": ["Ask", "Live Preview", "CodeChat", "PreTeXT-CLI View"],
+            "enum": [
+              "Ask",
+              "Live Preview",
+              "CodeChat",
+              "PreTeXT-CLI View"
+            ],
             "markdownEnumDescriptions": [
               "Ask for view method each time (default).",
               "Use VS Code's [Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server) extension to view the 'web' target in a separate tab of VS Code. Only works if you have installed the Live Preview extension",
@@ -208,7 +225,10 @@
           "pretext-tools.schemaVersion": {
             "type": "string",
             "default": "Stable",
-            "enum": ["Stable", "Experimental"],
+            "enum": [
+              "Stable",
+              "Experimental"
+            ],
             "markdownEnumDescriptions": [
               "Use the stable schema matching your installed version of PreTeXt (default).",
               "Use the experimental/development schema matching your installed version of PreTeXt."
