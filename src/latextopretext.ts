@@ -67,10 +67,11 @@ export function latexToPretext(text: string) {
   let textArray = text.split(/\r\n|\r|\n/);
   var result = "";
   let convertCheck = true;
+  let loopCount = text.split(/\r\n|\r|\n/).length;
 
-  for (let i = 0; i < text.split(/\r\n|\r|\n/).length; i++) {
+  for (let i = 0; i < loopCount; i++) {
     //test i + 1 i - 0 .length(0)
-    if (textArray[i].trim().length == 0) {
+    if (textArray[i].trim().length === 0) {
       console.log(i + 1 + ": " + textArray[i] + "empty");
       result += "\n";
       continue;
@@ -82,7 +83,22 @@ export function latexToPretext(text: string) {
 
         convertCheck = false;
       } else {
-        result += "<p>\n" + converter(textArray[i]).trim() + "\n</p>\n";
+        if (i === 0) {
+          result += "\n<p>\n" + converter(textArray[i]).trim() + "\n";
+        } else if (i + 1 === loopCount) {
+          if (textArray[i - 1].trim().length === 0) {
+            result += "<p>\n";
+          }
+          result += converter(textArray[i]).trim() + "\n</p>\n";
+        } else {
+          if (textArray[i - 1].trim().length === 0) {
+            result += "<p>\n";
+          }
+          result += converter(textArray[i]).trim() + "\n";
+          if (textArray[i + 1].trim().length === 0) {
+            result += "</p>\n";
+          }
+        }
       }
     } else {
       if (textArray[i].trim().startsWith("\\end")) {
