@@ -8,24 +8,14 @@
   "publisher": "oscarlevin",
   "repository": "https://github.com/oscarlevin/pretext-tools",
   "engines": {
-    "vscode": "^1.70.0"
+    "vscode": "^1.76.0"
   },
   "categories": [
     "Programming Languages",
     "Snippets"
   ],
   "activationEvents": [
-    "onLanguage:pretext",
-    "workspaceContains:project.ptx",
-    "onCommand:pretext-tools.buildAny",
-    "onCommand:pretext-tools.buildDefault",
-    "onCommand:pretext-tools.new",
-    "onCommand:pretext-tools.view",
-    "onCommand:pretext-tools.viewWatch",
-    "onCommand:pretext-tools.generate",
-    "onCommand:pretext-tools.updatePTX",
-    "onCommand:pretext-tools.refresh",
-    "onCommand:pretext-tools.convertToPretext"
+    "workspaceContains:project.ptx"
   ],
   "main": "./out/extension.js",
   "extensionDependencies": [
@@ -110,7 +100,7 @@
     ],
     "commands": [
       {
-        "command": "pretext-tools.refresh",
+        "command": "pretext-tools.refreshTargets",
         "title": "Refresh target list",
         "category": "PreTeXt"
       },
