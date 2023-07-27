@@ -71,21 +71,28 @@ export function latexToPretext(text: string) {
   let loopCount = text.split(/\r\n|\r|\n/).length;
 
   for (let i = 0; i < loopCount; i++) {
-    //test i + 1 i - 0 .length(0)
+    
     if (textArray[i].trim().length === 0) {
       console.log(i + 1 + ": " + textArray[i] + "empty");
       result += "\n";
       continue;
     }
+
     console.log(i + 1 + ": " + textArray[i]);
+
     if (convertCheck) {
       if (textArray[i].trim().startsWith("\\begin")) {
         result += textArray[i].trim() + "\n";
 
         convertCheck = false;
-      } else {
+      } 
+      
+      else {
         if (i === 0) {
           result += "\n<p>\n" + converter(textArray[i]).trim() + "\n";
+          if (textArray[i + 1].trim().length === 0) {
+            result += "</p>\n";
+          }
         } else if (i + 1 === loopCount) {
           if (textArray[i - 1].trim().length === 0) {
             result += "<p>\n";
