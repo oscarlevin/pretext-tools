@@ -6,7 +6,7 @@ A Visual Studio Code extension to make writing PreTeXt documents easier.
 
 - Defines the PreTeXt language, automatically selecting it for `.ptx` files.
 - Syntax highlighting and indentation based on XML, plus some additions like recognizing math as LaTeX and "hiding" permid attributes as comments.
-- Schema support via the vscode-xml extension (which also provides many xml tools).
+- Schema support via the [vscode-xml](https://github.com/redhat-developer/vscode-xml) extension (which also provides many xml tools).
 - A large collection of snippets for most PreTeXt elements.
 - A front-end for the [PreTeXt-CLI](https://github.com/PreTeXtBook/pretext-cli), with commands available through a menu in the side explorere, the command pallet (Ctrl+Shift+P), and keyboard shortcuts (Ctrl-Alt-B to build, Ctrl-Alt-V to view, etc.).
 - Support for the Live Preview and CodeChat extensions to view output, as well as via the PreTeXt-CLI.
