@@ -1,11 +1,12 @@
-function convertParagraph(text: string) {
-  //convert empty lines to paragraph
-  let result = text.replace(
-    /(\r|\n(?!\r|\n))(.*?)((\r|\n)\s*?(\r|\n))/gs,
-    "<p>\n$2\n</p>\n\n"
-  );
-  return result;
-}
+//convertParagraph function using regex currently unused
+// function convertParagraph(text: string) {
+//   //convert empty lines to paragraph
+//   let result = text.replace(
+//     /(\r|\n(?!\r|\n))(.*?)((\r|\n)\s*?(\r|\n))/gs,
+//     "<p>\n$2\n</p>\n\n"
+//   );
+//   return result;
+// }
 
 function convertMath(text: string) {
   //convert diplay math mode
