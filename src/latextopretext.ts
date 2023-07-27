@@ -71,7 +71,6 @@ export function latexToPretext(text: string) {
   let loopCount = text.split(/\r\n|\r|\n/).length;
 
   for (let i = 0; i < loopCount; i++) {
-    
     if (textArray[i].trim().length === 0) {
       console.log(i + 1 + ": " + textArray[i] + "empty");
       result += "\n";
@@ -85,9 +84,7 @@ export function latexToPretext(text: string) {
         result += textArray[i].trim() + "\n";
 
         convertCheck = false;
-      } 
-      
-      else {
+      } else {
         if (i === 0) {
           result += "\n<p>\n" + converter(textArray[i]).trim() + "\n";
           if (textArray[i + 1].trim().length === 0) {
