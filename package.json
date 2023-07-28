@@ -165,9 +165,9 @@
       },
       {
         "command": "pretext-tools.latexToPretext",
-        "title": "Convert Selected LaTex to PreTeXt",
+        "title": "Convert Selected LaTeX to PreTeXt",
         "category": "PreTeXt",
-        "description": "Converts and Replaces a selection of LaTex to PreTeXt within VCS window."
+        "description": "Converts and replaces a selection of LaTeX with PreTeXt formatted text."
       }
     ],
     "xmlLanguageParticipants": [
@@ -263,7 +263,7 @@
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
     "ovsx": "^0.8.2",
-    "prettier": "^2.7.1",
+    "prettier": "^2.8.8",
     "typescript": "^4.7.2",
     "vscode-test": "^1.5.2"
   },

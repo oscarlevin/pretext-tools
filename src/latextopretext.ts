@@ -1,11 +1,12 @@
-function convertParagraph(text: string) {
-  //convert empty lines to paragraph
-  let result = text.replace(
-    /(\r|\n(?!\r|\n))(.*?)((\r|\n)\s*?(\r|\n))/gs,
-    "<p>\n$2\n</p>\n\n"
-  );
-  return result;
-}
+//convertParagraph function using regex currently unused
+// function convertParagraph(text: string) {
+//   //convert empty lines to paragraph
+//   let result = text.replace(
+//     /(\r|\n(?!\r|\n))(.*?)((\r|\n)\s*?(\r|\n))/gs,
+//     "<p>\n$2\n</p>\n\n"
+//   );
+//   return result;
+// }
 
 function convertMath(text: string) {
   //convert diplay math mode
@@ -42,15 +43,78 @@ function convertQuotation(text: string) {
   result = result.replace(/(`|')(.*?)(')/gs, "<sq>$2</sq>");
   return result;
 }
-
-//calls each conversion in extension
-export function latexToPretext(text: string) {
-  var result = text;
-
+function converter(text: string) {
+  let result = text;
   //result = convertParagraph(result);
   result = convertMath(result);
   result = convertTextMarkup(result);
   result = convertQuotation(result);
+
+  return result;
+}
+
+// Converts full text testing convert line by line//calls each conversion in extension
+// export function latexToPretext(text: string) {
+//   var result = text;
+
+//   //result = convertParagraph(result);
+//   result = convertMath(result);
+//   result = convertTextMarkup(result);
+//   result = convertQuotation(result);
+
+//   return result;
+// }
+export function latexToPretext(text: string) {
+  let textArray = text.split(/\r\n|\r|\n/);
+  var result = "";
+  let convertCheck = true;
+  let loopCount = text.split(/\r\n|\r|\n/).length;
+
+  for (let i = 0; i < loopCount; i++) {
+    if (textArray[i].trim().length === 0) {
+      console.log(i + 1 + ": " + textArray[i] + "empty");
+      result += "\n";
+      continue;
+    }
+
+    console.log(i + 1 + ": " + textArray[i]);
+
+    if (convertCheck) {
+      if (textArray[i].trim().startsWith("\\begin")) {
+        result += textArray[i].trim() + "\n";
+
+        convertCheck = false;
+      } else {
+        if (i === 0) {
+          result += "\n<p>\n" + converter(textArray[i]).trim() + "\n";
+          if (textArray[i + 1].trim().length === 0) {
+            result += "</p>\n";
+          }
+        } else if (i + 1 === loopCount) {
+          if (textArray[i - 1].trim().length === 0) {
+            result += "<p>\n";
+          }
+          result += converter(textArray[i]).trim() + "\n</p>\n";
+        } else {
+          if (textArray[i - 1].trim().length === 0) {
+            result += "<p>\n";
+          }
+          result += converter(textArray[i]).trim() + "\n";
+          if (textArray[i + 1].trim().length === 0) {
+            result += "</p>\n";
+          }
+        }
+      }
+    } else {
+      if (textArray[i].trim().startsWith("\\end")) {
+        result += textArray[i].trim() + "\n";
+
+        convertCheck = true;
+      } else {
+        result += textArray[i].trim() + "\n";
+      }
+    }
+  }
 
   return result;
 }
