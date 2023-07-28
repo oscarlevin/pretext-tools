@@ -8,6 +8,8 @@
 //   return result;
 // }
 
+// Paragraph element conversions /////////////////////////////////
+
 function convertMath(text: string) {
   //convert diplay math mode
   let result = text.replace(
@@ -43,6 +45,9 @@ function convertQuotation(text: string) {
   result = result.replace(/(`|')(.*?)(')/gs, "<sq>$2</sq>");
   return result;
 }
+
+/////////////////////////////////////////////////////////////////
+
 function converter(text: string) {
   let result = text;
   //result = convertParagraph(result);
@@ -51,6 +56,21 @@ function converter(text: string) {
   result = convertQuotation(result);
 
   return result;
+}
+
+function getBlockList(text: string) {
+  // We parse the text input and return a list of strings, each a separate "block", which could be a paragraph or a \begin/\end environment.
+  let blockList = ["paragraph1", "paragraph2"];
+  return blockList;
+}
+
+function convertBlockList(blockList) {
+  // We convert the block list to pretext.
+  for (let block in blockList) {
+    // if the block is a \begin/\end block in a "don't touch" list, we skip it.
+    // else if the block is a \begin/\end block in a "convert" list, we wrap it with the right thing and run a getBlockList and convertBlockList on the contents.
+    // else we run a converter on the block.
+  }
 }
 
 // Converts full text testing convert line by line//calls each conversion in extension
@@ -69,6 +89,9 @@ export function latexToPretext(text: string) {
   var result = "";
   let convertCheck = true;
   let loopCount = text.split(/\r\n|\r|\n/).length;
+
+  // let blockList = makeBlockList(textArray);
+  // result = convertBlockList(blockList);
 
   for (let i = 0; i < loopCount; i++) {
     if (textArray[i].trim().length === 0) {
