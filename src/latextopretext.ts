@@ -73,7 +73,7 @@ function getBlockList(text: string) {
       console.log(i + 1 + ": " + textArray[i] + "empty");
       block += "\n";
       blockList.push(block);
-      block = ""
+      block = "";
       continue;
     }
 
@@ -124,7 +124,9 @@ function getBlockList(text: string) {
   }
 
 
-  
+  for (var blockCheck of blockList) {
+    console.log("BLOCK CHECK: " + blockCheck);
+  }
   
   return blockList;
 }
@@ -150,6 +152,7 @@ function convertBlockList(blockList: Array<string>) {
 //   return result;
 // }
 export function latexToPretext(text: string) {
+  getBlockList(text);
   let textArray = text.split(/\r\n|\r|\n/);
   var result = "";
   let convertCheck = true;
