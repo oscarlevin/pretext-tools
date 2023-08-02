@@ -110,9 +110,8 @@ function getBlockList(text: string) {
       } else {
         if (textArray[i].trim().length === 0) {
           block += "\n";
-        }
-        else {
-        block += textArray[i].trim() + "\n";
+        } else {
+          block += textArray[i].trim() + "\n";
         }
       }
     }
@@ -131,9 +130,9 @@ function convertBlockList(blockList: Array<string>) {
     if (block.trim().length === 0) {
       result += "\n";
     } else if (block.trim().startsWith("\\begin")) {
-      result += block;
+      result += block + "\n";
     } else {
-      result += "<p>\n" + block + "\n</p>";
+      result += "<p>\n" + block + "</p>\n";
     }
     // if the block is a \begin/\end block in a "don't touch" list, we skip it.
     // else if the block is a \begin/\end block in a "convert" list, we wrap it with the right thing and run a getBlockList and convertBlockList on the contents.
