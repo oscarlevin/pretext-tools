@@ -129,10 +129,10 @@ function convertBlockList(blockList: Array<string>) {
   for (let block of blockList) {
     if (block.trim().length === 0) {
       result += "\n";
-    } else if (block.trim().startsWith("\\begin")) {
+    } else if (block.trim().startsWith("\\begin")) { //additional conditionals can be added within this section for /begin blocks to detemine convert|!convert
       result += block + "\n";
     } else {
-      result += "<p>\n" + block + "</p>\n";
+      result += "<p>\n" + converter(block) + "</p>\n";
     }
     // if the block is a \begin/\end block in a "don't touch" list, we skip it.
     // else if the block is a \begin/\end block in a "convert" list, we wrap it with the right thing and run a getBlockList and convertBlockList on the contents.
