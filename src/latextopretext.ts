@@ -68,7 +68,6 @@ function getBlockList(text: string) {
 
   for (let i = 0; i < loopCount; i++) {
     if (textArray[i].trim().length === 0) {
-      console.log(i + 1 + ": " + textArray[i] + "empty");
       block += "\n";
       blockList.push(block);
       block = "";
@@ -117,9 +116,10 @@ function getBlockList(text: string) {
     }
   }
 
-  for (var blockCheck of blockList) {
-    console.log("BLOCK CHECK: " + blockCheck);
-  }
+  // //log each block in terminal to see how it is building as test
+  //   for (var blockCheck of blockList) {
+  //     console.log("BLOCK CHECK: " + blockCheck);
+  //   }
 
   return blockList;
 }
@@ -129,14 +129,16 @@ function convertBlockList(blockList: Array<string>) {
   for (let block of blockList) {
     if (block.trim().length === 0) {
       result += "\n";
-    } else if (block.trim().startsWith("\\begin")) { //additional conditionals can be added within this section for /begin blocks to detemine convert|!convert
+    }
+    //block is a \begin/\end block skip for now.
+    else if (block.trim().startsWith("\\begin")) {
+      //additional conditionals can be added within this section for /begin blocks to detemine convert|!convert
       result += block + "\n";
-    } else {
+    }
+    //Block likely a paragraph run a converter on the block.
+    else {
       result += "<p>\n" + converter(block) + "</p>\n";
     }
-    // if the block is a \begin/\end block in a "don't touch" list, we skip it.
-    // else if the block is a \begin/\end block in a "convert" list, we wrap it with the right thing and run a getBlockList and convertBlockList on the contents.
-    // else we run a converter on the block.
   }
   return result;
 }
