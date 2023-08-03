@@ -67,14 +67,13 @@ function getBlockList(text: string) {
   let block = "";
 
   for (let i = 0; i < loopCount; i++) {
-    if (textArray[i].trim().length === 0) {
-      block += "\n";
-      blockList.push(block);
-      block = "";
-      continue;
-    }
-
     if (convertCheck) {
+      if (textArray[i].trim().length === 0) {
+        block += "\n";
+        blockList.push(block);
+        block = "";
+        continue;
+      }
       if (textArray[i].trim().startsWith("\\begin")) {
         block += textArray[i].trim() + "\n";
 
@@ -112,14 +111,17 @@ function getBlockList(text: string) {
         } else {
           block += textArray[i].trim() + "\n";
         }
+        if (i + 1 === loopCount) {
+          blockList.push(block);
+        }
       }
     }
   }
 
   // //log each block in terminal to see how it is building as test
-  //   for (var blockCheck of blockList) {
-  //     console.log("BLOCK CHECK: " + blockCheck);
-  //   }
+  // for (var blockCheck of blockList) {
+  //   console.log("BLOCK CHECK: " + blockCheck);
+  // }
 
   return blockList;
 }
@@ -133,11 +135,15 @@ function convertBlockList(blockList: Array<string>) {
     //block is a \begin/\end block skip for now.
     else if (block.trim().startsWith("\\begin")) {
       //additional conditionals can be added within this section for /begin blocks to detemine convert|!convert
-      result += block + "\n";
+      result += block;
     }
     //Block likely a paragraph run a converter on the block.
     else {
-      result += "<p>\n" + converter(block) + "</p>\n";
+      if (block.trim().startsWith("\\")) {
+        result += converter(block);
+      } else {
+        result += "<p>\n" + converter(block) + "</p>\n";
+      }
     }
   }
   return result;
