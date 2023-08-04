@@ -134,8 +134,15 @@ function convertBlockList(blockList: Array<string>) {
     }
     //block is a \begin/\end block skip for now.
     else if (block.trim().startsWith("\\begin")) {
+
+      const blockArray = block.split("\n");
+
+      const insideBlock = blockArray.slice(1,-1);
+      result += convertBlockList(getBlockList(insideBlock.join("\n")));
+
+      
       //additional conditionals can be added within this section for /begin blocks to detemine convert|!convert
-      result += block;
+      // result += block;
     }
     //Block likely a paragraph run a converter on the block.
     else {
