@@ -10,6 +10,7 @@ import { convertToPretext } from "./convert";
 let pretextOutputChannel: vscode.OutputChannel;
 let pretextStatusBarItem: vscode.StatusBarItem;
 let pretextTerminal: vscode.Terminal;
+const showLogCommand = vscode.Uri.parse("command:pretext-tools.showLog");
 
 // list of pretext commands
 let pretextCommandList = [
@@ -131,7 +132,10 @@ async function installPretext(progress: vscode.Progress<{}>) {
   // Now try to install pretext (using 1.0 command):
   progress.report({ message: "Installing pretext" });
   try {
-    execSync(pythonExec + " -m " + pipExec + " install --upgrade pretext");
+    if (pipExec === "pipx") {
+      execSync(pipExec + " install pretext");
+    }
+    execSync(pythonExec + " -m " + "pip" + " install --upgrade pretext");
     vscode.window.showInformationMessage(
       "Successfully installed or upgraded pretext.",
       "Dismiss"
@@ -250,7 +254,7 @@ async function runPretext(
         if (filePath !== "" && filePath !== ".") {
           pretextOutputChannel.clear();
           pretextOutputChannel.append(
-            "Now running `" + fullCommand + "` ...\n"
+            "Now running `" + fullCommand + "` ..\n"
           );
           progressUpdate = "Running " + fullCommand;
           var process = spawn(fullCommand, [], {
@@ -436,7 +440,6 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("pretext-tools.showLog", () => {
       pretextOutputChannel.show();
       updateStatusBarItem();
-      console.log(pretextTerminal.state);
     })
   );
 
