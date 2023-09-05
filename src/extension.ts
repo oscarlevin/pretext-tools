@@ -236,16 +236,17 @@ async function runPretext(
       cancellable: true,
     },
     (progress, token) => {
-      token.onCancellationRequested(() => {
-        console.log("User canceled the long running operation");
-      });
+      // token.onCancellationRequested(() => {
+      //   console.log("User requested to cancel");
+      //   process.kill(0);
+      // });
 
       return new Promise<void>((resolve) => {
         updateStatusBarItem("running");
         var progressUpdate = "Starting up...";
         const interval = setInterval(
           () => progress.report({ message: progressUpdate }),
-          500
+          1000
         );
         let fullCommand = ptxExec + " " + ptxCommand + " " + ptxOptions;
         let status = "ready"; //for statusbaritem
@@ -257,15 +258,23 @@ async function runPretext(
             "Now running `" + fullCommand + "` ..\n"
           );
           progressUpdate = "Running " + fullCommand;
-          var process = spawn(fullCommand, [], {
+          var ptxrun = spawn(fullCommand, [], {
             cwd: filePath,
             shell: true,
           });
-          process.stdout.on("data", function (data) {
+          console.log("Process ID: " + ptxrun.pid);
+
+          token.onCancellationRequested(() => {
+            console.log("User requested to cancel");
+            // TODO: make this work.
+            ptxrun.kill("SIGKILL");
+            return;
+          });
+          ptxrun.stdout.on("data", function (data) {
             console.log(`${data}`);
             pretextOutputChannel.append(`${data}`);
           });
-          process.stderr.on("data", function (data) {
+          ptxrun.stderr.on("data", function (data) {
             console.log(`${data}`);
             var outputLines = data.toString().split(/\r?\n/);
             for (const line of outputLines) {
@@ -308,9 +317,9 @@ async function runPretext(
               }
             }
           });
-          process.on("close", function (code) {
+          ptxrun.on("close", function (code) {
             console.log(code?.toString());
-            if (process.killed) {
+            if (ptxrun.killed) {
               pretextOutputChannel.appendLine(
                 "...PreTeXt command terminated early."
               );
@@ -324,7 +333,8 @@ async function runPretext(
             clearInterval(interval);
           });
         }
-        token.onCancellationRequested((_) => process.kill("SIGHUP"));
+
+        // token.onCancellationRequested((_) => process.kill("SIGHUP"));
       });
     }
   );
