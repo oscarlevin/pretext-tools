@@ -1,11 +1,9 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { execSync, spawn } from "child_process";
-import * as fs from "fs";
+import { execSync, spawn, spawnSync } from "child_process";
 import { homedir } from "os";
 import * as path from "path";
 import * as vscode from "vscode";
-import { Uri } from "vscode";
 import { convertToPretext } from "./convert";
 import { latexToPretext } from "./latextopretext";
 
@@ -13,6 +11,7 @@ import { latexToPretext } from "./latextopretext";
 let pretextOutputChannel: vscode.OutputChannel;
 let pretextStatusBarItem: vscode.StatusBarItem;
 let pretextTerminal: vscode.Terminal;
+const showLogCommand = vscode.Uri.parse("command:pretext-tools.showLog");
 
 // list of pretext commands
 let pretextCommandList = [
@@ -40,6 +39,16 @@ let pretextCommandList = [
     label: "Deploy",
     description: "to GitHub Pages",
     command: "pretext-tools.deploy",
+  },
+  {
+    label: "Refresh targets",
+    description: "Refresh the list of targets",
+    command: "pretext-tools.refreshTargets",
+  },
+  {
+    label: "Convert to PreTeXt",
+    description: "Convert from other formats using Pandoc",
+    command: "pretext-tools.convert",
   },
   {
     label: "Run commands in terminal",
@@ -88,8 +97,9 @@ function getDir(myPath: string = "") {
   }
 }
 
-function installPretext() {
+async function installPretext(progress: vscode.Progress<{}>) {
   // Here we will attempt to pip install pretext, upgraded to the most recent version.  This will happen if pretext is not found, or if a user requests it through a command.
+
   // first check for python and pip:
   let pythonExec = "";
   for (let command of ["python3", "python"]) {
@@ -104,8 +114,9 @@ function installPretext() {
       console.log("Error: ", err);
     }
   }
+  progress.report({ message: "Checking pip version" });
   let pipExec = "";
-  for (let command of ["pip3", "pip"]) {
+  for (let command of ["pipx", "pip3", "pip"]) {
     try {
       let pipVersion = execSync(command + " --version").toString();
       console.log("pip version result: ", pipVersion);
@@ -120,8 +131,12 @@ function installPretext() {
     );
   }
   // Now try to install pretext (using 1.0 command):
+  progress.report({ message: "Installing pretext" });
   try {
-    execSync(pythonExec + " -m " + pipExec + " install --upgrade pretext");
+    if (pipExec === "pipx") {
+      execSync(pipExec + " install pretext");
+    }
+    execSync(pythonExec + " -m " + "pip" + " install --upgrade pretext");
     vscode.window.showInformationMessage(
       "Successfully installed or upgraded pretext.",
       "Dismiss"
@@ -134,6 +149,7 @@ function installPretext() {
     console.log(err);
     throw new Error("Installation failed");
   }
+  progress.report({ message: "Done" });
 }
 
 function getPtxExec() {
@@ -162,7 +178,7 @@ function getPtxExec() {
       .then((option) => {
         if (option === "Yes") {
           try {
-            installPretext();
+            vscode.commands.executeCommand("pretext-tools.updatePTX");
             console.log("Finished attempting to install PreTeXt");
             return getPtxExec();
           } catch (err) {
@@ -214,72 +230,105 @@ async function runPretext(
   ptxOptions: string,
   passedPath: string = ""
 ): Promise<void> {
-  // var editor = vscode.window.activeTextEditor;
-  // var fullName = path.normalize(editor.document.fileName);
-  // var filePath = path.dirname(fullName);
-  updateStatusBarItem("running");
-  let fullCommand = ptxExec + " " + ptxCommand + " " + ptxOptions;
-  let status = "ready"; //for statusbaritem
-  var filePath = getDir(passedPath);
-  console.log("cwd = " + filePath);
-  if (filePath !== "" && filePath !== ".") {
-    pretextOutputChannel.clear();
-    pretextOutputChannel.append("Now running `" + fullCommand + "` ...\n");
-    var process = spawn(fullCommand, [], { cwd: filePath, shell: true });
-    process.stdout.on("data", function (data) {
-      console.log(`${data}`);
-      pretextOutputChannel.append(`${data}`);
-    });
-    process.stderr.on("data", function (data) {
-      console.log(`${data}`);
-      var outputLines = data.toString().split(/\r?\n/);
-      for (const line of outputLines) {
-        // console.log(line + "\n");
-        if (line.startsWith("Use [Ctrl]+[C]")) {
-          pretextOutputChannel.append(line + "\n");
-          pretextOutputChannel.append(
-            "(this local server will remain running until you close vs code)\n"
-          );
-          console.log("Using view.  status should change back");
-          updateStatusBarItem("success");
-          return;
-        } else {
-          pretextOutputChannel.append(line + "\n");
-        }
-        if (line.startsWith("error") || line.startsWith("critical")) {
-          vscode.window
-            .showErrorMessage(line, "Show Log", "Dismiss")
-            .then((option) => {
-              if (option === "Show Log") {
-                pretextOutputChannel.show();
-              }
-            });
-          status = "error";
-        } else if (line.includes(`pretext view`)) {
-          if (ptxCommand === "build") {
-            vscode.window
-              .showInformationMessage(
-                "Build successfull!",
-                "View output",
-                "Dismiss"
-              )
-              .then((option) => {
-                if (option === "View output") {
-                  vscode.commands.executeCommand("pretext-tools.view");
-                }
-              });
-          }
-          status = "success";
-        }
-      }
-    });
+ return vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Window,
+      title: "PreTeXt Command Running",
+      cancellable: false,
+    },
+    async (progress) => {
+      return new Promise<void>((resolve) => {
 
-    process.on("exit", function (code) {
-      console.log(code?.toString());
-      pretextOutputChannel.appendLine("...PreTeXt command finished.");
-      updateStatusBarItem(status);
-    });
-  }
+        updateStatusBarItem("running");
+        var progressUpdate = "Starting up...";
+        const interval = setInterval(
+          () => progress.report({ message: progressUpdate }),
+          1000
+        );
+        let fullCommand = ptxExec + " " + ptxCommand + " " + ptxOptions;
+        let status = "ready"; //for statusbaritem
+        var filePath = getDir(passedPath);
+        console.log("cwd = " + filePath);
+        if (filePath !== "" && filePath !== ".") {
+          pretextOutputChannel.clear();
+          pretextOutputChannel.append(
+            "Now running `" + fullCommand + "` ..\n"
+          );
+          progressUpdate = "Running " + fullCommand;
+          var ptxrun = spawn(fullCommand, [], {
+            cwd: filePath,
+            shell: true,
+          });
+
+          ptxrun.stdout.on("data", function (data) {
+            console.log(`${data}`);
+            pretextOutputChannel.append(`${data}`);
+          });
+          ptxrun.stderr.on("data", function (data) {
+            console.log(`${data}`);
+            var outputLines = data.toString().split(/\r?\n/);
+            for (const line of outputLines) {
+              // console.log(line + "\n");
+              if (line.startsWith("Use [Ctrl]+[C]")) {
+                pretextOutputChannel.append(line + "\n");
+                pretextOutputChannel.append(
+                  "(this local server will remain running until you close vs code)\n"
+                );
+                console.log("Using view.  status should change back");
+                updateStatusBarItem("success");
+                return;
+              } else {
+                pretextOutputChannel.append(line + "\n");
+              }
+              if (line.startsWith("error") || line.startsWith("critical")) {
+                vscode.window
+                  .showErrorMessage(line, "Show Log", "Dismiss")
+                  .then((option) => {
+                    if (option === "Show Log") {
+                      pretextOutputChannel.show();
+                    }
+                  });
+                status = "error";
+              } else if (line.includes(`pretext view`)) {
+                if (ptxCommand === "build") {
+                  vscode.window
+                    .showInformationMessage(
+                      "Build successfull!",
+                      "View output",
+                      "Dismiss"
+                    )
+                    .then((option) => {
+                      if (option === "View output") {
+                        vscode.commands.executeCommand("pretext-tools.view");
+                      }
+                    });
+                }
+                status = "success";
+              }
+            }
+          });
+
+          ptxrun.on("close", function (code) {
+            console.log(code?.toString());
+            if (ptxrun.killed) {
+              pretextOutputChannel.appendLine(
+                "...PreTeXt command terminated early."
+              );
+              console.log("Process killed");
+            } else {
+              pretextOutputChannel.appendLine("...PreTeXt command finished.");
+            }
+            updateStatusBarItem(status);
+            progressUpdate = "Finished";
+            resolve();
+            clearInterval(interval);
+          });
+
+
+        }
+      });
+    }
+  );
 }
 
 async function runThenOpen(
@@ -356,7 +405,6 @@ function updateStatusBarItem(state?: string): void {
 }
 
 // this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
   setSchema();
@@ -393,7 +441,6 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("pretext-tools.showLog", () => {
       pretextOutputChannel.show();
       updateStatusBarItem();
-      console.log(pretextTerminal.state);
     })
   );
 
@@ -566,7 +613,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("pretext-tools.viewLivePreview", () => {
       if (vscode.extensions.getExtension("ms-vscode.live-server")) {
         let uri = vscode.Uri.file(
-          path.join(getDir(), "output\\web\\index.html")
+          path.join(getDir(), "output", "web", "index.html")
         );
         vscode.commands.executeCommand("livePreview.start.preview.atFile", uri);
       } else {
@@ -586,7 +633,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.new", () => {
       let viewCommand = [];
-      for (let template of ["article", "book", "slideshow"]) {
+      for (let template of ["article", "book", "slideshow", "demo"]) {
         viewCommand.push({
           label: template,
           description: "New " + template,
@@ -631,20 +678,34 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.updatePTX", () => {
-      console.log("Checking for new version of PreTeXt to install");
-      pretextOutputChannel.appendLine(
-        "Checking for new version of PreTeXt to install"
+      console.log("Updating PreTeXt");
+      vscode.window.withProgress(
+        {
+          location: vscode.ProgressLocation.Window,
+        },
+        (progress) => {
+          progress.report({ message: "Checking for updates" });
+
+          return new Promise<void>((resolve) => {
+            console.log("Checking for new> version of PreTeXt to install");
+            pretextOutputChannel.appendLine(
+              "Checking for new version of PreTeXt to install"
+            );
+            try {
+              installPretext(progress);
+            } catch {
+              console.log("Unable to update pretext");
+            }
+            progress.report({ message: "Done" });
+            resolve();
+          });
+        }
       );
-      try {
-        installPretext();
-      } catch {
-        console.log("Unable to update pretext");
-      }
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("pretext-tools.refresh", () => {
+    vscode.commands.registerCommand("pretext-tools.refreshTargets", () => {
       pretextOutputChannel.appendLine("Refreshing target list.");
       console.log("Refreshing target list.");
       targetSelection = getTargets();

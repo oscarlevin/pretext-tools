@@ -100,7 +100,7 @@
     ],
     "commands": [
       {
-        "command": "pretext-tools.refresh",
+        "command": "pretext-tools.refreshTargets",
         "title": "Refresh target list",
         "category": "PreTeXt"
       },
