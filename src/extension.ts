@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { execSync, spawn, spawnSync } from "child_process";
+import { exec, execSync, spawn, spawnSync } from "child_process";
 import { homedir } from "os";
 import * as path from "path";
 import * as vscode from "vscode";
@@ -229,19 +229,30 @@ async function runPretext(
   ptxOptions: string,
   passedPath: string = ""
 ): Promise<void> {
-  vscode.window.withProgress(
+ return vscode.window.withProgress(
     {
       location: vscode.ProgressLocation.Notification,
       title: "PreTeXt Command Running",
       cancellable: true,
     },
-    (progress, token) => {
+    async (progress, token) => {
       // token.onCancellationRequested(() => {
       //   console.log("User requested to cancel");
       //   process.kill(0);
       // });
 
-      return new Promise<void>((resolve) => {
+      return new Promise<void>((resolve, reject) => {
+
+        if (token.isCancellationRequested) {
+          return;
+        }
+
+        token.onCancellationRequested(_ => {
+          ptxrun.kill("SIGKILL");
+          clearInterval(interval);
+          reject();
+        });
+
         updateStatusBarItem("running");
         var progressUpdate = "Starting up...";
         const interval = setInterval(
@@ -262,14 +273,13 @@ async function runPretext(
             cwd: filePath,
             shell: true,
           });
-          console.log("Process ID: " + ptxrun.pid);
 
-          token.onCancellationRequested(() => {
-            console.log("User requested to cancel");
-            // TODO: make this work.
-            ptxrun.kill("SIGKILL");
-            return;
-          });
+          // token.onCancellationRequested(() => {
+          //   console.log("User requested to cancel");
+          //   // TODO: make this work.
+          //   ptxrun.kill("SIGKILL");
+          //   return;
+          // });
           ptxrun.stdout.on("data", function (data) {
             console.log(`${data}`);
             pretextOutputChannel.append(`${data}`);
@@ -317,6 +327,7 @@ async function runPretext(
               }
             }
           });
+
           ptxrun.on("close", function (code) {
             console.log(code?.toString());
             if (ptxrun.killed) {
@@ -332,8 +343,9 @@ async function runPretext(
             resolve();
             clearInterval(interval);
           });
-        }
 
+
+        }
         // token.onCancellationRequested((_) => process.kill("SIGHUP"));
       });
     }
