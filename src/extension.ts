@@ -229,127 +229,85 @@ async function runPretext(
   ptxOptions: string,
   passedPath: string = ""
 ): Promise<void> {
- return vscode.window.withProgress(
-    {
-      location: vscode.ProgressLocation.Notification,
-      title: "PreTeXt Command Running",
-      cancellable: true,
-    },
-    async (progress, token) => {
-      // token.onCancellationRequested(() => {
-      //   console.log("User requested to cancel");
-      //   process.kill(0);
-      // });
-
-      return new Promise<void>((resolve, reject) => {
-
-        if (token.isCancellationRequested) {
-          return;
-        }
-
-        token.onCancellationRequested(_ => {
-          ptxrun.kill("SIGKILL");
-          clearInterval(interval);
-          reject();
-        });
-
-        updateStatusBarItem("running");
-        var progressUpdate = "Starting up...";
-        const interval = setInterval(
-          () => progress.report({ message: progressUpdate }),
-          1000
-        );
-        let fullCommand = ptxExec + " " + ptxCommand + " " + ptxOptions;
-        let status = "ready"; //for statusbaritem
-        var filePath = getDir(passedPath);
-        console.log("cwd = " + filePath);
-        if (filePath !== "" && filePath !== ".") {
-          pretextOutputChannel.clear();
-          pretextOutputChannel.append(
-            "Now running `" + fullCommand + "` ..\n"
-          );
-          progressUpdate = "Running " + fullCommand;
-          var ptxrun = spawn(fullCommand, [], {
-            cwd: filePath,
-            shell: true,
-          });
-
-          // token.onCancellationRequested(() => {
-          //   console.log("User requested to cancel");
-          //   // TODO: make this work.
-          //   ptxrun.kill("SIGKILL");
-          //   return;
-          // });
-          ptxrun.stdout.on("data", function (data) {
-            console.log(`${data}`);
-            pretextOutputChannel.append(`${data}`);
-          });
-          ptxrun.stderr.on("data", function (data) {
-            console.log(`${data}`);
-            var outputLines = data.toString().split(/\r?\n/);
-            for (const line of outputLines) {
-              // console.log(line + "\n");
-              if (line.startsWith("Use [Ctrl]+[C]")) {
-                pretextOutputChannel.append(line + "\n");
-                pretextOutputChannel.append(
-                  "(this local server will remain running until you close vs code)\n"
-                );
-                console.log("Using view.  status should change back");
-                updateStatusBarItem("success");
-                return;
-              } else {
-                pretextOutputChannel.append(line + "\n");
-              }
-              if (line.startsWith("error") || line.startsWith("critical")) {
-                vscode.window
-                  .showErrorMessage(line, "Show Log", "Dismiss")
-                  .then((option) => {
-                    if (option === "Show Log") {
-                      pretextOutputChannel.show();
-                    }
-                  });
-                status = "error";
-              } else if (line.includes(`pretext view`)) {
-                if (ptxCommand === "build") {
-                  vscode.window
-                    .showInformationMessage(
-                      "Build successfull!",
-                      "View output",
-                      "Dismiss"
-                    )
-                    .then((option) => {
-                      if (option === "View output") {
-                        vscode.commands.executeCommand("pretext-tools.view");
-                      }
-                    });
-                }
-                status = "success";
-              }
-            }
-          });
-
-          ptxrun.on("close", function (code) {
-            console.log(code?.toString());
-            if (ptxrun.killed) {
-              pretextOutputChannel.appendLine(
-                "...PreTeXt command terminated early."
-              );
-              console.log("Process killed");
-            } else {
-              pretextOutputChannel.appendLine("...PreTeXt command finished.");
-            }
-            updateStatusBarItem(status);
-            progressUpdate = "Finished";
-            resolve();
-            clearInterval(interval);
-          });
-
-
-        }
-        // token.onCancellationRequested((_) => process.kill("SIGHUP"));
+    updateStatusBarItem("running");
+    let fullCommand = ptxExec + " " + ptxCommand + " " + ptxOptions;
+    let status = "ready"; //for statusbaritem
+    var filePath = getDir(passedPath);
+    console.log("cwd = " + filePath);
+    if (filePath !== "" && filePath !== ".") {
+      pretextOutputChannel.clear();
+      pretextOutputChannel.append(
+        "Now running `" + fullCommand + "` ..\n"
+      );
+      var ptxrun = spawn(fullCommand, [], {
+        cwd: filePath,
+        shell: true,
       });
+
+      ptxrun.stdout.on("data", function (data) {
+        console.log(`${data}`);
+        pretextOutputChannel.append(`${data}`);
+      });
+      ptxrun.stderr.on("data", function (data) {
+        console.log(`${data}`);
+        var outputLines = data.toString().split(/\r?\n/);
+        for (const line of outputLines) {
+          // console.log(line + "\n");
+          if (line.startsWith("Use [Ctrl]+[C]")) {
+            pretextOutputChannel.append(line + "\n");
+            pretextOutputChannel.append(
+              "(this local server will remain running until you close vs code)\n"
+            );
+            console.log("Using view.  status should change back");
+            updateStatusBarItem("success");
+            return;
+          } else {
+            pretextOutputChannel.append(line + "\n");
+          }
+          if (line.startsWith("error") || line.startsWith("critical")) {
+            vscode.window
+              .showErrorMessage(line, "Show Log", "Dismiss")
+              .then((option) => {
+                if (option === "Show Log") {
+                  pretextOutputChannel.show();
+                }
+              });
+            status = "error";
+          } else if (line.includes(`pretext view`)) {
+            if (ptxCommand === "build") {
+              vscode.window
+                .showInformationMessage(
+                  "Build successfull!",
+                  "View output",
+                  "Dismiss"
+                )
+                .then((option) => {
+                  if (option === "View output") {
+                    vscode.commands.executeCommand("pretext-tools.view");
+                  }
+                });
+            }
+            status = "success";
+          }
+        }
+      });
+
+      ptxrun.on("close", function (code) {
+        console.log(code?.toString());
+        if (ptxrun.killed) {
+          pretextOutputChannel.appendLine(
+            "...PreTeXt command terminated early."
+          );
+          console.log("Process killed");
+        } else {
+          pretextOutputChannel.appendLine("...PreTeXt command finished.");
+        }
+        updateStatusBarItem(status);
+
+      });
+
+
     }
-  );
 }
 
 async function runThenOpen(
