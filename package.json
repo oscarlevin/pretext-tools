@@ -119,10 +119,10 @@
         "description": "Build selected target from the project.ptx manifest."
       },
       {
-        "command": "pretext-tools.buildDefault",
-        "title": "Build default target",
+        "command": "pretext-tools.buildLast",
+        "title": "Build most recent or default target",
         "category": "PreTeXt",
-        "description": "Build the default target (first in the project.ptx manifest)."
+        "description": "Build the most recent target (or the default target)."
       },
       {
         "command": "pretext-tools.new",
@@ -133,11 +133,6 @@
         "command": "pretext-tools.view",
         "title": "View",
         "icon": "$(open-preview)",
-        "category": "PreTeXt"
-      },
-      {
-        "command": "pretext-tools.viewWatch",
-        "title": "View HTML and watch",
         "category": "PreTeXt"
       },
       {

@@ -7,10 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.12.0] - 2023-09-08
+
+### Changed
+
+- First quickPick menu item now builds most recently built target (or default).
+- Target select menu no longer reorders targets.
+- `generate` no longer in quickPick menu (since `pretext build` automatically generates assets that have changed).
+- Only one error notification when process produces an error, with an option to view log.
+
 ### Added
 
 - New Button Menu Options: You can now refresh the list of targets and initiate a "Convert to PreTeXt" from the PreTeXt button menu.
-- Progress notification for `Update PreTeXt` command.
+- Progress notification for most commands.
+
+### Fixed
+
+- Fixed bug producing warning when clicking on the pretext button while running (undefined state).
 
 ## [0.11.3] - 2023-07-09
 
