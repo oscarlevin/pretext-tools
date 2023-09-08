@@ -685,7 +685,7 @@ export function activate(context: vscode.ExtensionContext) {
           progress.report({ message: "Checking for updates" });
 
           return new Promise<void>((resolve) => {
-            console.log("Checking for new> version of PreTeXt to install");
+            console.log("Checking for new version of PreTeXt to install");
             pretextOutputChannel.append(
               "Checking for new version of PreTeXt to install"
             );
