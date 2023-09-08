@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { execSync, spawn, spawnSync } from "child_process";
+import { execSync, spawn } from "child_process";
 import { homedir } from "os";
 import * as path from "path";
 import * as vscode from "vscode";
@@ -11,23 +11,18 @@ import { latexToPretext } from "./latextopretext";
 let pretextOutputChannel: vscode.OutputChannel;
 let pretextStatusBarItem: vscode.StatusBarItem;
 let pretextTerminal: vscode.Terminal;
-
+var lastTarget = "";
 // list of pretext commands
-let pretextCommandList = [
+var pretextCommandList = [
   {
-    label: "Quick Build",
-    description: "default target",
-    command: "pretext-tools.buildDefault",
+    label: "Build default target",
+    description: "",
+    command: "pretext-tools.buildLast",
   },
   {
-    label: "Build",
+    label: "Build another target...",
     description: "select target",
     command: "pretext-tools.buildAny",
-  },
-  {
-    label: "Generate assets",
-    description: "select target",
-    command: "pretext-tools.generate",
   },
   {
     label: "View",
@@ -248,20 +243,20 @@ async function runPretext(
         var filePath = getDir(passedPath);
         console.log("cwd = " + filePath);
         if (filePath !== "" && filePath !== ".") {
-          let lasterror: string | undefined = undefined;
+          let lastError: string | undefined = undefined;
           pretextOutputChannel.clear();
           pretextOutputChannel.appendLine("\n\nNow running `" + fullCommand + "`...");
           progressUpdate = "Running " + fullCommand;
-          var ptxrun = spawn(fullCommand, [], {
+          var ptxRun = spawn(fullCommand, [], {
             cwd: filePath,
             shell: true,
           });
-          ptxrun.stdout.on("data", function (data) {
+          ptxRun.stdout.on("data", function (data) {
             console.log(`${data}`);
             pretextOutputChannel.append(`${data}`);
           });
 
-          ptxrun.stderr.on("data", function (data) {
+          ptxRun.stderr.on("data", function (data) {
             console.log(`${data}`);
             // var outputLines = data.toString().split(/\r?\n/);
             // for (const line of outputLines) {
@@ -279,9 +274,9 @@ async function runPretext(
                 data.toString().startsWith("error") ||
                 data.toString().startsWith("critical")
               ) {
-                // Update `lasterror` so it will show the final error from running pretext
+                // Update `lastError` so it will show the final error from running pretext
                 pretextOutputChannel.append(`${data}`);
-                lasterror = `${data}`;
+                lastError = `${data}`;
                 status = "error";
               } else if (data.toString().includes(`pretext view`) && ptxCommand === "build") {
                   vscode.window
@@ -305,18 +300,18 @@ async function runPretext(
             }
           );
 
-          ptxrun.on("close", function (code) {
+          ptxRun.on("close", function (code) {
             console.log(code?.toString());
-            if (ptxrun.killed) {
+            if (ptxRun.killed) {
               pretextOutputChannel.appendLine("...PreTeXt command terminated early.");
               console.log("Process killed");
             } else {
               pretextOutputChannel.appendLine("...PreTeXt command finished.");
             }
-            if (lasterror) {
+            if (lastError) {
               vscode.window
                 .showErrorMessage(
-                  "PreTeXt encountered one or more errors: " + lasterror,
+                  "PreTeXt encountered one or more errors: " + lastError,
                   "Show Log",
                   "Dismiss"
                 )
@@ -425,8 +420,6 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(pretextStatusBarItem);
   updateStatusBarItem();
 
-  console.log(vscode.commands.getCommands());
-
   const activeEditor = vscode.window.activeTextEditor;
   console.log(activeEditor?.document.fileName);
 
@@ -436,6 +429,8 @@ export function activate(context: vscode.ExtensionContext) {
   console.log("Pretext is installed is:", ptxInstalled);
 
   var targetSelection = getTargets();
+  lastTarget = targetSelection[0].label;
+  pretextCommandList[0].label = "Build " + lastTarget;
   console.log(
     "Targets are now:" +
       targetSelection.map(function (obj) {
@@ -467,10 +462,12 @@ export function activate(context: vscode.ExtensionContext) {
             runPretext(ptxExec, "build", qpSelection.label);
           }
           // Move selected target to front of list for next command.
-          targetSelection = targetSelection.filter(
-            (item) => item !== qpSelection
-          );
-          targetSelection.unshift(qpSelection);
+          // targetSelection = targetSelection.filter(
+          //   (item) => item !== qpSelection
+          // );
+          // targetSelection.unshift(qpSelection);
+          lastTarget = qpSelection.label;
+          pretextCommandList[0].label = "Build " + lastTarget;
         });
       }
     )
@@ -478,13 +475,13 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "pretext-tools.buildDefault",
+      "pretext-tools.buildLast",
       (runInTerminal: boolean = false) => {
         if (runInTerminal) {
           pretextTerminal = setupTerminal(pretextTerminal);
           pretextTerminal.sendText("pretext build");
         } else {
-          runPretext(ptxExec, "build", "");
+          runPretext(ptxExec, "build", lastTarget);
         }
       }
     )
@@ -630,11 +627,6 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand("pretext-tools.viewWatch", () => {
-      runPretext(ptxExec, "view", "--watch");
-    })
-  );
 
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.new", () => {
