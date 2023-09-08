@@ -45,6 +45,10 @@ jobs:
       - name: Deploy to Open VSX
         run: ovsx publish -p ${{ secrets.OPEN_VSX_TOKEN }}
 
+      - name: push commit
+        run: |
+          git push origin main
+
   release:
     needs: deploy
     name: Create Release
