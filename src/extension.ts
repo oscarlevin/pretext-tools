@@ -245,7 +245,9 @@ async function runPretext(
         if (filePath !== "" && filePath !== ".") {
           let lastError: string | undefined = undefined;
           pretextOutputChannel.clear();
-          pretextOutputChannel.appendLine("\n\nNow running `" + fullCommand + "`...");
+          pretextOutputChannel.appendLine(
+            "\n\nNow running `" + fullCommand + "`..."
+          );
           progressUpdate = "Running " + fullCommand;
           var ptxRun = spawn(fullCommand, [], {
             cwd: filePath,
@@ -260,50 +262,56 @@ async function runPretext(
             console.log(`${data}`);
             // var outputLines = data.toString().split(/\r?\n/);
             // for (const line of outputLines) {
-              // console.log(line + "\n");
-              if (data.toString().startsWith("Server will soon be available at")) {
-                pretextOutputChannel.appendLine(`${data}`);
-                pretextOutputChannel.append(
-                  "(this local server will remain running until you close vs code)\n"
-                );
-                console.log("Using view.  status should change back");
-                updateStatusBarItem("success");
-                resolve();
-                clearInterval(interval);
-              } else if (
-                data.toString().startsWith("error") ||
-                data.toString().startsWith("critical")
-              ) {
-                // Update `lastError` so it will show the final error from running pretext
-                pretextOutputChannel.append(`${data}`);
-                lastError = `${data}`;
-                status = "error";
-              } else if (data.toString().includes(`pretext view`) && ptxCommand === "build") {
-                  vscode.window
-                    .showInformationMessage(
-                      "Build successful!",
-                      "View output",
-                      "View log",
-                      "Dismiss"
-                    )
-                    .then((option) => {
-                      if (option === "View output") {
-                        vscode.commands.executeCommand("pretext-tools.view");
-                      } else if (option === "View log") {
-                        pretextOutputChannel.show();
-                      }
-                    });
-                status = "success";
-              } else {
-                pretextOutputChannel.append(`${data}`);
-              }
+            // console.log(line + "\n");
+            if (
+              data.toString().startsWith("Server will soon be available at")
+            ) {
+              pretextOutputChannel.appendLine(`${data}`);
+              pretextOutputChannel.append(
+                "(this local server will remain running until you close vs code)\n"
+              );
+              console.log("Using view.  status should change back");
+              updateStatusBarItem("success");
+              resolve();
+              clearInterval(interval);
+            } else if (
+              data.toString().startsWith("error") ||
+              data.toString().startsWith("critical")
+            ) {
+              // Update `lastError` so it will show the final error from running pretext
+              pretextOutputChannel.append(`${data}`);
+              lastError = `${data}`;
+              status = "error";
+            } else if (
+              data.toString().includes(`pretext view`) &&
+              ptxCommand === "build"
+            ) {
+              vscode.window
+                .showInformationMessage(
+                  "Build successful!",
+                  "View output",
+                  "View log",
+                  "Dismiss"
+                )
+                .then((option) => {
+                  if (option === "View output") {
+                    vscode.commands.executeCommand("pretext-tools.view");
+                  } else if (option === "View log") {
+                    pretextOutputChannel.show();
+                  }
+                });
+              status = "success";
+            } else {
+              pretextOutputChannel.append(`${data}`);
             }
-          );
+          });
 
           ptxRun.on("close", function (code) {
             console.log(code?.toString());
             if (ptxRun.killed) {
-              pretextOutputChannel.appendLine("...PreTeXt command terminated early.");
+              pretextOutputChannel.appendLine(
+                "...PreTeXt command terminated early."
+              );
               console.log("Process killed");
             } else {
               pretextOutputChannel.appendLine("...PreTeXt command finished.");
@@ -411,7 +419,10 @@ export function activate(context: vscode.ExtensionContext) {
   setSchema();
 
   // Set up vscode elements
-  pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools", "log");
+  pretextOutputChannel = vscode.window.createOutputChannel(
+    "PreTeXt Tools",
+    "log"
+  );
 
   pretextStatusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
@@ -626,7 +637,6 @@ export function activate(context: vscode.ExtensionContext) {
       }
     })
   );
-
 
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.new", () => {
