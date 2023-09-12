@@ -264,13 +264,13 @@ async function runPretext(
             // for (const line of outputLines) {
             // console.log(line + "\n");
             if (
-              data.toString().startsWith("Server will soon be available at")
+              data.toString().startsWith("Server will soon be available at") || data.toString().includes("[CTRL]+[C]")
             ) {
               pretextOutputChannel.appendLine(`${data}`);
               pretextOutputChannel.append(
                 "(this local server will remain running until you close vs code)\n"
               );
-              console.log("Using view.  status should change back");
+              console.log("Using view. Status should change back");
               updateStatusBarItem("success");
               resolve();
               clearInterval(interval);
