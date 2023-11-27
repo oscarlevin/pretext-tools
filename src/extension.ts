@@ -4,7 +4,7 @@ import { execSync, spawn } from "child_process";
 import { homedir } from "os";
 import * as path from "path";
 import * as vscode from "vscode";
-import { convertToPretext } from "./convert";
+import { convertToPretext } from "./pandocConvert";
 import { latexToPretext } from "./latextopretext";
 
 // Set up vscode elements

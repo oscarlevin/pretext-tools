@@ -162,7 +162,7 @@
         "command": "pretext-tools.latexToPretext",
         "title": "Convert Selected LaTeX to PreTeXt",
         "category": "PreTeXt",
-        "description": "Converts and replaces a selection of LaTeX with PreTeXt formatted text."
+        "description": "Converts and replaces a selection of LaTeX with PreTeXt formatted text (experimental)."
       }
     ],
     "xmlLanguageParticipants": [

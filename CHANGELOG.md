@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.13.0] - 2023-11-27
+
+### Added
+
+- Experimental support for converting selected LaTeX to PreTeXt.
+
 ## [0.12.2] - 2023-09-12
 
 ### Fixed
