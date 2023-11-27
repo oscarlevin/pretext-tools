@@ -10,8 +10,8 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@latest
-      - uses: actions/setup-node@latest
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
         with:
           node-version: 18
 
