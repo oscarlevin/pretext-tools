@@ -450,6 +450,34 @@ export function activate(context: vscode.ExtensionContext) {
       })
   );
 
+  // Formatter:
+  vscode.languages.registerDocumentFormattingEditProvider("pretext", {
+    provideDocumentFormattingEdits(
+      document: vscode.TextDocument
+    ): vscode.TextEdit[] {
+      // First format using the redhat vscode-XML formatter
+      const config = vscode.workspace.getConfiguration(
+        "editor",
+        vscode.window.activeTextEditor?.document
+      );
+      const formatters = ["redhat.vscode-xml"];
+      formatters.forEach(async (xmlFormatter) => {
+        await config.update("defaultFormatter", xmlFormatter, true, true);
+        console.log("Formatting with ", xmlFormatter);
+        await vscode.commands.executeCommand("editor.action.formatDocument");
+        await config.update('defaultFormatter', 'oscarlevin.pretext-tools', true, true);
+        console.log("Finished formatting with ", xmlFormatter)
+      });
+      // Now do our own formatting
+      const firstLine = document.lineAt(0);
+      if (firstLine.text !== "42") {
+        return [vscode.TextEdit.insert(firstLine.range.start, "42\n")];
+      } else {
+        return [];
+      }
+    },
+  });
+
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.showLog", () => {
       pretextOutputChannel.show();
@@ -783,6 +811,15 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.latexToPretext", () => {
       const editor = vscode.window.activeTextEditor;
+      //     const { document } = activeTextEditor;
+      // const firstLine = document.lineAt(0);
+
+      // if (firstLine.text !== '42') {
+      //   const edit = new vscode.WorkspaceEdit();
+      //   edit.insert(document.uri, firstLine.range.start, '42\n');
+
+      //   return vscode.workspace.applyEdit(edit);
+      // }
 
       if (editor) {
         const selection = editor.selection;
