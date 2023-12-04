@@ -466,16 +466,27 @@ export function activate(context: vscode.ExtensionContext) {
         console.log("Formatting with ", xmlFormatter);
         await vscode.commands.executeCommand("editor.action.formatDocument");
         await config.update('defaultFormatter', 'oscarlevin.pretext-tools', true, true);
-        console.log("Finished formatting with ", xmlFormatter)
+        console.log("Finished formatting with ", xmlFormatter);
+        // Get current text of active editor as a string:
+        const currentText = vscode.window.activeTextEditor?.document.getText();
+        console.log("Current text is: ", currentText)
       });
       // Now do our own formatting
+      let changes = [];
       const firstLine = document.lineAt(0);
-      if (firstLine.text !== "42") {
-        return [vscode.TextEdit.insert(firstLine.range.start, "42\n")];
-      } else {
-        return [];
+      // TODO: how do I refresh the document after I run the command above.
+      if (!firstLine.text.startsWith("<?xml")) {
+        changes.push(
+          vscode.TextEdit.insert(firstLine.range.start, '<?xml version="1.0" encoding="UTF-8"?>\n')
+        );
+      } 
+      let lines = document.getText().split(/\r\n|\r|\n/);
+      for (let line of lines) {
+        console.log("line", line);
       }
-    },
+      console.log(" And NOW: Text is", document.getText());
+      return changes;
+    }
   });
 
   context.subscriptions.push(
