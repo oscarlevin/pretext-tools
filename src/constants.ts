@@ -1,6 +1,6 @@
 // Purpose: Contains constants used throughout the project.
 
-export const BLOCKS: { [key: string]: string } = {
+export const tex2ptxBlocks: { [key: string]: string } = {
   axiom: "axiom",
   principle: "principle",
   conjecture: "conjecture",

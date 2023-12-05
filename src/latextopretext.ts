@@ -1,51 +1,8 @@
 // module
+import * as constants from "./constants";
 
-const BLOCKS: { [key: string]: string } = {
-  axiom: "axiom",
-  principle: "principle",
-  conjecture: "conjecture",
-  heuristic: "heuristic",
-  hypothesis: "hypothesis",
-  assumption: "assumption",
-  theorem: "theorem",
-  thm: "theorem",
-  lemma: "lemma",
-  lem: "lemma",
-  corollary: "corollary",
-  cor: "corollary",
-  claim: "claim",
-  proposition: "proposition",
-  prop: "proposition",
-  algorithm: "algorithm",
-  fact: "fact",
-  identity: "identity",
-  proof: "proof",
-  definition: "definition",
-  def: "definition",
-  defn: "definition",
-  remark: "remark",
-  note: "note",
-  warning: "warning",
-  convention: "convention",
-  observation: "observation",
-  insight: "insight",
-  example: "example",
-  question: "question",
-  problem: "problem",
-  solution: "solution",
-  hint: "hint",
-  answer: "answer",
-  exercise: "exercise",
-  aside: "aside",
-  activity: "activity",
-  project: "project",
-  investigation: "investigation",
-  exploration: "exploration",
-  figure: "figure",
-  table: "table",
-  enumerate: "ol",
-  itemize: "ul",
-};
+const blocks = constants.tex2ptxBlocks;
+
 
 // Paragraph element conversions /////////////////////////////////
 
@@ -244,8 +201,8 @@ function convertLines(lines: string[]) {
     else if (line.startsWith("\\begin")) {
       let env = line.match(/\\begin{(.*?)}/);
       if (env !== null) {
-        if (env[1] in BLOCKS) {
-          result += "<" + BLOCKS[env[1]] + ">\n\t";
+        if (env[1] in blocks) {
+          result += "<" + blocks[env[1]] + ">\n\t";
         } else {
           result +=
             "<!-- START " +
@@ -256,8 +213,8 @@ function convertLines(lines: string[]) {
     } else if (line.startsWith("\\end")) {
       let env = line.match(/\\end{(.*?)}/);
       if (env !== null) {
-        if (env[1] in BLOCKS) {
-          result += "\n</" + BLOCKS[env[1]] + ">\n";
+        if (env[1] in blocks) {
+          result += "\n</" + blocks[env[1]] + ">\n";
         } else {
           result += "<!-- END " + env[1] + " environment -->\n";
         }
