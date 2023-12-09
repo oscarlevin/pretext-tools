@@ -131,22 +131,7 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
     }
   }
   allText = fixedLines.join("\n");
-    // else {
-      // let tag = line.match(/<\\?(.*?)>/);
-    //   if (tag) {
-    //     for (let i = 1; i < tag.length; i++) {
-    //       if (blockTags.includes(tag[i])) {
 
-    //       }
-    //     }
-    //     if (blockTags.includes(tag[1])) {
-    //       level += 1;
-    //     }
-    //     line = "\t".repeat(level) + line.trim()+"\n";
-    //   }
-  //   result += line;
-  // }
-    // }
 
   return [vscode.TextEdit.replace(document.validateRange(new vscode.Range(0, 0, document.lineCount, 0)), allText)];
 }

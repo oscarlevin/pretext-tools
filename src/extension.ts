@@ -457,42 +457,6 @@ export function activate(context: vscode.ExtensionContext) {
       document: vscode.TextDocument
     ): vscode.TextEdit[] {
       return formatPTX(document);
-      // First format using the redhat vscode-XML formatter
-      // const config = vscode.workspace.getConfiguration(
-      //   "editor",
-      //   vscode.window.activeTextEditor?.document
-      // );
-      // const xmlFormatter = "redhat.vscode-xml";
-      // config.update("defaultFormatter", xmlFormatter, true, true);
-      // console.log("Formatting with ", xmlFormatter);
-      // vscode.commands.executeCommand("editor.action.formatDocument");
-      // config.update('defaultFormatter', 'oscarlevin.pretext-tools', true, true);
-      // console.log("Finished formatting with ", xmlFormatter);
-      // // Get current text of active editor as a string:
-      // const currentText = vscode.window.activeTextEditor?.document.getText();
-      // console.log("Current text is: ", currentText);
-      // Now do our own formatting
-      let changes = [];
-      const firstLine = document.lineAt(0);
-      // TODO: how do I refresh the document after I run the command above.
-      if (!firstLine.text.startsWith("<?xml")) {
-        changes.push(
-          vscode.TextEdit.insert(firstLine.range.start, '<?xml version="1.0" encoding="UTF-8"?>\n')
-        );
-      } 
-      let result = "";
-      let allText = document.getText();
-      allText = allText.replace(/\r\n|\r|\n/g, "");
-      allText = allText.replace(/<(.*?)>/g, "\n<$1>\n");
-      // allText = allText.replace(/\n\n/g, "\n");
-      // for (let line of lines) {
-      //   if (line.length === 0) {
-      //     continue;
-      //   } 
-      // }
-      changes.push(vscode.TextEdit.replace(document.validateRange(new vscode.Range(0, 0, document.lineCount, 0)), allText));
-      console.log(" And NOW: Text is", document.getText());
-      return changes;
     }
   });
 
