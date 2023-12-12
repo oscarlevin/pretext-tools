@@ -6,6 +6,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { convertToPretext } from "./pandocConvert";
 import { latexToPretext } from "./latextopretext";
+import { formatPTX } from "./formatter";
 
 // Set up vscode elements
 let pretextOutputChannel: vscode.OutputChannel;
@@ -201,14 +202,16 @@ function getTargets() {
       .split(/\r?\n/)
       .filter(Boolean);
     // Set up dictionary for quickselect:
-    let targetSelection = [];
-    for (let target of targets) {
-      targetSelection.push({
-        label: target,
-        description: "Build source as " + target,
-      });
-    }
-    return targetSelection;
+    if (targets.length > 0) {
+      let targetSelection = [];
+      for (let target of targets) {
+        targetSelection.push({
+          label: target,
+          description: "Build source as " + target,
+        });
+      }
+      return targetSelection;
+    } else {return [{label: "No PreTeXt project found.", description: "Change to directory containing a project.ptx file."}];}
   } catch (err) {
     console.log("getTargets() Error: \n", err);
     return [];
@@ -441,6 +444,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log("Pretext is installed is:", ptxInstalled);
 
   var targetSelection = getTargets();
+  console.log("targetSelection is:", targetSelection);
   lastTarget = targetSelection[0].label;
   pretextCommandList[0].label = "Build " + lastTarget;
   console.log(
@@ -449,6 +453,15 @@ export function activate(context: vscode.ExtensionContext) {
         return " " + obj.label;
       })
   );
+
+  // Formatter:
+  vscode.languages.registerDocumentFormattingEditProvider("pretext", {
+    provideDocumentFormattingEdits(
+      document: vscode.TextDocument
+    ): vscode.TextEdit[] {
+      return formatPTX(document);
+    }
+  });
 
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.showLog", () => {
@@ -783,6 +796,15 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.latexToPretext", () => {
       const editor = vscode.window.activeTextEditor;
+      //     const { document } = activeTextEditor;
+      // const firstLine = document.lineAt(0);
+
+      // if (firstLine.text !== '42') {
+      //   const edit = new vscode.WorkspaceEdit();
+      //   edit.insert(document.uri, firstLine.range.start, '42\n');
+
+      //   return vscode.workspace.applyEdit(edit);
+      // }
 
       if (editor) {
         const selection = editor.selection;

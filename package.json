@@ -12,7 +12,8 @@
   },
   "categories": [
     "Programming Languages",
-    "Snippets"
+    "Snippets",
+    "Formatters"
   ],
   "activationEvents": [
     "workspaceContains:project.ptx"

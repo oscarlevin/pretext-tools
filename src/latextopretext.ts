@@ -1,27 +1,8 @@
 // module
+import * as constants from "./constants";
 
-const BLOCKS: { [key: string]: string } = {
-  axiom: "axiom",
-  theorem: "theorem",
-  lemma: "lemma",
-  corollary: "corollary",
-  proposition: "proposition",
-  definition: "definition",
-  example: "example",
-  remark: "remark",
-  exercise: "exercise",
-  question: "question",
-  problem: "problem",
-  solution: "solution",
-  proof: "proof",
-  note: "note",
-  aside: "aside",
-  figure: "figure",
-  table: "table",
-  algorithm: "algorithm",
-  enumerate: "ol",
-  itemize: "ul",
-};
+const blocks = constants.tex2ptxBlocks;
+
 
 // Paragraph element conversions /////////////////////////////////
 
@@ -220,8 +201,8 @@ function convertLines(lines: string[]) {
     else if (line.startsWith("\\begin")) {
       let env = line.match(/\\begin{(.*?)}/);
       if (env !== null) {
-        if (env[1] in BLOCKS) {
-          result += "<" + BLOCKS[env[1]] + ">\n\t";
+        if (env[1] in blocks) {
+          result += "<" + blocks[env[1]] + ">\n\t";
         } else {
           result +=
             "<!-- START " +
@@ -232,8 +213,8 @@ function convertLines(lines: string[]) {
     } else if (line.startsWith("\\end")) {
       let env = line.match(/\\end{(.*?)}/);
       if (env !== null) {
-        if (env[1] in BLOCKS) {
-          result += "\n</" + BLOCKS[env[1]] + ">\n";
+        if (env[1] in blocks) {
+          result += "\n</" + blocks[env[1]] + ">\n";
         } else {
           result += "<!-- END " + env[1] + " environment -->\n";
         }
