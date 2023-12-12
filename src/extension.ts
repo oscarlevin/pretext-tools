@@ -202,14 +202,16 @@ function getTargets() {
       .split(/\r?\n/)
       .filter(Boolean);
     // Set up dictionary for quickselect:
-    let targetSelection = [];
-    for (let target of targets) {
-      targetSelection.push({
-        label: target,
-        description: "Build source as " + target,
-      });
-    }
-    return targetSelection;
+    if (targets.length > 0) {
+      let targetSelection = [];
+      for (let target of targets) {
+        targetSelection.push({
+          label: target,
+          description: "Build source as " + target,
+        });
+      }
+      return targetSelection;
+    } else {return [{label: "No PreTeXt project found.", description: "Change to directory containing a project.ptx file."}];}
   } catch (err) {
     console.log("getTargets() Error: \n", err);
     return [];
@@ -442,6 +444,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log("Pretext is installed is:", ptxInstalled);
 
   var targetSelection = getTargets();
+  console.log("targetSelection is:", targetSelection);
   lastTarget = targetSelection[0].label;
   pretextCommandList[0].label = "Build " + lastTarget;
   console.log(

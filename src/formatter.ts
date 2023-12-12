@@ -29,7 +29,7 @@ const docEnvs = ['proof',
 'activity', 'remark', 'warning', 'table', 'tabular',
 'list', 'listing', 'program', 'console', 'demonstration',
 'images', 'image',
-'fact', 'subtask', 'notation', 'claim', 'biblio',
+'fact', 'subtask', 'claim', 'biblio',
 'poem', 'stanza'];
 
 const docPieces = ['title', 'subtitle', 'cell', 'caption',
@@ -62,7 +62,9 @@ const verbatimTags = ['latex-image-preamble', 'latex-image', 'latex-preamble',
                  'tikzpicture', 'tikz', 'code',
                  'c'];
 
-const blockTags = docStructure.concat(docSecs).concat(docEnvs).concat(nestable_tags);
+const newlineTags = docStructure.concat(docSecs).concat(docEnvs).concat(nestable_tags);
+
+const blockTags = newlineTags.concat(math_display);
 
 
 
@@ -78,9 +80,10 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
   // First clean up document so that each line is a single tag when appropriate.
   let allText = document.getText();
 
+  console.log("Getting ready to start formatting.")
   for (let btag of blockTags) {
-    let startTag = new RegExp('<'+btag+'(.*?)>', 'g');
-    let endTag = new RegExp('<\\/'+btag+'>', 'g');
+    let startTag = new RegExp('<'+btag+'(>|(\s[^/]*?)>)', 'g');
+    let endTag = new RegExp('<\\/'+btag+'>(.?)', 'g');
     allText = allText.replace(startTag, "\n$&\n");
     allText = allText.replace(endTag, "\n$&\n");
   }
@@ -88,11 +91,13 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
   let level = 0;
   let verbatim = false;
   let lines = allText.split(/\r\n|\r|\n/g);
+  console.log("Finished splitting lines. Now will process", lines.length, "lines.");
   let fixedLines = [];
   for (let line of lines) {
+    console.log("level is", level, "and verbatim is", verbatim, "and line is", line);
     let trimmedLine = line.trim();
     let openTagMatch = /^<(\w*?)(\s.*?|>)$/.exec(trimmedLine);
-    let closeTagMatch = /^<\/(\w*?)(\s.*?|>)$/.exec(trimmedLine);
+    let closeTagMatch = /^<\/(\w*?)(\s.*?|>)(.?)$/.exec(trimmedLine);
     let selfCloseTagMatch = /^<(\w*?)(\s.*?\/>|\/>)$/.exec(trimmedLine);
     if (trimmedLine.length === 0) {
       continue;
@@ -104,7 +109,7 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       fixedLines.push("\t".repeat(level) + trimmedLine);
     } else if (closeTagMatch) {
       if (blockTags.includes(closeTagMatch[1])) {
-        level -= 1;
+        level = Math.max(0, level-1);
         fixedLines.push("\t".repeat(level) + trimmedLine);
       } else if (verbatimTags.includes(closeTagMatch[1])) {
         verbatim = false;
@@ -126,12 +131,22 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
   }
   // Second pass: add empty line between appropriate tags.
   for (let i = 0; i < fixedLines.length-1; i++) {
-    if (/<\/p>/.test(fixedLines[i]) && /<p>/.test(fixedLines[i+1])) {
-      fixedLines[i] += "\n";
+    if (fixedLines[i].trim().startsWith("</")){
+      for (let tag of newlineTags) {
+        let startTag = new RegExp('<'+tag+'(.*?)>', 'g');
+        if (startTag.test(fixedLines[i+1])) {
+          console.log("Adding newline between", fixedLines[i], "and", fixedLines[i+1]);
+          fixedLines[i] += "\n";
+        }
+      } 
     }
   }
-  allText = fixedLines.join("\n");
+  // Add document identifier line if missing:
+  if (!fixedLines[0].trim().startsWith('<?xml')) {
+    fixedLines.unshift('<?xml version="1.0" encoding="UTF-8" ?>');
+  }
 
+  allText = fixedLines.join("\n");
 
   return [vscode.TextEdit.replace(document.validateRange(new vscode.Range(0, 0, document.lineCount, 0)), allText)];
 }

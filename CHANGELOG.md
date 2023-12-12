@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Formatting support using vs-code's built-in formatting engine.  From the command palette, select "Format Document" or use the keyboard shortcut `CTRL+SHIFT+I`.
+
+### Fixed
+
+- Bug that prevent initialization if not in a pretext project folder.
+
+
 ## [0.13.0] - 2023-11-27
 
 ### Added
