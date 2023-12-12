@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.14.0] - 2023-12-12
+
 ### Added
 
-- Formatting support using vs-code's built-in formatting engine.  From the command palette, select "Format Document" or use the keyboard shortcut `CTRL+SHIFT+I`.
+- Formatting support using vs-code's built-in formatting engine.  From the command palette, select "Format Document".
 
 ### Fixed
 
