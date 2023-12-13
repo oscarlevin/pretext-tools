@@ -213,6 +213,11 @@
             ],
             "markdownDescription": "Select which method to use when viewing the output of a pretext project.  Leaving this at the default will ask for available methods each time.  Your choice will likely depend on the size of your project and whether you are building output other than the 'web' target."
           },
+          "pretext-tools.formatter.breakSentences": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Whether to add a line break after each period in a paragraph."
+          },
           "pretext-tools.installPretext": {
             "type": "boolean",
             "default": true,

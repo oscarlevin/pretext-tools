@@ -88,13 +88,13 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
     allText = allText.replace(endTag, "\n$&\n");
   }
 
+  const extraLineBreaks = vscode.workspace.getConfiguration('pretext-tools').get('formatter.breakSentences');
+  console.log("extraLineBreaks is", extraLineBreaks);
   let level = 0;
   let verbatim = false;
   let lines = allText.split(/\r\n|\r|\n/g);
-  console.log("Finished splitting lines. Now will process", lines.length, "lines.");
   let fixedLines = [];
   for (let line of lines) {
-    console.log("level is", level, "and verbatim is", verbatim, "and line is", line);
     let trimmedLine = line.trim();
     let openTagMatch = /^<(\w*?)(\s.*?|>)$/.exec(trimmedLine);
     let closeTagMatch = /^<\/(\w*?)(\s.*?|>)(.?)$/.exec(trimmedLine);
@@ -114,18 +114,22 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       } else if (verbatimTags.includes(closeTagMatch[1])) {
         verbatim = false;
         fixedLines.push("\t".repeat(level) + trimmedLine);
+      } else {
+        fixedLines.push("\t".repeat(level) + trimmedLine);
       }
     } else if (openTagMatch) {
+      fixedLines.push("\t".repeat(level) + trimmedLine);
       if (blockTags.includes(openTagMatch[1])) {
-        fixedLines.push("\t".repeat(level) + trimmedLine);
         level += 1;
       } else if (verbatimTags.includes(openTagMatch[1])) {
         verbatim = true;
-        fixedLines.push("\t".repeat(level) + trimmedLine);
       }
     } else if (verbatim) {
       fixedLines.push(line);
     } else {
+      if (extraLineBreaks) {
+        trimmedLine = trimmedLine.replace(/\.\s+/g, ".\n"+"\t".repeat(level));
+      }
       fixedLines.push("\t".repeat(level) + trimmedLine);
     }
   }
