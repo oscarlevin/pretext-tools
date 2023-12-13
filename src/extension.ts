@@ -550,12 +550,6 @@ export function activate(context: vscode.ExtensionContext) {
         // Create and use a quick-select box if user has not set a configuration for view:
         if (selectedViewMethod === "Ask") {
           let viewMethods = [];
-          if (vscode.extensions.getExtension("ms-vscode.live-server")) {
-            viewMethods.push({
-              label: "Use Live Preview",
-              command: "pretext-tools.viewLivePreview",
-            });
-          }
           if (vscode.extensions.getExtension("CodeChat.codechat")) {
             viewMethods.push({
               label: "Use CodeChat",
@@ -582,9 +576,6 @@ export function activate(context: vscode.ExtensionContext) {
         } else {
           // otherwise honor the users setting choice.
           switch (selectedViewMethod) {
-            case "Live Preview":
-              vscode.commands.executeCommand("pretext-tools.viewLivePreview");
-              break;
             case "CodeChat":
               vscode.commands.executeCommand("pretext-tools.viewCodeChat");
               break;
@@ -637,20 +628,6 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand("pretext-tools.viewLivePreview", () => {
-      if (vscode.extensions.getExtension("ms-vscode.live-server")) {
-        let uri = vscode.Uri.file(
-          path.join(getDir(), "output", "web", "index.html")
-        );
-        vscode.commands.executeCommand("livePreview.start.preview.atFile", uri);
-      } else {
-        vscode.window.showErrorMessage(
-          "Unable to start Live Preview.  Is the 'Live Preview' extension installed?"
-        );
-      }
-    })
-  );
 
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.new", () => {

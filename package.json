@@ -201,13 +201,11 @@
             "default": "Ask",
             "enum": [
               "Ask",
-              "Live Preview",
               "CodeChat",
               "PreTeXT-CLI View"
             ],
             "markdownEnumDescriptions": [
               "Ask for view method each time (default).",
-              "Use VS Code's [Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server) extension to view the 'web' target in a separate tab of VS Code. Only works if you have installed the Live Preview extension",
               "Use CodeChat to view the 'web' target in a separate tab of VS Code.  Auto-refreshes when a ptx files is saved (not recommended for large projects).  Requires CodeChat extension and CodeChat_Server installed via pip.",
               "Use the `pretext view` command from the PreTeXt CLI.  Works with all targets.  Opens the output in a separate application."
             ],
