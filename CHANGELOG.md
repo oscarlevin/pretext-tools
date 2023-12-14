@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+
+### [0.14.1] - 2023-12-14
+
+### Added
+
+- New option to break paragraphs into separate lines for each sentence when formatting.
+
+### Fixed
+
+- Formatting no longer removes unknown tags (bug).
+- Detection of math using `\(...\)` in latex to pretext conversion.
+
+### Removed
+
+- Deprecated "Live Preview" as a view option (use "CodeChat" instead).
+
 ## [0.14.0] - 2023-12-12
 
 ### Added

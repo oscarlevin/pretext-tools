@@ -14,8 +14,8 @@ function convertMath(text: string) {
   );
   //convert inline math mode
   result = result.replace(
-    /((?<!\\)\$|\\\(|\\begin{math})(.*?)((?<!\\)\$|\\\)|\\end{math})/gs,
-    "<m>$2</m>"
+    /(?<!\\)\$(.*?)\$|\\\((.*?)\\\)|\\begin\{math\}(.*?)\\end\{math\}/gs,
+    "<m>$1$2$3</m>"
   );
 
   return result;
