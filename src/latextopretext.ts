@@ -3,7 +3,6 @@ import * as constants from "./constants";
 
 const blocks = constants.tex2ptxBlocks;
 
-
 // Paragraph element conversions /////////////////////////////////
 
 function convertMath(text: string) {

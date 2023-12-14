@@ -211,7 +211,14 @@ function getTargets() {
         });
       }
       return targetSelection;
-    } else {return [{label: "No PreTeXt project found.", description: "Change to directory containing a project.ptx file."}];}
+    } else {
+      return [
+        {
+          label: "No PreTeXt project found.",
+          description: "Change to directory containing a project.ptx file.",
+        },
+      ];
+    }
   } catch (err) {
     console.log("getTargets() Error: \n", err);
     return [];
@@ -460,7 +467,7 @@ export function activate(context: vscode.ExtensionContext) {
       document: vscode.TextDocument
     ): vscode.TextEdit[] {
       return formatPTX(document);
-    }
+    },
   });
 
   context.subscriptions.push(
@@ -627,7 +634,6 @@ export function activate(context: vscode.ExtensionContext) {
       }
     })
   );
-
 
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.new", () => {
