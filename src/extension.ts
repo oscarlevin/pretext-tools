@@ -229,11 +229,6 @@ export function activate(context: vscode.ExtensionContext) {
           } else {
             runPretext(ptxExec, "build", qpSelection.label);
           }
-          // Move selected target to front of list for next command.
-          // targetSelection = targetSelection.filter(
-          //   (item) => item !== qpSelection
-          // );
-          // targetSelection.unshift(qpSelection);
           lastTarget = qpSelection.label;
           pretextCommandList[0].label = "Build " + lastTarget;
         });
@@ -515,19 +510,11 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.latexToPretext", () => {
       const editor = vscode.window.activeTextEditor;
-      //     const { document } = activeTextEditor;
-      // const firstLine = document.lineAt(0);
-
-      // if (firstLine.text !== '42') {
-      //   const edit = new vscode.WorkspaceEdit();
-      //   edit.insert(document.uri, firstLine.range.start, '42\n');
-
-      //   return vscode.workspace.applyEdit(edit);
-      // }
-
       if (editor) {
         const selection = editor.selection;
-        const selectionRange = new vscode.Range(selection.start, selection.end);
+        const selectionRange = selection.isEmpty
+          ? editor.document.lineAt(selection.start.line).range
+          : new vscode.Range(selection.start, selection.end);
 
         var initialText = editor.document.getText(selectionRange);
 
