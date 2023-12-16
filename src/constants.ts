@@ -1,5 +1,45 @@
 // Purpose: Contains constants used throughout the project.
+// list of pretext commands
+export const ptxCommandList = [
+  {
+    label: "Build default target",
+    description: "",
+    command: "pretext-tools.buildLast",
+  },
+  {
+    label: "Build another target...",
+    description: "select target",
+    command: "pretext-tools.buildAny",
+  },
+  {
+    label: "View",
+    description: "Select target to view",
+    command: "pretext-tools.view",
+  },
+  {
+    label: "Deploy",
+    description: "to GitHub Pages",
+    command: "pretext-tools.deploy",
+  },
+  {
+    label: "Refresh targets",
+    description: "Refresh the list of targets",
+    command: "pretext-tools.refreshTargets",
+  },
+  {
+    label: "Convert to PreTeXt",
+    description: "Convert from other formats using Pandoc",
+    command: "pretext-tools.convert",
+  },
+  {
+    label: "Run commands in terminal",
+    description: "Use to debug a failed command",
+    command: "pretext-tools.selectPretextCommand",
+  },
+];
 
+
+// dictionary of pretext equivalents to latex environments
 export const tex2ptxBlocks: { [key: string]: string } = {
   axiom: "axiom",
   principle: "principle",
