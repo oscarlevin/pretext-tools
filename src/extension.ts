@@ -160,6 +160,7 @@ async function runThenOpen(
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
 
+  ///////////////// General Setup //////////////////////
   // Set schema for pretext files:
   utils.setSchema();
 
@@ -169,6 +170,7 @@ export function activate(context: vscode.ExtensionContext) {
     "log"
   );
 
+  // set up status bar item
   ptxSBItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
     -100
@@ -180,6 +182,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log(activeEditor?.document.fileName);
 
   console.log("PreTeXt exec command: ", utils.ptxExec);
+
   // set ptxInstalled variable to whether ptx is installed
   let ptxInstalled = utils.ptxExec !== "";
   console.log("Pretext is installed is:", ptxInstalled);
@@ -195,7 +198,8 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
-  // Formatter:
+  ///////////////// Formatter //////////////////////
+
   let formatter = vscode.languages.registerDocumentFormattingEditProvider("pretext", {
     provideDocumentFormattingEdits(
       document: vscode.TextDocument
@@ -205,6 +209,29 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   context.subscriptions.push(formatter);
+
+
+  const provider = vscode.languages.registerCompletionItemProvider(
+    { language: 'pretext' }, 
+       {
+      provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
+        const completionItem = new vscode.CompletionItem('<p>', 12 );
+        completionItem.insertText = new vscode.SnippetString('<para>\n\t$0\n</para>');
+        console.log(completionItem.label);
+        completionItem.sortText = '0';
+        completionItem.documentation = 'Insert a paragraph';
+        completionItem.detail = 'PreTeXt paragraph';
+        completionItem.filterText = 'p';
+        return [completionItem];
+      }
+    }
+  );
+
+  context.subscriptions.push(provider);
+
+
+
+  ///////////////// Commands //////////////////////
 
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.showLog", () => {
@@ -507,6 +534,7 @@ export function activate(context: vscode.ExtensionContext) {
       convertToPretext();
     })
   );
+
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.latexToPretext", () => {
       const editor = vscode.window.activeTextEditor;
