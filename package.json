@@ -137,6 +137,18 @@
         "category": "PreTeXt"
       },
       {
+        "command": "pretext-tools.viewCodeChat",
+        "title": "Preview file with CodeChat",
+        "icon": "$(open-preview)",
+        "category": "PreTeXt"
+      },
+      {
+        "command": "pretext-tools.viewCLI",
+        "title": "View full document in browser",
+        "icon": "$(open-preview)",
+        "category": "PreTeXt"
+      },
+      {
         "command": "pretext-tools.generate",
         "title": "Generate assets",
         "icon": "$(symbol-color)",

@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Changed
+
+- View in codechat or browser given as options in main menu.
 
 ### [0.14.1] - 2023-12-14
 

@@ -12,9 +12,14 @@ export const ptxCommandList = [
     command: "pretext-tools.buildAny",
   },
   {
-    label: "View",
-    description: "Select target to view",
-    command: "pretext-tools.view",
+    label: "Preview file with CodeChat",
+    description: "show in CodeChat preview",
+    command: "pretext-tools.viewCodeChat",
+  },
+  {
+    label: "View full document",
+    description: "select target to view",
+    command: "pretext-tools.viewCLI",
   },
   {
     label: "Deploy",
@@ -37,7 +42,6 @@ export const ptxCommandList = [
     command: "pretext-tools.selectPretextCommand",
   },
 ];
-
 
 // dictionary of pretext equivalents to latex environments
 export const tex2ptxBlocks: { [key: string]: string } = {
