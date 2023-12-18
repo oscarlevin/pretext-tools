@@ -17,7 +17,6 @@ let pretextTerminal: vscode.Terminal;
 var lastTarget = "";
 let pretextCommandList = ptxCommandList;
 
-
 // The main function to run pretext commands:
 async function runPretext(
   ptxExec: string,
@@ -155,7 +154,6 @@ async function runThenOpen(
   );
 }
 
-
 // this method is called when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
@@ -190,19 +188,22 @@ export function activate(context: vscode.ExtensionContext) {
   pretextCommandList[0].label = "Build " + lastTarget;
   console.log(
     "Targets are now:" +
-    targetSelection.map(function (obj) {
-      return " " + obj.label;
-    })
+      targetSelection.map(function (obj) {
+        return " " + obj.label;
+      })
   );
 
   // Formatter:
-  let formatter = vscode.languages.registerDocumentFormattingEditProvider("pretext", {
-    provideDocumentFormattingEdits(
-      document: vscode.TextDocument
-    ): vscode.TextEdit[] {
-      return formatPTX(document);
-    },
-  });
+  let formatter = vscode.languages.registerDocumentFormattingEditProvider(
+    "pretext",
+    {
+      provideDocumentFormattingEdits(
+        document: vscode.TextDocument
+      ): vscode.TextEdit[] {
+        return formatPTX(document);
+      },
+    }
+  );
 
   context.subscriptions.push(formatter);
 
@@ -447,15 +448,15 @@ export function activate(context: vscode.ExtensionContext) {
       targetSelection = utils.getTargets();
       console.log(
         "Targets are now:" +
-        targetSelection.map(function (obj) {
-          return " " + obj.label;
-        })
+          targetSelection.map(function (obj) {
+            return " " + obj.label;
+          })
       );
       vscode.window.showInformationMessage(
         "Refreshed list of targets.  Targets are now:" +
-        targetSelection.map(function (obj) {
-          return " " + obj.label;
-        })
+          targetSelection.map(function (obj) {
+            return " " + obj.label;
+          })
       );
     })
   );

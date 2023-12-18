@@ -43,7 +43,6 @@ export const ptxCommandList = [
   },
 ];
 
-
 // dictionary of pretext equivalents to latex environments
 export const tex2ptxBlocks: { [key: string]: string } = {
   axiom: "axiom",
