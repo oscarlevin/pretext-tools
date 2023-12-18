@@ -407,7 +407,7 @@ export function activate(context: vscode.ExtensionContext) {
           pretextTerminal = utils.setupTerminal(pretextTerminal);
           pretextTerminal.sendText("pretext deploy");
         } else {
-          runPretext(ptxExec, "deploy", "");
+          runPretext(ptxExec, "deploy", "-u");
         }
       }
     )
