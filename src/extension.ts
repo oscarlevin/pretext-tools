@@ -157,7 +157,6 @@ async function runThenOpen(
 // this method is called when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
-
   // Set schema for pretext files:
   utils.setSchema();
 
@@ -174,6 +173,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(ptxSBItem);
   utils.updateStatusBarItem(ptxSBItem);
 
+  console.log("context", context.subscriptions[0]);
   const activeEditor = vscode.window.activeTextEditor;
   console.log(activeEditor?.document.fileName);
 
