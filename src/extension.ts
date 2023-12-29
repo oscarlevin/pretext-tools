@@ -17,7 +17,6 @@ let pretextTerminal: vscode.Terminal;
 var lastTarget = "";
 let pretextCommandList = ptxCommandList;
 
-
 // The main function to run pretext commands:
 async function runPretext(
   ptxExec: string,
@@ -155,7 +154,6 @@ async function runThenOpen(
   );
 }
 
-
 // this method is called when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
@@ -193,43 +191,59 @@ export function activate(context: vscode.ExtensionContext) {
   pretextCommandList[0].label = "Build " + lastTarget;
   console.log(
     "Targets are now:" +
-    targetSelection.map(function (obj) {
-      return " " + obj.label;
-    })
+      targetSelection.map(function (obj) {
+        return " " + obj.label;
+      })
   );
 
   ///////////////// Formatter //////////////////////
 
-  let formatter = vscode.languages.registerDocumentFormattingEditProvider("pretext", {
-    provideDocumentFormattingEdits(
-      document: vscode.TextDocument
-    ): vscode.TextEdit[] {
-      return formatPTX(document);
-    },
-  });
+  let formatter = vscode.languages.registerDocumentFormattingEditProvider(
+    "pretext",
+    {
+      provideDocumentFormattingEdits(
+        document: vscode.TextDocument
+      ): vscode.TextEdit[] {
+        return formatPTX(document);
+      },
+    }
+  );
 
   context.subscriptions.push(formatter);
 
+  ///////////////// Completion Items //////////////////////
 
   const provider = vscode.languages.registerCompletionItemProvider(
-    { language: 'pretext' }, 
-       {
-      provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
-        const completionItem = new vscode.CompletionItem('<p>', 12 );
-        completionItem.insertText = new vscode.SnippetString('<para>\n\t$0\n</para>');
-        console.log(completionItem.label);
-        completionItem.sortText = '0';
-        completionItem.documentation = 'Insert a paragraph';
-        completionItem.detail = 'PreTeXt paragraph';
-        completionItem.filterText = 'p';
-        return [completionItem];
-      }
+    { language: "pretext" },
+    {
+      provideCompletionItems(
+        document: vscode.TextDocument,
+        position: vscode.Position,
+        token: vscode.CancellationToken,
+        context: vscode.CompletionContext
+      ) {
+        const p = new vscode.CompletionItem("<p>", 12);
+        // console.log("context trigger character:", context.triggerCharacter);
+        // console.log("context trigger kind:", context.triggerKind);
+        // console.log("context (all):", context);
+        // console.log("position:", position);
+        p.insertText = new vscode.SnippetString("<p>\n\t$0\n</p>");
+        console.log(p.label);
+        p.sortText = "0";
+        p.documentation = "Insert a paragraph";
+        p.detail = "PreTeXt paragraph";
+        p.filterText = "<p>";
+        const m = new vscode.CompletionItem("<m>", 11);
+        m.insertText = new vscode.SnippetString("<m>$1</m>$0");
+        m.sortText = "0";
+        m.documentation = "Math expression";
+        m.detail = "PreTeXt math expression";
+        return [p, m];
+      },
     }
   );
 
   context.subscriptions.push(provider);
-
-
 
   ///////////////// Commands //////////////////////
 
@@ -474,15 +488,15 @@ export function activate(context: vscode.ExtensionContext) {
       targetSelection = utils.getTargets();
       console.log(
         "Targets are now:" +
-        targetSelection.map(function (obj) {
-          return " " + obj.label;
-        })
+          targetSelection.map(function (obj) {
+            return " " + obj.label;
+          })
       );
       vscode.window.showInformationMessage(
         "Refreshed list of targets.  Targets are now:" +
-        targetSelection.map(function (obj) {
-          return " " + obj.label;
-        })
+          targetSelection.map(function (obj) {
+            return " " + obj.label;
+          })
       );
     })
   );
