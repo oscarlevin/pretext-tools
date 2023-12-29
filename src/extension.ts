@@ -9,6 +9,7 @@ import { formatPTX } from "./formatter";
 import { ptxExec } from "./utils";
 import * as utils from "./utils";
 import { ptxCommandList } from "./constants";
+import { activateCompletions } from "./completions";
 
 // Set up vscode elements
 let pretextOutputChannel: vscode.OutputChannel;
@@ -213,37 +214,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   ///////////////// Completion Items //////////////////////
 
-  const provider = vscode.languages.registerCompletionItemProvider(
-    { language: "pretext" },
-    {
-      provideCompletionItems(
-        document: vscode.TextDocument,
-        position: vscode.Position,
-        token: vscode.CancellationToken,
-        context: vscode.CompletionContext
-      ) {
-        const p = new vscode.CompletionItem("<p>", 12);
-        // console.log("context trigger character:", context.triggerCharacter);
-        // console.log("context trigger kind:", context.triggerKind);
-        // console.log("context (all):", context);
-        // console.log("position:", position);
-        p.insertText = new vscode.SnippetString("<p>\n\t$0\n</p>");
-        console.log(p.label);
-        p.sortText = "0";
-        p.documentation = "Insert a paragraph";
-        p.detail = "PreTeXt paragraph";
-        p.filterText = "<p>";
-        const m = new vscode.CompletionItem("<m>", 11);
-        m.insertText = new vscode.SnippetString("<m>$1</m>$0");
-        m.sortText = "0";
-        m.documentation = "Math expression";
-        m.detail = "PreTeXt math expression";
-        return [p, m];
-      },
-    }
-  );
-
-  context.subscriptions.push(provider);
+  activateCompletions(context);
 
   ///////////////// Commands //////////////////////
 

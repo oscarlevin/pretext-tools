@@ -50,22 +50,7 @@
       }
     ],
     "snippets": [
-      {
-        "language": "pretext",
-        "path": "./snippets/pretext.json"
-      },
-      {
-        "language": "pretext",
-        "path": "./snippets/pretext-blocks.json"
-      },
-      {
-        "language": "pretext",
-        "path": "./snippets/pretext-attributes.json"
-      },
-      {
-        "language": "pretext",
-        "path": "./snippets/pretext-templates.json"
-      }
+
     ],
     "keybindings": [
       {
