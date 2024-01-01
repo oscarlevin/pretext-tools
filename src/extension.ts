@@ -12,6 +12,7 @@ import { ptxCommandList } from "./constants";
 import { activateCompletions } from "./completions";
 
 // Set up vscode elements
+export let _context: vscode.ExtensionContext;
 let pretextOutputChannel: vscode.OutputChannel;
 let ptxSBItem: vscode.StatusBarItem;
 let pretextTerminal: vscode.Terminal;
@@ -160,6 +161,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
 
   ///////////////// General Setup //////////////////////
+  _context = context;
   // Set schema for pretext files:
   utils.setSchema();
 

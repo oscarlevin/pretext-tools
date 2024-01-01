@@ -44,6 +44,16 @@
     "body": "xmlns:xi=\"http://www.w3.org/2001/XInclude\"",
     "description": "xinclud namespace: add to top division of xinclud-ed file."
   },
+  "xml:id": {
+    "prefix": "@xml:id",
+    "body": "xml:id=\"$1\"$0",
+    "description": "xml:id attribute, for references."
+  },
+  "label": {
+    "prefix": "@label",
+    "body": "label=\"$1\"$0",
+    "description": "label attribute, for naming."
+  },
   "pause": {
     "prefix": "@pause",
     "body": "pause=\"yes\""
