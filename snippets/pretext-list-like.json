@@ -1,0 +1,101 @@
+{
+  "math-equation": {
+    "prefix": "<me>",
+    "body": ["<me>", "\t$1", "</me>\n$0"],
+    "description": "math-equation."
+  },
+  "math-equation numbered": {
+    "prefix": "<men>",
+    "body": "<men xml:id=\"eqn-$1\">\n\t$2\n</men>\n$0",
+    "description": "math-equation numbered."
+  },
+  "mathdisplay": {
+    "prefix": "<md>",
+    "body": "<md>\n\t<mrow>$1 \\\\amp $2</mrow>$0\n</md>",
+    "description": "math-display (multi-row)"
+  },
+  "mathdisplay numbered": {
+    "prefix": "<mdn>",
+    "body": "<mdn>\n\t<mrow>$1 \\\\amp $2</mrow>$0\n</mdn>",
+    "description": "math-display (multi-row) numbered"
+  },
+  "mrow": {
+    "prefix": "<mrow>",
+    "body": "<mrow>$1 \\\\amp $2</mrow>$0"
+  },
+  "code-display": {
+    "prefix": "<cd>",
+    "body": "<cd>\n\t<cline>$1</cline>$0\n</cd>",
+    "description": "code-display"
+  },
+  "cline": {
+    "prefix": "<cline>",
+    "body": "<cline>$1</cline>$0",
+    "description": "cline"
+  },
+  "index entry": {
+    "prefix": "<idx>",
+    "body": "<idx><h>$1</h></idx>$0"
+  },
+  "index header": {
+    "prefix": "<h>",
+    "body": "<h>$1</h>$0"
+  },
+  "index see": {
+    "prefix": "<see>",
+    "body": "<see>$1</see>$0"
+  },
+  "index see also": {
+    "prefix": "<seealso>",
+    "body": "<seealso>$1</seealso>$0"
+  },
+  "notation": {
+    "prefix": "<notation>",
+    "body": "<notation>\n\t<usage>${1:(in math mode)}</usage>\n  <description>$2</description>\n</notation>$0"
+  },
+  "definition-list": {
+    "prefix": "<dl>",
+    "body": "<dl>\n\t<li>\n\t\t<title>$1</title>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</li>\n</dl>"
+  },
+  "definition-list item": {
+    "prefix": "<li-d>",
+    "body": "<li>\n\t<title>$1</title>\n\t<p>\n\t\t$0\n\t</p>\n</li>"
+  },
+  "enumerate (ordered list)": {
+    "prefix": "<ol>",
+    "body": "<ol>\n\t<li>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</li>\n</ol>"
+  },
+  "itemize (unordered list)": {
+    "prefix": "<ul>",
+    "body": "<ul>\n\t<li>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</li>\n</ul>"
+  },
+  "list item": {
+    "prefix": "<li>",
+    "body": "<li>\n\t<p>\n\t\t$0\n\t</p>\n</li>"
+  },
+  "item": {
+    "prefix": "\\item",
+    "body": "<li>\n\t$0\n</li>"
+  },
+  "list item (short, no p)": {
+    "prefix": "<li> inline",
+    "body": "<li>$1</li>$0"
+  },
+  "title": {
+    "prefix": "<title>",
+    "body": "<title>$1</title>\n\n$0"
+  },
+  "creator": {
+    "prefix": "<creator>",
+    "body": "<creator>$1</creator>$0",
+    "description": "creator, for use in axiom-like."
+  },
+  "<?xml... top of document": {
+    "prefix": "<?xml...>",
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+  },
+  "xinclude": {
+    "prefix": "<xi:xinclude>",
+    "body": "<xi:include href=\"$1\" />$0"
+  }
+}
