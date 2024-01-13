@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Changed
+
+- Snippets are now completion items, which limits when they show up as suggestions based on context.
 
 ### [0.14.1] - 2023-12-14
 

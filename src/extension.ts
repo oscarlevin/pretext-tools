@@ -541,6 +541,31 @@ export function activate(context: vscode.ExtensionContext) {
       }
     })
   );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("pretext-tools.test", () => {
+      console.log("Running Experiment");
+      const editor = vscode.window.activeTextEditor;
+      const document = editor?.document;
+      const position = editor?.selection.active;
+      if (position) {
+        const textUntilPosition = document?.getText(
+          new vscode.Range(new vscode.Position(0, 0), position)
+        );
+        const openedTags = (
+          textUntilPosition?.match(/<(\w)+(?![^>]*\/>)/g) || []
+        ).map((tag) => tag.slice(1));
+        const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map(
+          (tag) => tag.slice(2)
+        );
+        const unclosedTags = openedTags.filter(
+          (tag) => !closedTags.includes(tag)
+        );
+        const currentTag = unclosedTags[unclosedTags.length - 1];
+        console.log("Current XML Element: ", currentTag);
+      }
+    })
+  );
 }
 
 // this method is called when your extension is deactivated
