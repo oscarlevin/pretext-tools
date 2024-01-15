@@ -90,27 +90,28 @@ export const tex2ptxBlocks: { [key: string]: string } = {
 // Definitions of pretext elements and how they can be nested.//
 ////////////////////////////////////////////////////////////////
 
-type TpChildren = {
+type PtxChildren = {
   attributes: string[];
   elements: string[];
 };
 
-type TpParent = {
-  [key: string]: TpChildren;
+type PtxElement = {
+  [key: string]: PtxChildren;
 };
 
 function expand(
   parents: string[],
   attributes: string[],
   elements: string[]
-): TpParent {
-  let result: TpParent = {};
+): PtxElement {
+  let result: PtxElement = {};
   for (let parent of parents) {
     result[parent] = { attributes: attributes, elements: elements };
   }
   return result;
 }
 
+// The following constants attempt to replicate a fair amount of the schema, so we can decide what completions to show.
 const gpFigure = ["figure", "table", "listing", "list"];
 
 const gpAside = ["aside", "biographical", "historical"];
@@ -379,7 +380,7 @@ const idl = ["xml:id", "label"];
 const atSidebyside = ["margins", "width", "widths", "valign", "valigns"];
 
 // dictionary of pretext elements and their legal children
-export const elementChildren: TpParent = {
+export const elementChildren: PtxElement = {
   answer: {
     attributes: id,
     elements: [...blockSolution, ...mdTitle],
@@ -503,6 +504,11 @@ export const elementChildren: TpParent = {
     attributes: id,
     elements: [...blockStatement, "case"],
   },
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  "reading-questions": {
+    attributes: id,
+    elements: [...mdTitle, "introduction", "exercise", "conclusion"],
+  },
   section: {
     attributes: id,
     elements: [
@@ -513,6 +519,22 @@ export const elementChildren: TpParent = {
       ...endSections,
       "introduction",
       "subsection",
+    ],
+  },
+  sidebyside: {
+    attributes: atSidebyside,
+    elements: [
+      "figure",
+      "poem",
+      "tabular",
+      "image",
+      "video",
+      "program",
+      "console",
+      "p",
+      "pre",
+      "list",
+      "stack",
     ],
   },
   solution: {
@@ -634,7 +656,6 @@ export const elementChildren: TpParent = {
     "prelude",
     "postlude",
   ]),
-  ...expand(gpHasTextShort, [], textShort),
 };
 
 // dictionary of pretext elements and their legal attributes

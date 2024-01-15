@@ -36,9 +36,8 @@
   },
   "0 algorithm (theorem-like)": {
     "prefix": "<algorithm>",
-    "body": [
-      "<algorithm xml:id=\"alg-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</algorithm>"
-    ],
+    "body": 
+      "<algorithm xml:id=\"alg-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</algorithm>",
     "description": "algorithm (theorem-like)."
   },
   "1 claim (theorem-like)": {
@@ -193,8 +192,8 @@
     "prefix": "<exercise>",
     "body": "<exercise>\n\t$0\n</exercise>"
   },
-  "1 exercise (worksheet)": {
-    "prefix": "<exercise workspace=>",
+  "1 exercise (in worksheet)": {
+    "prefix": "<exercise>",
     "body": "<exercise workspace=\"$1\">\n\t$0\n</exercise>"
   },
   "2 page": {
@@ -223,7 +222,7 @@
     "description": "answer"
   },
   "0 WeBWorK (from server)": {
-    "prefix": "<webwork source=>",
+    "prefix": "<webwork>",
     "body": "<webwork source=\"$1\" />$0",
     "description": "WeBWorK (from server)"
   },
@@ -268,7 +267,7 @@
     "description": "image (not external)"
   },
   "1 image (external)": {
-    "prefix": "<image source=>",
+    "prefix": "<image>",
     "body": "<image source=\"${1:path (no extension)}\" width=\"$2%\">\n\t<description>${0:(for accessibility)}</description>\n</image>",
     "description": "image (external)"
   },
@@ -321,6 +320,86 @@
     "prefix": "<feedback>",
     "body": "<feedback>\n\t<p>\n\t\t$0\n\t</p>\n</feedback>",
     "description": "Feedback element for interactive exercise"
+  },
+  "1 matches": {
+    "prefix": "<matches>",
+    "body": "<matches>\n\t<match order=\"$1\">\n\t\t<premise>$2</premise>\n\t\t<response>$3</response>\n\t</match>\n\t$0\n</matches>",
+    "description": "Matches for interactive exercise"
+  },
+  "1 match": {
+    "prefix": "<match>",
+    "body": "<match order=\"$1\">\n\t<premise>$2</premise>\n\t<response>$3</response>\n</match>\n$0",
+    "description": "match pair for interactive Matching exercise"
+  },
+  "1 blocks": {
+    "prefix": "<blocks>",
+    "body": "<blocks>\n\t<block>\n\t\t<p>\n\t\t\t$1\n\t\t</p>\n\t</block>\n</blocks>",
+    "description": "Parsons problem blocks"
+  },
+  "1 block": {
+    "prefix": "<block>",
+    "body": "<block>\n\t<p>\n\t\t$1\n\t</p>\n</block>",
+    "description": "block for a Parsons problem"
+  },
+  "0 part (division)": {
+    "prefix": "<part>",
+    "body": "<part xml:id=\"part-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</part>"
+  },
+  "0 chapter (division)": {
+    "prefix": "<chapter>",
+    "body": "<chapter xml:id=\"ch-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</chapter>"
+  },
+  "0 section (division)": {
+    "prefix": "<section>",
+    "body": "<section xml:id=\"sec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</section>"
+  },
+  "0 subsection (division)": {
+    "prefix": "<subsection>",
+    "body": "<subsection xml:id=\"subsec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</subsection>"
+  },
+  "0 subsubsection (division)": {
+    "prefix": "<subsubsection>",
+    "body": "<subsubsection xml:id=\"subsubsec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</subsubsection>"
+  },
+  "0 exercises (division)": {
+    "prefix": "<exercises>",
+    "body": "<exercises xml:id=\"exercises-$1\">\n\t$0\n</exercises>",
+    "description": "A division that holds exercises."
+  },
+  "1 paragraphs (division)": {
+    "prefix": "<paragraphs>",
+    "body": "<paragraphs>\n\t<title>$1</title>\n\t$0\n</paragraphs>"
+  },
+  "1 references (division)": {
+    "prefix": "<references>",
+    "body": "<references xml:id=\"refs-$1\">\n\t$0\n</references>"
+  },
+  "1 reading questions (division)": {
+    "prefix": "<reading-questions>",
+    "body": "<reading-questions xml:id=\"rqs-$1\">\n\t$0\n</reading-questions>"
+  },
+  "1 solutions-division": {
+    "prefix": "<division-solutions>",
+    "body": "<solutions $1>\n\t$0\n<solutions>"
+  },
+  "0 worksheet": {
+    "prefix": "<worksheet>",
+    "body": "<worksheet xml:id=\"ws-$1\">\n\t$0\n</worksheet>"
+  },
+  "0 introduction": {
+    "prefix": "<introduction>",
+    "body": "<introduction>\n\t<p>\n\t\t$0\n\t</p>\n</introduction>",
+    "description": "introduction of a division"
+  },
+  "1 conclusion": {
+    "prefix": "<conclusion>",
+    "body": "<conclusion>\n\t<p>\n\t\t$0\n\t</p>\n</conclusion>",
+    "description": "conclusion of a division"
+  },
+  "0 p (paragraph)": {
+    "prefix": "<p>",
+    "body": "<p>\n\t$0\n</p>",
+    "description": "paragraph"
   }
 }
   
