@@ -1,15 +1,15 @@
 {
-  "columns attribute": {
+  "cols": {
     "prefix": "@cols",
     "body": "cols=\"$1\"$0",
     "description": "columns attribute for lists and exercisegroup.  e.g. cols=\"3\""
   },
-  "width attribute": {
+  "width": {
     "prefix": "@width",
     "body": "width=\"$1%\"$0",
     "description": "width attribute for images and side-by-sides"
   },
-  "widths attribute": {
+  "widths": {
     "prefix": "@widths",
     "body": "widths=\"$1\"$0",
     "description": "widths attribute for side-by-sides, e.g. widths=\"20% 80%\""

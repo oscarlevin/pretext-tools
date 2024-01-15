@@ -559,7 +559,8 @@ export function activate(context: vscode.ExtensionContext) {
           (tag) => tag.slice(2)
         );
         const unclosedTags = openedTags.filter(
-          (tag) => !closedTags.includes(tag)
+          (tag) => 
+            openedTags.filter(x => x === tag).length > closedTags.filter(x => x === tag).length
         );
         const currentTag = unclosedTags[unclosedTags.length - 1];
         console.log("Current XML Element: ", currentTag);
