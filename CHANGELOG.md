@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+
 ## [0.15.0] - 2024-01-16
 
 ### Added
@@ -16,10 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Snippets are now completion items, which limits when they show up as suggestions based on context.
+- View in codechat or browser given as options in main menu.
+- `Deploy to GitHub` now makes a commit to save recent work (using the `-u` option).
 
 ### Fixed
 
 - Formatter correctly adds empty line at end of document.
+
+
+
 
 ### [0.14.1] - 2023-12-14
 

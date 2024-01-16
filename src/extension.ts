@@ -20,7 +20,9 @@ let ptxSBItem: vscode.StatusBarItem;
 let pretextTerminal: vscode.Terminal;
 var lastTarget = "";
 let pretextCommandList = ptxCommandList;
+
 export let labels: LabelArray = [];
+
 
 // The main function to run pretext commands:
 async function runPretext(
@@ -163,8 +165,10 @@ async function runThenOpen(
 export async function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
 
+
   ///////////////// General Setup //////////////////////
   _context = context;
+
   // Set schema for pretext files:
   utils.setSchema();
 
@@ -182,6 +186,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(ptxSBItem);
   utils.updateStatusBarItem(ptxSBItem);
 
+  console.log("context", context.subscriptions[0]);
   const activeEditor = vscode.window.activeTextEditor;
   console.log(activeEditor?.document.fileName);
 
@@ -201,6 +206,7 @@ export async function activate(context: vscode.ExtensionContext) {
         return " " + obj.label;
       })
   );
+
 
   ///////////////// Formatter //////////////////////
 
@@ -428,7 +434,7 @@ export async function activate(context: vscode.ExtensionContext) {
           pretextTerminal = utils.setupTerminal(pretextTerminal);
           pretextTerminal.sendText("pretext deploy");
         } else {
-          runPretext(ptxExec, "deploy", "");
+          runPretext(ptxExec, "deploy", "-u");
         }
       }
     )
