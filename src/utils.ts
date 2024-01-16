@@ -303,3 +303,4 @@ export function updateReferences(
   );
   console.log("Done updating labels");
   return labels;
+}
