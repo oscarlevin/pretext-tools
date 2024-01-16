@@ -52,18 +52,6 @@
     "snippets": [
       {
         "language": "pretext",
-        "path": "./snippets/pretext.json"
-      },
-      {
-        "language": "pretext",
-        "path": "./snippets/pretext-blocks.json"
-      },
-      {
-        "language": "pretext",
-        "path": "./snippets/pretext-attributes.json"
-      },
-      {
-        "language": "pretext",
         "path": "./snippets/pretext-templates.json"
       }
     ],
@@ -176,6 +164,11 @@
         "title": "Convert Selected LaTeX to PreTeXt",
         "category": "PreTeXt",
         "description": "Converts and replaces a selection of LaTeX with PreTeXt formatted text (experimental)."
+      },
+      {
+        "command": "pretext-tools.test",
+        "title": "development experiemnt",
+        "category": "PreTeXt"
       }
     ],
     "xmlLanguageParticipants": [

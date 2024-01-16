@@ -9,13 +9,20 @@ import { formatPTX } from "./formatter";
 import { ptxExec } from "./utils";
 import * as utils from "./utils";
 import { ptxCommandList } from "./constants";
+import { activateCompletions } from "./completions";
 
+// Set up types:
+type LabelArray = [string, string, string][];
 // Set up vscode elements
+export let _context: vscode.ExtensionContext;
 let pretextOutputChannel: vscode.OutputChannel;
 let ptxSBItem: vscode.StatusBarItem;
 let pretextTerminal: vscode.Terminal;
 var lastTarget = "";
 let pretextCommandList = ptxCommandList;
+
+export let labels: LabelArray = [];
+
 
 // The main function to run pretext commands:
 async function runPretext(
@@ -155,8 +162,13 @@ async function runThenOpen(
 }
 
 // this method is called when your extension is activated
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
+
+
+  ///////////////// General Setup //////////////////////
+  _context = context;
+
   // Set schema for pretext files:
   utils.setSchema();
 
@@ -166,6 +178,7 @@ export function activate(context: vscode.ExtensionContext) {
     "log"
   );
 
+  // set up status bar item
   ptxSBItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
     -100
@@ -178,6 +191,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log(activeEditor?.document.fileName);
 
   console.log("PreTeXt exec command: ", utils.ptxExec);
+
   // set ptxInstalled variable to whether ptx is installed
   let ptxInstalled = utils.ptxExec !== "";
   console.log("Pretext is installed is:", ptxInstalled);
@@ -193,7 +207,9 @@ export function activate(context: vscode.ExtensionContext) {
       })
   );
 
-  // Formatter:
+
+  ///////////////// Formatter //////////////////////
+
   let formatter = vscode.languages.registerDocumentFormattingEditProvider(
     "pretext",
     {
@@ -206,6 +222,17 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(formatter);
+
+  ///////////////// Completion Items //////////////////////
+  labels = await utils.getReferences();
+
+  activateCompletions(context);
+
+  vscode.workspace.onDidSaveTextDocument(async (document) => {
+    labels = await utils.updateReferences(document, labels);
+  });
+
+  ///////////////// Commands //////////////////////
 
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.showLog", () => {
@@ -508,6 +535,7 @@ export function activate(context: vscode.ExtensionContext) {
       convertToPretext();
     })
   );
+
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.latexToPretext", () => {
       const editor = vscode.window.activeTextEditor;
@@ -525,6 +553,36 @@ export function activate(context: vscode.ExtensionContext) {
           editbuilder.replace(selectionRange, newText);
         });
       }
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("pretext-tools.test", async () => {
+      console.log("Running Experiment");
+      // const editor = vscode.window.activeTextEditor;
+      // const document = editor?.document;
+      // const position = editor?.selection.active;
+      // if (document) {
+      //   let labels = await utils.getReferences();
+      //   console.log("Found labels: ", labels);
+      // }
+      // if (position) {
+      //   const textUntilPosition = document?.getText(
+      //     new vscode.Range(new vscode.Position(0, 0), position)
+      //   );
+      //   const openedTags = (
+      //     textUntilPosition?.match(/<(\w)+(?![^>]*\/>)/g) || []
+      //   ).map((tag) => tag.slice(1));
+      //   const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map(
+      //     (tag) => tag.slice(2)
+      //   );
+      //   const unclosedTags = openedTags.filter(
+      //     (tag) =>
+      //       openedTags.filter(x => x === tag).length > closedTags.filter(x => x === tag).length
+      //   );
+      //   const currentTag = unclosedTags[unclosedTags.length - 1];
+      //   console.log("Current XML Element: ", currentTag);
+      // }
     })
   );
 }

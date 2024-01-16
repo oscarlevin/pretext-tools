@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import { homedir } from "os";
 import * as path from "path";
 import * as vscode from "vscode";
+import * as fs from "fs";
 
 export {
   getDir,
@@ -41,6 +42,17 @@ function getDir(myPath: string = "") {
           return fileUri[0].fsPath;
         }
       });
+    return "";
+  }
+}
+
+
+function getSourceDir() {
+  let dir = getDir();
+  dir = path.join(dir, "source");
+  if (fs.existsSync(dir)) {
+    return dir;
+  } else {
     return "";
   }
 }
@@ -248,3 +260,46 @@ function setupTerminal(terminal: vscode.Terminal): vscode.Terminal {
   terminal.show();
   return terminal;
 }
+type LabelArray = [string, string, string][];
+
+export async function getReferences(): Promise<LabelArray> {
+  // Look through all files in project directory and collect all labels contained as xml:id attributes.
+  let labels: LabelArray = [];
+  let sourceDir = getSourceDir();
+  console.log("Looking for labels in ", sourceDir);
+  const uri = vscode.Uri.file(sourceDir);
+  let files = await vscode.workspace.fs.readDirectory(uri);
+  for (const [file, type] of files) {
+    if (type === vscode.FileType.File) {
+      let fileAbsolutePath = path.join(sourceDir, file);
+      let document = await vscode.workspace.openTextDocument(fileAbsolutePath);
+      let text = document.getText();
+      let regex = /<(\w*?)\s(.*?)xml:id="([^"]+)"/g;
+      let matches = [...text.matchAll(regex)];
+      labels = labels.concat(
+        matches.map((match) => [match[3], match[1], document.fileName])
+      );
+    }
+  }
+  console.log("Finished collecting labels");
+  return labels;
+}
+
+export function updateReferences(
+  document: vscode.TextDocument,
+  labels: LabelArray
+) {
+  console.log("Updating references");
+  // Look through the specified file collect all labels contained as xml:id attributes.
+  // This can then be used to update the current list of references every time a file is saved.
+  let fileContents = document.getText();
+  let regex = /<(\w*?)\s(.*?)xml:id="([^"]+)"/g;
+  let matches = [...fileContents.matchAll(regex)];
+  // Remove all (old) labels from the current file:
+  labels = labels.filter((label) => label[2] !== document.fileName);
+  // Add all (new) labels from the current file:
+  labels = labels.concat(
+    matches.map((match) => [match[3], match[1], document.fileName])
+  );
+  console.log("Done updating labels");
+  return labels;
