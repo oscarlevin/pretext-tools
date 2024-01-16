@@ -46,6 +46,7 @@ function getDir(myPath: string = "") {
   }
 }
 
+
 function getSourceDir() {
   let dir = getDir();
   dir = path.join(dir, "source");
@@ -302,4 +303,3 @@ export function updateReferences(
   );
   console.log("Done updating labels");
   return labels;
-}
