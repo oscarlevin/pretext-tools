@@ -285,7 +285,7 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
   return [
     vscode.TextEdit.replace(
       document.validateRange(new vscode.Range(0, 0, document.lineCount, 0)),
-      allText
+      allText + "\n"
     ),
   ];
 }

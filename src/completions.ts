@@ -1,7 +1,8 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import { _context } from "./extension";
-import { elementAttributes, elementChildren } from "./constants";
+import { labels } from "./extension";
+import { elementChildren } from "./constants";
 
 function readJsonFile(relativePath: string): any {
   try {
@@ -172,6 +173,35 @@ async function elementCompletions(
 //   return inlineCompletionItems;
 // }
 
+async function refCompletions(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+  token: vscode.CancellationToken,
+  context: vscode.CompletionContext
+) {
+  // const refs = readJsonFile("snippets/pretext-attributes.json");
+  const linePrefix = document
+    .lineAt(position.line)
+    .text.slice(0, position.character);
+  const match = linePrefix.match(/<xref ref=\"$/);
+  if (!match) {
+    return undefined;
+  }
+  let completionItems: vscode.CompletionItem[] = [];
+  for (let [reference, parent] of labels) {
+    const refCompletion = new vscode.CompletionItem(
+      reference,
+      vscode.CompletionItemKind.Reference
+    );
+    refCompletion.insertText = new vscode.SnippetString(reference);
+    refCompletion.documentation = "(a " + parent + ")";
+    refCompletion.detail = "(reference to " + parent + ")";
+    refCompletion.sortText = "0" + reference;
+    completionItems.push(refCompletion);
+  }
+  return completionItems;
+}
+
 /**
  * Activate completions for PreTeXt
  * @param context - the extension context
@@ -182,6 +212,12 @@ export function activateCompletions(context: vscode.ExtensionContext) {
     "pretext",
     { provideCompletionItems: attributeCompletions },
     "@"
+  );
+
+  const refProvider = vscode.languages.registerCompletionItemProvider(
+    "pretext",
+    { provideCompletionItems: refCompletions },
+    '"'
   );
 
   const elementProvider = vscode.languages.registerCompletionItemProvider(

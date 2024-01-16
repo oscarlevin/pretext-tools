@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.15.0] - 2024-01-16
+
+### Added
+
+- `<xref ref="..."/>` will now suggest xml:ids from any file in the `source` directory.
+
 ### Changed
 
 - Snippets are now completion items, which limits when they show up as suggestions based on context.
+
+### Fixed
+
+- Formatter correctly adds empty line at end of document.
 
 ### [0.14.1] - 2023-12-14
 
