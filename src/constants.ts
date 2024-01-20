@@ -434,12 +434,20 @@ export const elementChildren: PtxElement = {
     attributes: ["multiple-correct", "randomize"],
     elements: ["choice"],
   },
+  console: {
+    attributes: ["prompt", "width", "margins"],
+    elements: [],
+  },
   definition: {
     attributes: id,
     elements: [...mdTitle, "notation", "statement"],
   },
+  dl: {
+    attributes: [...id, "width"],
+    elements: ["title", "li"],
+  },
   exercise: {
-    attributes: [...idl, "number", "numbered", "language", "indentation"],
+    attributes: [...idl, "number", "workspace"],
     elements: [...exerciseBody, "feedback"],
   },
   exercises: {
@@ -464,6 +472,22 @@ export const elementChildren: PtxElement = {
   idx: {
     attributes: ["sortby", "start", "finish", "h", "see", "seealso"],
     elements: textShort,
+  },
+  image: {
+    attributes: [
+      "width",
+      "margins",
+      "rotate",
+      "archive",
+      "source",
+      "decorative",
+      "pg-name",
+    ],
+    elements: ["latex-image", "description", "short-description"],
+  },
+  input: {
+    attributes: ["prompt"],
+    elements: [],
   },
   introduction: {
     attributes: id,
@@ -505,6 +529,17 @@ export const elementChildren: PtxElement = {
     attributes: [],
     elements: ["article", "book", "letter", "memo", "docinfo"],
   },
+  program: {
+    attributes: [
+      "width",
+      "margins",
+      "language",
+      "line-numbers",
+      "highlight-lines",
+      "interactive",
+    ],
+    elements: [],
+  },
   proof: {
     attributes: id,
     elements: [...blockStatement, "case"],
@@ -513,6 +548,10 @@ export const elementChildren: PtxElement = {
   "reading-questions": {
     attributes: id,
     elements: [...mdTitle, "introduction", "exercise", "conclusion"],
+  },
+  sbsgroup: {
+    attributes: ["margins", "width", "widths", "valign", "valigns"],
+    elements: [],
   },
   section: {
     attributes: id,
@@ -546,6 +585,10 @@ export const elementChildren: PtxElement = {
     attributes: id,
     elements: [...blockSolution, ...mdTitle],
   },
+  solutions: {
+    attributes: ["inline", "divisional", "project", "admit"],
+    elements: [],
+  },
   statement: {
     attributes: id,
     elements: blockStatement,
@@ -572,6 +615,20 @@ export const elementChildren: PtxElement = {
       ...endSections,
       "introduction",
     ],
+  },
+  tabular: {
+    attributes: [
+      "width",
+      "margins",
+      "row-headers",
+      "halign",
+      "valign",
+      "bottom",
+      "left",
+      "top",
+      "right",
+    ],
+    elements: ["row", "col"],
   },
   task: {
     attributes: id,
@@ -665,66 +722,16 @@ export const elementChildren: PtxElement = {
 
 // dictionary of pretext elements and their legal attributes
 export const elementAttributes: { [key: string]: string[] } = {
-  solutions: ["inline", "divisional", "project", "admit"],
   cd: ["latexsep"],
-  console: ["prompt", "width", "margins"],
-  program: [
-    "width",
-    "margins",
-    "language",
-    "line-numbers",
-    "highlight-lines",
-    "interactive",
-  ],
-  input: ["prompt"],
-  ol: ["cols", "marker"],
-  ul: ["cols", "marker"],
-  dl: ["width"],
   case: ["direction"],
-  figure: ["landscape"],
-  sidebyside: ["margins", "width", "widths", "valigns"],
   sbsgroup: ["margins", "width", "widths", "valigns"],
-  image: [
-    "width",
-    "margins",
-    "rotate",
-    "archive",
-    "source",
-    "decorative",
-    "pg-name",
-  ],
   sageplot: ["variant", "aspect"],
   cell: ["halign", "bottom", "right", "colspan"],
   row: ["header", "halign", "valign", "bottom", "left"],
   col: ["right", "top", "halign", "width"],
-  tabular: [
-    "width",
-    "margins",
-    "row-headers",
-    "halign",
-    "valign",
-    "bottom",
-    "left",
-    "top",
-    "right",
-  ],
   sage: ["doctest", "tolerance", "auto-evaluate", "language", "type"],
   score: ["musescoreuser", "musescore"],
-  video: [
-    "width",
-    "margins",
-    "aspect",
-    "start",
-    "end",
-    "play-at",
-    "preview",
-    "source",
-    "href",
-    "youtube",
-    "youtubeplaylist",
-    "vimeo",
-  ],
-  exercise: ["number", "workspace", "label"],
+
   exercisegroup: ["cols"],
   poem: ["halign"],
   stanza: ["indent"],
