@@ -143,22 +143,22 @@
     "body": "<creator>$1</creator>$0",
     "description": "creator"
   },
-  "latex": {
+  "latex/": {
     "prefix": "<latex>",
     "body": "<latex />$0",
     "description": "latex (fancy letters)"
   },
-  "tex": {
+  "tex/": {
     "prefix": "<tex/>",
     "body": "<tex />$0",
     "description": "tex (fancy letters)"
   },
-  "pretext": {
+  "pretext/": {
     "prefix": "<pretext/>",
     "body": "<pretext />$0",
     "description": "pretext (fancy letters)"
   },
-  "webwork": {
+  "webwork/": {
     "prefix": "<webwork/>",
     "body": "<webwork/>$0",
     "description": "webwork (fancy letters)"

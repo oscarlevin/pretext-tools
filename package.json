@@ -2,7 +2,7 @@
   "name": "pretext-tools",
   "displayName": "PreTeXt-tools",
   "description": "Language support and more for PreTeXt",
-  "version": "0.14.1",
+  "version": "0.15.0",
   "license": "See license in LICENSE",
   "icon": "logo.png",
   "publisher": "oscarlevin",
@@ -53,6 +53,18 @@
       {
         "language": "pretext",
         "path": "./snippets/pretext-templates.json"
+      },
+      {
+        "language": "pretext",
+        "path": "./snippets/pretext-inline.json"
+      },
+      {
+        "language": "pretext",
+        "path": "./snippets/pretext-list-like.json"
+      },
+      {
+        "language": "pretext",
+        "path": "./snippets/pretext-elements.json"
       }
     ],
     "keybindings": [
@@ -167,7 +179,7 @@
       },
       {
         "command": "pretext-tools.test",
-        "title": "development experiemnt",
+        "title": "development experiment",
         "category": "PreTeXt"
       }
     ],

@@ -21,7 +21,7 @@ function getDir(myPath: string = "") {
   }
   if (vscode.workspace.workspaceFolders !== undefined) {
     myPath = vscode.workspace.workspaceFolders[0].uri.fsPath;
-    console.log("Dir ", myPath, " set by worksapce folder");
+    console.log("Dir ", myPath, " set by workspace folder");
     return myPath;
   } else if (vscode.window.activeTextEditor !== undefined) {
     myPath = path.dirname(vscode.window.activeTextEditor.document.uri.fsPath);
@@ -45,7 +45,6 @@ function getDir(myPath: string = "") {
     return "";
   }
 }
-
 
 function getSourceDir() {
   let dir = getDir();
@@ -260,6 +259,7 @@ function setupTerminal(terminal: vscode.Terminal): vscode.Terminal {
   terminal.show();
   return terminal;
 }
+
 type LabelArray = [string, string, string][];
 
 export async function getReferences(): Promise<LabelArray> {
@@ -303,3 +303,4 @@ export function updateReferences(
   );
   console.log("Done updating labels");
   return labels;
+}

@@ -396,10 +396,20 @@
     "body": "<conclusion>\n\t<p>\n\t\t$0\n\t</p>\n</conclusion>",
     "description": "conclusion of a division"
   },
-  "0 p (paragraph)": {
+  "0 p": {
     "prefix": "<p>",
     "body": "<p>\n\t$0\n</p>",
     "description": "paragraph"
+  },
+  "<?xml... top of document": {
+    "prefix": "<?xml...>",
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+    "description": "XML declaration"
+  },
+  "xinclude": {
+    "prefix": "<xi:xinclude>",
+    "body": "<xi:include href=\"$1\" />$0",
+    "description": "XInclude"
   }
 }
   

@@ -42,7 +42,7 @@
   "xinclude namespace": {
     "prefix": "@xmlns:xi",
     "body": "xmlns:xi=\"http://www.w3.org/2001/XInclude\"",
-    "description": "xinclud namespace: add to top division of xinclud-ed file."
+    "description": "xinclude namespace: add to top division of xinclude-ed file."
   },
   "xml:id": {
     "prefix": "@xml:id",
@@ -56,6 +56,27 @@
   },
   "pause": {
     "prefix": "@pause",
-    "body": "pause=\"yes\""
+    "body": "pause=\"yes\"",
+    "description": "pause attribute, for slides"
+  },
+  "correct": {
+    "prefix": "@correct",
+    "body": "correct=\"${1|yes,no|}\"$0",
+    "description": "correct attribute, for exercises"
+  },
+  "randomized": {
+    "prefix": "@randomized",
+    "body": "randomized=\"${1|yes,no|}\"$0",
+    "description": "randomized attribute, for exercises"
+  },
+  "multiple-correct": {
+    "prefix": "@multiple-correct",
+    "body": "multiple-correct=\"${1|yes,no|}\"$0",
+    "description": "multiple-correct attribute, for choices"
+  },
+  "order": {
+    "prefix": "@order",
+    "body": "order=\"$1\"$0",
+    "description": "order attribute, for exercises"
   }
 }
