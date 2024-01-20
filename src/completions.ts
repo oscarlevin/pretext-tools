@@ -40,7 +40,8 @@ function getCurrentTag(
 type Snippet = {
   prefix: string;
   body: string;
-  description: string;
+  description?: string;
+  sortText?: string;
 };
 
 type Snippets = {

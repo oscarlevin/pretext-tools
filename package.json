@@ -3,7 +3,6 @@
   "displayName": "PreTeXt-tools",
   "description": "Language support and more for PreTeXt",
   "version": "0.15.0",
-  "version": "0.15.0",
   "license": "See license in LICENSE",
   "icon": "logo.png",
   "publisher": "oscarlevin",
@@ -58,10 +57,6 @@
       {
         "language": "pretext",
         "path": "./snippets/pretext-inline.json"
-      },
-      {
-        "language": "pretext",
-        "path": "./snippets/pretext-list-like.json"
       },
       {
         "language": "pretext",
@@ -180,7 +175,7 @@
       },
       {
         "command": "pretext-tools.test",
-        "title": "development experiment",
+        "title": "development experiments",
         "category": "PreTeXt"
       }
     ],
@@ -192,7 +187,7 @@
     "configurationDefaults": {
       "xml.fileAssociations": [
         {
-          "pattern": "**/source/**.ptx",
+          "pattern": "**/source/**.ptxx",
           "systemId": "https://raw.githubusercontent.com/PreTeXtBook/pretext/master/schema/pretext.rng"
         }
       ],
