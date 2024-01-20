@@ -54,6 +54,16 @@
     "body": "label=\"$1\"$0",
     "description": "label attribute, for naming."
   },
+  "xml:id": {
+    "prefix": "@xml:id",
+    "body": "xml:id=\"$1\"$0",
+    "description": "xml:id attribute, for references."
+  },
+  "label": {
+    "prefix": "@label",
+    "body": "label=\"$1\"$0",
+    "description": "label attribute, for naming."
+  },
   "pause": {
     "prefix": "@pause",
     "body": "pause=\"yes\"",
