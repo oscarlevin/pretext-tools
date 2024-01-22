@@ -8,12 +8,14 @@ A Visual Studio Code extension to make writing PreTeXt documents easier.
 ## Features
 
 - Defines the PreTeXt language, automatically selecting it for `.ptx` files.
-- Syntax highlighting and indentation based on XML, plus some additions like recognizing math as LaTeX and "hiding" permid attributes as comments.
+- Syntax highlighting and indentation based on XML, plus some additions like recognizing math as LaTeX.
 - Schema support via the [vscode-xml](https://github.com/redhat-developer/vscode-xml) extension (which also provides many xml tools).
 - A large collection of snippets for most PreTeXt elements.
 - A front-end for the [PreTeXt-CLI](https://github.com/PreTeXtBook/pretext-cli), with commands available through a menu in the side explorere, the command pallet (Ctrl+Shift+P), and keyboard shortcuts (Ctrl-Alt-B to build, Ctrl-Alt-V to view, etc.).
-- Support for the Live Preview and CodeChat extensions to view output, as well as via the PreTeXt-CLI.
+- Support for the CodeChat extension to view output, as well as via the PreTeXt-CLI.
 - Use pandoc to convert almost any file format to PreTeXt.
+- Convert small passages ofLaTeX to PreTeXt (experimental).
+- Formatter specific to PreTeXt (experimental).
 
 ## Usage
 
@@ -30,7 +32,7 @@ Having a document identified as a PreTeXt document will give you:
 
 ### Snippets
 
-PreTeXt has a lot of markup to describe the structure of the document. To vastly speed up the authoring of the documents, the extension provides _snippets_ for almost all of the supported tags and attributes of PreTeXt. As you type, if you start typing a tag, such as `<example>`, autocomplete will pop up a menu at your cursor suggesting this tag. If you hit ENTER (or if configured, TAB), then the snippet will expand and put your cursor in the right spot to start typing the statement of the example.
+PreTeXt has a lot of markup to describe the structure of the document. To vastly speed up the authoring of the documents, the extension provides autocomplete _snippets_ for almost all of the supported tags and attributes of PreTeXt. As you type, if you start typing a tag, such as `<example>`, autocomplete will pop up a menu at your cursor suggesting this tag. If you hit ENTER (or if configured, TAB), then the snippet will expand and put your cursor in the right spot to start typing the statement of the example.
 
 ![animation showing snippets](assets/snippets.gif "snippet example")
 
@@ -47,7 +49,7 @@ To see a complete list of available snippets, hit Ctrl+Space.
 Here are some options that I find make snippets more useful. For each of these, open settings in VS code and search for them.
 
 - Emmet: Excluded Languages. I exclude PreTeXt Emmet for PreTeXt, since the snippets behave better.
-- Editor: Snippets Suggestions. I set this to "top" so that the snippets are shown before other autocomplete suggestions.
+- Editor: Snippets Suggestions. I set this to "bottom" so that the snippets are shown after other autocomplete suggestions.
 - Editor: Tab Completion. I set this to "only snippets" so that I can hit TAB or ENTER to select the snippet.
 - If you get too many snippet suggestions, experiment with the quick-suggest and completion settings. Please contribute suggestions on the best configuration if you find something that works well.
 
@@ -61,7 +63,13 @@ In particular, if you are working with multiple projects in the same window, you
 
 All this assumes you that have the PreTeXt-CLI installed. The extension will try to install this for you if not, but that still requires Python 3.8.5 or later, and PIP to be installed. If you don't have that yet, see the [PreTeXt documentation](https://pretextbook.org/doc/guide/html/quickstart-getting-pretext.html).
 
+### Formatting
+
+Using the command pallet, you can request to "Format Document With..." and select "pretext-tools" as the formatter.  You can also set this as the default from that menu.  In settings, you can specify to "Split Sentences" which will take long paragraphs and start new lines after each period.  Consider setting "Format on Save" to keep your document nicely formatted always.
+
 ### Converting to PreTeXt
+
+You can convert selected LaTeX to PreTeXt using the `PreTeXt: Convert LaTeX to PreTeXt` command from the command pallet. This is experimental, and will not work for all LaTeX. It is also not guaranteed to produce valid PreTeXt, but it should get you close.
 
 If you have pandoc installed, you can convert almost any format of document to pretext using the `PreTeXt: Convert To PreText` command from the command pallet.
 
