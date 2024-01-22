@@ -29,7 +29,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
-          npm install -g vsce
+          npm install -g @vscode/vsce
           npm install -g ovsx
 
       - name: Set up git user
