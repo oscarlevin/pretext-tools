@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.15.1] - 2024-01-21
+
 ### Changed
 
 - Scan for reference labels starting at the main source file and following xi:included links.
