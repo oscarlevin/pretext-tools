@@ -13,6 +13,7 @@ import { activateCompletions } from "./completions";
 
 // Set up types:
 type LabelArray = [string, string, string][];
+
 // Set up vscode elements
 export let _context: vscode.ExtensionContext;
 let pretextOutputChannel: vscode.OutputChannel;
@@ -22,7 +23,6 @@ var lastTarget = "";
 let pretextCommandList = ptxCommandList;
 
 export let labels: LabelArray = [];
-
 
 // The main function to run pretext commands:
 async function runPretext(
@@ -165,12 +165,15 @@ async function runThenOpen(
 export async function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
 
-
   ///////////////// General Setup //////////////////////
   _context = context;
 
   // Set schema for pretext files:
-  utils.setSchema();
+  try {
+    utils.setSchema();
+  } catch {
+    console.log("Error setting schema");
+  }
 
   // Set up vscode elements
   pretextOutputChannel = vscode.window.createOutputChannel(
@@ -178,6 +181,7 @@ export async function activate(context: vscode.ExtensionContext) {
     "log"
   );
 
+  // set up status bar item
   // set up status bar item
   ptxSBItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
@@ -207,31 +211,42 @@ export async function activate(context: vscode.ExtensionContext) {
       })
   );
 
-
   ///////////////// Formatter //////////////////////
 
-  let formatter = vscode.languages.registerDocumentFormattingEditProvider(
-    "pretext",
-    {
-      provideDocumentFormattingEdits(
-        document: vscode.TextDocument
-      ): vscode.TextEdit[] {
-        return formatPTX(document);
-      },
-    }
-  );
+  try {
+    let formatter = vscode.languages.registerDocumentFormattingEditProvider(
+      "pretext",
+      {
+        provideDocumentFormattingEdits(
+          document: vscode.TextDocument
+        ): vscode.TextEdit[] {
+          return formatPTX(document);
+        },
+      }
+    );
 
-  context.subscriptions.push(formatter);
+    context.subscriptions.push(formatter);
+  } catch {
+    console.log("Error setting up formatter");
+  }
 
   ///////////////// Completion Items //////////////////////
-  labels = await utils.getReferences();
+  labels = [];
+  try {
+    labels = await utils.getReferences();
+  } catch {
+    console.log("Error getting references");
+  }
 
-  activateCompletions(context);
+  try {
+    activateCompletions(context);
+  } catch {
+    console.log("Error setting up completions");
+  }
 
   vscode.workspace.onDidSaveTextDocument(async (document) => {
     labels = await utils.updateReferences(document, labels);
   });
-
   ///////////////// Commands //////////////////////
 
   context.subscriptions.push(
