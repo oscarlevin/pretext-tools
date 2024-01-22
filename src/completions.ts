@@ -60,11 +60,17 @@ async function getSnippetCompletionItems(
   let completionItems: vscode.CompletionItem[] = [];
   for (let [key, value] of Object.entries(snippets)) {
     if (trigger === "@") {
-      if (node in elementChildren && !elementChildren[node].attributes.includes(value.prefix.slice(1))) {
+      if (
+        node in elementChildren &&
+        !elementChildren[node].attributes.includes(value.prefix.slice(1))
+      ) {
         continue;
       }
     } else if (trigger === "<") {
-      if (node in elementChildren && !elementChildren[node].elements.includes(value.prefix.slice(1, -1))) {
+      if (
+        node in elementChildren &&
+        !elementChildren[node].elements.includes(value.prefix.slice(1, -1))
+      ) {
         continue;
       }
     }
@@ -83,7 +89,7 @@ async function getSnippetCompletionItems(
     snippetCompletion.insertText = new vscode.SnippetString(value.body);
     snippetCompletion.documentation = value.description;
     snippetCompletion.detail = value.description;
-    snippetCompletion.sortText = value.sort ? value.sort+key : key;
+    snippetCompletion.sortText = value.sort ? value.sort + key : key;
     snippetCompletion.filterText = value.prefix;
     completionItems.push(snippetCompletion);
   }
@@ -135,14 +141,17 @@ async function elementCompletions(
 ) {
   // First check the length of the current line and whether the previous line is an plain <p> tag.  If the current line is not empty, or it is but the previous started a <p> we show inline completions.  Otherwise we show element/block completions.
   const currentLineLength = document.lineAt(position.line).text.trim().length;
-  const prevLineP = document.lineAt(position.line-1).text.trim() === "<p>";
+  const prevLineP = document.lineAt(position.line - 1).text.trim() === "<p>";
   let elementSnippets: Snippets;
   if (currentLineLength > 1) {
     elementSnippets = readJsonFile("snippets/pretext-inline.json");
   } else {
     elementSnippets = readJsonFile("snippets/pretext-elements.json");
     if (prevLineP) {
-      elementSnippets = {...elementSnippets ,...readJsonFile("snippets/pretext-inline.json")};
+      elementSnippets = {
+        ...elementSnippets,
+        ...readJsonFile("snippets/pretext-inline.json"),
+      };
     }
   }
   console.log("elementSnippets: ", elementSnippets);
@@ -156,8 +165,6 @@ async function elementCompletions(
     "<"
   );
   return elementCompletionItems;
-
-
 }
 
 // async function inlineCompletions(
@@ -244,7 +251,7 @@ export function activateCompletions(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     elementProvider,
     attributeProvider,
-    refProvider,
+    refProvider
     // inlineProvider
   );
   console.log("Activated completion provider");
