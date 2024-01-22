@@ -116,7 +116,6 @@
     "body": "<term>${1:$TM_SELECTED_TEXT}</term>$0",
     "description": "term (for defined terms)",
     "sort": "0"
-
   },
   "abbreviations": {
     "prefix": "<abbr>",
@@ -199,4 +198,3 @@
     "description": "fillin"
   }
 }
-

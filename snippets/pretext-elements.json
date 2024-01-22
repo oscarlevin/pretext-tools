@@ -36,8 +36,7 @@
   },
   "algorithm (theorem-like)": {
     "prefix": "<algorithm>",
-    "body": 
-      "<algorithm xml:id=\"alg-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</algorithm>",
+    "body": "<algorithm xml:id=\"alg-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</algorithm>",
     "description": "algorithm (theorem-like)."
   },
   "claim (theorem-like)": {
@@ -316,7 +315,7 @@
   "choice": {
     "prefix": "<choice>",
     "body": "<choice>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</choice>",
-    "description": "Choice for multiple choice question." 
+    "description": "Choice for multiple choice question."
   },
   "feedback": {
     "prefix": "<feedback>",
@@ -491,7 +490,6 @@
   "ul": {
     "prefix": "<ul>",
     "body": "<ul>\n\t<li>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</li>\n</ul>"
-
   },
   "li": {
     "prefix": "<li>",
@@ -516,4 +514,3 @@
     "description": "creator, for use in axiom-like."
   }
 }
-  
