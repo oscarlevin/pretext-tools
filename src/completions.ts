@@ -42,6 +42,7 @@ type Snippet = {
   body: string;
   description?: string;
   sort?: string;
+  retrigger?: boolean;
 };
 
 type Snippets = {
@@ -91,6 +92,12 @@ async function getSnippetCompletionItems(
     snippetCompletion.detail = value.description;
     snippetCompletion.sortText = value.sort ? value.sort + key : key;
     snippetCompletion.filterText = value.prefix;
+    if (value.retrigger) {
+      snippetCompletion.command = {
+        title: "Suggest",
+        command: "editor.action.triggerSuggest",
+      };
+    }
     completionItems.push(snippetCompletion);
   }
   return completionItems;
@@ -105,6 +112,13 @@ async function attributeCompletions(
   token: vscode.CancellationToken,
   context: vscode.CompletionContext
 ) {
+  // First, stop completions if the previous character is a double quote.
+  const charBefore = document.getText(
+    new vscode.Range(position.translate(0, -1), position)
+  );
+  if (charBefore === '"') {
+    return undefined;
+  }
   const attributeSnippets = readJsonFile("snippets/pretext-attributes.json");
   const linePrefix = document
     .lineAt(position.line)
@@ -139,11 +153,18 @@ async function elementCompletions(
   token: vscode.CancellationToken,
   context: vscode.CompletionContext
 ) {
-  // First check the length of the current line and whether the previous line is an plain <p> tag.  If the current line is not empty, or it is but the previous started a <p> we show inline completions.  Otherwise we show element/block completions.
-  const currentLineLength = document.lineAt(position.line).text.trim().length;
+  // First, stop completions if the previous character is a double quote.
+  const charBefore = document.getText(
+    new vscode.Range(position.translate(0, -1), position)
+  );
+  if (charBefore === '"') {
+    return undefined;
+  }
+  // Now check the length of the current line and whether the previous line is an plain <p> tag.  If the current line is not empty, or it is but the previous started a <p> we show inline completions.  Otherwise we show element/block completions.
+  const currentLine = document.lineAt(position.line).text.trim();
   const prevLineP = document.lineAt(position.line - 1).text.trim() === "<p>";
   let elementSnippets: Snippets;
-  if (currentLineLength > 1) {
+  if (currentLine.length > 1) {
     elementSnippets = readJsonFile("snippets/pretext-inline.json");
   } else {
     elementSnippets = readJsonFile("snippets/pretext-elements.json");

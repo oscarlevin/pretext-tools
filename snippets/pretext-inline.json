@@ -48,7 +48,8 @@
   "reference": {
     "prefix": "<xref>",
     "body": "<xref ref=\"$1\"/>$0",
-    "description": "reference"
+    "description": "reference",
+    "retrigger": true
   },
   "reference (first-last)": {
     "prefix": "<xref first last>",
