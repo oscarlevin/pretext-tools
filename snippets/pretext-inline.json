@@ -16,6 +16,11 @@
     "body": "<c>${1:$TM_SELECTED_TEXT}</c>$0",
     "description": "code"
   },
+  "cell": {
+    "prefix": "<cell>",
+    "body": "<cell>$1</cell>$0",
+    "description": "cell (of row in tabular)"
+  },
   "&lt;": {
     "prefix": "&lt;",
     "body": "&lt;",

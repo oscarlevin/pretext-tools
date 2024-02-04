@@ -31,9 +31,6 @@ function getCurrentTag(
   const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map((tag) =>
     tag.slice(2)
   );
-  console.log("All Tags: ", allTags);
-  console.log("Opened Tags: ", openedTags);
-  console.log("Closed Tags: ", closedTags);
 
   // Now walk through list of all tags, creating a stack of open tags and removing closed tags from the stack.
   let openTagStack: string[] = [];
@@ -49,7 +46,6 @@ function getCurrentTag(
       openTagStack.push(tag);
     }
   }
-  console.log("Open Tag Stack: ", openTagStack);
 
   const currentTag = openTagStack.pop();
   console.log("Current XML Element: ", currentTag);

@@ -224,7 +224,7 @@
     "description": "answer"
   },
   "webwork server": {
-    "prefix": "<webwork>",
+    "prefix": "<webwork source=\"\" />",
     "body": "<webwork source=\"$1\" />$0",
     "description": "WeBWorK (from server)",
     "sort": "0"
@@ -241,7 +241,7 @@
   },
   "table": {
     "prefix": "<table>",
-    "body": "<table>\n\t<title>$1</title>\n\t<tabular>\n\t\t<row>\n      <cell>$2</cell>$0\n\t\t</row>\n\t</tabular>\n</table>",
+    "body": "<table>\n\t<title>$1</title>\n\t<tabular>\n\t\t<row>\n\t\t\t<cell>$2</cell>$0\n\t\t</row>\n\t</tabular>\n</table>",
     "description": "table"
   },
   "tabular": {
@@ -266,12 +266,12 @@
   },
   "image (not external)": {
     "prefix": "<image>",
-    "body": "<image xml:id=\"$1\">\n\t<description>$2</description>\n\t$0\n</image>",
+    "body": "<image xml:id=\"$1\">\n\t<shortdescription>$2</shortdescription>\n\t$0\n</image>",
     "description": "image (not external)"
   },
   "image (external)": {
     "prefix": "<image>",
-    "body": "<image source=\"${1:path (no extension)}\" width=\"$2%\">\n\t<description>${0:(for accessibility)}</description>\n</image>",
+    "body": "<image source=\"${1:path (no extension)}\">\n\t<shortdescription>${0:(for accessibility)}</shortdescription>\n</image>",
     "description": "image (external)"
   },
   "latex-image": {
@@ -281,8 +281,13 @@
   },
   "description": {
     "prefix": "<description>",
-    "body": "<description>$1</description>$0",
-    "description": "for inside images, produces alt-text"
+    "body": "<description>\n\t<p>$1\n\t</p>\n</description>$0",
+    "description": "long description for images"
+  },
+  "shortdescription": {
+    "prefix": "<shortdescription>",
+    "body": "<shortdescription>$1</shortdescription>$0",
+    "description": "alt-text short description for images"
   },
   "caption": {
     "prefix": "<caption>",
@@ -419,7 +424,7 @@
     "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
     "description": "XML declaration"
   },
-  "xi:xinclude": {
+  "xi:include": {
     "prefix": "<xi:xinclude>",
     "body": "<xi:include href=\"$1\" />$0",
     "description": "XInclude"
@@ -522,5 +527,10 @@
     "prefix": "<creator>",
     "body": "<creator>$1</creator>$0",
     "description": "creator, for use in axiom-like."
+  },
+  "blockquote": {
+    "prefix": "<blockquote>",
+    "body": "<blockquote>\n\t<p>\n\t\t$0\n\t</p>\n</blockquote>",
+    "description": "blockquote"
   }
 }

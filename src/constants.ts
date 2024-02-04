@@ -154,13 +154,7 @@ const gpAxiom = [
 
 const gpExample = ["example", "question", "problem"];
 
-const gpProject = [
-  "exercise",
-  "activity",
-  "investigation",
-  "exploration",
-  "project",
-];
+const gpProject = ["activity", "investigation", "exploration", "project"];
 
 const gpCharacter = [
   "nbsp",
@@ -306,7 +300,6 @@ const blockText = [
   "blockquote",
   "pre",
   "image",
-  "image",
   "video",
   "program",
   "console",
@@ -320,6 +313,7 @@ const blockStatement = [
   "sidebyside",
   "sbsgroup",
   "sage",
+  "xi:include",
 ];
 
 const blockSolution = [...blockStatement, "proof"];
@@ -378,9 +372,7 @@ const mdTitle = ["title", "idx"];
 const mdLinedTitle = [...titles, "idx"];
 
 // Attributes
-const id = ["xml:id"];
-
-const idl = ["xml:id", "label"];
+const id = ["xml:id", "label"];
 
 const atSidebyside = ["margins", "width", "widths", "valign", "valigns"];
 
@@ -410,9 +402,17 @@ export const elementChildren: PtxElement = {
       "backmatter",
     ],
   },
+  case: {
+    attributes: ["direction"],
+    elements: [...blockStatement, ...mdTitle],
+  },
   cd: {
     attributes: [],
     elements: ["cline"],
+  },
+  cell: {
+    attributes: ["halign", "bottom", "right", "colspan"],
+    elements: [...textParagraph, ...textLong],
   },
   chapter: {
     attributes: id,
@@ -424,6 +424,7 @@ export const elementChildren: PtxElement = {
       ...endSections,
       "introduction",
       "section",
+      "worksheet",
     ],
   },
   choice: {
@@ -433,6 +434,10 @@ export const elementChildren: PtxElement = {
   choices: {
     attributes: ["multiple-correct", "randomize"],
     elements: ["choice"],
+  },
+  col: {
+    attributes: ["right", "top", "halign", "width"],
+    elements: [],
   },
   console: {
     attributes: ["prompt", "width", "margins"],
@@ -447,7 +452,7 @@ export const elementChildren: PtxElement = {
     elements: ["li-dl"],
   },
   exercise: {
-    attributes: [...idl, "number", "workspace"],
+    attributes: [...id, "number", "workspace"],
     elements: [...exerciseBody, "feedback"],
   },
   exercises: {
@@ -483,7 +488,7 @@ export const elementChildren: PtxElement = {
       "decorative",
       "pg-name",
     ],
-    elements: ["latex-image", "description", "short-description"],
+    elements: ["latex-image", "description", "shortdescription"],
   },
   input: {
     attributes: ["prompt"],
@@ -505,9 +510,17 @@ export const elementChildren: PtxElement = {
     attributes: [],
     elements: ["match"],
   },
+  objectives: {
+    attributes: id,
+    elements: ["idx", "introduction", "conclusion", "ol", "ul", "dl"],
+  },
   ol: {
     attributes: ["cols", "marker"],
     elements: ["li"],
+  },
+  outcomes: {
+    attributes: id,
+    elements: ["idx", "introduction", "conclusion", "ol", "ul", "dl"],
   },
   p: {
     attributes: id,
@@ -549,6 +562,10 @@ export const elementChildren: PtxElement = {
     attributes: id,
     elements: [...mdTitle, "introduction", "exercise", "conclusion"],
   },
+  row: {
+    attributes: ["header", "halign", "valign", "bottom", "left"],
+    elements: ["cell"],
+  },
   sbsgroup: {
     attributes: ["margins", "width", "widths", "valign", "valigns"],
     elements: [],
@@ -563,7 +580,12 @@ export const elementChildren: PtxElement = {
       ...endSections,
       "introduction",
       "subsection",
+      "worksheet",
     ],
+  },
+  shortdescription: {
+    attributes: [],
+    elements: ["var"],
   },
   sidebyside: {
     attributes: atSidebyside,
@@ -603,6 +625,7 @@ export const elementChildren: PtxElement = {
       ...endSections,
       "introduction",
       "subsubsection",
+      "worksheet",
     ],
   },
   subsubsection: {
@@ -614,6 +637,7 @@ export const elementChildren: PtxElement = {
       "paragraphs",
       ...endSections,
       "introduction",
+      "worksheet",
     ],
   },
   tabular: {
@@ -723,12 +747,9 @@ export const elementChildren: PtxElement = {
 // dictionary of pretext elements and their legal attributes
 export const elementAttributes: { [key: string]: string[] } = {
   cd: ["latexsep"],
-  case: ["direction"],
+
   sbsgroup: ["margins", "width", "widths", "valigns"],
   sageplot: ["variant", "aspect"],
-  cell: ["halign", "bottom", "right", "colspan"],
-  row: ["header", "halign", "valign", "bottom", "left"],
-  col: ["right", "top", "halign", "width"],
   sage: ["doctest", "tolerance", "auto-evaluate", "language", "type"],
   score: ["musescoreuser", "musescore"],
 
