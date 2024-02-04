@@ -185,6 +185,8 @@
       }
     ],
     "configurationDefaults": {
+      "editor.suggest.showValues": false,
+      "editor.suggest.showProperties": false,
       "xml.fileAssociations": [
         {
           "pattern": "**/source/**.ptx",

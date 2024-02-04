@@ -57,7 +57,6 @@ async function getSnippetCompletionItems(
   position: vscode.Position,
   trigger: string
 ): Promise<vscode.CompletionItem[]> {
-  // console.log("getSnippetCompletionItems");
   let completionItems: vscode.CompletionItem[] = [];
   for (let [key, value] of Object.entries(snippets)) {
     if (trigger === "@") {
@@ -175,11 +174,10 @@ async function elementCompletions(
       };
     }
   }
-  console.log("elementSnippets: ", elementSnippets);
   const currentTag = getCurrentTag(document, position);
   const elementCompletionItems = getSnippetCompletionItems(
     elementSnippets,
-    vscode.CompletionItemKind.Keyword,
+    vscode.CompletionItemKind.Class,
     currentTag,
     document,
     position,
