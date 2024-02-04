@@ -17,28 +17,41 @@ function readJsonFile(relativePath: string): any {
 function getCurrentTag(
   document: vscode.TextDocument,
   position: vscode.Position
-) {
+): string | undefined {
   const textUntilPosition = document?.getText(
     new vscode.Range(new vscode.Position(0, 0), position)
   );
+  // Get all open and close tags from the text until the current position.
+  const allTags = (
+    textUntilPosition?.match(/<(\w)+(?![^>]*\/>)|<\/\w+/g) || []
+  ).map((tag) => tag.slice(1));
   const openedTags = (
     textUntilPosition?.match(/<(\w)+(?![^>]*\/>)/g) || []
   ).map((tag) => tag.slice(1));
   const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map((tag) =>
     tag.slice(2)
   );
+  console.log("All Tags: ", allTags);
+  console.log("Opened Tags: ", openedTags);
+  console.log("Closed Tags: ", closedTags);
 
-  // Cycle through list of closed tags and remove each from the end of the list of open tags.
-  // What is left will be the unclosed tags, the last of which will be our current element.
-  while (closedTags.length > 0) {
-    const lastClosedTag = closedTags.pop() || "";
-    const index = openedTags.lastIndexOf(lastClosedTag);
-    if (index > -1) {
-      openedTags.splice(index, 1);
+  // Now walk through list of all tags, creating a stack of open tags and removing closed tags from the stack.
+  let openTagStack: string[] = [];
+  for (let tag of allTags) {
+    if (tag.startsWith("/")) {
+      const lastOpenTag = openTagStack.pop();
+      if (lastOpenTag !== tag.slice(1)) {
+        console.error(
+          `Error: Found closing tag ${tag} without matching opening tag.`
+        );
+      }
+    } else {
+      openTagStack.push(tag);
     }
   }
-  const unclosedTags = openedTags;
-  const currentTag = unclosedTags[unclosedTags.length - 1];
+  console.log("Open Tag Stack: ", openTagStack);
+
+  const currentTag = openTagStack.pop();
   console.log("Current XML Element: ", currentTag);
   return currentTag;
 }
@@ -58,26 +71,28 @@ type Snippets = {
 async function getSnippetCompletionItems(
   snippets: Snippets,
   kind: vscode.CompletionItemKind,
-  node: string,
+  node: string | undefined,
   document: vscode.TextDocument,
   position: vscode.Position,
   trigger: string
 ): Promise<vscode.CompletionItem[]> {
   let completionItems: vscode.CompletionItem[] = [];
   for (let [key, value] of Object.entries(snippets)) {
-    if (trigger === "@") {
-      if (
-        node in elementChildren &&
-        !elementChildren[node].attributes.includes(value.prefix.slice(1))
-      ) {
-        continue;
-      }
-    } else if (trigger === "<") {
-      if (
-        node in elementChildren &&
-        !elementChildren[node].elements.includes(value.prefix.slice(1, -1))
-      ) {
-        continue;
+    if (node) {
+      if (trigger === "@") {
+        if (
+          node in elementChildren &&
+          !elementChildren[node].attributes.includes(key.split(" ")[0])
+        ) {
+          continue;
+        }
+      } else if (trigger === "<") {
+        if (
+          node in elementChildren &&
+          !elementChildren[node].elements.includes(key.split(" ")[0])
+        ) {
+          continue;
+        }
       }
     }
     const snippetCompletion = new vscode.CompletionItem(value.prefix, kind);

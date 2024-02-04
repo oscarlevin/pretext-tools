@@ -334,7 +334,7 @@ const exerciseBody = [
   "conclusion",
   "task",
   "webwork",
-  "response/",
+  "response",
   "choices",
   "blocks",
   "matches",
@@ -444,7 +444,7 @@ export const elementChildren: PtxElement = {
   },
   dl: {
     attributes: [...id, "width"],
-    elements: ["title", "li"],
+    elements: ["li-dl"],
   },
   exercise: {
     attributes: [...idl, "number", "workspace"],
