@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Changed
+
+- Remove vscode-xml's cross reference suggestions in favor of pretext-tools version.
+- Set default workspace settings to hide "properties" completion type so that duplicate suggestions from vscode-xml don't show.
+- Added and improved the scope settings for many snippets.
+
+### Fixed
+
+- Bug that incorrectly identified the current open tag for snippet suggestions
+
 ## [0.15.1] - 2024-01-21
 
 ### Changed
