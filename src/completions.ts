@@ -27,11 +27,17 @@ function getCurrentTag(
   const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map((tag) =>
     tag.slice(2)
   );
-  const unclosedTags = openedTags.filter(
-    (tag) =>
-      openedTags.filter((x) => x === tag).length >
-      closedTags.filter((x) => x === tag).length
-  );
+
+  // Cycle through list of closed tags and remove each from the end of the list of open tags.
+  // What is left will be the unclosed tags, the last of which will be our current element.
+  while (closedTags.length > 0) {
+    const lastClosedTag = closedTags.pop() || "";
+    const index = openedTags.lastIndexOf(lastClosedTag);
+    if (index > -1) {
+      openedTags.splice(index, 1);
+    }
+  }
+  const unclosedTags = openedTags;
   const currentTag = unclosedTags[unclosedTags.length - 1];
   console.log("Current XML Element: ", currentTag);
   return currentTag;
