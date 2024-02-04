@@ -129,7 +129,7 @@ async function attributeCompletions(
   const element = match[0].slice(1, match[0].indexOf(" "));
   const attributeCompletionItems = getSnippetCompletionItems(
     attributeSnippets,
-    vscode.CompletionItemKind.Keyword,
+    vscode.CompletionItemKind.Enum,
     element,
     document,
     position,
@@ -185,29 +185,6 @@ async function elementCompletions(
   );
   return elementCompletionItems;
 }
-
-// async function inlineCompletions(
-//   document: vscode.TextDocument,
-//   position: vscode.Position,
-//   token: vscode.CancellationToken,
-//   context: vscode.CompletionContext
-// ) {
-//   const inlineSnippets = readJsonFile("snippets/pretext-inline.json");
-//   // Condition under which to not provide completions
-//   const lineEmpty = document.lineAt(position.line).text.trim().length <= 1;
-//   if (lineEmpty) {
-//     return undefined;
-//   }
-//   const inlineCompletionItems = getSnippetCompletionItems(
-//     inlineSnippets,
-//     vscode.CompletionItemKind.Keyword,
-//     " ",
-//     document,
-//     position,
-//     "<"
-//   );
-//   return inlineCompletionItems;
-// }
 
 async function refCompletions(
   document: vscode.TextDocument,

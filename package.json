@@ -185,23 +185,11 @@
       }
     ],
     "configurationDefaults": {
-      "editor.suggest.showValues": false,
       "editor.suggest.showProperties": false,
       "xml.fileAssociations": [
         {
           "pattern": "**/source/**.ptx",
           "systemId": "https://raw.githubusercontent.com/PreTeXtBook/pretext/master/schema/pretext.rng"
-        }
-      ],
-      "xml.references": [
-        {
-          "pattern": "**/source/**.ptx",
-          "expressions": [
-            {
-              "from": "xref/@ref",
-              "to": "@xml:id"
-            }
-          ]
         }
       ],
       "xml.validation.xInclude.enabled": true
