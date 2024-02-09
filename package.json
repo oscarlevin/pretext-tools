@@ -224,18 +224,25 @@
             "default": true,
             "markdownDescription": "Whether pretext-tools should try to use pip to install PreTeXt if it cannot find it."
           },
-          "pretext-tools.schemaVersion": {
+          "pretext-tools.schema.Version": {
             "type": "string",
             "default": "Stable",
             "enum": [
               "Stable",
-              "Experimental"
+              "Experimental",
+              "Custom"
             ],
             "markdownEnumDescriptions": [
               "Use the stable schema matching your installed version of PreTeXt (default).",
-              "Use the experimental/development schema matching your installed version of PreTeXt."
+              "Use the experimental/development schema matching your installed version of PreTeXt.",
+              "Use a custom schema file, which you can set using the `pretext-tools.customSchemaPath` setting."
             ],
             "markdownDescription": "Select the version of the PreTeXt schema to validate against.  If you are using newer features, you might try to experimental schema, which isn't as stable, but will give you fewer warnings.  *Reload your workspace for these changes to take effect.*"
+          },
+          "pretext-tools.schema.customPath": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Provide a path to your custom schema file.  This will override the schema version setting.  *Reload your workspace for these changes to take effect.*"
           }
         }
       }

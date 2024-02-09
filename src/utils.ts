@@ -223,29 +223,33 @@ function getTargets() {
   }
 }
 
-function setSchema(schemaPath: string = "") {
+function setSchema() {
+  let schemaPath: string | undefined = vscode.workspace
+    .getConfiguration("pretext-tools")
+    .get("schema.customPath");
   if (schemaPath === "") {
     const userHomeDir: string = homedir();
     const schemaConfig = vscode.workspace
       .getConfiguration("pretext-tools")
-      .get("schemaVersion");
-    console.log(schemaConfig);
+      .get("schema.Version");
     switch (schemaConfig) {
       case "Stable":
-        var schemaPath = path.join(
-          userHomeDir,
-          ".ptx",
-          "schema",
-          "pretext.rng"
-        );
+        schemaPath = path.join(userHomeDir, ".ptx", "schema", "pretext.rng");
         break;
       case "Experimental":
-        var schemaPath = path.join(
+        schemaPath = path.join(
           userHomeDir,
           ".ptx",
           "schema",
           "pretext-dev.rng"
         );
+        break;
+      case "Custom":
+        console.log(
+          "Selected custom schema, but no path provided.  Setting to default."
+        );
+        schemaPath =
+          "https://raw.githubusercontent.com/PreTeXtBook/pretext/master/schema/pretext.rng";
         break;
     }
   }
