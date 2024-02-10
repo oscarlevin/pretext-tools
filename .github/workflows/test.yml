@@ -1,0 +1,20 @@
+name: Deploy Package
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: read version
+        run: |
+          version=$(jq '.version', package.json | tr -d '"')
+          echo "VERSION=$version" >> $GITHUB_ENV
+          echo "v${{ env.VERSION }}""
+
+
