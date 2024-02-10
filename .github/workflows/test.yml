@@ -13,8 +13,8 @@ jobs:
 
       - name: read version
         run: |
-          version=$(jq '.version', package.json | tr -d '"')
-          echo "VERSION=$version" >> $GITHUB_ENV
+          value=$(jq '.version' package.json | tr -d '"')
+          echo "VERSION=$value" >> $GITHUB_ENV
           echo "v${{ env.VERSION }}""
 
 
