@@ -168,13 +168,25 @@ export async function activate(context: vscode.ExtensionContext) {
   ///////////////// General Setup //////////////////////
   _context = context;
 
+  vscode.workspace.onDidChangeConfiguration((event) => {
+    let affected = event.affectsConfiguration("pretext-tools");
+    if (affected) {
+      console.log("PreTeXt Tools configuration changed");
+      // Set schema for pretext files:
+      try {
+        utils.setSchema();
+      } catch {
+        console.log("Error setting schema");
+      }
+    }
+  });
+
   // Set schema for pretext files:
   try {
     utils.setSchema();
   } catch {
     console.log("Error setting schema");
   }
-
   // Set up vscode elements
   pretextOutputChannel = vscode.window.createOutputChannel(
     "PreTeXt Tools",

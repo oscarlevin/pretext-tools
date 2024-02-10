@@ -17,22 +17,37 @@ function readJsonFile(relativePath: string): any {
 function getCurrentTag(
   document: vscode.TextDocument,
   position: vscode.Position
-) {
+): string | undefined {
   const textUntilPosition = document?.getText(
     new vscode.Range(new vscode.Position(0, 0), position)
   );
+  // Get all open and close tags from the text until the current position.
+  const allTags = (
+    textUntilPosition?.match(/<(\w)+(?![^>]*\/>)|<\/\w+/g) || []
+  ).map((tag) => tag.slice(1));
   const openedTags = (
     textUntilPosition?.match(/<(\w)+(?![^>]*\/>)/g) || []
   ).map((tag) => tag.slice(1));
   const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map((tag) =>
     tag.slice(2)
   );
-  const unclosedTags = openedTags.filter(
-    (tag) =>
-      openedTags.filter((x) => x === tag).length >
-      closedTags.filter((x) => x === tag).length
-  );
-  const currentTag = unclosedTags[unclosedTags.length - 1];
+
+  // Now walk through list of all tags, creating a stack of open tags and removing closed tags from the stack.
+  let openTagStack: string[] = [];
+  for (let tag of allTags) {
+    if (tag.startsWith("/")) {
+      const lastOpenTag = openTagStack.pop();
+      if (lastOpenTag !== tag.slice(1)) {
+        console.error(
+          `Error: Found closing tag ${tag} without matching opening tag.`
+        );
+      }
+    } else {
+      openTagStack.push(tag);
+    }
+  }
+
+  const currentTag = openTagStack.pop();
   console.log("Current XML Element: ", currentTag);
   return currentTag;
 }
@@ -42,6 +57,7 @@ type Snippet = {
   body: string;
   description?: string;
   sort?: string;
+  retrigger?: boolean;
 };
 
 type Snippets = {
@@ -51,27 +67,28 @@ type Snippets = {
 async function getSnippetCompletionItems(
   snippets: Snippets,
   kind: vscode.CompletionItemKind,
-  node: string,
+  node: string | undefined,
   document: vscode.TextDocument,
   position: vscode.Position,
   trigger: string
 ): Promise<vscode.CompletionItem[]> {
-  // console.log("getSnippetCompletionItems");
   let completionItems: vscode.CompletionItem[] = [];
   for (let [key, value] of Object.entries(snippets)) {
-    if (trigger === "@") {
-      if (
-        node in elementChildren &&
-        !elementChildren[node].attributes.includes(value.prefix.slice(1))
-      ) {
-        continue;
-      }
-    } else if (trigger === "<") {
-      if (
-        node in elementChildren &&
-        !elementChildren[node].elements.includes(value.prefix.slice(1, -1))
-      ) {
-        continue;
+    if (node) {
+      if (trigger === "@") {
+        if (
+          node in elementChildren &&
+          !elementChildren[node].attributes.includes(key.split(" ")[0])
+        ) {
+          continue;
+        }
+      } else if (trigger === "<") {
+        if (
+          node in elementChildren &&
+          !elementChildren[node].elements.includes(key.split(" ")[0])
+        ) {
+          continue;
+        }
       }
     }
     const snippetCompletion = new vscode.CompletionItem(value.prefix, kind);
@@ -91,6 +108,12 @@ async function getSnippetCompletionItems(
     snippetCompletion.detail = value.description;
     snippetCompletion.sortText = value.sort ? value.sort + key : key;
     snippetCompletion.filterText = value.prefix;
+    if (value.retrigger) {
+      snippetCompletion.command = {
+        title: "Suggest",
+        command: "editor.action.triggerSuggest",
+      };
+    }
     completionItems.push(snippetCompletion);
   }
   return completionItems;
@@ -105,6 +128,13 @@ async function attributeCompletions(
   token: vscode.CancellationToken,
   context: vscode.CompletionContext
 ) {
+  // First, stop completions if the previous character is a double quote.
+  const charBefore = document.getText(
+    new vscode.Range(position.translate(0, -1), position)
+  );
+  if (charBefore === '"') {
+    return undefined;
+  }
   const attributeSnippets = readJsonFile("snippets/pretext-attributes.json");
   const linePrefix = document
     .lineAt(position.line)
@@ -116,7 +146,7 @@ async function attributeCompletions(
   const element = match[0].slice(1, match[0].indexOf(" "));
   const attributeCompletionItems = getSnippetCompletionItems(
     attributeSnippets,
-    vscode.CompletionItemKind.Keyword,
+    vscode.CompletionItemKind.Enum,
     element,
     document,
     position,
@@ -139,11 +169,18 @@ async function elementCompletions(
   token: vscode.CancellationToken,
   context: vscode.CompletionContext
 ) {
-  // First check the length of the current line and whether the previous line is an plain <p> tag.  If the current line is not empty, or it is but the previous started a <p> we show inline completions.  Otherwise we show element/block completions.
-  const currentLineLength = document.lineAt(position.line).text.trim().length;
+  // First, stop completions if the previous character is a double quote.
+  const charBefore = document.getText(
+    new vscode.Range(position.translate(0, -1), position)
+  );
+  if (charBefore === '"') {
+    return undefined;
+  }
+  // Now check the length of the current line and whether the previous line is an plain <p> tag.  If the current line is not empty, or it is but the previous started a <p> we show inline completions.  Otherwise we show element/block completions.
+  const currentLine = document.lineAt(position.line).text.trim();
   const prevLineP = document.lineAt(position.line - 1).text.trim() === "<p>";
   let elementSnippets: Snippets;
-  if (currentLineLength > 1) {
+  if (currentLine.length > 1) {
     elementSnippets = readJsonFile("snippets/pretext-inline.json");
   } else {
     elementSnippets = readJsonFile("snippets/pretext-elements.json");
@@ -154,11 +191,10 @@ async function elementCompletions(
       };
     }
   }
-  console.log("elementSnippets: ", elementSnippets);
   const currentTag = getCurrentTag(document, position);
   const elementCompletionItems = getSnippetCompletionItems(
     elementSnippets,
-    vscode.CompletionItemKind.Keyword,
+    vscode.CompletionItemKind.Class,
     currentTag,
     document,
     position,
@@ -166,29 +202,6 @@ async function elementCompletions(
   );
   return elementCompletionItems;
 }
-
-// async function inlineCompletions(
-//   document: vscode.TextDocument,
-//   position: vscode.Position,
-//   token: vscode.CancellationToken,
-//   context: vscode.CompletionContext
-// ) {
-//   const inlineSnippets = readJsonFile("snippets/pretext-inline.json");
-//   // Condition under which to not provide completions
-//   const lineEmpty = document.lineAt(position.line).text.trim().length <= 1;
-//   if (lineEmpty) {
-//     return undefined;
-//   }
-//   const inlineCompletionItems = getSnippetCompletionItems(
-//     inlineSnippets,
-//     vscode.CompletionItemKind.Keyword,
-//     " ",
-//     document,
-//     position,
-//     "<"
-//   );
-//   return inlineCompletionItems;
-// }
 
 async function refCompletions(
   document: vscode.TextDocument,
@@ -200,21 +213,38 @@ async function refCompletions(
   const linePrefix = document
     .lineAt(position.line)
     .text.slice(0, position.character);
-  const match = linePrefix.match(/<xref ref=\"$/);
-  if (!match) {
-    return undefined;
-  }
   let completionItems: vscode.CompletionItem[] = [];
-  for (let [reference, parent] of labels) {
-    const refCompletion = new vscode.CompletionItem(
-      reference,
-      vscode.CompletionItemKind.Reference
-    );
-    refCompletion.insertText = new vscode.SnippetString(reference);
-    refCompletion.documentation = "(a " + parent + ")";
-    refCompletion.detail = "(reference to " + parent + ")";
-    refCompletion.sortText = "0" + reference;
-    completionItems.push(refCompletion);
+  if (linePrefix.match(/<xref ref=\"$/)) {
+    for (let [reference, parent] of labels) {
+      const refCompletion = new vscode.CompletionItem(
+        reference,
+        vscode.CompletionItemKind.Reference
+      );
+      refCompletion.insertText = new vscode.SnippetString(reference);
+      refCompletion.documentation = "(a " + parent + ")";
+      refCompletion.detail = "(reference to " + parent + ")";
+      refCompletion.sortText = "0" + reference;
+      completionItems.push(refCompletion);
+    }
+  } else if (linePrefix.match(/<xi:include href="$/)) {
+    const files = await vscode.workspace.findFiles("**/source/**");
+    // const currentFile = vscode.workspace.asRelativePath(document.fileName);
+    // console.log(currentFile);
+    // get relative paths:
+    for (let file of files) {
+      let relativePath = vscode.workspace
+        .asRelativePath(file)
+        .replace("source/", "");
+      console.log(relativePath);
+      const refCompletion = new vscode.CompletionItem(
+        relativePath,
+        vscode.CompletionItemKind.Reference
+      );
+      refCompletion.insertText = new vscode.SnippetString(relativePath);
+      completionItems.push(refCompletion);
+    }
+  } else {
+    return undefined;
   }
   return completionItems;
 }
