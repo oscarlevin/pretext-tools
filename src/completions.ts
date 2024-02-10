@@ -213,21 +213,38 @@ async function refCompletions(
   const linePrefix = document
     .lineAt(position.line)
     .text.slice(0, position.character);
-  const match = linePrefix.match(/<xref ref=\"$/);
-  if (!match) {
-    return undefined;
-  }
   let completionItems: vscode.CompletionItem[] = [];
-  for (let [reference, parent] of labels) {
-    const refCompletion = new vscode.CompletionItem(
-      reference,
-      vscode.CompletionItemKind.Reference
-    );
-    refCompletion.insertText = new vscode.SnippetString(reference);
-    refCompletion.documentation = "(a " + parent + ")";
-    refCompletion.detail = "(reference to " + parent + ")";
-    refCompletion.sortText = "0" + reference;
-    completionItems.push(refCompletion);
+  if (linePrefix.match(/<xref ref=\"$/)) {
+    for (let [reference, parent] of labels) {
+      const refCompletion = new vscode.CompletionItem(
+        reference,
+        vscode.CompletionItemKind.Reference
+      );
+      refCompletion.insertText = new vscode.SnippetString(reference);
+      refCompletion.documentation = "(a " + parent + ")";
+      refCompletion.detail = "(reference to " + parent + ")";
+      refCompletion.sortText = "0" + reference;
+      completionItems.push(refCompletion);
+    }
+  } else if (linePrefix.match(/<xi:include href="$/)) {
+    const files = await vscode.workspace.findFiles("**/source/**");
+    // const currentFile = vscode.workspace.asRelativePath(document.fileName);
+    // console.log(currentFile);
+    // get relative paths:
+    for (let file of files) {
+      let relativePath = vscode.workspace
+        .asRelativePath(file)
+        .replace("source/", "");
+      console.log(relativePath);
+      const refCompletion = new vscode.CompletionItem(
+        relativePath,
+        vscode.CompletionItemKind.Reference
+      );
+      refCompletion.insertText = new vscode.SnippetString(relativePath);
+      completionItems.push(refCompletion);
+    }
+  } else {
+    return undefined;
   }
   return completionItems;
 }

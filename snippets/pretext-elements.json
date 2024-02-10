@@ -427,7 +427,8 @@
   "xi:include": {
     "prefix": "<xi:xinclude>",
     "body": "<xi:include href=\"$1\" />$0",
-    "description": "XInclude"
+    "description": "XInclude",
+    "retrigger": true
   },
   "me": {
     "prefix": "<me>",

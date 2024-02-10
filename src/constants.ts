@@ -567,8 +567,8 @@ export const elementChildren: PtxElement = {
     elements: ["cell"],
   },
   sbsgroup: {
-    attributes: ["margins", "width", "widths", "valign", "valigns"],
-    elements: [],
+    attributes: atSidebyside,
+    elements: ["sidebyside"],
   },
   section: {
     attributes: id,
@@ -591,6 +591,7 @@ export const elementChildren: PtxElement = {
     attributes: atSidebyside,
     elements: [
       "figure",
+      "exercise",
       "poem",
       "tabular",
       "image",
