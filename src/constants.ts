@@ -391,7 +391,7 @@ export const elementChildren: PtxElement = {
     elements: ["block"],
   },
   book: {
-    attributes: id,
+    attributes: [...id, "xi-namespace"],
     elements: [
       "title",
       "subtitle",
@@ -415,7 +415,7 @@ export const elementChildren: PtxElement = {
     elements: [...textParagraph, ...textLong],
   },
   chapter: {
-    attributes: id,
+    attributes: [...id, "xi-namespace"],
     elements: [
       ...blockDivision,
       ...mdLinedTitle,
@@ -531,7 +531,7 @@ export const elementChildren: PtxElement = {
     elements: [...blockDivision, "idx"],
   },
   part: {
-    attributes: id,
+    attributes: [...id, "xi-namespace"],
     elements: ["title", "subtitle", "idx", "chapter"],
   },
   pre: {
@@ -539,7 +539,7 @@ export const elementChildren: PtxElement = {
     elements: ["cline"],
   },
   pretext: {
-    attributes: [],
+    attributes: [...id, "xi-namespace"],
     elements: ["article", "book", "letter", "memo", "docinfo"],
   },
   program: {
@@ -571,7 +571,7 @@ export const elementChildren: PtxElement = {
     elements: ["sidebyside"],
   },
   section: {
-    attributes: id,
+    attributes: [...id, "xi-namespace"],
     elements: [
       ...blockDivision,
       ...mdLinedTitle,
@@ -617,7 +617,7 @@ export const elementChildren: PtxElement = {
     elements: blockStatement,
   },
   subsection: {
-    attributes: id,
+    attributes: [...id, "xi-namespace"],
     elements: [
       ...blockDivision,
       ...mdLinedTitle,
@@ -630,7 +630,7 @@ export const elementChildren: PtxElement = {
     ],
   },
   subsubsection: {
-    attributes: id,
+    attributes: [...id, "xi-namespace"],
     elements: [
       ...blockDivision,
       ...mdLinedTitle,
