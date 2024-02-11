@@ -45,6 +45,19 @@ jobs:
       - name: Deploy to Open VSX
         run: ovsx publish -p ${{ secrets.OPEN_VSX_TOKEN }}
 
+      - name: setup variables and update changelog
+        run: |
+          value=$(jq -r '.version' package.json | tr -d '"')
+          echo "VERSION=$value" >> "$GITHUB_ENV"
+          chlogline="\\\n## [$value] - $(date +'%Y-%m-%d')"
+          sed "/## [UNRELEASED]/a $newline" CHANGELOG.md > CHANGELOG.md.tmp
+          mv CHANGELOG.md.tmp CHANGELOG.md
+
+      - name: Commit
+        run: |
+          git add CHANGELOG.md
+          git commit -m "update changelog"
+
       - name: push commit
         run: |
           git push origin main
@@ -62,9 +75,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.event.commits[0].message }}
+          tag_name: "v${{ env.VERSION }}"
 
-          release_name: ${{ github.event.commits[0].message }}
+          release_name: "v${{ env.VERSION }}"
 
           body: |
             See the [changelog](CHANGELOG.md) for details.
