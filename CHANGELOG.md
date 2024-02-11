@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.16.0] - 2024-02-10
+
 ### Added
 
 - New setting allows you to set a custom pretext schema.

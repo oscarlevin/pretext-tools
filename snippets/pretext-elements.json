@@ -292,11 +292,7 @@
   },
   "me": {
     "prefix": "<me>",
-    "body": [
-      "<me>",
-      "\t$1",
-      "</me>\n$0"
-    ],
+    "body": ["<me>", "\t$1", "</me>\n$0"],
     "description": "math-equation."
   },
   "men": {

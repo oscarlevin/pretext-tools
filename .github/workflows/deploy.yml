@@ -49,7 +49,7 @@ jobs:
         run: |
           value=$(jq -r '.version' package.json | tr -d '"')
           echo "VERSION=$value" >> "$GITHUB_ENV"
-          chlogline="\\\n## [$value] - $(date +'%Y-%m-%d')"
+          newline="\\\n## [$value] - $(date +'%Y-%m-%d')"
           sed "/## [UNRELEASED]/a $newline" CHANGELOG.md > CHANGELOG.md.tmp
           mv CHANGELOG.md.tmp CHANGELOG.md
 
