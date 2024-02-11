@@ -14,8 +14,9 @@ jobs:
       - name: read version
         run: |
           value=$(jq '.version' package.json | tr -d '"')
+          echo $value
           echo "VERSION=$value" >> $GITHUB_ENV
           echo "v${{ env.VERSION }}"
           newline="\\\n## [$value] - $(date +'%Y-%m-%d')"
-          sed "/## [UNRELEASED]/a $newline" CHANGELOG.md > CHANGELOG.md.tmp
+          sed "/## [UNRELEASED]/a $newline" CHANGELOG.md
 
