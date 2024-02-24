@@ -64,6 +64,14 @@ type Snippets = {
   [key: string]: Snippet;
 };
 
+/** 
+* Reads a snippet file and returns a list of completion items.
+* @param snippets - the snippets to read
+* @param kind - the kind of completion item
+* @param node - the current (open) node/element
+* @param document - the current document
+* @param position - the current position of the cursor
+*/
 async function getSnippetCompletionItems(
   snippets: Snippets,
   kind: vscode.CompletionItemKind,
@@ -115,6 +123,17 @@ async function getSnippetCompletionItems(
       };
     }
     completionItems.push(snippetCompletion);
+  }
+  // Also add a closing tag for the current node, since we have turned off this feature from redhat.vscode-xml.
+  if (node) {
+    const closeTagCompletion = new vscode.CompletionItem(
+      `/${node}>`,
+      kind
+    );
+    closeTagCompletion.insertText = new vscode.SnippetString(`/${node}>`);
+    closeTagCompletion.documentation = `Close the ${node} tag`;
+    closeTagCompletion.detail = `Close the ${node} tag`;
+    completionItems.push(closeTagCompletion);
   }
   return completionItems;
 }

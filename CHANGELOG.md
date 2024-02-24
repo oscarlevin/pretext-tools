@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Completion to close the current tag when typing `</` (like `</tag>`).
+
 ## [0.16.0] - 2024-02-10
 
 ### Added
