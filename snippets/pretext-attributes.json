@@ -59,6 +59,11 @@
     "body": "pause=\"yes\"",
     "description": "pause attribute, for slides"
   },
+  "parse": {
+    "prefix": "@parse",
+    "body": "parse=\"${1|text|}\"$0",
+    "description": "parse=\"text\" if xi:include-ing code"
+  },
   "randomized": {
     "prefix": "@randomized",
     "body": "randomized=\"${1|yes,no|}\"$0",

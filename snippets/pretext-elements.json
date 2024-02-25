@@ -146,7 +146,8 @@
   "example": {
     "prefix": "<example>",
     "body": "<example>\n\t$0\n</example>",
-    "description": "example (example-like)"
+    "description": "example (example-like)",
+    "sort": "0"
   },
   "exercise": {
     "prefix": "<exercise>",
@@ -158,6 +159,11 @@
     "prefix": "<exercise workspace=\"\">",
     "body": "<exercise workspace=\"$1\">\n\t$0\n</exercise>",
     "description": "exercise (in worksheet)"
+  },
+  "exercise group": {
+    "prefix": "<exercisegroup>",
+    "body": "<exercisegroup>\n\n\t<introduction>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</introduction>\n\n\t<exercise>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t\n\t\t\t</p>\n\t\t</statement>\n\t</exercise>\n\n</exercisegroup>",
+    "description": "exercise group"
   },
   "exercises": {
     "prefix": "<exercises>",
@@ -220,14 +226,15 @@
     "description": "index entry"
   },
   "image (external)": {
-    "prefix": "<image>",
+    "prefix": "<image source=\"\">",
     "body": "<image source=\"${1:path (no extension)}\">\n\t<shortdescription>${0:(for accessibility)}</shortdescription>\n</image>",
     "description": "image (external)"
   },
   "image (not external)": {
     "prefix": "<image>",
-    "body": "<image xml:id=\"$1\">\n\t<shortdescription>$2</shortdescription>\n\t$0\n</image>",
-    "description": "image (not external)"
+    "body": "<image>\n\t<shortdescription>$2</shortdescription>\n\t$0\n</image>",
+    "description": "image (not external)",
+    "sort": "0"
   },
   "insight": {
     "prefix": "<insight>",
@@ -292,7 +299,7 @@
   },
   "me": {
     "prefix": "<me>",
-    "body": ["<me>", "\t$1", "</me>\n$0"],
+    "body": "<me>\n\t$1\n</me>\n$0",
     "description": "math-equation."
   },
   "men": {

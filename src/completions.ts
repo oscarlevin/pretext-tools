@@ -64,6 +64,14 @@ type Snippets = {
   [key: string]: Snippet;
 };
 
+/** 
+* Reads a snippet file and returns a list of completion items.
+* @param snippets - the snippets to read
+* @param kind - the kind of completion item
+* @param node - the current (open) node/element
+* @param document - the current document
+* @param position - the current position of the cursor
+*/
 async function getSnippetCompletionItems(
   snippets: Snippets,
   kind: vscode.CompletionItemKind,
@@ -115,6 +123,17 @@ async function getSnippetCompletionItems(
       };
     }
     completionItems.push(snippetCompletion);
+  }
+  // Also add a closing tag for the current node, since we have turned off this feature from redhat.vscode-xml.
+  if (node) {
+    const closeTagCompletion = new vscode.CompletionItem(
+      `/${node}>`,
+      kind
+    );
+    closeTagCompletion.insertText = new vscode.SnippetString(`/${node}>`);
+    closeTagCompletion.documentation = `Close the ${node} tag`;
+    closeTagCompletion.detail = `Close the ${node} tag`;
+    completionItems.push(closeTagCompletion);
   }
   return completionItems;
 }
@@ -178,12 +197,14 @@ async function elementCompletions(
   }
   // Now check the length of the current line and whether the previous line is an plain <p> tag.  If the current line is not empty, or it is but the previous started a <p> we show inline completions.  Otherwise we show element/block completions.
   const currentLine = document.lineAt(position.line).text.trim();
-  const prevLineP = document.lineAt(position.line - 1).text.trim() === "<p>";
   let elementSnippets: Snippets;
-  if (currentLine.length > 1) {
+  if (document.getText().trim().length < 10) {
+    elementSnippets = readJsonFile("snippets/pretext-templates.json");
+  } else if (currentLine.length > 1) {
     elementSnippets = readJsonFile("snippets/pretext-inline.json");
   } else {
     elementSnippets = readJsonFile("snippets/pretext-elements.json");
+    const prevLineP = document.lineAt(position.line - 1).text.trim() === "<p>";
     if (prevLineP) {
       elementSnippets = {
         ...elementSnippets,
