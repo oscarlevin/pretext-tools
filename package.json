@@ -2,7 +2,7 @@
   "name": "pretext-tools",
   "displayName": "PreTeXt-tools",
   "description": "Language support and more for PreTeXt",
-  "version": "0.15.2",
+  "version": "0.16.0",
   "license": "See license in LICENSE",
   "icon": "logo.png",
   "publisher": "oscarlevin",
@@ -238,6 +238,11 @@
             "type": "string",
             "default": "",
             "markdownDescription": "Provide a path to your custom schema file.  This will override the schema version setting."
+          },
+          "pretext-tools.pythonPath": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "To use a non-standard python installation or virtual environment, set path to python here.  If blank we will use `python -m` or `python3 -m`. **Requires restart of VS Code**"
           }
         }
       }

@@ -94,46 +94,37 @@ async function installPretext(progress: vscode.Progress<{}>) {
   // Here we will attempt to pip install pretext, upgraded to the most recent version.  This will happen if pretext is not found, or if a user requests it through a command.
 
   // first check for python and pip:
-  let pythonExec = "";
-  for (let command of ["python3", "python"]) {
-    try {
-      let pythonVersion = execSync(command + " --version").toString();
-      console.log("Python version result: ", pythonVersion);
-      if (pythonVersion.toLowerCase().includes("python 2")) {
-        throw new Error(command + " is python 2");
-      }
-      pythonExec = command;
-    } catch (err) {
-      console.log("Error: ", err);
-    }
+  let pythonExec = getPythonExec();
+  if (pythonExec === undefined) {
+    vscode.window.showErrorMessage(
+      "Unable to install PreTeXt without python.  Please install python and try again."
+    );
+    return;
   }
   progress.report({ message: "Checking pip version" });
   let pipExec = "";
-  for (let command of ["pipx", "pip3", "pip"]) {
+  for (let command of ["pipx", "pip"]) {
     try {
-      let pipVersion = execSync(command + " --version").toString();
+      let pipVersion = execSync(pythonExec + " -m " + command + " --version").toString();
       console.log("pip version result: ", pipVersion);
       pipExec = command;
+      break;
     } catch (err) {
       console.log("Error: ", err);
     }
-  }
-  if (pythonExec === "") {
-    vscode.window.showErrorMessage(
-      "You do not appear to have python installed.  Please download and install python (and make sure to add python to your path)."
-    );
   }
   // Now try to install pretext (using 1.0 command):
   progress.report({ message: "Installing pretext" });
   try {
     if (pipExec === "pipx") {
       execSync(pipExec + " install pretext");
+    } else {
+      execSync(pythonExec + " -m " + "pip" + " install --upgrade pretext");
+      vscode.window.showInformationMessage(
+        "Successfully installed or upgraded pretext.",
+        "Dismiss"
+        );
     }
-    execSync(pythonExec + " -m " + "pip" + " install --upgrade pretext");
-    vscode.window.showInformationMessage(
-      "Successfully installed or upgraded pretext.",
-      "Dismiss"
-    );
   } catch (err) {
     vscode.window.showErrorMessage(
       "Unable to install PreTeXt using pip.  Please see the pretext documentation for further assistance.",
@@ -145,8 +136,69 @@ async function installPretext(progress: vscode.Progress<{}>) {
   progress.report({ message: "Done" });
 }
 
+/**
+ * Get python command, either from settings or by verifying python3 or python is on PATH
+ */
+function getPythonExec() {
+  let pythonExec = vscode.workspace.getConfiguration("pretext-tools").get("pythonPath");
+  console.log("Python path from settings: ", pythonExec);
+  if (pythonExec === "") {
+    for (let command of ["python3", "python"]) {
+      try {
+        let pythonVersion = execSync(command + " --version").toString();
+        console.log("Python version result: ", pythonVersion);
+        if (pythonVersion.toLowerCase().includes("python 2")) {
+          throw new Error(command + " is python 2");
+        }
+        pythonExec = command;
+        break;
+      } catch (err) {
+        console.log("Error: ", err);
+      }
+    }
+  } else {
+    try {
+      let pythonVersion = execSync(pythonExec + " --version").toString();
+      console.log("Python version result: ", pythonVersion);
+      if (pythonVersion.toLowerCase().includes("python 2")) {
+        throw new Error(pythonExec + " is python 2");
+      }
+    } catch (err) {
+      console.log("Error: ", err);
+      vscode.window.showErrorMessage(
+        "The path to python provided in settings does not appear to be a valid python 3 executable.  Please provide a valid path to python."
+      );
+      pythonExec = "";
+    }
+  }
+  if (pythonExec === "") {
+    vscode.window.showErrorMessage(
+      "You do not appear to have python installed.  Please download and install python (and make sure it is added to your PATH)."
+    );
+    return undefined;
+  }
+  return pythonExec;
+}
+
+
 function getPtxExec() {
-  // Here we will try to guess the name of the pretext command, be it `pretext`, `python -m pretext`, or `python3 -m pretext`.
+  let pythonExec = getPythonExec();
+  if (pythonExec === undefined) {
+    vscode.window.showErrorMessage(
+      "Unable to run PreTeXt without python.  Please install python and try again."
+    );
+  } else {
+    console.log("Using python at ", pythonExec);
+    let ptxCommand = pythonExec + " -m pretext";
+    try {
+      let ptxVersion = execSync(ptxCommand + " --version").toString();
+      console.log("Using PreTeXt version", ptxVersion);
+      return ptxCommand;
+    } catch (err) {
+      console.log(ptxCommand + " not found");
+    }
+  }
+  // If the above did not work, then either pretext has been installed with pipx, is not yet installed, or python is not available in the usual place, so we try a last ditch effort to find it.
   let ptxExec = "";
   for (let command of ["pretext", "python -m pretext", "python3 -m pretext"]) {
     try {
@@ -187,7 +239,23 @@ function getPtxExec() {
   return ptxExec;
 }
 
+function getPtxVersion() {
+  let ptxVersion = "version unknown";
+  try {
+    ptxVersion = execSync(ptxExec + " --version").toString().trim();
+    if (ptxVersion.includes("\n")) {
+      ptxVersion = ptxVersion.split("\n")[-1];
+    }
+    console.log("Using PreTeXt version", ptxVersion);
+  } catch (err) {
+    console.log("Error: ", err);
+  }
+  return ptxVersion;
+}
+
+
 const ptxExec = getPtxExec();
+const ptxVersion = getPtxVersion();
 
 function getTargets() {
   // Define a constant that holds the names of targets listed in project.ptx
@@ -273,7 +341,7 @@ function updateStatusBarItem(
   ptxSBItem.show();
   if (state === "ready" || state === undefined) {
     ptxSBItem.text = `$(debug-run) PreTeXt`;
-    ptxSBItem.tooltip = `Run PreTeXt command`;
+    ptxSBItem.tooltip = `Run PreTeXt command (version ${ptxVersion})`;
     ptxSBItem.command = `pretext-tools.selectPretextCommand`;
   } else if (state === "running") {
     ptxSBItem.text = `$(loading~spin) PreTeXt`;
