@@ -105,7 +105,9 @@ async function installPretext(progress: vscode.Progress<{}>) {
   let pipExec = "";
   for (let command of ["pipx", "pip"]) {
     try {
-      let pipVersion = execSync(pythonExec + " -m " + command + " --version").toString();
+      let pipVersion = execSync(
+        pythonExec + " -m " + command + " --version"
+      ).toString();
       console.log("pip version result: ", pipVersion);
       pipExec = command;
       break;
@@ -123,7 +125,7 @@ async function installPretext(progress: vscode.Progress<{}>) {
       vscode.window.showInformationMessage(
         "Successfully installed or upgraded pretext.",
         "Dismiss"
-        );
+      );
     }
   } catch (err) {
     vscode.window.showErrorMessage(
@@ -140,7 +142,9 @@ async function installPretext(progress: vscode.Progress<{}>) {
  * Get python command, either from settings or by verifying python3 or python is on PATH
  */
 function getPythonExec() {
-  let pythonExec = vscode.workspace.getConfiguration("pretext-tools").get("pythonPath");
+  let pythonExec = vscode.workspace
+    .getConfiguration("pretext-tools")
+    .get("pythonPath");
   console.log("Python path from settings: ", pythonExec);
   if (pythonExec === "") {
     for (let command of ["python3", "python"]) {
@@ -179,7 +183,6 @@ function getPythonExec() {
   }
   return pythonExec;
 }
-
 
 function getPtxExec() {
   let pythonExec = getPythonExec();
@@ -242,7 +245,9 @@ function getPtxExec() {
 function getPtxVersion() {
   let ptxVersion = "version unknown";
   try {
-    ptxVersion = execSync(ptxExec + " --version").toString().trim();
+    ptxVersion = execSync(ptxExec + " --version")
+      .toString()
+      .trim();
     if (ptxVersion.includes("\n")) {
       ptxVersion = ptxVersion.split("\n")[-1];
     }
@@ -252,7 +257,6 @@ function getPtxVersion() {
   }
   return ptxVersion;
 }
-
 
 const ptxExec = getPtxExec();
 const ptxVersion = getPtxVersion();
