@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [0.17.0] - 2024-02-25
+
 - Support for running pretext in a virtual environment.
 - Completion to close the current tag when typing `</` (like `</tag>`).
 - Snippets for new documents.
@@ -25,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.16.0] - 2024-02-10
 
 ### Added
+
+## [0.17.0] - 2024-02-25
 
 - New setting allows you to set a custom pretext schema.
 - Completions suggest file names for `xi:include`
@@ -54,6 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [0.17.0] - 2024-02-25
+
 - `<xref ref="..."/>` will now suggest xml:ids from any file in the `source` directory.
 
 ### Changed
@@ -70,6 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [0.17.0] - 2024-02-25
+
 - New option to break paragraphs into separate lines for each sentence when formatting.
 
 ### Fixed
@@ -79,11 +87,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.17.0] - 2024-02-25
+
 - Deprecated "Live Preview" as a view option (use "CodeChat" instead).
 
 ## [0.14.0] - 2023-12-12
 
 ### Added
+
+## [0.17.0] - 2024-02-25
 
 - Formatting support using vs-code's built-in formatting engine. From the command palette, select "Format Document".
 
@@ -94,6 +106,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.13.0] - 2023-11-27
 
 ### Added
+
+## [0.17.0] - 2024-02-25
 
 - Experimental support for converting selected LaTeX to PreTeXt.
 
@@ -113,6 +127,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Only one error notification when process produces an error, with an option to view log.
 
 ### Added
+
+## [0.17.0] - 2024-02-25
 
 - New Button Menu Options: You can now refresh the list of targets and initiate a "Convert to PreTeXt" from the PreTeXt button menu.
 - Progress notification for most commands.
@@ -139,15 +155,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [0.17.0] - 2024-02-25
+
 - `CTRL+ALT+p` now brings up the "run pretext command" selection menu
 
 ### Removed
+
+## [0.17.0] - 2024-02-25
 
 - No longer have green "run" button at top of window (Pretext status bar button makes that redundant).
 
 ## [0.11.0] - 2023-05-12
 
 ### Added
+
+## [0.17.0] - 2024-02-25
 
 - New function to use pandoc to convert an arbitrary file to PreTeXt. Pandoc must already be installed.
 
@@ -160,6 +182,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.10.0] - 2023-03-11
 
 ### Added
+
+## [0.17.0] - 2024-02-25
 
 - Status bar item: click to select a pretext command; shows when pretext is running; displays success/warnings (and opens output channel if clicked while running or on warning).
 - Debug mode: clicking status bar or run icon includes option to run pretext commands in a terminal, allowing a user to interact or debug issues.
@@ -180,6 +204,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [0.17.0] - 2024-02-25
+
 - Setting to decide schema version (Stable/Experimental) ready for updated schema from the CLI.
 - Set default value for `xml.references` so that `<xref ref="foo"/>` is linked to `@xml:id="foo"`.
 
@@ -197,6 +223,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.8.0] - 2022-12-21
 
 ### Added
+
+## [0.17.0] - 2024-02-25
 
 - Menu of available commands shows in explorer view.
 - Support for Live Preview and CodeChat to view output. User is asked which of the available methods to use, or can select a default in settings.
@@ -219,6 +247,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [0.17.0] - 2024-02-25
+
 - Support for PreTeXt schema validation via (now required) vscode-xml extension
 - Build icon on top of editor
 
@@ -229,6 +259,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.6.0]
 
 ### Added
+
+## [0.17.0] - 2024-02-25
 
 - PreTeXt is now a language, autodetected on ".ptx" files.
 - New keybindings for build, view, and generate.
@@ -259,11 +291,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [0.17.0] - 2024-02-25
+
 - New commands registered that allow you to build and view PreTeXt documents in various formats by calling the PreTeXt-CLI (which needs to be installed).
 
 ## [0.3.0] - 2020-10-30
 
 ### Added
+
+## [0.17.0] - 2024-02-25
 
 - New snippets: url, url-empty, email, code-display, cline, alert, delete, insert, stale, foreign, taxon, pubtitle, articletitle, youtube, tag, tage, attribute, fillin.
 - If text is selected, using m snippet keeps selected text (inside m).
@@ -286,6 +322,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [0.17.0] - 2024-02-25
+
 - new snippets: exercise-worksheet; exercise-numbered; @number; mdn.
 
 ### Fixed
@@ -296,6 +334,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2] - 2019-08-19
 
 ### Added
+
+## [0.17.0] - 2024-02-25
 
 - reading questions snippets
 - worksheets snippets (including @workspace and pagebreak)
