@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Completion to close the current tag when typing `</` (like `</tag>`).
 - Snippets for new documents.
 
+### Changed
+
+- Make default `ctrl+alt+b` keybinding build the most recently built target (or default).
+
 ### Fixed
 
 - Broken snippets
@@ -79,12 +83,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Formatting support using vs-code's built-in formatting engine.  From the command palette, select "Format Document".
+- Formatting support using vs-code's built-in formatting engine. From the command palette, select "Format Document".
 
 ### Fixed
 
 - Bug that prevent initialization if not in a pretext project folder.
-
 
 ## [0.13.0] - 2023-11-27
 

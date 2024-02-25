@@ -763,10 +763,8 @@ export const elementChildren: PtxElement = {
 
 // dictionary of pretext elements and their legal attributes
 export const elementAttributes: { [key: string]: string[] } = {
-
   sbsgroup: ["margins", "width", "widths", "valigns"],
   sageplot: ["variant", "aspect"],
   sage: ["doctest", "tolerance", "auto-evaluate", "language", "type"],
   score: ["musescoreuser", "musescore"],
-
 };

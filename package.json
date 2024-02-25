@@ -65,7 +65,7 @@
     ],
     "keybindings": [
       {
-        "command": "pretext-tools.buildAny",
+        "command": "pretext-tools.buildLast",
         "key": "ctrl+alt+b",
         "mac": "cmd+alt+b",
         "when": "editorTextFocus && editorLangId == 'pretext'"
@@ -172,11 +172,6 @@
         "title": "Convert Selected LaTeX to PreTeXt",
         "category": "PreTeXt",
         "description": "Converts and replaces a selection of LaTeX with PreTeXt formatted text (experimental)."
-      },
-      {
-        "command": "pretext-tools.test",
-        "title": "development experiments",
-        "category": "PreTeXt"
       }
     ],
     "xmlLanguageParticipants": [
@@ -237,12 +232,12 @@
               "Use the experimental/development schema matching your installed version of PreTeXt.",
               "Use a custom schema file, which you can set using the `pretext-tools.customSchemaPath` setting."
             ],
-            "markdownDescription": "Select the version of the PreTeXt schema to validate against.  If you are using newer features, you might try to experimental schema, which isn't as stable, but will give you fewer warnings.  *Reload your workspace for these changes to take effect.*"
+            "markdownDescription": "Select the version of the PreTeXt schema to validate against.  If you are using newer features, you might try to experimental schema, which isn't as stable, but will give you fewer warnings."
           },
           "pretext-tools.schema.customPath": {
             "type": "string",
             "default": "",
-            "markdownDescription": "Provide a path to your custom schema file.  This will override the schema version setting.  *Reload your workspace for these changes to take effect.*"
+            "markdownDescription": "Provide a path to your custom schema file.  This will override the schema version setting."
           }
         }
       }
