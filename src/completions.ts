@@ -197,12 +197,14 @@ async function elementCompletions(
   }
   // Now check the length of the current line and whether the previous line is an plain <p> tag.  If the current line is not empty, or it is but the previous started a <p> we show inline completions.  Otherwise we show element/block completions.
   const currentLine = document.lineAt(position.line).text.trim();
-  const prevLineP = document.lineAt(position.line - 1).text.trim() === "<p>";
   let elementSnippets: Snippets;
-  if (currentLine.length > 1) {
+  if (document.getText().trim().length < 10) {
+    elementSnippets = readJsonFile("snippets/pretext-templates.json");
+  } else if (currentLine.length > 1) {
     elementSnippets = readJsonFile("snippets/pretext-inline.json");
   } else {
     elementSnippets = readJsonFile("snippets/pretext-elements.json");
+    const prevLineP = document.lineAt(position.line - 1).text.trim() === "<p>";
     if (prevLineP) {
       elementSnippets = {
         ...elementSnippets,

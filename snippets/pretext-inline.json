@@ -117,6 +117,11 @@
     "description": "display math",
     "sort": "1"
   },
+  "me": {
+    "prefix": "<me>",
+    "body": "<me>${1:$TM_SELECTED_TEXT}</me>$0",
+    "description": "math expression"
+  },
   "notation": {
     "prefix": "<notation>",
     "body": "<notation>\n\t<usage>${1:(in math mode)}</usage>\n  <description>$2</description>\n</notation>$0"

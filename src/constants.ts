@@ -320,21 +320,22 @@ const blockSolution = [...blockStatement, "proof"];
 
 const exerciseBody = [
   ...blockStatement,
-  "ol",
-  "hint",
   "answer",
-  "solution",
-  "introduction",
+  "areas",
+  "blocks",
+  "choices",
   "conclusion",
+  "hint",
+  "introduction",
+  "matches",
+  "ol",
+  "program",
+  "response",
+  "setup",
+  "solution",
+  "statement",
   "task",
   "webwork",
-  "response",
-  "choices",
-  "blocks",
-  "matches",
-  "areas",
-  "setup",
-  "program",
 ];
 
 const blockDivision = [
@@ -509,6 +510,14 @@ export const elementChildren: PtxElement = {
   matches: {
     attributes: [],
     elements: ["match"],
+  },
+  md: {
+    attributes: [],
+    elements: ["mrow"],
+  },
+  mdn: {
+    attributes: [],
+    elements: ["mrow"],
   },
   objectives: {
     attributes: id,
@@ -706,6 +715,11 @@ export const elementChildren: PtxElement = {
       "conclusion",
     ],
   },
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  "xi:include": {
+    attributes: ["parse", "href"],
+    elements: [],
+  },
   ...expand(gpTheorem, id, [
     "creator",
     "title",
@@ -723,38 +737,36 @@ export const elementChildren: PtxElement = {
   ]),
   ...expand(gpExample, id, [
     ...blockStatement,
-    "statement",
-    "hint",
     "answer",
-    "solution",
-    "introduction",
     "conclusion",
+    "hint",
+    "introduction",
+    "solution",
+    "statement",
     "task",
+    ...mdTitle,
   ]),
   ...expand(gpProject, id, [
     ...blockStatement,
-    "statement",
-    "hint",
     "answer",
-    "solution",
-    "introduction",
     "conclusion",
-    "task",
-    "prelude",
+    "hint",
+    "introduction",
     "postlude",
+    "prelude",
+    "solution",
+    "statement",
+    "task",
+    ...mdTitle,
   ]),
 };
 
 // dictionary of pretext elements and their legal attributes
 export const elementAttributes: { [key: string]: string[] } = {
-  cd: ["latexsep"],
 
   sbsgroup: ["margins", "width", "widths", "valigns"],
   sageplot: ["variant", "aspect"],
   sage: ["doctest", "tolerance", "auto-evaluate", "language", "type"],
   score: ["musescoreuser", "musescore"],
 
-  exercisegroup: ["cols"],
-  poem: ["halign"],
-  stanza: ["indent"],
 };
