@@ -9,8 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for running pretext in a virtual environment.
 - Completion to close the current tag when typing `</` (like `</tag>`).
 - Snippets for new documents.
+- PreTeXt version reported in status bar tool-tip.
+
+### Changed
+
+- Make default `ctrl+alt+b` keybinding build the most recently built target (or default).
 
 ### Fixed
 
@@ -60,7 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Formatter correctly adds empty line at end of document.
 
-### [0.14.1] - 2023-12-14
+## [0.14.1] - 2023-12-14
 
 ### Added
 
@@ -79,12 +85,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Formatting support using vs-code's built-in formatting engine.  From the command palette, select "Format Document".
+- Formatting support using vs-code's built-in formatting engine. From the command palette, select "Format Document".
 
 ### Fixed
 
 - Bug that prevent initialization if not in a pretext project folder.
-
 
 ## [0.13.0] - 2023-11-27
 

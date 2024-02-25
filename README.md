@@ -10,8 +10,8 @@ A Visual Studio Code extension to make writing PreTeXt documents easier.
 - Defines the PreTeXt language, automatically selecting it for `.ptx` files.
 - Syntax highlighting and indentation based on XML, plus some additions like recognizing math as LaTeX.
 - Schema support via the [vscode-xml](https://github.com/redhat-developer/vscode-xml) extension (which also provides many xml tools).
-- A large collection of snippets for most PreTeXt elements.
-- A front-end for the [PreTeXt-CLI](https://github.com/PreTeXtBook/pretext-cli), with commands available through a menu in the side explorere, the command pallet (Ctrl+Shift+P), and keyboard shortcuts (Ctrl-Alt-B to build, Ctrl-Alt-V to view, etc.).
+- A large collection of snippets for most PreTeXt elements.  Smart completions based on the schema.
+- A front-end for the [PreTeXt-CLI](https://github.com/PreTeXtBook/pretext-cli), with commands available through a statusbar menu, keyboard shortcuts (Ctrl+Alt+P for command menu, Ctrl-Alt-B to build, Ctrl-Alt-V to view, etc.), and the command pallet (search for PreTeXT).
 - Support for the CodeChat extension to view output, as well as via the PreTeXt-CLI.
 - Use pandoc to convert almost any file format to PreTeXt.
 - Convert small passages ofLaTeX to PreTeXt (experimental).
@@ -44,8 +44,6 @@ Attributes are available if you start typing with "@".
 
 If you open a new empty document that you will include via `xi:include`, save it with a `.ptx` extension and then fill in the structure using a "!" snippet.
 
-To see a complete list of available snippets, hit Ctrl+Space.
-
 Here are some options that I find make snippets more useful. For each of these, open settings in VS code and search for them.
 
 - Emmet: Excluded Languages. I exclude PreTeXt Emmet for PreTeXt, since the snippets behave better.
@@ -55,9 +53,7 @@ Here are some options that I find make snippets more useful. For each of these, 
 
 ### Running PreTeXt
 
-To build and view projects, and to generate assets, the extension calls the PreTeXt-CLI. Of course, you can open a terminal in VS Code (CTRL+\`) and type `pretext build web`, but you can also get more visual feedback by using the keyboard shortcut Ctrl+Alt+B, clicking the "run" arrow on the top-right of the editor, or selecting `PreTeXt Tools: Build` from the side menu or command pallet (CTRL+SHIFT+P). This will open up a context menu asking you which target you want to build. Select it and your project will be built for that target. Ctrl+Alt+V will ask you which project you want to view, and Ctrl+Alt+G will ask you what to generate.
-
-There are additional commands that are accessible through the side menu and command pallet. Type Ctrl+Shift+P and start typing "PreTeXt" to see all of them.
+To build and view projects, and to generate assets, the extension calls the PreTeXt-CLI. Of course, you can open a terminal in VS Code (CTRL+\`) and type `pretext build web`, but you can also get more visual feedback by using the PreTeXt button in the bottom status bar, or the keyboard shortcut Ctrl+Alt+P or through the command pallet (CTRL+SHIFT+P). Follow the menus to select the command you want to run.
 
 In particular, if you are working with multiple projects in the same window, you might need to refresh your list of targets (this list is determined by looking at the `project.ptx` manifest, but is set once when a project is opened).
 

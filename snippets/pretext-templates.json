@@ -1,22 +1,22 @@
 {
   "pretext article template": {
     "prefix": "<!ptx-article",
-    "body":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<pretext>\n\t<article xml:id=\"$1\">\n\t\t<title>$2</title>\n\n\t\t$0\n\n\t</article>\n</pretext>",
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<pretext>\n\t<article xml:id=\"$1\">\n\t\t<title>$2</title>\n\n\t\t$0\n\n\t</article>\n</pretext>",
     "description": "article template for empty/new PreTeXt document"
   },
   "pretext book template": {
     "prefix": "<!ptx-book",
-    "body":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<pretext xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n\t<book xml:id=\"${1:$TM_FILENAME_BASE}\">\n\t\t<title>$2</title>\n\n\t\t$0\n\n\t</book>\n</pretext>",
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<pretext xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n\t<book xml:id=\"${1:$TM_FILENAME_BASE}\">\n\t\t<title>$2</title>\n\n\t\t$0\n\n\t</book>\n</pretext>",
     "description": "book template for empty/new PreTeXt document"
   },
   "pretext part": {
     "prefix": "<!ptx-part",
-    "body":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<part xml:id=\"${1:$TM_FILENAME_BASE}\" xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n\t<title>$2</title>\n\n\t$0\n\n</part>",
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<part xml:id=\"${1:$TM_FILENAME_BASE}\" xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n\t<title>$2</title>\n\n\t$0\n\n</part>",
     "description": "template for creating a part of a PreTeXt book in an empty file."
   },
   "pretext chapter": {
     "prefix": "<!ptx-chapter",
-    "body":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<chapter xml:id=\"${1:$TM_FILENAME_BASE}\" xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n\t<title>$2</title>\n\n\t$0\n\n</chapter>",
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<chapter xml:id=\"${1:$TM_FILENAME_BASE}\" xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n\t<title>$2</title>\n\n\t$0\n\n</chapter>",
     "description": "template for creating a chapter of a PreTeXt book in an empty file."
   },
   "pretext section": {
