@@ -6,9 +6,9 @@ const blocks = constants.tex2ptxBlocks;
 // Paragraph element conversions /////////////////////////////////
 
 function convertMath(text: string) {
-  //convert diplay math mode
+  //convert diplay math mode (assumes all in one line)
   let result = text.replace(
-    /(\${2}|\\\[|\\begin{displaymath}|\\begin{equation})(.*?)(\${2}|\\\]|\\end{displaymath}|\\end{equation})/gs,
+    /(\$\$|\\\[|\\begin{displaymath}|\\begin{equation})(.*?)(\$\$|\\\]|\\end{displaymath}|\\end{equation})/gs,
     "<me>$2</me>"
   );
   //convert inline math mode
@@ -71,6 +71,10 @@ function convertBS(text: string) {
       // console.log("VSPACE");
       return "<!-- " + command[1] + text + " -->\n";
     }
+    // display math
+    else if (command[1] === "\\[") {
+      return convertP(command[1] + text);
+    }
     // All other cases, just leave a comment:
     else {
       return (
@@ -86,8 +90,8 @@ function makeLines(text: string) {
   // Create an array of lines, with whitespace stripped from the beginning and end of each line.
   let lines = text.split(/\r\n|\r|\n/);
   lines = lines.map((line) => line.trim());
-  // console.log("LINES: "+lines );
-  // console.log("LINES LENGTH: "+lines.length );
+  console.log("LINES: " + lines);
+  console.log("LINES LENGTH: " + lines.length);
 
   // If lines contains multiple lines, we process it, otherwise just return the single line.
   if (lines.length > 1) {
@@ -97,8 +101,9 @@ function makeLines(text: string) {
       if (
         lines[i].length > 0 &&
         lines[i + 1].length > 0 &&
-        !lines[i].startsWith("\\") &&
-        !lines[i + 1].startsWith("\\")
+        (lines[i+1].startsWith("\\[") ||
+          lines[i + 1].startsWith("\\]") ||
+          (!lines[i].startsWith("\\") && !lines[i + 1].startsWith("\\")))
       ) {
         lines[i] = lines[i] + " " + lines[i + 1];
         lines.splice(i + 1, 1);
@@ -109,8 +114,8 @@ function makeLines(text: string) {
     // Then remove empty lines.
     lines = lines.filter((line) => line.length > 0);
   }
-  // console.log("LINES: "+lines );
-  // console.log("LINES LENGTH: "+lines.length );
+  console.log("LINES: " + lines);
+  console.log("LINES LENGTH: " + lines.length);
   return lines;
 }
 
@@ -156,9 +161,9 @@ function convertLines(lines: string[]) {
   return result;
 }
 
-
 export function latexToPretext(text: string) {
+  console.log("Converting LaTeX to PreTeXt.");
   var result = convertLines(makeLines(text));
-
+  console.log("Done with conversion.");
   return result;
 }
