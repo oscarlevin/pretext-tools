@@ -14,7 +14,7 @@ A Visual Studio Code extension to make writing PreTeXt documents easier.
 - A front-end for the [PreTeXt-CLI](https://github.com/PreTeXtBook/pretext-cli), with commands available through a statusbar menu, keyboard shortcuts (Ctrl+Alt+P for command menu, Ctrl-Alt-B to build, Ctrl-Alt-V to view, etc.), and the command pallet (search for PreTeXT).
 - Support for the CodeChat extension to view output, as well as via the PreTeXt-CLI.
 - Use pandoc to convert almost any file format to PreTeXt.
-- Convert small passages ofLaTeX to PreTeXt (experimental).
+- Convert small passages of LaTeX to PreTeXt (experimental).
 - Formatter specific to PreTeXt (experimental).
 
 ## Usage
@@ -58,6 +58,8 @@ To build and view projects, and to generate assets, the extension calls the PreT
 In particular, if you are working with multiple projects in the same window, you might need to refresh your list of targets (this list is determined by looking at the `project.ptx` manifest, but is set once when a project is opened).
 
 All this assumes you that have the PreTeXt-CLI installed. The extension will try to install this for you if not, but that still requires Python 3.8.5 or later, and PIP to be installed. If you don't have that yet, see the [PreTeXt documentation](https://pretextbook.org/doc/guide/html/quickstart-getting-pretext.html).
+
+If you have PreTeXt-CLI installed in a virtual environment, or have a non-standard way of calling python, you can set the path to the python executable (of your virtual environment of system) in the "python Path" setting.
 
 ### Formatting
 

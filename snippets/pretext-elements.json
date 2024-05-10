@@ -113,6 +113,11 @@
     "body": "<conjecture xml:id=\"conj-$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</conjecture>",
     "description": "conjecture (axiom-like)"
   },
+  "console": {
+    "prefix": "<console>",
+    "body": "<console>\n<input>$1\n</input>\n<output>\n$2\n</output></console>$0",
+    "description": "console (input/output)"
+  },
   "convention": {
     "prefix": "<convention>",
     "body": "<convention>\n\t$0\n</convention>",
@@ -371,6 +376,11 @@
     "body": "<problem>\n\t$0\n</problem>",
     "description": "problem (example-like)"
   },
+  "program": {
+    "prefix": "<program>",
+    "body": "<program language=\"$1$\">\n\t<input>\n$0\n\t</input>\n</program>",
+    "description": "program (program-like)"
+  },
   "project": {
     "prefix": "<project>",
     "body": "<project>\n\t$0\n</project>",
@@ -414,6 +424,16 @@
     "prefix": "<row>",
     "body": "<row>\n\t<cell>$1</cell>$0\n</row>",
     "description": "row (of tabular)"
+  },
+  "sage": {
+    "prefix": "<sage>",
+    "body": "<sage>\n\t<input>\n\t\t$1\n\t</input>\n\t<output>\n\t\t$2\n\t</output>\n</sage>$0",
+    "description": "sage math cell"
+  },
+  "sageplot": {
+    "prefix": "<sageplot>",
+    "body": "<sageplot>\n$1\n</sageplot>$0",
+    "description": "sageplot"
   },
   "sbsgroup": {
     "prefix": "<sbsgroup>",

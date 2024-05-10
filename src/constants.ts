@@ -320,6 +320,7 @@ const blockSolution = [...blockStatement, "proof"];
 
 const exerciseBody = [
   ...blockStatement,
+  "title",
   "answer",
   "areas",
   "blocks",
@@ -377,6 +378,11 @@ const id = ["xml:id", "label"];
 
 const atSidebyside = ["margins", "width", "widths", "valign", "valigns"];
 
+const atMetaDataCaption = [...id, "component"];
+
+/////////////////////////////////////////////////
+// Now we list out our version of the "schema" //
+/////////////////////////////////////////////////
 // dictionary of pretext elements and their legal children
 export const elementChildren: PtxElement = {
   answer: {
@@ -471,6 +477,10 @@ export const elementChildren: PtxElement = {
     attributes: ["xml:id", "landscape"],
     elements: ["image", "video", "sidebyside", "sbsgroup", "score"],
   },
+  listing: {
+    attributes: [...atMetaDataCaption, "landscape"],
+    elements: ["title", "caption", "idx", "program", "console"]
+  },
   hint: {
     attributes: id,
     elements: [...blockSolution, ...mdTitle],
@@ -560,7 +570,7 @@ export const elementChildren: PtxElement = {
       "highlight-lines",
       "interactive",
     ],
-    elements: [],
+    elements: ["input"],
   },
   proof: {
     attributes: id,
@@ -574,6 +584,14 @@ export const elementChildren: PtxElement = {
   row: {
     attributes: ["header", "halign", "valign", "bottom", "left"],
     elements: ["cell"],
+  },
+  sage: {
+    attributes: ["component", "doctest", "tolerance", "auto-evaluate", "language", "type"],
+    elements: ["input", "output"]
+  },
+  sageplot: {
+    attributes: ["label", "component", "variant", "aspect"],
+    elements: []
   },
   sbsgroup: {
     attributes: atSidebyside,
@@ -665,7 +683,7 @@ export const elementChildren: PtxElement = {
     elements: ["row", "col"],
   },
   task: {
-    attributes: id,
+    attributes: [...id, "workspace"],
     elements: [
       "statement",
       "hint",
@@ -764,7 +782,6 @@ export const elementChildren: PtxElement = {
 // dictionary of pretext elements and their legal attributes
 export const elementAttributes: { [key: string]: string[] } = {
   sbsgroup: ["margins", "width", "widths", "valigns"],
-  sageplot: ["variant", "aspect"],
-  sage: ["doctest", "tolerance", "auto-evaluate", "language", "type"],
+
   score: ["musescoreuser", "musescore"],
 };

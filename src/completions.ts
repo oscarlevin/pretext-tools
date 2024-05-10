@@ -14,6 +14,9 @@ function readJsonFile(relativePath: string): any {
   }
 }
 
+/**
+  Finds the current node of the curser by comparing all tags above the curser to the open tags above the curser.
+ */
 function getCurrentTag(
   document: vscode.TextDocument,
   position: vscode.Position
@@ -52,6 +55,8 @@ function getCurrentTag(
   return currentTag;
 }
 
+
+// Types for snippets
 type Snippet = {
   prefix: string;
   body: string;
