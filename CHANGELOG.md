@@ -9,9 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- C
+- Add plastex converter
 - New snippets/completions
-  
+
+### Fixed
+
+- Bugs with selection converter
 
 ## [0.17.0] - 2024-02-25
 

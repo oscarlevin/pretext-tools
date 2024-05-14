@@ -64,7 +64,7 @@ function convertBS(text: string) {
     // console.log("TEXT: "+text);
     // Item:
     if (command[1] === "\\item") {
-      return "<li>\n\t<p>\n\t\t" + convertP(text) + "\n<p>\n</li>\n";
+      return "<li>\n\t<p>\n\t\t" + convertP(text) + "\n</p>\n</li>\n";
     }
     // \vspace or \vskip:
     else if (["\\vskip", "\\vspace"].includes(command[1].trim())) {
