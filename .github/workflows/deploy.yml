@@ -49,9 +49,8 @@ jobs:
         run: |
           value=$(jq -r '.version' package.json | tr -d '"')
           echo "VERSION=$value" >> "$GITHUB_ENV"
-          newline="\\\n## [$value] - $(date +'%Y-%m-%d')"
-          echo $newline
-          sed "/## \[UNRELEASED\]/a\$newline" CHANGELOG.md > CHANGELOG.md.tmp
+          newline="\\n## [${{ env.VERSION }}] - $(date +'%Y-%m-%d')"
+          sed '/## \[UNRELEASED\]/a\'"$newline" CHANGELOG.md > CHANGELOG.md.tmp
           mv CHANGELOG.md.tmp CHANGELOG.md
 
       - name: Commit
@@ -73,12 +72,11 @@ jobs:
       - name: setup variable
         run: |
           value=$(jq -r '.version' package.json | tr -d '"')
-          value="v"$value
           echo "VERSION=$value" >> "$GITHUB_ENV"
 
       - name: debug value
         run: |
-          echo $VERSION
+          echo ${{ env.VERSION}}
 
       - name: Create Release
         id: create_release
@@ -86,9 +84,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ env.VERSION }}
+          tag_name: v${{ env.VERSION }}
 
-          release_name: ${{ env.VERSION }}
+          release_name: v${{ env.VERSION }}
 
           body: |
             See the [changelog](CHANGELOG.md) for details.
