@@ -4,28 +4,58 @@ import * as path from "path";
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as https from "https";
+import moment = require("moment");
 
 const pretextWriter = path.join(homedir(), ".ptx", "pandoc", "pretext.lua");
 
 export function convertToPretext(method: string = "pandoc") {
-  if (pandocInstalled()) {
-    console.log("Pandoc found; Waiting for file selection");
-    ensurePretextLua();
+  if (method === "plastex") {
     vscode.window.showOpenDialog().then((uri) => {
       if (uri) {
         console.log(uri);
         const inputfile = uri[0].fsPath;
-        runPandoc(inputfile);
-        console.log("Pandoc finished");
+        runPlastex(inputfile);
+        console.log("PlasTeX finished");
       }
     });
+    return;
   } else {
-    console.log("Pandoc not found");
-    vscode.window.showErrorMessage(
-      "Pandoc not found. Please install Pandoc and try again.",
-      "Dismiss"
-    );
+    if (pandocInstalled()) {
+      console.log("Pandoc found; Waiting for file selection");
+      ensurePretextLua();
+      vscode.window.showOpenDialog().then((uri) => {
+        if (uri) {
+          console.log(uri);
+          const inputfile = uri[0].fsPath;
+          runPandoc(inputfile);
+          console.log("Pandoc finished");
+        }
+      });
+    } else {
+      console.log("Pandoc not found");
+      vscode.window.showErrorMessage(
+        "Pandoc not found. Please install Pandoc and try again.",
+        "Dismiss"
+      );
+    }
   }
+}
+
+function runPlastex(inputfile: string) {
+  console.log("Converting to pretext using PlasTeX converter");
+  // set outputDir to imports/timestamp
+  const outputDir = path.join(
+    path.dirname(inputfile),
+    "imports",
+    path.basename(inputfile, ".tex"),
+    moment().format("YYYYMMDD-HHmm")
+  );
+  console.log("outputDir: " + outputDir);
+  // run pretext import
+  const importCommand = spawn(
+    `pretext import -o "${outputDir}" "${inputfile}"`,
+    { shell: true }
+  );
 }
 
 function runPandoc(inputfile: string) {

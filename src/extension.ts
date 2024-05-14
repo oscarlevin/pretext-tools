@@ -3,7 +3,7 @@
 import { spawn } from "child_process";
 import * as path from "path";
 import * as vscode from "vscode";
-import { convertToPretext } from "./pandocConvert";
+import { convertToPretext } from "./importFiles";
 import { latexToPretext } from "./latextopretext";
 import { formatPTX } from "./formatter";
 import { ptxExec } from "./utils";
@@ -559,7 +559,18 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("pretext-tools.convertToPretext", () => {
       console.log("Converting to PreTeXt");
       pretextOutputChannel.append("Converting to PreTeXt");
-      convertToPretext();
+      // show quick pick to select whether to convert with pandoc or plastex
+      vscode.window
+        .showQuickPick(["plastex", "pandoc"], {
+          placeHolder: "Select a converter",
+        })
+        .then((qpSelection) => {
+          if (qpSelection === "pandoc") {
+            convertToPretext("pandoc");
+          } else if (qpSelection === "plastex") {
+            convertToPretext("plastex");
+          }
+        });
     })
   );
 

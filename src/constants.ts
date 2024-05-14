@@ -32,9 +32,14 @@ export const ptxCommandList = [
     command: "pretext-tools.refreshTargets",
   },
   {
-    label: "Convert to PreTeXt",
-    description: "Convert from other formats using Pandoc",
-    command: "pretext-tools.convert",
+    label: "Convert selection to PreTeXt",
+    description: "Convert selection",
+    command: "pretext-tools.latexToPretext",
+  },
+  {
+    label: "Convert file to PreTeXt",
+    description: "Convert from other formats using PlasTeX or Pandoc",
+    command: "pretext-tools.convertToPretext",
   },
   {
     label: "Run commands in terminal",
@@ -479,7 +484,7 @@ export const elementChildren: PtxElement = {
   },
   listing: {
     attributes: [...atMetaDataCaption, "landscape"],
-    elements: ["title", "caption", "idx", "program", "console"]
+    elements: ["title", "caption", "idx", "program", "console"],
   },
   hint: {
     attributes: id,
@@ -586,12 +591,19 @@ export const elementChildren: PtxElement = {
     elements: ["cell"],
   },
   sage: {
-    attributes: ["component", "doctest", "tolerance", "auto-evaluate", "language", "type"],
-    elements: ["input", "output"]
+    attributes: [
+      "component",
+      "doctest",
+      "tolerance",
+      "auto-evaluate",
+      "language",
+      "type",
+    ],
+    elements: ["input", "output"],
   },
   sageplot: {
     attributes: ["label", "component", "variant", "aspect"],
-    elements: []
+    elements: [],
   },
   sbsgroup: {
     attributes: atSidebyside,
