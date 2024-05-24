@@ -1,38 +1,39 @@
 import * as vscode from "vscode";
 
 const docStructure = [
-  "pretext",
-  "mathbook",
-  "book",
-  "part",
-  "article",
-  "docinfo",
-  "macros",
-  "html",
-  "search",
-  "google",
-  "feedback",
-  "index",
-  "frontmatter",
-  "backmatter",
-  "appendix",
-  "solutions",
-  "references",
-  "biography",
-  "dedication",
-  "titlepage",
-  "preface",
   "abstract",
-  "colophon",
-  "shortlicense",
   "acknowledgement",
-  "credit",
-  "website",
-  "copyright",
+  "appendix",
+  "article",
   "author",
-  "editor",
+  "backmatter",
+  "biography",
+  "book",
+  "chapter",
+  "colophon",
   "contributor",
   "contributors",
+  "copyright",
+  "credit",
+  "dedication",
+  "docinfo",
+  "editor",
+  "feedback",
+  "frontmatter",
+  "google",
+  "html",
+  "index",
+  "macros",
+  "mathbook",
+  "preface",
+  "pretext",
+  "references",
+  "search",
+  "shortlicense",
+  "solutions",
+  "subsection",
+  "titlepage",
+  "website",
 ];
 
 const docSecs = [
@@ -43,6 +44,7 @@ const docSecs = [
   "objectives",
   "outcomes",
   "paragraphs",
+  "part",
   "postlude",
   "prelude",
   "reading-questions",
@@ -64,12 +66,15 @@ const docEnvs = [
   "biblio",
   "blockquote",
   "case",
+  "choice",
+  "choices",
   "claim",
   "conjecture",
   "console",
   "corollary",
   "definition",
   "demonstration",
+  "description",
   "example",
   "exercise",
   "exploration",
@@ -95,6 +100,7 @@ const docEnvs = [
   "proposition",
   "question",
   "remark",
+  "shortdescription",
   "solution",
   "stanza",
   "statement",
@@ -103,6 +109,7 @@ const docEnvs = [
   "tabular",
   "theorem",
   "warning",
+  "webwork",
 ];
 
 const docPieces = [
@@ -187,22 +194,11 @@ const verbatimTags = [
   "c",
 ];
 
-const newlineTags = docStructure
-  .concat(docSecs)
-  .concat(docEnvs)
-  .concat(nestable_tags);
+const newlineTags = [...docStructure, ...docSecs, ...docEnvs, ...nestable_tags, "xi:include"];
 
-const blockTags = newlineTags.concat(math_display);
+const blockTags = [...docStructure, ...docSecs, ...docEnvs, ...nestable_tags, ...math_display];
 
 export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
-  // let changes = [];
-  // const firstLine = document.lineAt(0);
-  // if (!firstLine.text.startsWith("<?xml")) {
-  //   changes.push(
-  //     vscode.TextEdit.insert(firstLine.range.start, '<?xml version="1.0" encoding="UTF-8"?>\n')
-  //   );
-  // }
-
   // First clean up document so that each line is a single tag when appropriate.
   let allText = document.getText();
 
@@ -224,9 +220,9 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
   let fixedLines = [];
   for (let line of lines) {
     let trimmedLine = line.trim();
-    let openTagMatch = /^<(\w*?)(\s.*?|>)$/.exec(trimmedLine);
-    let closeTagMatch = /^<\/(\w*?)(\s.*?|>)(.?)$/.exec(trimmedLine);
-    let selfCloseTagMatch = /^<(\w*?)(\s.*?\/>|\/>)$/.exec(trimmedLine);
+    let openTagMatch = /^<(\w\S*?)(\s.*?|>)$/.exec(trimmedLine);
+    let closeTagMatch = /^<\/(\w\S*?)(\s.*?|>)(.?)$/.exec(trimmedLine);
+    // let selfCloseTagMatch = /^<(\w*?)(\s.*?\/>|\/>)$/.exec(trimmedLine);
     if (trimmedLine.length === 0) {
       continue;
     } else if (trimmedLine.startsWith("<?")) {
@@ -276,6 +272,8 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
           fixedLines[i] += "\n";
         }
       }
+    } else if (fixedLines[i].trim().startsWith("<title>")) {
+      fixedLines[i] += "\n";
     }
   }
   // Add document identifier line if missing:
