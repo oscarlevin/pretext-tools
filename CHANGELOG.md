@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Bugs with formatting.
+- Conversion of selection: convert reserved characters (&, <, >) to entities.
 
 
 ## [0.18.0] - 2024-05-14

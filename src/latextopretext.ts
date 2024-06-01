@@ -5,6 +5,16 @@ const blocks = constants.tex2ptxBlocks;
 
 // Paragraph element conversions /////////////////////////////////
 
+function convertSpecialChars(text: string) {
+  // Replace bare &, < and > with their HTML entities
+  let result = text;
+  // result = result.replace(/(?<=\$[^$]*?)&(?=[^$]*?\$)/gs,'\amp');
+  result = text.replace(/&\s/g, "&amp; ");
+  result = result.replace(/<\s/g, "&lt; ");
+  result = result.replace(/>\s/g, "&gt; ");
+  return result;
+}
+
 function convertMath(text: string) {
   //convert diplay math mode (assumes all in one line)
   let result = text.replace(
@@ -47,6 +57,7 @@ function convertQuotation(text: string) {
 
 function convertP(text: string) {
   let result = text;
+  result = convertSpecialChars(result);
   result = convertMath(result);
   result = convertTextMarkup(result);
   result = convertQuotation(result);
@@ -90,8 +101,8 @@ function makeLines(text: string) {
   // Create an array of lines, with whitespace stripped from the beginning and end of each line.
   let lines = text.split(/\r\n|\r|\n/);
   lines = lines.map((line) => line.trim());
-  console.log("LINES: " + lines);
-  console.log("LINES LENGTH: " + lines.length);
+  // console.log("LINES: " + lines);
+  // console.log("LINES LENGTH: " + lines.length);
 
   // If lines contains multiple lines, we process it, otherwise just return the single line.
   if (lines.length > 1) {
@@ -114,8 +125,8 @@ function makeLines(text: string) {
     // Then remove empty lines.
     lines = lines.filter((line) => line.length > 0);
   }
-  console.log("LINES: " + lines);
-  console.log("LINES LENGTH: " + lines.length);
+  // console.log("LINES: " + lines);
+  // console.log("LINES LENGTH: " + lines.length);
   return lines;
 }
 
