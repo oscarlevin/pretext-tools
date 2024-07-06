@@ -268,6 +268,18 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
     .getConfiguration("pretext-tools")
     .get("formatter.breakSentences");
   console.log("extraLineBreaks is", extraLineBreaks);
+
+  // Determine the number of spaces or tabs each indent is in current editor.
+  let editorTabSize = vscode.window.activeTextEditor?.options.tabSize;
+  console.log("editorTabSize is", editorTabSize);
+  let editorInsertSpaces = vscode.window.activeTextEditor?.options.insertSpaces;
+  console.log("editorInsertSpaces is", editorInsertSpaces);
+  // Set indent character to \t or a number of ss based on editor settings.
+  let indentChar = "\t";
+  if (editorInsertSpaces && typeof editorTabSize === "number") {
+    indentChar = " ".repeat(editorTabSize);
+  }
+
   let level = 0;
   let verbatim = false;
   let lines = allText.split(/\r\n|\r|\n/g);
@@ -284,19 +296,19 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       fixedLines.push(trimmedLine+"\n");
     } else if (trimmedLine.startsWith("<!--")) {
       // It's a comment:
-      fixedLines.push("\t".repeat(level) + trimmedLine);
+      fixedLines.push(indentChar.repeat(level) + trimmedLine);
     } else if (closeTagMatch) {
       if (blockTags.includes(closeTagMatch[1])) {
         level = Math.max(0, level - 1);
-        fixedLines.push("\t".repeat(level) + trimmedLine);
+        fixedLines.push(indentChar.repeat(level) + trimmedLine);
       } else if (verbatimTags.includes(closeTagMatch[1])) {
         verbatim = false;
-        fixedLines.push("\t".repeat(level) + trimmedLine);
+        fixedLines.push(indentChar.repeat(level) + trimmedLine);
       } else {
-        fixedLines.push("\t".repeat(level) + trimmedLine);
+        fixedLines.push(indentChar.repeat(level) + trimmedLine);
       }
     } else if (openTagMatch) {
-      fixedLines.push("\t".repeat(level) + trimmedLine);
+      fixedLines.push(indentChar.repeat(level) + trimmedLine);
       if (blockTags.includes(openTagMatch[1])) {
         level += 1;
       } else if (verbatimTags.includes(openTagMatch[1])) {
@@ -306,9 +318,9 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       fixedLines.push(line);
     } else {
       if (extraLineBreaks) {
-        trimmedLine = trimmedLine.replace(/\.\s+/g, ".\n" + "\t".repeat(level));
+        trimmedLine = trimmedLine.replace(/\.\s+/g, ".\n" + indentChar.repeat(level));
       }
-      fixedLines.push("\t".repeat(level) + trimmedLine);
+      fixedLines.push(indentChar.repeat(level) + trimmedLine);
     }
   }
   // Second pass: add empty line between appropriate tags.

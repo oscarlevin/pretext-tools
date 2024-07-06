@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Bugs with formatting.
+- Formatting now respects editor's choice of tab/space for indentation.
 - Conversion of selection: convert reserved characters (&, <, >) to entities.
 
 

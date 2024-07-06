@@ -4,7 +4,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as https from "https";
-import moment = require("moment");
+import * as date from "date-and-time";
 
 const pretextWriter = path.join(homedir(), ".ptx", "pandoc", "pretext.lua");
 
@@ -44,11 +44,12 @@ export function convertToPretext(method: string = "pandoc") {
 function runPlastex(inputfile: string) {
   console.log("Converting to pretext using PlasTeX converter");
   // set outputDir to imports/timestamp
+  const now = new Date();
   const outputDir = path.join(
     path.dirname(inputfile),
     "imports",
     path.basename(inputfile, ".tex"),
-    moment().format("YYYYMMDD-HHmm")
+    date.format(now, "YYYYMMDD-HHmm")
   );
   console.log("outputDir: " + outputDir);
   // run pretext import
