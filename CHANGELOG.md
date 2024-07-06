@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [] - 2024-07-06
 
+## [] - 2024-07-06
+
 ### Added
 
 - Blank Lines formatting option to specify whether no, some, or many blank lines are added between elements.
