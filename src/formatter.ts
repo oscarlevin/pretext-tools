@@ -164,7 +164,17 @@ const math_display = ["me", "men", "md", "mdn"];
 
 const footnote_like = ["fn"];
 
-const nestable_tags = ["ul", "ol", "li", "p", "task", "figure", "sidebyside", "notation", "row"];
+const nestable_tags = [
+  "ul",
+  "ol",
+  "li",
+  "p",
+  "task",
+  "figure",
+  "sidebyside",
+  "notation",
+  "row",
+];
 
 // note that c is special, because it is inline verbatim
 const verbatimTags = [
@@ -249,7 +259,10 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
   for (let btag of blockTags) {
     if (allText.includes("<" + btag)) {
       // start tag can be <tag>, <tag attr="val">, or <tag xmlns="..."> but shouldn't be self closing (no self closing tag would have xmlns in it)
-      let startTag = new RegExp("<" + btag + "(>|([^/]*?)>|(.*xmlns.*?)>)", "g");
+      let startTag = new RegExp(
+        "<" + btag + "(>|([^/]*?)>|(.*xmlns.*?)>)",
+        "g"
+      );
       let endTag = new RegExp("<\\/" + btag + ">(.?)", "g");
       allText = allText.replace(startTag, "\n$&\n");
       allText = allText.replace(endTag, "\n$&\n");
@@ -259,7 +272,7 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
     let startTag = new RegExp("<" + tag + "(.*?)>", "g");
     let endTag = new RegExp("<\\/" + tag + ">(.?)", "g");
     let selfCloseTag = new RegExp("<" + tag + "(.*?)/>", "g");
-    allText = allText.replace(startTag, "\n$&");  
+    allText = allText.replace(startTag, "\n$&");
     allText = allText.replace(endTag, "$&\n");
     allText = allText.replace(selfCloseTag, "$&\n");
   }
@@ -293,7 +306,7 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       continue;
     } else if (trimmedLine.startsWith("<?")) {
       // It's the start line of the file:
-      fixedLines.push(trimmedLine+"\n");
+      fixedLines.push(trimmedLine + "\n");
     } else if (trimmedLine.startsWith("<!--")) {
       // It's a comment:
       fixedLines.push(indentChar.repeat(level) + trimmedLine);
@@ -318,13 +331,18 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       fixedLines.push(line);
     } else {
       if (breakSentences) {
-        trimmedLine = trimmedLine.replace(/\.\s+/g, ".\n" + indentChar.repeat(level));
+        trimmedLine = trimmedLine.replace(
+          /\.\s+/g,
+          ".\n" + indentChar.repeat(level)
+        );
       }
       fixedLines.push(indentChar.repeat(level) + trimmedLine);
     }
   }
   // Second pass: add empty line between appropriate tags depending on blankLines setting.
-  const blankLines = vscode.workspace.getConfiguration("pretext-tools").get("formatter.blankLines");
+  const blankLines = vscode.workspace
+    .getConfiguration("pretext-tools")
+    .get("formatter.blankLines");
   switch (blankLines) {
     case "few":
       // do nothing
@@ -345,7 +363,11 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       break;
     case "many":
       for (let i = 0; i < fixedLines.length - 1; i++) {
-        if (fixedLines[i].trim().startsWith("</") || (fixedLines[i].trim().startsWith("<") && fixedLines[i+1].trim().startsWith("<"))) {
+        if (
+          fixedLines[i].trim().startsWith("</") ||
+          (fixedLines[i].trim().startsWith("<") &&
+            fixedLines[i + 1].trim().startsWith("<"))
+        ) {
           fixedLines[i] += "\n";
         }
       }

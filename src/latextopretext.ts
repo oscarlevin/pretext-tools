@@ -112,7 +112,7 @@ function makeLines(text: string) {
       if (
         lines[i].length > 0 &&
         lines[i + 1].length > 0 &&
-        (lines[i+1].startsWith("\\[") ||
+        (lines[i + 1].startsWith("\\[") ||
           lines[i + 1].startsWith("\\]") ||
           (!lines[i].startsWith("\\") && !lines[i + 1].startsWith("\\")))
       ) {

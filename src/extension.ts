@@ -194,7 +194,6 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   // set up status bar item
-  // set up status bar item
   ptxSBItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
     -100

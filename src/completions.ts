@@ -55,7 +55,6 @@ function getCurrentTag(
   return currentTag;
 }
 
-
 // Types for snippets
 type Snippet = {
   prefix: string;
