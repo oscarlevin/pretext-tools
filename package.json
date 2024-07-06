@@ -209,6 +209,21 @@
             ],
             "markdownDescription": "Select which method to use when viewing the output of a pretext project.  Leaving this at the default will ask for available methods each time.  Your choice will likely depend on the size of your project and whether you are building output other than the 'web' target."
           },
+          "pretext-tools.formatter.blankLines": {
+            "type":"string",
+            "default": "some",
+            "enum": [
+              "few",
+              "some",
+              "many"
+            ],
+            "markdownEnumDescriptions": [
+              "No blank lines between elements.",
+              "One line break between elements of the same type (default)",
+              "A blank line between every pair of tags."
+            ],
+            "markdownDescription": "Select whether few, some, or many blank lines appear when the document is formatted."
+          },
           "pretext-tools.formatter.breakSentences": {
             "type": "boolean",
             "default": true,

@@ -264,10 +264,10 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
     allText = allText.replace(selfCloseTag, "$&\n");
   }
 
-  const extraLineBreaks = vscode.workspace
+  const breakSentences = vscode.workspace
     .getConfiguration("pretext-tools")
     .get("formatter.breakSentences");
-  console.log("extraLineBreaks is", extraLineBreaks);
+  console.log("extraLineBreaks is", breakSentences);
 
   // Determine the number of spaces or tabs each indent is in current editor.
   let editorTabSize = vscode.window.activeTextEditor?.options.tabSize;
@@ -317,25 +317,41 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
     } else if (verbatim) {
       fixedLines.push(line);
     } else {
-      if (extraLineBreaks) {
+      if (breakSentences) {
         trimmedLine = trimmedLine.replace(/\.\s+/g, ".\n" + indentChar.repeat(level));
       }
       fixedLines.push(indentChar.repeat(level) + trimmedLine);
     }
   }
-  // Second pass: add empty line between appropriate tags.
-  for (let i = 0; i < fixedLines.length - 1; i++) {
-    if (fixedLines[i].trim().startsWith("</")) {
-      for (let tag of newlineTags) {
-        let startTag = new RegExp("<" + tag + "(.*?)>", "g");
-        if (startTag.test(fixedLines[i + 1])) {
+  // Second pass: add empty line between appropriate tags depending on blankLines setting.
+  const blankLines = vscode.workspace.getConfiguration("pretext-tools").get("formatter.blankLines");
+  switch (blankLines) {
+    case "few":
+      // do nothing
+      break;
+    case "some":
+      for (let i = 0; i < fixedLines.length - 1; i++) {
+        if (fixedLines[i].trim().startsWith("</")) {
+          for (let tag of newlineTags) {
+            let startTag = new RegExp("<" + tag + "(.*?)>", "g");
+            if (startTag.test(fixedLines[i + 1])) {
+              fixedLines[i] += "\n";
+            }
+          }
+        } else if (fixedLines[i].trim().startsWith("<title>")) {
           fixedLines[i] += "\n";
         }
       }
-    } else if (fixedLines[i].trim().startsWith("<title>")) {
-      fixedLines[i] += "\n";
-    }
+      break;
+    case "many":
+      for (let i = 0; i < fixedLines.length - 1; i++) {
+        if (fixedLines[i].trim().startsWith("</") || (fixedLines[i].trim().startsWith("<") && fixedLines[i+1].trim().startsWith("<"))) {
+          fixedLines[i] += "\n";
+        }
+      }
+      break;
   }
+
   // Add document identifier line if missing:
   if (!fixedLines[0].trim().startsWith("<?xml")) {
     fixedLines.unshift('<?xml version="1.0" encoding="UTF-8" ?>\n');

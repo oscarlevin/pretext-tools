@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- New snippets/completions
+- Blank Lines formatting option to specify whether no, some, or many blank lines are added between elements.
+- New snippets/completions.
 
 ### Fixed
 
