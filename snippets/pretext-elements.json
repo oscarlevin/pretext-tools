@@ -480,6 +480,11 @@
     "body": "<statement>\n\t<p>\n\t\t$0\n\t</p>\n</statement>",
     "description": "statement"
   },
+  "subexercises": {
+    "prefix": "<subexercises>",
+    "body": "<subexercises>\n\t<title>$1</title>\n\n\t<exercise>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t$2\n\t\t\t</p>\n\t\t</statement>\n\t</exercise>\n\t$0\n</subexercises>",
+    "description": "subexercises (to group exercises)"
+  },
   "subsection": {
     "prefix": "<subsection>",
     "body": "<subsection xml:id=\"subsec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}\">\n\t<title>$1</title>\n\t$0\n</subsection>",
