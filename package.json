@@ -187,7 +187,21 @@
           "systemId": "https://raw.githubusercontent.com/PreTeXtBook/pretext/master/schema/pretext.rng"
         }
       ],
-      "xml.validation.xInclude.enabled": true
+      "xml.validation.xInclude.enabled": true,
+      "cSpell.enableFiletypes": [
+        "pretext"
+      ],
+      "cSpell.languageSettings": [
+        { 
+            "languageId": "pretext",
+            "ignoreRegExpList": [
+                "<.*?>",
+                "<m>.*?</m>",
+                "<(me|men|md|mdn)>(.|\n|\r|\n\r)*?</(me|men|md|mdn)>",
+                "<latex-image>(.|\n|\r|\n\r)*?</latex-image>"
+            ]
+        }
+      ]
     },
     "menus": {},
     "configuration": [

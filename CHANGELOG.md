@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
-## [] - 2024-07-06
+### Added
 
-## [] - 2024-07-06
+- Configuration defaults for cSpell spell checker to enable spell checking in pretext documents, and to ignore words inside tags and between math-mode tags (`<m>`, `<me>`, etc.)
+
+## [0.19.0] - 2024-07-06
 
 ### Added
 
