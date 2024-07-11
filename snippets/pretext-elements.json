@@ -508,7 +508,7 @@
   "task": {
     "prefix": "<task>",
     "body": "<task>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>",
-    "description": "task (for parts of an exercise/project)."
+    "description": "task (for parts of an exercise/project).",
     "sort": "0"
   },
   "task (with workspace)": {
