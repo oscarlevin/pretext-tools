@@ -509,6 +509,12 @@
     "prefix": "<task>",
     "body": "<task>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>",
     "description": "task (for parts of an exercise/project)."
+    "sort": "0"
+  },
+  "task (with workspace)": {
+    "prefix": "<task workspace=\"\">",
+    "body": "<task workspace=\"$1\">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>",
+    "description": "task (for parts of an exercise in worksheet)"
   },
   "technology": {
     "prefix": "<technology>",
