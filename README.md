@@ -26,11 +26,12 @@ Open the root folder of your PreTeXt project in VSCode. Open any of your source 
 Having a document identified as a PreTeXt document will give you:
 
 - Syntax highlighting
-- Access to snippets (auto-complete)
+- Access to snippets and completions of PreTeXt tags, attributes, and cross-references.
 - Access to keyboard shortcuts for PreTeXt commands.
-- Schema validation (via required vscode-xml extension)
+- Schema validation (via required vscode-xml extension).
+- Better spell checking using the Code Spell Checker extension.
 
-### Snippets
+### Completions/Snippets
 
 PreTeXt has a lot of markup to describe the structure of the document. To vastly speed up the authoring of the documents, the extension provides autocomplete _snippets_ for almost all of the supported tags and attributes of PreTeXt. As you type, if you start typing a tag, such as `<example>`, autocomplete will pop up a menu at your cursor suggesting this tag. If you hit ENTER (or if configured, TAB), then the snippet will expand and put your cursor in the right spot to start typing the statement of the example.
 
@@ -63,7 +64,9 @@ If you have PreTeXt-CLI installed in a virtual environment, or have a non-standa
 
 ### Formatting
 
-Using the command pallet, you can request to "Format Document With..." and select "pretext-tools" as the formatter.  You can also set this as the default from that menu.  In settings, you can specify to "Split Sentences" which will take long paragraphs and start new lines after each period.  Consider setting "Format on Save" to keep your document nicely formatted always.
+Using the command pallet, you can request to "Format Document With..." and select "pretext-tools" as the formatter.  You can also set this as the default from that menu.  In settings, you can specify to "Split Sentences" which will take long paragraphs and start new lines after each period.  You can also specify whether you want no, some, or lots of blank lines inserted in the settings. 
+
+Consider setting "Format on Save" to keep your document nicely formatted always.
 
 ### Converting to PreTeXt
 
