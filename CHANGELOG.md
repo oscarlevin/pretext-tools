@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Configuration defaults for cSpell spell checker to enable spell checking in pretext documents, and to ignore words inside tags and between math-mode tags (`<m>`, `<me>`, etc.)
+- Configuration defaults for cSpell spell checker to enable spell checking in pretext documents, and to ignore words inside tags and between math-mode tags (`<m>`, `<me>`, etc.).
+- Support for CLI 2.5+ schema locations.
 
 ## [0.19.0] - 2024-07-06
 

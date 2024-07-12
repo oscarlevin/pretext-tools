@@ -304,17 +304,27 @@ function setSchema() {
     const schemaConfig = vscode.workspace
       .getConfiguration("pretext-tools")
       .get("schema.Version");
+    // set schema folder based on ptxVersion number:
+    //  - < 2.5, use userHomeDir/.ptx/schema/
+    //  - >= 2.5, use userHomeDir/.ptx/{ptxVersion}/core/schema/
+    let schemaDir: string;
+    if (parseFloat(ptxVersion) < 2.5) {
+      schemaDir = path.join(userHomeDir, ".ptx", "schema");
+    } else {
+      schemaDir = path.join(
+        userHomeDir,
+        ".ptx",
+        ptxVersion,
+        "core",
+        "schema",
+      );
+    }
     switch (schemaConfig) {
       case "Stable":
-        schemaPath = path.join(userHomeDir, ".ptx", "schema", "pretext.rng");
+        schemaPath = path.join(schemaDir, "pretext.rng");
         break;
       case "Experimental":
-        schemaPath = path.join(
-          userHomeDir,
-          ".ptx",
-          "schema",
-          "pretext-dev.rng"
-        );
+        schemaPath = path.join(schemaDir, "pretext-dev.rng");
         break;
       case "Custom":
         console.log(
@@ -334,6 +344,7 @@ function setSchema() {
       break;
     }
   }
+  console.log("Schema set to: ", schemaPath);
   console.log("Configuration is now: ", schemas);
   configuration.update("fileAssociations", schemas);
 }
