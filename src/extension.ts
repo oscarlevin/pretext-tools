@@ -89,6 +89,17 @@ async function runPretext(
               // Update `lastError` so it will show the final error from running pretext
               pretextOutputChannel.append(`${data}`);
               lastError = `${data}`;
+              vscode.window
+                .showErrorMessage(
+                  "PreTeXt encountered an error: " + lastError,
+                  "View log",
+                  "Dismiss"
+                )
+                .then((option) => {
+                  if (option === "View log") {
+                    pretextOutputChannel.show();
+                  }
+                });
               status = "error";
             } else if (
               data.toString().includes(`pretext view`) &&
@@ -96,14 +107,35 @@ async function runPretext(
             ) {
               vscode.window
                 .showInformationMessage(
-                  "Build successful!",
-                  "View output",
+                  "Build successful! You can preview your output now.",
                   "View log",
                   "Dismiss"
                 )
                 .then((option) => {
-                  if (option === "View output") {
-                    vscode.commands.executeCommand("pretext-tools.view");
+                  if (option === "View log") {
+                    pretextOutputChannel.show();
+                  }
+                });
+              status = "success";
+            } else if (
+              data
+                .toString()
+                .includes(
+                  "Your built project will soon be available to the public at:"
+                ) &&
+              ptxCommand === "deploy"
+            ) {
+              vscode.window
+                .showInformationMessage(
+                  "Deploy successful! You can view your deployed site now.",
+                  "Visit site",
+                  "View log",
+                  "Dismiss"
+                )
+                .then((option) => {
+                  if (option === "Visit site") {
+                    const siteURL = data.toString().trim();
+                    vscode.env.openExternal(vscode.Uri.parse(siteURL));
                   } else if (option === "View log") {
                     pretextOutputChannel.show();
                   }
