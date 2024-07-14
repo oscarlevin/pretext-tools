@@ -14,6 +14,7 @@ export {
   setSpellCheckConfig,
   updateStatusBarItem,
   setupTerminal,
+  stripColorCodes,
 };
 
 function getDir(myPath: string = "") {
@@ -484,4 +485,10 @@ export function updateReferences(
   );
   console.log("Done updating labels");
   return labels;
+}
+
+function stripColorCodes(input: string): string {
+  // ANSI color code regex
+  const regex = /\x1B\[[0-9;]*m/g;
+  return input.replace(regex, "");
 }

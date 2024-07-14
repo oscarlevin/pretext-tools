@@ -50,7 +50,7 @@ async function runPretext(
         var filePath = utils.getDir(passedPath);
         console.log("cwd = " + filePath);
         if (filePath !== "" && filePath !== ".") {
-          let lastError: string | undefined = undefined;
+          let capturedOutput: string[] = [];
           pretextOutputChannel.clear();
           pretextOutputChannel.appendLine(
             "\n\nNow running `" + fullCommand + "`..."
@@ -65,45 +65,41 @@ async function runPretext(
             pretextOutputChannel.append(`${data}`);
           });
           ptxRun.stderr.on("data", function (data) {
+            data = utils.stripColorCodes(data.toString());
             console.log(`stderr: ${data}`);
             // var outputLines = data.toString().split(/\r?\n/);
             // for (const line of outputLines) {
             // console.log(line + "\n");
+            // Gather important output lines (store in capturedOutput) and add to output channel
             if (
               data.toString().startsWith("Server will soon be available at") ||
               data.toString().includes("[Ctrl]+[C]")
             ) {
               pretextOutputChannel.appendLine(`${data}`);
               pretextOutputChannel.append(
-                "(this local server will remain running until you close vs code)\n"
+                "(this local server will remain running until you close vs-code)\n"
               );
+              capturedOutput.push(data);
               console.log("Using view. Status should change back");
               utils.updateStatusBarItem(ptxSBItem, "success");
               resolve();
               clearInterval(interval);
-            } else if (
-              data.toString().startsWith("error:") ||
-              data.toString().startsWith("critical:")
-            ) {
-              // Update `lastError` so it will show the final error from running pretext
-              pretextOutputChannel.append(`${data}`);
-              lastError = `${data}`;
-              console.log("Error: ", lastError);
-              vscode.window.showErrorMessage(
-                  "PreTeXt encountered an error: \n" + lastError,
-                  "View log",
-                  "Dismiss"
-                )
-                .then((option) => {
-                  if (option === "View log") {
-                    pretextOutputChannel.show();
-                  }
-                });
-              status = "error";
-            } else if (
+            }
+            // else if (
+            //   data.includes("error:") ||
+            //   data.includes("critical:")
+            // ) {
+            //   // Update `lastError` so it will show the final error from running pretext
+            //   pretextOutputChannel.append(`${data}`);
+            //   capturedOutput.push(data);
+            //   console.log("found an error/critical: ", data);
+            //   status = "error";
+            // }
+            else if (
               data.toString().includes(`pretext view`) &&
               ptxCommand === "build"
             ) {
+              capturedOutput.push(data);
               vscode.window
                 .showInformationMessage(
                   "Build successful! You can preview your output now.",
@@ -124,6 +120,7 @@ async function runPretext(
                 ) &&
               ptxCommand === "deploy"
             ) {
+              capturedOutput.push(data);
               vscode.window
                 .showInformationMessage(
                   "Deploy successful! You can view your deployed site now.",
@@ -134,7 +131,11 @@ async function runPretext(
                 .then((option) => {
                   if (option === "Visit site") {
                     // get last line of data which is the url
-                    const siteURL = data.toString().split("soon be available to the public at:").slice(-1)[0].trim();
+                    const siteURL = data
+                      .toString()
+                      .split("soon be available to the public at:")
+                      .slice(-1)[0]
+                      .trim();
                     console.log("Opening site at: ", siteURL);
                     vscode.env.openExternal(siteURL);
                   } else if (option === "View log") {
@@ -143,12 +144,12 @@ async function runPretext(
                 });
               status = "success";
             } else {
-              pretextOutputChannel.append(`${data}`);
+              pretextOutputChannel.append(data);
             }
           });
 
           ptxRun.on("close", function (code) {
-            console.log(code?.toString());
+            console.log(code);
             if (ptxRun.killed) {
               pretextOutputChannel.appendLine(
                 "...PreTeXt command terminated early."
@@ -157,10 +158,12 @@ async function runPretext(
             } else {
               pretextOutputChannel.appendLine("...PreTeXt command finished.");
             }
-            if (lastError) {
+            if (code === 1) {
+              console.log("PreTeXt encountered an error; code =", code);
               vscode.window
                 .showErrorMessage(
-                  "PreTeXt encountered one or more errors: " + lastError,
+                  "PreTeXt encountered one or more errors: " +
+                    capturedOutput.splice(-1)[0],
                   "Show Log",
                   "Dismiss"
                 )
@@ -237,10 +240,7 @@ export async function activate(context: vscode.ExtensionContext) {
     console.log("Error setting schema");
   }
   // Set up vscode elements
-  pretextOutputChannel = vscode.window.createOutputChannel(
-    "PreTeXt Tools",
-    "log"
-  );
+  pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
 
   // set up status bar item
   ptxSBItem = vscode.window.createStatusBarItem(

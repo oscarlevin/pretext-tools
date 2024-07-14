@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improved feedback messages when running PreTeXt commands.
 
+### Fixed
+
+- Garbled log messages in the output pain are now not garbled.
+
 ## [0.19.0] - 2024-07-06
 
 ### Added
