@@ -170,8 +170,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
   vscode.workspace.onDidChangeConfiguration((event) => {
     let affected = event.affectsConfiguration("pretext-tools");
-    if (affected) {
-      console.log("PreTeXt Tools configuration changed");
+    if (event.affectsConfiguration("pretext-tools.schema")) {
+      console.log("PreTeXt Tools schema configuration changed");
       // Set schema for pretext files:
       try {
         utils.setSchema();
@@ -179,7 +179,23 @@ export async function activate(context: vscode.ExtensionContext) {
         console.log("Error setting schema");
       }
     }
+    if (event.affectsConfiguration("pretext-tools.spellCheck")) {
+      console.log("PreTeXt Tools spell check configuration changed");
+      // Set spell check options:
+      try {
+        utils.setSpellCheckConfig();
+      } catch {
+        console.log("Error setting spell check");
+      }
+    }
   });
+
+  // Set spell check options:
+  try {
+    utils.setSpellCheckConfig();
+  } catch {
+    console.log("Error setting spell check");
+  }
 
   // Set schema for pretext files:
   try {

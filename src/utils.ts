@@ -3,6 +3,7 @@ import { homedir } from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 import * as fs from "fs";
+import { SpellCheckScope } from "./types";
 
 export {
   getDir,
@@ -10,6 +11,7 @@ export {
   ptxExec,
   getTargets,
   setSchema,
+  setSpellCheckConfig,
   updateStatusBarItem,
   setupTerminal,
 };
@@ -295,6 +297,57 @@ function getTargets() {
   }
 }
 
+function setSpellCheckConfig() {
+  const cSpellConfig = vscode.workspace.getConfiguration("cSpell");
+  // Now update which scopes should be checked or ignored for spell checking.
+  const spellCheckScopes: SpellCheckScope | undefined = vscode.workspace
+    .getConfiguration("pretext-tools")
+    .get("spellCheck.checkErrorsInsideScope");
+  console.log(
+    "Current value of spellCheck.checkErrorsInsideScope is",
+    spellCheckScopes
+  );
+  let ignorePatterns: string[] = [];
+  if (spellCheckScopes) {
+    if (spellCheckScopes.comments === "Ignore") {
+      ignorePatterns.push("<!--.*?-->");
+    }
+    if (spellCheckScopes.inlineMath === "Ignore") {
+      ignorePatterns.push("<m>.*?</m>");
+    }
+    if (spellCheckScopes.displayMath === "Ignore") {
+      ignorePatterns.push(
+        "<(me|men|md|mdn)>(.|\n|\r|\n\r)*?</(me|men|md|mdn)>"
+      );
+    }
+    if (spellCheckScopes.inlineCode === "Ignore") {
+      ignorePatterns.push("<c>.*?</c>");
+    }
+    if (spellCheckScopes.blockCode === "Ignore") {
+      ignorePatterns.push(
+        "<(program|sage|pre)>(.|\n|\r|\n\r)*?</(program|sage|pre)>"
+      );
+    }
+    if (spellCheckScopes.latexImage === "Ignore") {
+      ignorePatterns.push("<latex-image>(.|\n|\r|\n\r)*?</latex-image>");
+    }
+    if (spellCheckScopes.tags === "Ignore") {
+      ignorePatterns.push("<[^!].*>");
+    }
+  }
+  // Get current languageSettings for cSpell and update those for pretext
+  let languageSettings: any = cSpellConfig.get("languageSettings");
+  for (let dicts of languageSettings) {
+    if (dicts["languageId"] === "pretext") {
+      console.log("Current value of languageSettings for Pretext is", dicts);
+      dicts["ignoreRegExpList"] = ignorePatterns;
+      break;
+    }
+  }
+  console.log("Updated languageSettings for Pretext to", languageSettings);
+  cSpellConfig.update("languageSettings", languageSettings);
+}
+
 function setSchema() {
   let schemaPath: string | undefined = vscode.workspace
     .getConfiguration("pretext-tools")
@@ -311,13 +364,7 @@ function setSchema() {
     if (parseFloat(ptxVersion) < 2.5) {
       schemaDir = path.join(userHomeDir, ".ptx", "schema");
     } else {
-      schemaDir = path.join(
-        userHomeDir,
-        ".ptx",
-        ptxVersion,
-        "core",
-        "schema",
-      );
+      schemaDir = path.join(userHomeDir, ".ptx", ptxVersion, "core", "schema");
     }
     switch (schemaConfig) {
       case "Stable":

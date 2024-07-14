@@ -190,17 +190,6 @@
       "xml.validation.xInclude.enabled": true,
       "cSpell.enableFiletypes": [
         "pretext"
-      ],
-      "cSpell.languageSettings": [
-        { 
-            "languageId": "pretext",
-            "ignoreRegExpList": [
-                "<.*?>",
-                "<m>.*?</m>",
-                "<(me|men|md|mdn)>(.|\n|\r|\n\r)*?</(me|men|md|mdn)>",
-                "<latex-image>(.|\n|\r|\n\r)*?</latex-image>"
-            ]
-        }
       ]
     },
     "menus": {},
@@ -224,6 +213,7 @@
             "markdownDescription": "Select which method to use when viewing the output of a pretext project.  Leaving this at the default will ask for available methods each time.  Your choice will likely depend on the size of your project and whether you are building output other than the 'web' target."
           },
           "pretext-tools.formatter.blankLines": {
+            "order": 4,
             "type": "string",
             "default": "some",
             "enum": [
@@ -239,16 +229,90 @@
             "markdownDescription": "Select whether few, some, or many blank lines appear when the document is formatted."
           },
           "pretext-tools.formatter.breakSentences": {
+            "order": 4,
             "type": "boolean",
             "default": true,
             "markdownDescription": "Whether to add a line break after each period in a paragraph."
           },
+          "pretext-tools.spellCheck.checkErrorsInsideScope": {
+            "order": 3,
+            "type": "object",
+            "properties": {
+              "comments": {
+                "type": "string",
+                "default": "Check",
+                "enum": [
+                  "Check",
+                  "Ignore"
+                ],
+                "markdownDescription": "Check or Ignore spelling in comments."
+              },
+              "inlineMath": {
+                "type": "string",
+                "default": "Ignore",
+                "enum": [
+                  "Check",
+                  "Ignore"
+                ],
+                "markdownDescription": "Check or Ignore spelling for inline math (`<m>` tags)."
+              },
+              "displayMath": {
+                "type": "string",
+                "default": "Ignore",
+                "enum": [
+                  "Check",
+                  "Ignore"
+                ],
+                "markdownDescription": "Check or Ignore spelling in display math (`<me>`, `<md>`, etc)."
+              },
+              "inlineCode": {
+                "type": "string",
+                "default": "Ignore",
+                "enum": [
+                  "Check",
+                  "Ignore"
+                ],
+                "markdownDescription": "Check or Ignore spelling in inline code (`<c>` tags)."
+              },
+              "blockCode": {
+                "type": "string",
+                "default": "Ignore",
+                "enum": [
+                  "Check",
+                  "Ignore"
+                ],
+                "markdownDescription": "Check or Ignore spelling in program elements."
+              },
+              "latexImage": {
+                "type": "string",
+                "default": "Ignore",
+                "enum": [
+                  "Check",
+                  "Ignore"
+                ],
+                "markdownDescription": "Check or Ignore spelling in latex-image."
+              },
+              "tags": {
+                "type": "string",
+                "default": "Ignore",
+                "enum": [
+                  "Check",
+                  "Ignore"
+                ],
+                "markdownDescription": "Check or Ignore spelling in tags and attributes."
+              }
+            },
+            "markdownDescription": "Check or ignore spelling inside specific scopes.  You must have the Code Spell Checker extension installed for this to work and need to ensure that pretext files are set to be checked in the settings of that extension.",
+            "additionalProperties": false
+          },
           "pretext-tools.installPretext": {
+            "order": 10,
             "type": "boolean",
             "default": true,
             "markdownDescription": "Whether pretext-tools should try to use pip to install PreTeXt if it cannot find it."
           },
           "pretext-tools.schema.Version": {
+            "order": 1,
             "type": "string",
             "default": "Stable",
             "enum": [
@@ -264,11 +328,13 @@
             "markdownDescription": "Select the version of the PreTeXt schema to validate against.  If you are using newer features, you might try to experimental schema, which isn't as stable, but will give you fewer warnings."
           },
           "pretext-tools.schema.customPath": {
+            "order": 2,
             "type": "string",
             "default": "",
             "markdownDescription": "Provide a path to your custom schema file.  This will override the schema version setting."
           },
           "pretext-tools.pythonPath": {
+            "order": 20,
             "type": "string",
             "default": "",
             "markdownDescription": "To use a non-standard python installation or virtual environment, set path to python here.  If blank we will use `python -m` or `python3 -m`. **Requires restart of VS Code**"

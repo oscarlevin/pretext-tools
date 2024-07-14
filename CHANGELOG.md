@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Configuration defaults for cSpell spell checker to enable spell checking in pretext documents, and to ignore words inside tags and between math-mode tags (`<m>`, `<me>`, etc.).
+- Spell check scopes are configurable: you can specify whether to check or ignore spelling inside comments, math, latex-image, code, etc.
 - Support for CLI 2.5+ schema locations.
 
 ## [0.19.0] - 2024-07-06
