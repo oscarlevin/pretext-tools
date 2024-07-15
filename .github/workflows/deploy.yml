@@ -49,7 +49,7 @@ jobs:
         run: |
           value=$(jq -r '.version' package.json | tr -d '"')
           echo "VERSION=$value" >> "$GITHUB_ENV"
-          newline="\\n## [${{ env.VERSION }}] - $(date +'%Y-%m-%d')"
+          newline="\\n## [${value}] - $(date +'%Y-%m-%d')"
           sed '/## \[UNRELEASED\]/a\'"$newline" CHANGELOG.md > CHANGELOG.md.tmp
           mv CHANGELOG.md.tmp CHANGELOG.md
 
@@ -62,31 +62,15 @@ jobs:
         run: |
           git push origin main
 
-  release:
-    needs: deploy
-    name: Create Release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: setup variable
-        run: |
-          value=$(jq -r '.version' package.json | tr -d '"')
-          echo "VERSION=$value" >> "$GITHUB_ENV"
-
-      - name: debug value
-        run: |
-          echo ${{ env.VERSION}}
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: v${{ env.VERSION }}
+          tag_name: "v${{ env.VERSION }}"
 
-          release_name: v${{ env.VERSION }}
+          release_name: "v${{ env.VERSION }}"
 
           body: |
             See the [changelog](CHANGELOG.md) for details.
