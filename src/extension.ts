@@ -51,6 +51,7 @@ async function runPretext(
         console.log("cwd = " + filePath);
         if (filePath !== "" && filePath !== ".") {
           let capturedOutput: string[] = [];
+          let capturedErrors: string[] = [];
           pretextOutputChannel.clear();
           pretextOutputChannel.appendLine(
             "\n\nNow running `" + fullCommand + "`..."
@@ -62,15 +63,19 @@ async function runPretext(
           });
           ptxRun.stdout.on("data", function (data) {
             console.log(`stdout: ${data}`);
-            pretextOutputChannel.append(`${data}`);
-          });
-          ptxRun.stderr.on("data", function (data) {
             data = utils.stripColorCodes(data.toString());
-            console.log(`stderr: ${data}`);
-            // var outputLines = data.toString().split(/\r?\n/);
-            // for (const line of outputLines) {
-            // console.log(line + "\n");
-            // Gather important output lines (store in capturedOutput) and add to output channel
+            // save important messages to capturedOutput and add to output channel
+            if (
+              data
+                .toString()
+                .includes(
+                  "Your built project will soon be available to the public at:"
+                )
+            ) {
+              capturedOutput.push(data);
+              console.log("found the url: ", capturedOutput);
+            }
+            // we treat the view command differently and add a special message to the output channel
             if (
               data.toString().startsWith("Server will soon be available at") ||
               data.toString().includes("[Ctrl]+[C]")
@@ -84,68 +89,14 @@ async function runPretext(
               utils.updateStatusBarItem(ptxSBItem, "success");
               resolve();
               clearInterval(interval);
-            }
-            // else if (
-            //   data.includes("error:") ||
-            //   data.includes("critical:")
-            // ) {
-            //   // Update `lastError` so it will show the final error from running pretext
-            //   pretextOutputChannel.append(`${data}`);
-            //   capturedOutput.push(data);
-            //   console.log("found an error/critical: ", data);
-            //   status = "error";
-            // }
-            else if (
-              data.toString().includes(`pretext view`) &&
-              ptxCommand === "build"
-            ) {
-              capturedOutput.push(data);
-              vscode.window
-                .showInformationMessage(
-                  "Build successful! You can preview your output now.",
-                  "View log",
-                  "Dismiss"
-                )
-                .then((option) => {
-                  if (option === "View log") {
-                    pretextOutputChannel.show();
-                  }
-                });
-              status = "success";
-            } else if (
-              data
-                .toString()
-                .includes(
-                  "Your built project will soon be available to the public at:"
-                ) &&
-              ptxCommand === "deploy"
-            ) {
-              capturedOutput.push(data);
-              vscode.window
-                .showInformationMessage(
-                  "Deploy successful! You can view your deployed site now.",
-                  "Visit site",
-                  "View log",
-                  "Dismiss"
-                )
-                .then((option) => {
-                  if (option === "Visit site") {
-                    // get last line of data which is the url
-                    const siteURL = data
-                      .toString()
-                      .split("soon be available to the public at:")
-                      .slice(-1)[0]
-                      .trim();
-                    console.log("Opening site at: ", siteURL);
-                    vscode.env.openExternal(siteURL);
-                  } else if (option === "View log") {
-                    pretextOutputChannel.show();
-                  }
-                });
-              status = "success";
             } else {
-              pretextOutputChannel.append(data);
+              pretextOutputChannel.append(`${data}`);
             }
+          });
+          ptxRun.stderr.on("data", function (data) {
+            console.log(`stderr: ${data}`);
+            data = utils.stripColorCodes(data.toString());
+            capturedErrors.push(data);
           });
 
           ptxRun.on("close", function (code) {
@@ -160,10 +111,13 @@ async function runPretext(
             }
             if (code === 1) {
               console.log("PreTeXt encountered an error; code =", code);
+              for (let error of capturedErrors) {
+                pretextOutputChannel.appendLine("Collected Errors:\n");
+                pretextOutputChannel.appendLine(error);
+              }
               vscode.window
                 .showErrorMessage(
-                  "PreTeXt encountered one or more errors: " +
-                    capturedOutput.splice(-1)[0],
+                  "PreTeXt encountered one or more errors",
                   "Show Log",
                   "Dismiss"
                 )
@@ -172,6 +126,54 @@ async function runPretext(
                     pretextOutputChannel.show();
                   }
                 });
+            } else {
+              console.log(
+                "PreTeXt command finished successfully; code =",
+                code
+              );
+              if (ptxCommand === "build") {
+                vscode.window
+                  .showInformationMessage(
+                    "Build successful! You can preview your output now.",
+                    "Dismiss",
+                    "View log"
+                  )
+                  .then((option) => {
+                    if (option === "View log") {
+                      pretextOutputChannel.show();
+                    }
+                  });
+              } else if (ptxCommand === "deploy") {
+                if (capturedOutput.length > 0) {
+                  // get last line of data which is the url
+                  const siteURL = vscode.Uri.parse(
+                    capturedOutput
+                      .splice(-1)[0]
+                      .split("soon be available to the public at:")
+                      .slice(-1)[0]
+                      .trim()
+                  );
+                  console.log("Opening site at: ", siteURL);
+                  vscode.window
+                    .showInformationMessage(
+                      "Deploy successful! You can view your deployed site now.",
+                      "Visit site",
+                      "View log",
+                      "Dismiss"
+                    )
+                    .then((option) => {
+                      if (option === "Visit site") {
+                        // get last line of data which is the url
+                        console.log("Opening site at: ", siteURL);
+                        vscode.env.openExternal(siteURL);
+                      } else if (option === "View log") {
+                        pretextOutputChannel.show();
+                      }
+                    });
+                } else {
+                  pretextOutputChannel.show();
+                }
+              }
             }
             utils.updateStatusBarItem(ptxSBItem, status);
             progressUpdate = "Finished";
@@ -240,7 +242,10 @@ export async function activate(context: vscode.ExtensionContext) {
     console.log("Error setting schema");
   }
   // Set up vscode elements
-  pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
+  pretextOutputChannel = vscode.window.createOutputChannel(
+    "PreTeXt Tools",
+    "log"
+  );
 
   // set up status bar item
   ptxSBItem = vscode.window.createStatusBarItem(

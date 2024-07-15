@@ -278,10 +278,13 @@ function getTargets() {
     if (targets.length > 0) {
       let targetSelection = [];
       for (let target of targets) {
-        targetSelection.push({
-          label: target,
-          description: "Build source as " + target,
-        });
+        // exclude lines that start with "Generated" as these are not targets
+        if (!target.includes("Generated")) {
+          targetSelection.push({
+            label: target,
+            description: "Build source as " + target,
+          });
+        }
       }
       return targetSelection;
     } else {
