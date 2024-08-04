@@ -29,7 +29,7 @@
   "xml.fileAssociations": [
     {
       "pattern": "**/source/**.ptx",
-      "systemId": "/home/oscar/.ptx/schema/pretext-dev.rng"
+      "systemId": "C:\\Users\\oscar.levin\\.ptx\\2.6.0\\core\\schema\\pretext.rng"
     }
   ]
 }

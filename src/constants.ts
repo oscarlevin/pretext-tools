@@ -332,6 +332,7 @@ const exerciseBody = [
   "choices",
   "conclusion",
   "hint",
+  "instruction",
   "introduction",
   "matches",
   "ol",

@@ -246,6 +246,11 @@
     "body": "<insight>\n\t$0\n</insight>",
     "description": "insight (remark-like)"
   },
+  "instruction": {
+    "prefix": "<instruction>",
+    "body": "<instruction>$1</instruction>$0",
+    "description": "instruction (for WeBWorK)"
+  },
   "introduction": {
     "prefix": "<introduction>",
     "body": "<introduction>\n\t<p>\n\t\t$0\n\t</p>\n</introduction>",

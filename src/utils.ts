@@ -336,7 +336,7 @@ function setSpellCheckConfig() {
       ignorePatterns.push("<latex-image>(.|\n|\r|\n\r)*?</latex-image>");
     }
     if (spellCheckScopes.tags === "Ignore") {
-      ignorePatterns.push("<[^!].*>");
+      ignorePatterns.push("<[^!].*?>");
     }
   }
   // Get current languageSettings for cSpell and update those for pretext
