@@ -11,7 +11,10 @@
   "cSpell.enableFiletypes": ["pretext"],
   "cSpell.words": [
     "esbuild",
-    "outfile"
+    "lezer",
+    "outfile",
+    "unist",
+    "xast"
   ],
   "editor.quickSuggestions": {
     "strings": "on"
