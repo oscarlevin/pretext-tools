@@ -12,7 +12,13 @@ import { ptxCommandList } from "./constants";
 import { activateCompletions } from "./completions";
 
 // Set up types:
+import {
+  activate as lspActivate,
+  deactivate as lspDeactivate,
+} from "./lsp-client/main";
 type LabelArray = [string, string, string][];
+
+var pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
 
 // Set up vscode elements
 export let _context: vscode.ExtensionContext;
@@ -202,6 +208,10 @@ async function runThenOpen(
 // this method is called when your extension is activated
 export async function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
+
+    // Start the LSP
+    lspActivate(context);
+
 
   ///////////////// General Setup //////////////////////
   _context = context;
@@ -680,6 +690,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
+  lspDeactivate();
   if (pretextTerminal) {
     pretextTerminal.dispose();
   }
