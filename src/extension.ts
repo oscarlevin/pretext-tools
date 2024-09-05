@@ -18,8 +18,6 @@ import {
 } from "./lsp-client/main";
 type LabelArray = [string, string, string][];
 
-var pretextOutputChannel = vscode.window.createOutputChannel("PreTeXt Tools");
-
 // Set up vscode elements
 export let _context: vscode.ExtensionContext;
 let pretextOutputChannel: vscode.OutputChannel;

@@ -55,7 +55,7 @@ esbuild
         format: "cjs",
         platform: "node",
         sourcemap: true,
-        external: ["vscode", "vscode*", "glob", "file"],
+        external: ["vscode", "vscode*", "glob", "file", "prettier"],
         outfile: "./out/lsp-server.js",
         watch: WATCH && {
             onRebuild(error, result) {

@@ -6,9 +6,6 @@ import { connection } from "./connection";
 import {
     InitializeParams,
     DidChangeConfigurationNotification,
-    CompletionItem,
-    CompletionItemKind,
-    TextDocumentPositionParams,
     TextDocumentSyncKind,
     InitializeResult,
     DocumentSymbol,
@@ -31,6 +28,7 @@ import {
     getProjectPtxCompletionDetails,
     getProjectPtxCompletions,
 } from "./projectPtx/get-completions";
+import { formatDocument } from "./formatter";
 
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
@@ -67,6 +65,7 @@ connection.onInitialize((params: InitializeParams) => {
             executeCommandProvider: {
                 commands: ["editor.action.addCommentLine"],
             },
+            documentFormattingProvider: {},
         },
     };
     if (hasWorkspaceFolderCapability) {
@@ -171,6 +170,8 @@ connection.onDocumentSymbol(async (params): Promise<DocumentSymbol[]> => {
     }
     return [];
 });
+
+connection.onDocumentFormatting(formatDocument);
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
