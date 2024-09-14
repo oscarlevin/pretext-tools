@@ -137,7 +137,7 @@ connection.onDidChangeWatchedFiles((_change) => {
 connection.onCompletion(async (params) => {
     if (isProjectPtx(params.textDocument.uri)) {
         const ret = await getProjectPtxCompletions(params);
-        console.log("completions", ret);
+        // console.log("completions", ret);
         return ret;
     }
 });
