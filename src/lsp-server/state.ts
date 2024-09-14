@@ -35,7 +35,7 @@ function getDefaultInfo(): DocumentInfo {
 }
 
 /**
- * This caches data on all documents so that we don't recompute unecessarily!
+ * This caches data on all documents so that we don't recompute unnecessarily!
  */
 export const documentInfoCache: Map<string, DocumentInfo> = new Map();
 

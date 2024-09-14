@@ -53,6 +53,7 @@ export async function getProjectPtxSymbols(
         return EXIT;
     });
 
+    console.log("targets", targets);
     // We convert into DocumentSymbol type.
     return targets.map((t) => ({
         kind: SymbolKind.Module,

@@ -158,13 +158,13 @@ const docEmpty = [
   "webwork",
 ];
 
-const list_like = ["ol", "ul", "dl"];
+const listLike = ["ol", "ul", "dl"];
 
-const math_display = ["me", "men", "md", "mdn"];
+const mathDisplay = ["me", "men", "md", "mdn"];
 
-const footnote_like = ["fn"];
+const footnoteLike = ["fn"];
 
-const nestable_tags = [
+const nestableTags = [
   "ul",
   "ol",
   "li",
@@ -202,7 +202,7 @@ const newlineTags = [
   ...docStructure,
   ...docSecs,
   ...docEnvs,
-  ...nestable_tags,
+  ...nestableTags,
   "xi:include",
 ];
 
@@ -210,8 +210,8 @@ const blockTags = [
   ...docStructure,
   ...docSecs,
   ...docEnvs,
-  ...nestable_tags,
-  ...math_display,
+  ...nestableTags,
+  ...mathDisplay,
 ];
 
 function joinLines(fullText: string): string {

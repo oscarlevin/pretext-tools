@@ -8,4 +8,17 @@ type SpellCheckScope = {
   tags: "Check" | "Ignore";
 };
 
-export { SpellCheckScope };
+// Types for snippets
+type Snippet = {
+  prefix: string;
+  body: string;
+  description?: string;
+  sort?: string;
+  retrigger?: boolean;
+};
+
+type Snippets = {
+  [key: string]: Snippet;
+};
+
+export { SpellCheckScope, Snippet, Snippets };

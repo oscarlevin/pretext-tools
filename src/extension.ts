@@ -9,7 +9,7 @@ import { formatPTX } from "./formatter";
 import { ptxExec } from "./utils";
 import * as utils from "./utils";
 import { ptxCommandList } from "./constants";
-import { activateCompletions } from "./completions";
+// import { activateCompletions } from "./completions";
 
 // Set up types:
 import {
@@ -304,22 +304,22 @@ export async function activate(context: vscode.ExtensionContext) {
   }
 
   ///////////////// Completion Items //////////////////////
-  labels = [];
-  try {
-    labels = await utils.getReferences();
-  } catch {
-    console.log("Error getting references");
-  }
+  // labels = [];
+  // try {
+  //   labels = await utils.getReferences();
+  // } catch {
+  //   console.log("Error getting references");
+  // }
 
-  try {
-    activateCompletions(context);
-  } catch {
-    console.log("Error setting up completions");
-  }
+  // try {
+  //   activateCompletions(context);
+  // } catch {
+  //   console.log("Error setting up completions");
+  // }
 
-  vscode.workspace.onDidSaveTextDocument(async (document) => {
-    labels = await utils.updateReferences(document, labels);
-  });
+  // vscode.workspace.onDidSaveTextDocument(async (document) => {
+  //   labels = await utils.updateReferences(document, labels);
+  // });
   ///////////////// Commands //////////////////////
 
   context.subscriptions.push(

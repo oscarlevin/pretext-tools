@@ -10,8 +10,8 @@ import {
     InitializeResult,
     DocumentSymbol,
     CodeActionKind,
+    TextDocumentPositionParams,
 } from "vscode-languageserver/node";
-
 import { isProjectPtx } from "./projectPtx/is-project-ptx";
 import {
     clearAllDocumentInfo,
@@ -27,7 +27,7 @@ import { getProjectPtxHoverInfo } from "./projectPtx/get-hover";
 import {
     getProjectPtxCompletionDetails,
     getProjectPtxCompletions,
-} from "./projectPtx/get-completions";
+} from "./completions/get-completions";
 import { formatDocument } from "./formatter";
 
 let hasConfigurationCapability = false;
@@ -57,15 +57,16 @@ connection.onInitialize((params: InitializeParams) => {
             // Tell the client that this server supports code completion.
             completionProvider: {
                 resolveProvider: true,
+                triggerCharacters: ["@", "<"],
             },
-            hoverProvider: { workDoneProgress: true },
-            documentSymbolProvider: { label: "PreTeXt Symbols" },
-            documentLinkProvider: {},
-            codeActionProvider: { codeActionKinds: [CodeActionKind.QuickFix] },
-            executeCommandProvider: {
-                commands: ["editor.action.addCommentLine"],
-            },
-            documentFormattingProvider: {},
+            // hoverProvider: { workDoneProgress: true },
+            // documentSymbolProvider: { label: "PreTeXt Symbols" },
+            // documentLinkProvider: {},
+            // codeActionProvider: { codeActionKinds: [CodeActionKind.QuickFix] },
+            // executeCommandProvider: {
+            //     commands: ["editor.action.addCommentLine"],
+            // },
+            // documentFormattingProvider: {},
         },
     };
     if (hasWorkspaceFolderCapability) {
@@ -104,6 +105,7 @@ connection.onDidChangeConfiguration((change) => {
 
 // Only keep settings for open documents
 documents.onDidClose((e) => {
+    console.log("closed", e.document.uri);
     clearDocumentInfo(e.document.uri);
 });
 
@@ -111,6 +113,7 @@ documents.onDidClose((e) => {
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(async (change) => {
     updateDocument(change.document);
+    console.log("changed content", change.document.uri);
     if (isProjectPtx(change.document)) {
         const info = await getDocumentInfo(change.document.uri);
         if (!info) {
@@ -127,13 +130,15 @@ documents.onDidChangeContent(async (change) => {
 
 connection.onDidChangeWatchedFiles((_change) => {
     // Monitored files have change in VSCode
-    connection.console.log("We received an file change event");
+    connection.console.log("We received a file change event");
 });
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion(async (params) => {
     if (isProjectPtx(params.textDocument.uri)) {
-        return await getProjectPtxCompletions(params);
+        const ret = await getProjectPtxCompletions(params);
+        console.log("completions", ret);
+        return ret;
     }
 });
 
@@ -143,6 +148,7 @@ connection.onCompletionResolve(getProjectPtxCompletionDetails);
 
 connection.onHover(async (params) => {
     if (isProjectPtx(params.textDocument.uri)) {
+        connection.console.log("hovering over");
         return getProjectPtxHoverInfo(params);
     }
 });
