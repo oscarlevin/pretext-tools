@@ -1,3 +1,5 @@
+import { CompletionItem } from "vscode-languageserver";
+
 type SpellCheckScope = {
   comments: "Check" | "Ignore";
   inlineMath: "Check" | "Ignore";
@@ -12,6 +14,7 @@ type SpellCheckScope = {
 type Snippet = {
   prefix: string;
   body: string;
+  detail?: string;
   description?: string;
   sort?: string;
   retrigger?: boolean;
@@ -21,4 +24,8 @@ type Snippets = {
   [key: string]: Snippet;
 };
 
-export { SpellCheckScope, Snippet, Snippets };
+type CompletionItems = {
+  [key:string]: CompletionItem;
+};
+
+export { CompletionItems, SpellCheckScope, Snippet, Snippets };

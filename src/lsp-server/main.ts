@@ -25,8 +25,8 @@ import { getProjectPtxSymbols } from "./projectPtx/get-symbols";
 import { getProjectPtxLinks } from "./projectPtx/get-links";
 import { getProjectPtxHoverInfo } from "./projectPtx/get-hover";
 import {
-    getProjectPtxCompletionDetails,
-    getProjectPtxCompletions,
+    getCompletions,
+    getCompletionDetails,
 } from "./completions/get-completions";
 import { formatDocument } from "./formatter";
 
@@ -57,7 +57,7 @@ connection.onInitialize((params: InitializeParams) => {
             // Tell the client that this server supports code completion.
             completionProvider: {
                 resolveProvider: true,
-                triggerCharacters: ["@", "<"],
+                triggerCharacters: ["@", "<", "\"",],
             },
             // hoverProvider: { workDoneProgress: true },
             // documentSymbolProvider: { label: "PreTeXt Symbols" },
@@ -135,16 +135,12 @@ connection.onDidChangeWatchedFiles((_change) => {
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion(async (params) => {
-    if (isProjectPtx(params.textDocument.uri)) {
-        const ret = await getProjectPtxCompletions(params);
-        // console.log("completions", ret);
-        return ret;
-    }
+    return getCompletions(params);
 });
 
 // This handler resolves additional information for the item selected in
 // the completion list.
-connection.onCompletionResolve(getProjectPtxCompletionDetails);
+connection.onCompletionResolve(getCompletionDetails);
 
 connection.onHover(async (params) => {
     if (isProjectPtx(params.textDocument.uri)) {
