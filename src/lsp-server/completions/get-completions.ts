@@ -11,9 +11,10 @@ import {
   getSnippetCompletionItems,
   lineToPosition,
   rangeInLine,
+  getCurrentTag,
 } from "./utils";
 import { ATTRIBUTES, ELEMENTS } from "./constants";
-import { Position, TextDocument } from "vscode-languageserver-textdocument";
+import { Position, Range, TextDocument } from "vscode-languageserver-textdocument";
 import { elementChildren } from "../../constants";
 
 const LINK_CONTENT_NODES = new Set(["xsl", "source", "publication"]);
@@ -54,6 +55,7 @@ export async function getCompletions(
   const uri = params.textDocument.uri;
   const info = getDocumentInfo(uri);
   const doc = documents.get(uri);
+  const pos = params.position;
   if (!info || !doc) {
     console.warn("Requested project symbols for uninitialized file", uri);
     return null;
@@ -70,7 +72,7 @@ export async function getCompletions(
     return null;
   } else {
     // Completions for attributes and elements:
-    // First, stop completions if the previous character is not a space.
+    // First, stop completions if the previous character (or the one before it in case a trigger character is used) is not a space.
     const charsBefore = doc.getText(rangeInLine(params.position, -2, 0));
     if (!charsBefore.includes(" ") && !charsBefore.includes("\t")) {
       return null;
@@ -88,15 +90,39 @@ export async function getCompletions(
       // Build completions for attributes based on the current element.
       let completionItems: CompletionItem[] = [];
       // Check if the element is in the list of known elements.
-      if (!elementChildren[element]) {
+      if (!elementChildren[element] || !elementChildren[element].attributes) {
         return null;
       }
+          // remove preceding trigger character if present:
+    let range: Range;
+    if (
+      doc.getText(rangeInLine(pos, -1, 0)) === "@"
+    ) {
+      console.log("trigger detected");
+      range = rangeInLine(pos, -1, 0);
+    } else {
+      range = rangeInLine(pos);
+    }
       for (let attr of elementChildren[element].attributes) {
         if (attr in ATTRIBUTES) {
-          completionItems.push(ATTRIBUTES[attr]);
+          const snippetCompletion = ATTRIBUTES[attr];
+          snippetCompletion.insertText = snippetCompletion.insertText || attr;
+          snippetCompletion.insertTextFormat = 2;
+          snippetCompletion.textEdit = { newText: snippetCompletion.insertText, range: range };
+          completionItems.push(snippetCompletion);
+        } else {
+          const snippetCompletion: CompletionItem = {
+            label: '@'+attr,
+            kind: CompletionItemKind.TypeParameter,
+            insertTextFormat: 2,
+            textEdit: {
+              newText: `${attr}="$1"$0`,
+              range: range,
+            },
+          };
+          completionItems.push(snippetCompletion);
         }
       }
-
       return completionItems.map((item, i) => {
         completionCache[i] = item;
         return {
@@ -109,8 +135,67 @@ export async function getCompletions(
         };
       });
     } else if (completionType === "element") {
-      // return await fileCompletions(params);
-      return null;
+      const element = getCurrentTag(doc, pos);
+      console.log("currentTag", element);
+      // Build completions for elements based on the current context.
+      let completionItems: CompletionItem[] = [];
+      // Check if the element is in the list of known elements.
+      if (!element || !elementChildren[element] || !elementChildren[element].elements) {
+        return null;
+      }
+
+          // remove preceding trigger character if present:
+      let range: Range;
+      if (
+        doc.getText(rangeInLine(pos, -1, 0)) === "<"
+      ) {
+        console.log("trigger detected");
+        range = rangeInLine(pos, -1, 0);
+      } else {
+        range = rangeInLine(pos);
+      }
+      for (let elem of elementChildren[element].elements) {
+        if (elem in ELEMENTS) {
+          const snippetCompletion = ELEMENTS[elem];
+          snippetCompletion.insertText = snippetCompletion.insertText || elem;
+          snippetCompletion.insertTextFormat = 2;
+          snippetCompletion.textEdit = { newText: snippetCompletion.insertText, range: range };
+          completionItems.push(snippetCompletion);
+        } else {
+          const snippetCompletion: CompletionItem = {
+            label: '<'+elem,
+            kind: CompletionItemKind.TypeParameter,
+            insertTextFormat: 2,
+            textEdit: {
+              newText: `<${elem}>$1</${elem}>$0`,
+              range: range,
+            },
+          };
+          completionItems.push(snippetCompletion);
+        }
+      }
+      // Also return the end tag for the current element.
+      const snippetCompletion: CompletionItem = {
+        label: '</'+element,
+        kind: CompletionItemKind.TypeParameter,
+        insertTextFormat: 2,
+        textEdit: {
+          newText: `</${element}>$0`,
+          range: range,
+        },
+      };
+      completionItems.push(snippetCompletion);
+      return completionItems.map((item, i) => {
+        completionCache[i] = item;
+        return {
+          label: item.label,
+          // insertText: item.insertText,
+          textEdit: item.textEdit,
+          // insertTextFormat: item.insertTextFormat,
+          kind: item.kind,
+          data: i,
+        };
+      });
     } else {
       return null;
     }

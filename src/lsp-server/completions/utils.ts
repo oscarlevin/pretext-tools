@@ -70,7 +70,7 @@ export function lineToPosition(position: Position): Range {
 /**
   Finds the current node of the curser by comparing all tags above the curser to the open tags above the curser.
  */
-  function getCurrentTag(
+export function getCurrentTag(
     document: TextDocument,
     position: Position
   ): string | undefined {

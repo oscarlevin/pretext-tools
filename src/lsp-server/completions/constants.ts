@@ -3,6 +3,11 @@
 
 import { CompletionItems } from "../../types";
 
+const suggestCommand = {
+  title: "Suggest",
+  command: "editor.action.triggerSuggest",
+};
+
 // needs to be completed that is not here will get very basic treatment.
 export const ATTRIBUTES: CompletionItems = {
   bottom: {
@@ -212,7 +217,7 @@ export const ATTRIBUTES: CompletionItems = {
   },
 };
 
-export const ELEMENTS = {
+export const ELEMENTS: CompletionItems = {
   "?xml": {
     label: "<?xml...>",
     insertText: '<?xml version="1.0" encoding="UTF-8"?>',
@@ -366,13 +371,13 @@ export const ELEMENTS = {
     label: "<example>",
     insertText: "<example>\n\t$0\n</example>",
     documentation: "example (example-like)",
-    sort: "0",
+    sortText: "0",
   },
   exercise: {
     label: "<exercise>",
     insertText: "<exercise>\n\t$0\n</exercise>",
     documentation: "exercise",
-    sort: "0",
+    sortText: "0",
   },
   "exercise-workspace": {
     label: '<exercise workspace="">',
@@ -453,7 +458,7 @@ export const ELEMENTS = {
     label: "<image>",
     insertText: "<image>\n\t<shortdescription>$2</shortdescription>\n\t$0\n</image>",
     documentation: "image (not external)",
-    sort: "0",
+    sortText: "0",
   },
   insight: {
     label: "<insight>",
@@ -489,7 +494,7 @@ export const ELEMENTS = {
     label: "<li>",
     insertText: "<li>\n\t<p>\n\t\t$0\n\t</p>\n</li>",
     documentation: "list item (w/ p)",
-    sort: "0",
+    sortText: "0",
   },
  "li-dl": {
     label: "<li>",
@@ -568,7 +573,7 @@ export const ELEMENTS = {
     label: "<p>",
     insertText: "<p>\n\t$0\n</p>",
     documentation: "paragraph",
-    sort: "0",
+    sortText: "0",
   },
   page: {
     label: "<page>",
@@ -729,7 +734,7 @@ export const ELEMENTS = {
     label: "<task>",
     insertText: "<task>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>",
     documentation: "task (for parts of an exercise/project).",
-    sort: "0",
+    sortText: "0",
   },
   "task-workspace": {
     label: '<task workspace="">',
@@ -750,7 +755,7 @@ export const ELEMENTS = {
     label: "<title>",
     insertText: "<title>$1</title>\n\n$0",
     documentation: "title",
-    sort: "0",
+    sortText: "0",
   },
   ul: {
     label: "<ul>",
@@ -780,7 +785,7 @@ export const ELEMENTS = {
     label: '<webwork source="" />',
     insertText: '<webwork source="$1" />$0',
     documentation: "WeBWorK (from server)",
-    sort: "0",
+    sortText: "0",
   },
   worksheet: {
     label: "<worksheet>",
@@ -790,7 +795,7 @@ export const ELEMENTS = {
     label: "<xi:xinclude>",
     insertText: '<xi:include href="$1" />$0',
     documentation: "XInclude",
-    retrigger: true,
+    command: suggestCommand,
   },
   "&amp;": {
     label: "&amp;",
@@ -841,7 +846,7 @@ export const ELEMENTS = {
     label: "<em>",
     insertText: "<em>${1:$TM_SELECTED_TEXT}</em>$0",
     documentation: "emphasis text",
-    sort: "0"
+    sortText: "0"
   },
   email: {
     label: "<email>",
@@ -882,7 +887,7 @@ export const ELEMENTS = {
     label: "<m>",
     insertText: "<m>${1:$TM_SELECTED_TEXT}</m>$0",
     documentation: "inline math",
-    sort: "0"
+    sortText: "0"
   },
   pretext: {
     label: "<pretext/>",
@@ -928,7 +933,7 @@ export const ELEMENTS = {
     label: "<term>",
     insertText: "<term>${1:$TM_SELECTED_TEXT}</term>$0",
     documentation: "term (for defined terms)",
-    sort: "0"
+    sortText: "0"
   },
   tex: {
     label: "<tex />",
@@ -954,7 +959,7 @@ export const ELEMENTS = {
     label: "<xref>",
     insertText: "<xref ref=\"$1\"/>$0",
     documentation: "reference",
-    retrigger: true
+    command: suggestCommand,
   }
 };
 
