@@ -9,14 +9,12 @@ import { formatPTX } from "./formatter";
 import { ptxExec } from "./utils";
 import * as utils from "./utils";
 import { ptxCommandList } from "./constants";
-// import { activateCompletions } from "./completions";
 
 // Set up types:
 import {
   activate as lspActivate,
   deactivate as lspDeactivate,
 } from "./lsp-client/main";
-type LabelArray = [string, string, string][];
 
 // Set up vscode elements
 export let _context: vscode.ExtensionContext;
@@ -26,7 +24,7 @@ let pretextTerminal: vscode.Terminal;
 var lastTarget = "";
 let pretextCommandList = ptxCommandList;
 
-export let labels: LabelArray = [];
+
 
 // The main function to run pretext commands:
 async function runPretext(
@@ -303,23 +301,7 @@ export async function activate(context: vscode.ExtensionContext) {
     console.log("Error setting up formatter");
   }
 
-  ///////////////// Completion Items //////////////////////
-  // labels = [];
-  // try {
-  //   labels = await utils.getReferences();
-  // } catch {
-  //   console.log("Error getting references");
-  // }
-
-  // try {
-  //   activateCompletions(context);
-  // } catch {
-  //   console.log("Error setting up completions");
-  // }
-
-  // vscode.workspace.onDidSaveTextDocument(async (document) => {
-  //   labels = await utils.updateReferences(document, labels);
-  // });
+ 
   ///////////////// Commands //////////////////////
 
   context.subscriptions.push(

@@ -29,12 +29,25 @@ import {
     getCompletionDetails,
 } from "./completions/get-completions";
 import { formatDocument } from "./formatter";
+import { getReferences, updateReferences } from "./completions/utils";
 
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 export let hasDiagnosticRelatedInformationCapability = false;
 
-connection.onInitialize((params: InitializeParams) => {
+
+type LabelArray = [string, string, string][];
+export let references: LabelArray = [];
+
+
+
+
+
+  // vscode.workspace.onDidSaveTextDocument(async (document) => {
+  //   labels = await utils.updateReferences(document, labels);
+  // });
+
+connection.onInitialize( (params: InitializeParams) => {
     const capabilities = params.capabilities;
 
     // Does the client support the `workspace/configuration` request?
@@ -92,6 +105,14 @@ connection.onInitialized(() => {
             connection.console.log("Workspace folder change event received.");
         });
     }
+
+     ///////////////// Completion Items //////////////////////
+    references = [];
+    try {
+      references = getReferences();
+    } catch {
+      console.log("Error getting references");
+    }
 });
 
 connection.onDidChangeConfiguration((change) => {
@@ -126,6 +147,12 @@ documents.onDidChangeContent(async (change) => {
             diagnostics: parseErrors,
         });
     }
+});
+
+documents.onDidSave((e) => {
+    // update references for the saved document
+    // TODO: this should just update references instead of finding all of them again.
+    references = getReferences();
 });
 
 connection.onDidChangeWatchedFiles((_change) => {

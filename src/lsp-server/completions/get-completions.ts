@@ -17,6 +17,7 @@ import {
 import { ATTRIBUTES, ELEMENTS } from "./constants";
 import { Position, Range, TextDocument } from "vscode-languageserver-textdocument";
 import { elementChildren } from "../../constants";
+import { references } from "../main";
 
 const LINK_CONTENT_NODES = new Set(["xsl", "source", "publication"]);
 
@@ -83,9 +84,16 @@ export async function getCompletions(
     })];
     console.log("completionItems", completionItems);
   } else if (completionType === "ref") {
-    // Form completions for references.
-    // return await refCompletions(params);
-    return null;
+    for (let [reference, parent] of references) {
+      const refCompletion: CompletionItem = {
+        label: reference,
+        kind: CompletionItemKind.Reference
+      };;
+      refCompletion.documentation = "(a " + parent + ")";
+      refCompletion.detail = "(reference to " + parent + ")";
+      refCompletion.sortText = "0" + reference;
+      completionItems.push(refCompletion);
+    }
   } else {
     // Completions for attributes and elements:
     // First, stop completions if the previous character (or the one before it in case a trigger character is used) is not a space.
