@@ -74,10 +74,11 @@ export async function getCompletions(
     completionItems = [...files.flatMap((f) => {
       // find absolute path of file f to match the format of pwd
       const absPath = Utils.resolvePath(URI.file(f)).path;
-      const relPath = path.relative(path.dirname(pwd), absPath);
+      const relPath = path.posix.relative(path.dirname(pwd), absPath);
       // Allow completing both relative form starting with `./` and without.
       return [
         { label: relPath, kind: CompletionItemKind.File},
+        { label: './'+relPath, kind: CompletionItemKind.File},
       ];
     })];
     console.log("completionItems", completionItems);
