@@ -6,7 +6,8 @@ import {
 import { elementAtOffset } from "../../parse/utils";
 import { documents, getDocumentInfo } from "../state";
 import * as glob from "glob";
-import * as fs from "fs";
+import * as path from "path";
+import { URI, Utils } from "vscode-uri";
 import {
   getSnippetCompletionItems,
   lineToPosition,
@@ -62,10 +63,24 @@ export async function getCompletions(
   }
   // Determine the type of completion to provide based on the current context.
   const completionType = await getCompletionType(doc, params.position);
+  let completionItems: CompletionItem[] = [];
   if (completionType === "file") {
-    // Get list of all possible files and return completions for them.
-    // return await elementCompletions(params);
-    return null;
+    // Get list of all possible files in **/source/** using fs and glob and return completions for them.
+    
+    // This method for getting the pwd gets the path in the same format as the `realpath` glob when used inside the flatMap loop.
+    const pwd = URI.parse(uri).path;
+    const files = glob.sync("source/**", {nodir: true, realpath: true,});
+
+    completionItems = [...files.flatMap((f) => {
+      // find absolute path of file f to match the format of pwd
+      const absPath = Utils.resolvePath(URI.file(f)).path;
+      const relPath = path.relative(path.dirname(pwd), absPath);
+      // Allow completing both relative form starting with `./` and without.
+      return [
+        { label: relPath, kind: CompletionItemKind.File},
+      ];
+    })];
+    console.log("completionItems", completionItems);
   } else if (completionType === "ref") {
     // Form completions for references.
     // return await refCompletions(params);
@@ -88,7 +103,7 @@ export async function getCompletions(
       const element = match[0].slice(1, match[0].indexOf(" "));
       console.log("element", element);
       // Build completions for attributes based on the current element.
-      let completionItems: CompletionItem[] = [];
+
       // Check if the element is in the list of known elements.
       if (!elementChildren[element] || !elementChildren[element].attributes) {
         return null;
@@ -123,22 +138,11 @@ export async function getCompletions(
           completionItems.push(snippetCompletion);
         }
       }
-      return completionItems.map((item, i) => {
-        completionCache[i] = item;
-        return {
-          label: item.label,
-          // insertText: item.insertText,
-          textEdit: item.textEdit,
-          // insertTextFormat: item.insertTextFormat,
-          kind: item.kind,
-          data: i,
-        };
-      });
+
     } else if (completionType === "element") {
       const element = getCurrentTag(doc, pos);
       console.log("currentTag", element);
       // Build completions for elements based on the current context.
-      let completionItems: CompletionItem[] = [];
       // Check if the element is in the list of known elements.
       if (!element || !elementChildren[element] || !elementChildren[element].elements) {
         return null;
@@ -185,21 +189,21 @@ export async function getCompletions(
         },
       };
       completionItems.push(snippetCompletion);
-      return completionItems.map((item, i) => {
-        completionCache[i] = item;
-        return {
-          label: item.label,
-          // insertText: item.insertText,
-          textEdit: item.textEdit,
-          // insertTextFormat: item.insertTextFormat,
-          kind: item.kind,
-          data: i,
-        };
-      });
     } else {
       return null;
     }
   }
+  return completionItems.map((item, i) => {
+    completionCache[i] = item;
+    return {
+      label: item.label,
+      // insertText: item.insertText,
+      textEdit: item.textEdit,
+      // insertTextFormat: item.insertTextFormat,
+      kind: item.kind,
+      data: i,
+    };
+  });
 }
 
 /**
