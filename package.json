@@ -164,9 +164,9 @@
       },
       {
         "command": "pretext-tools.convertToPretext",
-        "title": "Convert file to PreTeXt (using pandoc)",
+        "title": "Convert file to PreTeXt",
         "category": "PreTeXt",
-        "description": "Converts a selected file to PreTeXt using pandoc, which must be installed separately."
+        "description": "Converts a selected file to PreTeXt using pandoc or plastex, which must be installed separately."
       },
       {
         "command": "pretext-tools.latexToPretext",
@@ -353,34 +353,34 @@
     "test-compile": "tsc -p ./",
     "pretest": "npm run esbuild && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "vscode-test"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
-    "@types/mocha": "^10.0.1",
+    "@types/mocha": "^10.0.8",
     "@types/node": "16.x",
     "@types/prettier": "^2.7.1",
     "@types/vscode": "^1.74.0",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
     "esbuild": "^0.16.5",
     "eslint": "^8.29.0",
     "mocha": "^10.2.0",
-    "typescript": "^4.9.4",
-    "vscode-test": "^1.6.1"
+    "typescript": "^4.9.4"
   },
   "dependencies": {
     "@lezer/xml": "^1.0.0",
     "date-and-time": "^3.5.0",
     "esbuild-node-externals": "^1.6.0",
     "fs.promises.exists": "^1.1.3",
-    "glob": "^8.1.0",
     "prettier": "^2.8.1",
     "prettier-plugin-pretext": "^1.0.3",
     "saxes": "^6.0.0",
     "unified": "^10.1.2",
     "unist-util-visit": "^4.1.1",
-    "vscode": "^1.1.37",
+    "vscode": "^1.1.34",
     "vscode-languageclient": "^8.0.2",
     "vscode-languageserver": "^8.0.2",
     "vscode-languageserver-textdocument": "^1.0.8",
