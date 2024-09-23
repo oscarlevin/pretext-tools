@@ -12,7 +12,6 @@ import {
 import { documents } from "../state";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import path from "path";
-import { URI, Utils } from "vscode-uri";
 
 export async function readJsonFile(relativePath: string): Promise<any> {
   try {
@@ -206,11 +205,13 @@ export async function getSnippetCompletionItems(
 
 
 function getMainFile() {
-  let dir = "./";
+  const pwd = "./";
+  // Default source directory is ./source
+  let sourceDir = path.join(pwd, "source");
   // Set default main file to main.ptx
-  let mainFile = path.join(dir, "source", "main.ptx");
+  let mainFile = path.join(sourceDir, "main.ptx");
   // Check if project.ptx exists and if so, use that to find main file
-  let project = path.join(dir, "project.ptx");
+  let project = path.join(pwd, "project.ptx");
   if (fs.existsSync(project)) {
     console.log("Found project.ptx");
     const text = fs.readFileSync(project).toString();
@@ -223,19 +224,22 @@ function getMainFile() {
       let projectSourceMatch = regexProject.exec(text);
       let targetSourceMatch = regexTarget.exec(text);
       if (projectSourceMatch) {
-        mainFile = path.join(dir, projectSourceMatch[2]);
+        sourceDir = path.join(pwd, projectSourceMatch[2]);
         if (targetSourceMatch) {
-          mainFile = path.join(mainFile, targetSourceMatch[2]);
+          mainFile = path.join(sourceDir, targetSourceMatch[2]);
+        } else {
+          mainFile = path.join(sourceDir, "main.ptx"); // default
         }
       } else if (targetSourceMatch) {
-        mainFile = path.join(dir, targetSourceMatch[2]);
+        // No project source, so use default set above.
+        mainFile = path.join(sourceDir, targetSourceMatch[2]);
       }
     } else {
       console.log("project.ptx is legacy version");
       let regexTarget = /<source>(.*?)<\/source>/;
       let targetSourceMatch = regexTarget.exec(text);
       if (targetSourceMatch) {
-        mainFile = path.join(dir, targetSourceMatch[1]);
+        mainFile = path.join(pwd, targetSourceMatch[1]);
       }
     }
   }

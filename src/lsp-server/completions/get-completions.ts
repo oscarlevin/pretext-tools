@@ -7,6 +7,7 @@ import { elementAtOffset } from "../../parse/utils";
 import { documents, getDocumentInfo } from "../state";
 import * as glob from "glob";
 import * as path from "path";
+import * as fs from "fs";
 import { URI, Utils } from "vscode-uri";
 import {
   getSnippetCompletionItems,
@@ -68,14 +69,14 @@ export async function getCompletions(
   if (completionType === "file") {
     // Get list of all possible files in **/source/** using fs and glob and return completions for them.
     
-    // This method for getting the pwd gets the path in the same format as the `realpath` glob when used inside the flatMap loop.
-    const pwd = URI.parse(uri).path;
-    const files = glob.sync("source/**", {nodir: true, realpath: true,});
+    // currentFileDir is the directory of the current file, in the current OS format.
+    const currentFileDir = path.dirname(URI.parse(uri).fsPath);
+    const files = glob.sync("source/**", {nodir: true});
 
     completionItems = [...files.flatMap((f) => {
-      // find absolute path of file f to match the format of pwd
-      const absPath = Utils.resolvePath(URI.file(f)).path;
-      const relPath = path.posix.relative(path.dirname(pwd), absPath);
+      // Get the relative path from the current file to the file f.
+      let relPath = path.relative(currentFileDir, path.resolve(f));
+      relPath = relPath.replaceAll(path.sep, path.posix.sep);
       // Allow completing both relative form starting with `./` and without.
       return [
         { label: relPath, kind: CompletionItemKind.File},
