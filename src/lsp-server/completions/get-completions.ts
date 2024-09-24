@@ -97,9 +97,9 @@ export async function getCompletions(
     }
   } else {
     // Completions for attributes and elements:
-    // First, stop completions if the previous character (or the one before it in case a trigger character is used) is not a space.
+    // First, stop completions if the previous character (or the one before it in case a trigger character is used) is not a space, unless we are at the start of a line (in which case charsBefore will be empty).
     const charsBefore = doc.getText(rangeInLine(params.position, -2, 0));
-    if (!charsBefore.includes(" ") && !charsBefore.includes("\t")) {
+    if (charsBefore.length !== 0 && !charsBefore.includes(" ") && !charsBefore.includes("\t")) {
       return null;
     }
     // completions act slightly different for attributes and elements
