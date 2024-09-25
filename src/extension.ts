@@ -5,7 +5,8 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { convertToPretext } from "./importFiles";
 import { latexToPretext } from "./latextopretext";
-import { formatPTX } from "./formatter";
+import { markdownToPretext } from "./markdowntopretext";
+import { formatPTX } from "./formatter-ptx-format";
 import { ptxExec } from "./utils";
 import * as utils from "./utils";
 import { ptxCommandList } from "./constants";
@@ -626,6 +627,26 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     })
   );
+
+    context.subscriptions.push(
+      vscode.commands.registerCommand("pretext-tools.markdownToPretext", () => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+          const selection = editor.selection;
+          const selectionRange = selection.isEmpty
+            ? editor.document.lineAt(selection.start.line).range
+            : new vscode.Range(selection.start, selection.end);
+
+          var initialText = editor.document.getText(selectionRange);
+
+          var newText = markdownToPretext(initialText);
+
+          editor.edit((editbuilder) => {
+            editbuilder.replace(selectionRange, newText);
+          });
+        }
+      })
+    );
 
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.latexToPretext", () => {

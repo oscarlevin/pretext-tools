@@ -32,6 +32,11 @@ export const ptxCommandList = [
     command: "pretext-tools.refreshTargets",
   },
   {
+    label: "Convert Markdown selection to PreTeXt",
+    description: "Convert Markdown selection",
+    command: "pretext-tools.markdownToPretext",
+  },
+  {
     label: "Convert selection to PreTeXt",
     description: "Convert selection",
     command: "pretext-tools.latexToPretext",

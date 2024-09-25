@@ -1,6 +1,6 @@
 {
-  "name": "pretext-tools",
-  "displayName": "PreTeXt-tools",
+  "name": "skiadas-pretext-tools",
+  "displayName": "skiadas-PreTeXt-tools",
   "description": "Language support and more for PreTeXt",
   "version": "0.20.2",
   "license": "See license in LICENSE",
@@ -166,6 +166,12 @@
         "title": "Convert file to PreTeXt (using pandoc)",
         "category": "PreTeXt",
         "description": "Converts a selected file to PreTeXt using pandoc, which must be installed separately."
+      },
+      {
+        "command": "pretext-tools.markdownToPretext",
+        "title": "Convert Selected Markdown to PreTeXt",
+        "category": "PreTeXt",
+        "description": "Converts and replaces a selection of Markdown with PreTeXt formatted text (experimental)."
       },
       {
         "command": "pretext-tools.latexToPretext",
@@ -374,6 +380,7 @@
     "@vscode/vsce": "^2.22.0",
     "date-and-time": "^3.3.0",
     "fs.promises.exists": "^1.1.3",
+    "marked": "^14.1.2",
     "moment": "^2.30.1",
     "unified": "^10.1.2",
     "unist-util-visit": "^4.1.0",
