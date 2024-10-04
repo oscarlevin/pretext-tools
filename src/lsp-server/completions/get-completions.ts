@@ -68,7 +68,6 @@ export async function getCompletions(
   let completionItems: CompletionItem[] = [];
   if (completionType === "file") {
     // Get list of all possible files in **/source/** using fs and glob and return completions for them.
-    
     // currentFileDir is the directory of the current file, in the current OS format.
     const currentFileDir = path.dirname(URI.parse(uri).fsPath);
     const files = glob.sync("source/**", {nodir: true});

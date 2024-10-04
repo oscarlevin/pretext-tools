@@ -388,7 +388,8 @@
     "vscode-uri": "^3.0.8",
     "xast-util-from-xml": "^2.0.1",
     "xast-util-to-string": "^2.0.0",
-    "xast-util-to-xml": "^3.0.0"
+    "xast-util-to-xml": "^3.0.0",
+    "xml2js": "^0.6.2"
   },
   "prettier": {
     "tabWidth": 2
