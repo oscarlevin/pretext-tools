@@ -1,7 +1,3 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import { spawn } from "child_process";
-import * as path from "path";
 import * as vscode from "vscode";
 import { convertToPretext } from "./importFiles";
 import { latexToPretext } from "./latextopretext";
@@ -17,9 +13,7 @@ import {
 } from "./lsp-client/main";
 
 // Set up vscode elements
-export let _context: vscode.ExtensionContext;
-let pretextOutputChannel: vscode.OutputChannel;
-let ptxSBItem: vscode.StatusBarItem;
+//export let _context: vscode.ExtensionContext;
 let pretextTerminal: vscode.Terminal;
 var lastTarget = "";
 let pretextCommandList = ptxCommandList;
@@ -207,7 +201,7 @@ export async function activate(context: vscode.ExtensionContext) {
   lspActivate(context);
 
   ///////////////// General Setup //////////////////////
-  _context = context;
+  //_context = context;
 
   vscode.workspace.onDidChangeConfiguration((event) => {
     let affected = event.affectsConfiguration("pretext-tools");
@@ -244,17 +238,7 @@ export async function activate(context: vscode.ExtensionContext) {
   } catch {
     console.log("Error setting schema");
   }
-  // Set up vscode elements
-  pretextOutputChannel = vscode.window.createOutputChannel(
-    "PreTeXt Tools",
-    "log"
-  );
 
-  // set up status bar item
-  ptxSBItem = vscode.window.createStatusBarItem(
-    vscode.StatusBarAlignment.Left,
-    -100
-  );
   context.subscriptions.push(ptxSBItem);
   utils.updateStatusBarItem(ptxSBItem);
 
@@ -269,6 +253,7 @@ export async function activate(context: vscode.ExtensionContext) {
   console.log("Pretext is installed is:", ptxInstalled);
 
   var targetSelection = utils.getTargets();
+  context.workspaceState.update("targetSelection", targetSelection);
   console.log("targetSelection is:", targetSelection);
   lastTarget = targetSelection[0].label;
   pretextCommandList[0].label = "Build " + lastTarget;
@@ -300,11 +285,15 @@ export async function activate(context: vscode.ExtensionContext) {
 
   ///////////////// Commands //////////////////////
 
+  let myVar = "Hello World";
   context.subscriptions.push(
-    vscode.commands.registerCommand("pretext-tools.showLog", () => {
-      pretextOutputChannel.show();
-      utils.updateStatusBarItem(ptxSBItem);
+    vscode.commands.registerCommand("pretext-tools.exp", () => {
+      //console.log("Running Experiment");
+      ptxExperiment(context);
     })
+  );
+
+  context.subscriptions.push(
   );
 
   context.subscriptions.push(
@@ -424,31 +413,6 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "pretext-tools.viewCLI",
-      (runInTerminal: boolean = false) => {
-        // Show choice dialog and pass correct command to runPretext based on selection.
-        vscode.window.showQuickPick(targetSelection).then((qpSelection) => {
-          if (!qpSelection) {
-            return;
-          }
-          if (runInTerminal) {
-            pretextTerminal = utils.setupTerminal(pretextTerminal);
-            pretextTerminal.sendText("pretext view " + qpSelection.label);
-          } else {
-            runPretext(ptxExec, "view", qpSelection.label);
-          }
-          // Move selected target to front of list for next command.
-          targetSelection = targetSelection.filter(
-            (item) => item !== qpSelection
-          );
-          targetSelection.unshift(qpSelection);
-        });
-      }
-    )
-  );
-
-  context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.viewCodeChat", () => {
       if (vscode.extensions.getExtension("CodeChat.codechat")) {
         vscode.commands.executeCommand("extension.codeChatActivate");
@@ -461,77 +425,11 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("pretext-tools.new", () => {
-      let viewCommand = [];
-      for (let template of ["article", "book", "slideshow", "demo"]) {
-        viewCommand.push({
-          label: template,
-          description: "New " + template,
-        });
-      }
-      // Show choice dialog and pass correct command to runPretext based on selection.
-      vscode.window.showQuickPick(viewCommand).then((qpSelection) => {
-        if (!qpSelection) {
-          return;
-        }
-        vscode.window
-          .showOpenDialog({
-            openLabel: "Select folder that will hold your project...",
-            canSelectMany: false,
-            canSelectFiles: false,
-            canSelectFolders: true,
-          })
-          .then((fileUri) => {
-            if (fileUri && fileUri[0]) {
-              var projectFolder = fileUri[0].fsPath;
-              console.log("Selected folder: ", projectFolder);
-              runThenOpen(ptxExec, "new", qpSelection.label, projectFolder);
-            }
-          });
-      });
-    })
-  );
-
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "pretext-tools.deploy",
-      (runInTerminal: boolean = false) => {
-        if (runInTerminal) {
-          pretextTerminal = utils.setupTerminal(pretextTerminal);
-          pretextTerminal.sendText("pretext deploy");
-        } else {
-          runPretext(ptxExec, "deploy", "-u");
-        }
-      }
-    )
-  );
-
-  context.subscriptions.push(
-    vscode.commands.registerCommand("pretext-tools.updatePTX", () => {
-      console.log("Updating PreTeXt");
-      vscode.window.withProgress(
-        {
-          location: vscode.ProgressLocation.Window,
-        },
-        (progress) => {
-          progress.report({ message: "Checking for updates" });
-
-          return new Promise<void>((resolve) => {
-            console.log("Checking for new version of PreTeXt to install");
-            pretextOutputChannel.append(
-              "Checking for new version of PreTeXt to install"
-            );
-            try {
-              utils.installPretext(progress);
-            } catch {
-              console.log("Unable to update pretext");
-            }
-            progress.report({ message: "Done" });
-            resolve();
-          });
-        }
-      );
-    })
+    vscode.commands.registerCommand("pretext-tools.showLog", showLog),
+    vscode.commands.registerCommand("pretext-tools.viewCLI", (runInTerminal) => {ptxView(runInTerminal, pretextTerminal, targetSelection)}),
+    vscode.commands.registerCommand("pretext-tools.new", ptxNew),
+    vscode.commands.registerCommand("pretext-tools.deploy", ptxDeploy),
+    vscode.commands.registerCommand("pretext-tools.updatePTX", ptxUpdate)
   );
 
   context.subscriptions.push(
@@ -661,7 +559,6 @@ export async function activate(context: vscode.ExtensionContext) {
   //   const currentTag = unclosedTags[unclosedTags.length - 1];
   //   console.log("Current XML Element: ", currentTag);
   // }
-  //})
   //);
 }
 
