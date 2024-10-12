@@ -175,6 +175,7 @@ export async function getCompletions(
           snippetCompletion.textEdit = { newText: snippetCompletion.insertText, range: range };
           completionItems.push(snippetCompletion);
         } else {
+          // Give a very basic snippet completion since we haven't implemented a more specific one in ELEMENTS.
           const snippetCompletion: CompletionItem = {
             label: '<'+elem,
             kind: CompletionItemKind.TypeParameter,
@@ -183,6 +184,7 @@ export async function getCompletions(
               newText: `<${elem}>$1</${elem}>$0`,
               range: range,
             },
+            documentation: "Generic implementation for element " + elem,
           };
           completionItems.push(snippetCompletion);
         }

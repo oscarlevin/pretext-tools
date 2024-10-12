@@ -640,6 +640,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("pretext-tools.test", async () => {
       console.log("Running Experiment");
+      utils.experiment(context);
       // const editor = vscode.window.activeTextEditor;
       // const document = editor?.document;
       // const position = editor?.selection.active;

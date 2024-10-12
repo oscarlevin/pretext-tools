@@ -5,6 +5,13 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import { SpellCheckScope } from "./types";
 import { TextDocument } from "vscode-languageserver-textdocument";
+import { fromXml } from "xast-util-from-xml";
+import { remove } from "unist-util-remove";
+import { CONTINUE, SKIP, visitParents } from "unist-util-visit-parents";
+import { visit } from "unist-util-visit";
+import { assert } from "console";
+import deepmerge from "deepmerge";
+import { Schema } from "./lsp-server/schema";
 
 export {
   getDir,
@@ -16,7 +23,22 @@ export {
   updateStatusBarItem,
   setupTerminal,
   stripColorCodes,
+  experiment,
 };
+
+
+
+async function experiment(context: vscode.ExtensionContext) {
+  //read in rng file from scripts:
+  let rngPath = path.join(context.extensionPath, "scripts", "pretext.rng");
+  let rngFile = fs.readFileSync(rngPath, "utf8");
+  let ast = fromXml(rngFile);
+  let schema = new Schema(await ast);
+
+  console.log("Schema: ", schema.getSchema());
+  console.log("Schema name: ", schema.elementChildren);
+  console.log("Schema attributes: ", schema.attributeValues);
+}
 
 function getDir(myPath: string = "") {
   if (myPath !== "") {
@@ -49,8 +71,6 @@ function getDir(myPath: string = "") {
     return "";
   }
 }
-
-
 
 async function installPretext(progress: vscode.Progress<{}>) {
   // Here we will attempt to pip install pretext, upgraded to the most recent version.  This will happen if pretext is not found, or if a user requests it through a command.
@@ -390,8 +410,6 @@ function setupTerminal(terminal: vscode.Terminal): vscode.Terminal {
   terminal.show();
   return terminal;
 }
-
-
 
 function stripColorCodes(input: string): string {
   // ANSI color code regex
