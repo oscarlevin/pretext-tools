@@ -2,7 +2,7 @@ import { Terminal } from "vscode";
 import * as utils from "../utils";
 import { runPretext } from "./runPtx";
 
-export function ptxDeploy(
+export function cmdDeploy(
   runInTerminal: boolean = false,
   pretextTerminal: Terminal | null = null
 ) {
@@ -12,4 +12,4 @@ export function ptxDeploy(
   } else {
     runPretext(utils.ptxExec, "deploy", "-u");
   }
-};
+}

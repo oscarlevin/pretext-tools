@@ -2,7 +2,7 @@ import { ProgressLocation, window } from "vscode";
 import { pretextOutputChannel } from "../ui";
 import * as utils from "../utils";
 
-export async function ptxUpdate() {
+export async function cmdUpdate() {
   console.log("Updating PreTeXt");
   window.withProgress(
     {

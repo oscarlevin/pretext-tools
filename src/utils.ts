@@ -230,7 +230,7 @@ const ptxVersion = getPtxVersion();
 /**
  * Get list of targets from project.ptx file
  * @returns Array of target names
-*/
+ */
 function getTargets() {
   // execSync returns stdout from executing the command.  We then convert to a string, split on new lines, and remove any blanks, to create an array of the target names.
   // See also https://stackoverflow.com/questions/41001360/saving-the-output-of-a-child-process-in-a-variable-in-the-parent-in-nodejs
@@ -390,7 +390,7 @@ function updateStatusBarItem(
   }
 }
 
-function setupTerminal(terminal: vscode.Terminal|null): vscode.Terminal {
+function setupTerminal(terminal: vscode.Terminal | null): vscode.Terminal {
   if (!terminal) {
     terminal = vscode.window.createTerminal("PreTeXt Terminal");
   }
