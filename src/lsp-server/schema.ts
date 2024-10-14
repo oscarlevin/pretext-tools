@@ -13,6 +13,39 @@ type SchemaGroup = {
   };
 };
 
+export async function initializeSchema(schemaConfig: {
+  versionName: string;
+  customPath: string;
+}) {
+  let schemaPath = setSchema(schemaConfig);
+  let schemaAst = getAst(schemaPath);
+  return new Schema(schemaAst);
+}
+
+function setSchema(schemaConfig: { versionName: string; customPath: string }) {
+  let schemaPath: string = schemaConfig.customPath;
+  if (schemaPath === "") {
+    const extensionPath = path.resolve(__dirname);
+    let schemaDir = path.join(extensionPath, "assets", "schema");
+    switch (schemaConfig.versionName) {
+      case "Stable":
+        schemaPath = path.join(schemaDir, "pretext.rng");
+        break;
+      case "Experimental":
+        schemaPath = path.join(schemaDir, "pretext-dev.rng");
+        break;
+      case "Custom":
+        console.log(
+          "Selected custom schema, but no path provided.  Setting to default."
+        );
+        schemaPath = path.join(schemaDir, "pretext.rng");
+        break;
+    }
+  }
+  console.log("Schema set to: ", schemaPath);
+  return schemaPath;
+}
+
 //Create a class for a pretext schema:
 export class Schema {
   elementChildren: SchemaGroup;
@@ -50,7 +83,7 @@ export class Schema {
               getChildren(node)
             );
           }
-        } 
+        }
       }
     });
     console.timeEnd("visit");
@@ -122,7 +155,17 @@ function resolveRefs(elements: SchemaGroup, aliases: SchemaGroup) {
   return resolvedElements;
 }
 
-export function getAst(path: string) {
-  let rngFile = fs.readFileSync(path, "utf8");
+export function getAst(rngPath: string) {
+  let rngFile = fs.readFileSync(rngPath, "utf8");
+  //Look for an "include" statement:
+  let importRegex = /<include href=\"(.*?)\"\s*\/>/g;
+  let match = importRegex.exec(rngFile);
+  while (match !== null) {
+    let rngDir = path.dirname(rngPath);
+    let importPath = path.join(rngDir, match[1]);
+    let importContent = fs.readFileSync(importPath, "utf8");
+    rngFile = rngFile.replace(match[0], importContent);
+    match = importRegex.exec(rngFile);
+  }
   return fromXml(rngFile);
 }

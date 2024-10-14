@@ -4,13 +4,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import * as fs from "fs";
 import { SpellCheckScope } from "./types";
-import { TextDocument } from "vscode-languageserver-textdocument";
 import { fromXml } from "xast-util-from-xml";
-import { remove } from "unist-util-remove";
-import { CONTINUE, SKIP, visitParents } from "unist-util-visit-parents";
-import { visit } from "unist-util-visit";
-import { assert } from "console";
-import deepmerge from "deepmerge";
 import { Schema } from "./lsp-server/schema";
 
 export {
@@ -26,18 +20,8 @@ export {
   experiment,
 };
 
-
-
 async function experiment(context: vscode.ExtensionContext) {
-  //read in rng file from scripts:
-  let rngPath = path.join(context.extensionPath, "scripts", "pretext.rng");
-  let rngFile = fs.readFileSync(rngPath, "utf8");
-  let ast = fromXml(rngFile);
-  let schema = new Schema(await ast);
-
-  console.log("Schema: ", schema.getSchema());
-  console.log("Schema name: ", schema.elementChildren);
-  console.log("Schema attributes: ", schema.attributeValues);
+  return;
 }
 
 function getDir(myPath: string = "") {
@@ -339,7 +323,7 @@ function setSchema() {
     const userHomeDir: string = homedir();
     const schemaConfig = vscode.workspace
       .getConfiguration("pretext-tools")
-      .get("schema.Version");
+      .get("schema.versionName");
     // set schema folder based on ptxVersion number:
     //  - < 2.5, use userHomeDir/.ptx/schema/
     //  - >= 2.5, use userHomeDir/.ptx/{ptxVersion}/core/schema/

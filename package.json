@@ -98,11 +98,6 @@
     ],
     "commands": [
       {
-        "command": "pretext-tools.test",
-        "title": "Experiment",
-        "category": "PreTeXt"
-      },
-      {
         "command": "pretext-tools.refreshTargets",
         "title": "Refresh target list",
         "category": "PreTeXt"
@@ -317,7 +312,7 @@
             "default": true,
             "markdownDescription": "Whether pretext-tools should try to use pip to install PreTeXt if it cannot find it."
           },
-          "pretext-tools.schema.Version": {
+          "pretext-tools.schema.versionName": {
             "order": 1,
             "type": "string",
             "default": "Stable",
@@ -351,7 +346,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "node build.mjs",
+    "esbuild-base": "copyfiles -u l assets/schema/* out && node build.mjs",
     "esbuild": "npm run esbuild-base -- --sourcemap",
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "watch": "npm run esbuild",
@@ -370,6 +365,7 @@
     "@typescript-eslint/parser": "^5.46.1",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
+    "copyfiles": "^2.4.1",
     "esbuild": "^0.16.5",
     "eslint": "^8.29.0",
     "mocha": "^10.2.0",

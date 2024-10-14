@@ -225,8 +225,6 @@ async function elementCompletions(
   return elementCompletionItems;
 }
 
-
-
 // async function refCompletions(
 //   document: vscode.TextDocument,
 //   position: vscode.Position,
@@ -304,7 +302,7 @@ export function activateCompletions(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     elementProvider,
-    attributeProvider,
+    attributeProvider
     // refProvider
     // inlineProvider
   );

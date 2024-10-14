@@ -24,8 +24,6 @@ let pretextTerminal: vscode.Terminal;
 var lastTarget = "";
 let pretextCommandList = ptxCommandList;
 
-
-
 // The main function to run pretext commands:
 async function runPretext(
   ptxExec: string,
@@ -205,9 +203,8 @@ async function runThenOpen(
 export async function activate(context: vscode.ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
 
-    // Start the LSP
-    lspActivate(context);
-
+  // Start the LSP
+  lspActivate(context);
 
   ///////////////// General Setup //////////////////////
   _context = context;
@@ -301,7 +298,6 @@ export async function activate(context: vscode.ExtensionContext) {
     console.log("Error setting up formatter");
   }
 
- 
   ///////////////// Commands //////////////////////
 
   context.subscriptions.push(
@@ -637,10 +633,10 @@ export async function activate(context: vscode.ExtensionContext) {
     })
   );
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand("pretext-tools.test", async () => {
-      console.log("Running Experiment");
-      utils.experiment(context);
+  //context.subscriptions.push(
+  //  vscode.commands.registerCommand("pretext-tools.test", async () => {
+  //    console.log("Running Experiment");
+  //    utils.experiment(context);
       // const editor = vscode.window.activeTextEditor;
       // const document = editor?.document;
       // const position = editor?.selection.active;
@@ -665,8 +661,8 @@ export async function activate(context: vscode.ExtensionContext) {
       //   const currentTag = unclosedTags[unclosedTags.length - 1];
       //   console.log("Current XML Element: ", currentTag);
       // }
-    })
-  );
+    //})
+  //);
 }
 
 // this method is called when your extension is deactivated

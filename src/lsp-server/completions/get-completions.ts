@@ -3,22 +3,18 @@ import {
   CompletionItemKind,
   TextDocumentPositionParams,
 } from "vscode-languageserver/node";
-import { elementAtOffset } from "../../parse/utils";
 import { documents, getDocumentInfo } from "../state";
 import * as glob from "glob";
 import * as path from "path";
-import * as fs from "fs";
-import { URI, Utils } from "vscode-uri";
-import {
-  getSnippetCompletionItems,
-  lineToPosition,
-  rangeInLine,
-  getCurrentTag,
-} from "./utils";
+import { URI } from "vscode-uri";
+import { lineToPosition, rangeInLine, getCurrentTag } from "./utils";
 import { ATTRIBUTES, ELEMENTS } from "./constants";
-import { Position, Range, TextDocument } from "vscode-languageserver-textdocument";
-import { elementChildren } from "../../constants";
-import { references } from "../main";
+import {
+  Position,
+  Range,
+  TextDocument,
+} from "vscode-languageserver-textdocument";
+import { references, pretextSchema } from "../main";
 
 const LINK_CONTENT_NODES = new Set(["xsl", "source", "publication"]);
 
@@ -70,25 +66,27 @@ export async function getCompletions(
     // Get list of all possible files in **/source/** using fs and glob and return completions for them.
     // currentFileDir is the directory of the current file, in the current OS format.
     const currentFileDir = path.dirname(URI.parse(uri).fsPath);
-    const files = glob.sync("source/**", {nodir: true});
+    const files = glob.sync("source/**", { nodir: true });
 
-    completionItems = [...files.flatMap((f) => {
-      // Get the relative path from the current file to the file f.
-      let relPath = path.relative(currentFileDir, path.resolve(f));
-      relPath = relPath.replaceAll(path.sep, path.posix.sep);
-      // Allow completing both relative form starting with `./` and without.
-      return [
-        { label: relPath, kind: CompletionItemKind.File},
-        { label: './'+relPath, kind: CompletionItemKind.File},
-      ];
-    })];
+    completionItems = [
+      ...files.flatMap((f) => {
+        // Get the relative path from the current file to the file f.
+        let relPath = path.relative(currentFileDir, path.resolve(f));
+        relPath = relPath.replaceAll(path.sep, path.posix.sep);
+        // Allow completing both relative form starting with `./` and without.
+        return [
+          { label: relPath, kind: CompletionItemKind.File },
+          { label: "./" + relPath, kind: CompletionItemKind.File },
+        ];
+      }),
+    ];
     console.log("completionItems", completionItems);
   } else if (completionType === "ref") {
     for (let [reference, parent] of references) {
       const refCompletion: CompletionItem = {
         label: reference,
-        kind: CompletionItemKind.Reference
-      };;
+        kind: CompletionItemKind.Reference,
+      };
       refCompletion.documentation = "(a " + parent + ")";
       refCompletion.detail = "(reference to " + parent + ")";
       refCompletion.sortText = "0" + reference;
@@ -98,7 +96,11 @@ export async function getCompletions(
     // Completions for attributes and elements:
     // First, stop completions if the previous character (or the one before it in case a trigger character is used) is not a space, unless we are at the start of a line (in which case charsBefore will be empty).
     const charsBefore = doc.getText(rangeInLine(params.position, -2, 0));
-    if (charsBefore.length !== 0 && !charsBefore.includes(" ") && !charsBefore.includes("\t")) {
+    if (
+      charsBefore.length !== 0 &&
+      !charsBefore.includes(" ") &&
+      !charsBefore.includes("\t")
+    ) {
       return null;
     }
     // completions act slightly different for attributes and elements
@@ -114,29 +116,33 @@ export async function getCompletions(
       // Build completions for attributes based on the current element.
 
       // Check if the element is in the list of known elements.
-      if (!elementChildren[element] || !elementChildren[element].attributes) {
+      if (
+        !pretextSchema.elementChildren[element] ||
+        !pretextSchema.elementChildren[element].attributes
+      ) {
         return null;
       }
-          // remove preceding trigger character if present:
-    let range: Range;
-    if (
-      doc.getText(rangeInLine(pos, -1, 0)) === "@"
-    ) {
-      console.log("trigger detected");
-      range = rangeInLine(pos, -1, 0);
-    } else {
-      range = rangeInLine(pos);
-    }
-      for (let attr of elementChildren[element].attributes) {
+      // remove preceding trigger character if present:
+      let range: Range;
+      if (doc.getText(rangeInLine(pos, -1, 0)) === "@") {
+        console.log("trigger detected");
+        range = rangeInLine(pos, -1, 0);
+      } else {
+        range = rangeInLine(pos);
+      }
+      for (let attr of pretextSchema.elementChildren[element].attributes) {
         if (attr in ATTRIBUTES) {
           const snippetCompletion = ATTRIBUTES[attr];
           snippetCompletion.insertText = snippetCompletion.insertText || attr;
           snippetCompletion.insertTextFormat = 2;
-          snippetCompletion.textEdit = { newText: snippetCompletion.insertText, range: range };
+          snippetCompletion.textEdit = {
+            newText: snippetCompletion.insertText,
+            range: range,
+          };
           completionItems.push(snippetCompletion);
         } else {
           const snippetCompletion: CompletionItem = {
-            label: '@'+attr,
+            label: "@" + attr,
             kind: CompletionItemKind.TypeParameter,
             insertTextFormat: 2,
             textEdit: {
@@ -147,37 +153,41 @@ export async function getCompletions(
           completionItems.push(snippetCompletion);
         }
       }
-
     } else if (completionType === "element") {
       const element = getCurrentTag(doc, pos);
       console.log("currentTag", element);
       // Build completions for elements based on the current context.
       // Check if the element is in the list of known elements.
-      if (!element || !elementChildren[element] || !elementChildren[element].elements) {
+      if (
+        !element ||
+        !pretextSchema.elementChildren[element] ||
+        !pretextSchema.elementChildren[element].elements
+      ) {
         return null;
       }
 
-          // remove preceding trigger character if present:
+      // remove preceding trigger character if present:
       let range: Range;
-      if (
-        doc.getText(rangeInLine(pos, -1, 0)) === "<"
-      ) {
+      if (doc.getText(rangeInLine(pos, -1, 0)) === "<") {
         console.log("trigger detected");
         range = rangeInLine(pos, -1, 0);
       } else {
         range = rangeInLine(pos);
       }
-      for (let elem of elementChildren[element].elements) {
+      for (let elem of pretextSchema.elementChildren[element].elements) {
         if (elem in ELEMENTS) {
           const snippetCompletion = ELEMENTS[elem];
           snippetCompletion.insertText = snippetCompletion.insertText || elem;
           snippetCompletion.insertTextFormat = 2;
-          snippetCompletion.textEdit = { newText: snippetCompletion.insertText, range: range };
+          snippetCompletion.textEdit = {
+            newText: snippetCompletion.insertText,
+            range: range,
+          };
           completionItems.push(snippetCompletion);
         } else {
           // Give a very basic snippet completion since we haven't implemented a more specific one in ELEMENTS.
           const snippetCompletion: CompletionItem = {
-            label: '<'+elem,
+            label: "<" + elem,
             kind: CompletionItemKind.TypeParameter,
             insertTextFormat: 2,
             textEdit: {
@@ -191,7 +201,7 @@ export async function getCompletions(
       }
       // Also return the end tag for the current element.
       const snippetCompletion: CompletionItem = {
-        label: '</'+element,
+        label: "</" + element,
         kind: CompletionItemKind.TypeParameter,
         insertTextFormat: 2,
         textEdit: {
