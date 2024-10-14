@@ -4,6 +4,8 @@ import * as path from "path";
 import * as vscode from "vscode";
 import * as fs from "fs";
 import { SpellCheckScope } from "./types";
+import { fromXml } from "xast-util-from-xml";
+import { Schema } from "./lsp-server/schema";
 
 export {
   getDir,
@@ -15,7 +17,12 @@ export {
   updateStatusBarItem,
   setupTerminal,
   stripColorCodes,
+  experiment,
 };
+
+async function experiment(context: vscode.ExtensionContext) {
+  return;
+}
 
 function getDir(myPath: string = "") {
   if (myPath !== "") {
@@ -45,50 +52,6 @@ function getDir(myPath: string = "") {
           return fileUri[0].fsPath;
         }
       });
-    return "";
-  }
-}
-
-async function getMainFile() {
-  let dir = getDir();
-  // Set default main file to main.ptx
-  let mainFile = path.join(dir, "source", "main.ptx");
-  // Check if project.ptx exists and if so, use that to find main file
-  let project = path.join(dir, "project.ptx");
-  if (fs.existsSync(project)) {
-    console.log("Found project.ptx");
-    const text = fs.readFileSync(project).toString();
-    // Determine whether v1 or v2:
-    let regexVersion = /<project\s(.*?)ptx-version="2"/;
-    if (regexVersion.test(text)) {
-      console.log("project.ptx is version 2");
-      let regexProject = /<project\s(.*?)source="(.*?)"/;
-      let regexTarget = /<target\s(.*?)source="(.*?)"/;
-      let projectSourceMatch = regexProject.exec(text);
-      let targetSourceMatch = regexTarget.exec(text);
-      if (projectSourceMatch) {
-        mainFile = path.join(dir, projectSourceMatch[2]);
-        if (targetSourceMatch) {
-          mainFile = path.join(mainFile, targetSourceMatch[2]);
-        }
-      } else if (targetSourceMatch) {
-        mainFile = path.join(dir, targetSourceMatch[2]);
-      }
-    } else {
-      console.log("project.ptx is legacy version");
-      let regexTarget = /<source>(.*?)<\/source>/;
-      let targetSourceMatch = regexTarget.exec(text);
-      if (targetSourceMatch) {
-        mainFile = path.join(dir, targetSourceMatch[1]);
-      }
-    }
-  }
-  console.log("Checking for main source file: ", mainFile);
-  if (fs.existsSync(mainFile)) {
-    console.log("Found main source file");
-    return mainFile;
-  } else {
-    console.log("main source file not found");
     return "";
   }
 }
@@ -360,7 +323,7 @@ function setSchema() {
     const userHomeDir: string = homedir();
     const schemaConfig = vscode.workspace
       .getConfiguration("pretext-tools")
-      .get("schema.Version");
+      .get("schema.versionName");
     // set schema folder based on ptxVersion number:
     //  - < 2.5, use userHomeDir/.ptx/schema/
     //  - >= 2.5, use userHomeDir/.ptx/{ptxVersion}/core/schema/
@@ -430,64 +393,6 @@ function setupTerminal(terminal: vscode.Terminal): vscode.Terminal {
   }
   terminal.show();
   return terminal;
-}
-
-// define a type for the array of labels:
-type LabelArray = [string, string, string][];
-
-/**
- * Search through a project to find all xml:id's.  Start with main.ptx and include any fine that is xi:included up to a depth of 5.
- */
-export async function getReferences(): Promise<LabelArray> {
-  // Look through all files in project directory and collect all labels contained as xml:id attributes.
-  let baseFile = await getMainFile();
-  let labels: LabelArray = [];
-  let files = [baseFile];
-  let depth = 0;
-  // const uri = vscode.Uri.file(sourceDir);
-  // let files = await vscode.workspace.fs.readDirectory(uri);
-  while (depth < 5 && files.length > 0) {
-    let newFiles: string[] = [];
-    for (const file of files) {
-      if (fs.existsSync(file)) {
-        let text = fs.readFileSync(file).toString();
-        let regex = /<xi:include\s+href="([^"]+)"/g;
-        let matches = [...text.matchAll(regex)];
-        newFiles = newFiles.concat(
-          matches.map((match) => path.join(file, "..", match[1]))
-        );
-        regex = /<(\w*?)\s(.*?)xml:id="([^"]+?)"/g;
-        matches = [...text.matchAll(regex)];
-        labels = labels.concat(
-          matches.map((match) => [match[3], match[1], file])
-        );
-      }
-    }
-    files = newFiles;
-    depth++;
-  }
-  console.log("Finished collecting labels, reached depth of ", depth);
-  return labels;
-}
-
-export function updateReferences(
-  document: vscode.TextDocument,
-  labels: LabelArray = []
-) {
-  console.log("Updating references");
-  // Look through the specified file collect all labels contained as xml:id attributes.
-  // This can then be used to update the current list of references every time a file is saved.
-  let fileContents = document.getText();
-  let regex = /<(\w*?)\s(.*?)xml:id="([^"]+)"/g;
-  let matches = [...fileContents.matchAll(regex)];
-  // Remove all (old) labels from the current file:
-  labels = labels.filter((label) => label[2] !== document.fileName);
-  // Add all (new) labels from the current file:
-  labels = labels.concat(
-    matches.map((match) => [match[3], match[1], document.fileName])
-  );
-  console.log("Done updating labels");
-  return labels;
 }
 
 function stripColorCodes(input: string): string {

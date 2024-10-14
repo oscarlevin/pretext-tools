@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import { _context } from "./extension";
-import { labels } from "./extension";
+// import { labels } from "./extension";
 import { elementChildren } from "./constants";
 
 function readJsonFile(relativePath: string): any {
@@ -225,51 +225,51 @@ async function elementCompletions(
   return elementCompletionItems;
 }
 
-async function refCompletions(
-  document: vscode.TextDocument,
-  position: vscode.Position,
-  token: vscode.CancellationToken,
-  context: vscode.CompletionContext
-) {
-  // const refs = readJsonFile("snippets/pretext-attributes.json");
-  const linePrefix = document
-    .lineAt(position.line)
-    .text.slice(0, position.character);
-  let completionItems: vscode.CompletionItem[] = [];
-  if (linePrefix.match(/<xref ref=\"$/)) {
-    for (let [reference, parent] of labels) {
-      const refCompletion = new vscode.CompletionItem(
-        reference,
-        vscode.CompletionItemKind.Reference
-      );
-      refCompletion.insertText = new vscode.SnippetString(reference);
-      refCompletion.documentation = "(a " + parent + ")";
-      refCompletion.detail = "(reference to " + parent + ")";
-      refCompletion.sortText = "0" + reference;
-      completionItems.push(refCompletion);
-    }
-  } else if (linePrefix.match(/<xi:include href="$/)) {
-    const files = await vscode.workspace.findFiles("**/source/**");
-    // const currentFile = vscode.workspace.asRelativePath(document.fileName);
-    // console.log(currentFile);
-    // get relative paths:
-    for (let file of files) {
-      let relativePath = vscode.workspace
-        .asRelativePath(file)
-        .replace("source/", "");
-      console.log(relativePath);
-      const refCompletion = new vscode.CompletionItem(
-        relativePath,
-        vscode.CompletionItemKind.Reference
-      );
-      refCompletion.insertText = new vscode.SnippetString(relativePath);
-      completionItems.push(refCompletion);
-    }
-  } else {
-    return undefined;
-  }
-  return completionItems;
-}
+// async function refCompletions(
+//   document: vscode.TextDocument,
+//   position: vscode.Position,
+//   token: vscode.CancellationToken,
+//   context: vscode.CompletionContext
+// ) {
+//   // const refs = readJsonFile("snippets/pretext-attributes.json");
+//   const linePrefix = document
+//     .lineAt(position.line)
+//     .text.slice(0, position.character);
+//   let completionItems: vscode.CompletionItem[] = [];
+//   if (linePrefix.match(/<xref ref=\"$/)) {
+//     for (let [reference, parent] of labels) {
+//       const refCompletion = new vscode.CompletionItem(
+//         reference,
+//         vscode.CompletionItemKind.Reference
+//       );
+//       refCompletion.insertText = new vscode.SnippetString(reference);
+//       refCompletion.documentation = "(a " + parent + ")";
+//       refCompletion.detail = "(reference to " + parent + ")";
+//       refCompletion.sortText = "0" + reference;
+//       completionItems.push(refCompletion);
+//     }
+//   } else if (linePrefix.match(/<xi:include href="$/)) {
+//     const files = await vscode.workspace.findFiles("**/source/**");
+//     // const currentFile = vscode.workspace.asRelativePath(document.fileName);
+//     // console.log(currentFile);
+//     // get relative paths:
+//     for (let file of files) {
+//       let relativePath = vscode.workspace
+//         .asRelativePath(file)
+//         .replace("source/", "");
+//       console.log(relativePath);
+//       const refCompletion = new vscode.CompletionItem(
+//         relativePath,
+//         vscode.CompletionItemKind.Reference
+//       );
+//       refCompletion.insertText = new vscode.SnippetString(relativePath);
+//       completionItems.push(refCompletion);
+//     }
+//   } else {
+//     return undefined;
+//   }
+//   return completionItems;
+// }
 
 /**
  * Activate completions for PreTeXt
@@ -283,11 +283,11 @@ export function activateCompletions(context: vscode.ExtensionContext) {
     "@"
   );
 
-  const refProvider = vscode.languages.registerCompletionItemProvider(
-    "pretext",
-    { provideCompletionItems: refCompletions },
-    '"'
-  );
+  // const refProvider = vscode.languages.registerCompletionItemProvider(
+  //   "pretext",
+  //   { provideCompletionItems: refCompletions },
+  //   '"'
+  // );
 
   const elementProvider = vscode.languages.registerCompletionItemProvider(
     "pretext",
@@ -302,8 +302,8 @@ export function activateCompletions(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     elementProvider,
-    attributeProvider,
-    refProvider
+    attributeProvider
+    // refProvider
     // inlineProvider
   );
   console.log("Activated completion provider");
