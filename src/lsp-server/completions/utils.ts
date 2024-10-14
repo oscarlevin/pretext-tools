@@ -67,45 +67,47 @@ export function lineToPosition(position: Position): Range {
   };
 }
 
-
 /**
   Finds the current node of the curser by comparing all tags above the curser to the open tags above the curser.
  */
 export function getCurrentTag(
-    document: TextDocument,
-    position: Position
-  ): string | undefined {
-    const textUntilPosition = document?.getText({start: { line: 0, character: 0 }, end: position});
-    // Get all open and close tags from the text until the current position.
-    const allTags = (
-      textUntilPosition?.match(/<(\w)+(?![^>]*\/>)|<\/\w+/g) || []
-    ).map((tag) => tag.slice(1));
-    const openedTags = (
-      textUntilPosition?.match(/<(\w)+(?![^>]*\/>)/g) || []
-    ).map((tag) => tag.slice(1));
-    const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map((tag) =>
-      tag.slice(2)
-    );
-  
-    // Now walk through list of all tags, creating a stack of open tags and removing closed tags from the stack.
-    let openTagStack: string[] = [];
-    for (let tag of allTags) {
-      if (tag.startsWith("/")) {
-        const lastOpenTag = openTagStack.pop();
-        if (lastOpenTag !== tag.slice(1)) {
-          console.error(
-            `Error: Found closing tag ${tag} without matching opening tag.`
-          );
-        }
-      } else {
-        openTagStack.push(tag);
+  document: TextDocument,
+  position: Position
+): string | undefined {
+  const textUntilPosition = document?.getText({
+    start: { line: 0, character: 0 },
+    end: position,
+  });
+  // Get all open and close tags from the text until the current position.
+  const allTags = (
+    textUntilPosition?.match(/<(\w)+(?![^>]*\/>)|<\/\w+/g) || []
+  ).map((tag) => tag.slice(1));
+  const openedTags = (
+    textUntilPosition?.match(/<(\w)+(?![^>]*\/>)/g) || []
+  ).map((tag) => tag.slice(1));
+  const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map((tag) =>
+    tag.slice(2)
+  );
+
+  // Now walk through list of all tags, creating a stack of open tags and removing closed tags from the stack.
+  let openTagStack: string[] = [];
+  for (let tag of allTags) {
+    if (tag.startsWith("/")) {
+      const lastOpenTag = openTagStack.pop();
+      if (lastOpenTag !== tag.slice(1)) {
+        console.error(
+          `Error: Found closing tag ${tag} without matching opening tag.`
+        );
       }
+    } else {
+      openTagStack.push(tag);
     }
-  
-    const currentTag = openTagStack.pop();
-    console.log("Current XML Element: ", currentTag);
-    return currentTag;
   }
+
+  const currentTag = openTagStack.pop();
+  console.log("Current XML Element: ", currentTag);
+  return currentTag;
+}
 
 /**
  * Reads a snippet file and returns a list of completion items.
@@ -193,7 +195,10 @@ export async function getSnippetCompletionItems(
   }
   // Also add a closing tag for the current node, since we have turned off this feature from redhat.vscode-xml.
   if (node && trigger === "<") {
-    const closeTagCompletion: CompletionItem = {label:`/${node}>`, kind:kind};
+    const closeTagCompletion: CompletionItem = {
+      label: `/${node}>`,
+      kind: kind,
+    };
     closeTagCompletion.insertText = `/${node}>`;
     closeTagCompletion.documentation = `Close the ${node} tag`;
     closeTagCompletion.detail = `Close the ${node} tag`;
@@ -201,8 +206,6 @@ export async function getSnippetCompletionItems(
   }
   return completionItems;
 }
-
-
 
 function getMainFile() {
   const pwd = "./";
@@ -252,7 +255,6 @@ function getMainFile() {
     return "";
   }
 }
-
 
 // define a type for the array of labels:
 type LabelArray = [string, string, string][];
@@ -306,7 +308,7 @@ export function updateReferences(
   const rootDir = fs.realpathSync(".");
   console.log("Root directory: ", rootDir);
   const currentFile = document.uri;
-  console.log("Current file: ", currentFile); 
+  console.log("Current file: ", currentFile);
   const posixFile = path.posix.relative(rootDir, currentFile);
   console.log("Current file: ", posixFile);
   // Remove all (old) labels from the current file:

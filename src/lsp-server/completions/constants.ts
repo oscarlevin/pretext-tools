@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-// The constants ATTRIBUTES and ELEMENTS contain snippets for completions.  Any element/attribute that 
+// The constants ATTRIBUTES and ELEMENTS contain snippets for completions.  Any element/attribute that
 
 import { CompletionItems } from "../../types";
 
@@ -88,7 +88,8 @@ export const ATTRIBUTES: CompletionItems = {
   },
   text: {
     label: "@text",
-    insertText: 'text="${1|type-local,type-global,type-hybrid,local,global,hybrid,phrase-global,phrase-hybrid,title|}"$0',
+    insertText:
+      'text="${1|type-local,type-global,type-hybrid,local,global,hybrid,phrase-global,phrase-hybrid,title|}"$0',
     documentation: "text attribute, to specify style of cross-reference text.",
   },
   top: {
@@ -119,7 +120,8 @@ export const ATTRIBUTES: CompletionItems = {
   "xi-namespace": {
     label: "@xmlns:xi",
     insertText: 'xmlns:xi="http://www.w3.org/2001/XInclude"',
-    documentation: "xinclude namespace: add to top division of xinclude-ed file.",
+    documentation:
+      "xinclude namespace: add to top division of xinclude-ed file.",
   },
   "xml:id": {
     label: "@xml:id",
@@ -145,7 +147,8 @@ export const ATTRIBUTES: CompletionItems = {
     label: "@compression",
   },
   format: {
-    insertText: 'format="${1|html,pdf,latex,epub,kindle,slides,braille,custom|}"$0',
+    insertText:
+      'format="${1|html,pdf,latex,epub,kindle,slides,braille,custom|}"$0',
     documentation: "format, for this particular build target.",
     label: "@format",
   },
@@ -186,7 +189,8 @@ export const ATTRIBUTES: CompletionItems = {
   },
   "ptx-version": {
     insertText: 'ptx-version="2"$0',
-    documentation: "ptx-version attribute, for project tag.  Must have value 2.",
+    documentation:
+      "ptx-version attribute, for project tag.  Must have value 2.",
     label: "@ptx-version",
   },
   publication: {
@@ -230,7 +234,8 @@ export const ELEMENTS: CompletionItems = {
   },
   algorithm: {
     label: "<algorithm>",
-    insertText: '<algorithm xml:id="alg-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</algorithm>',
+    insertText:
+      '<algorithm xml:id="alg-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</algorithm>',
     documentation: "algorithm (theorem-like).",
   },
   answer: {
@@ -245,16 +250,19 @@ export const ELEMENTS: CompletionItems = {
   },
   assemblage: {
     label: "<assemblage>",
-    insertText: '<assemblage xml:id="assemblage-$1">\n\t<title>$2</title>\n\t<p>\n\t\t$0\n\t</p>\n</assemblage>',
+    insertText:
+      '<assemblage xml:id="assemblage-$1">\n\t<title>$2</title>\n\t<p>\n\t\t$0\n\t</p>\n</assemblage>',
   },
   assumption: {
     label: "<assumption>",
-    insertText: '<assumption xml:id="assumption-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</assumption>',
+    insertText:
+      '<assumption xml:id="assumption-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</assumption>',
     documentation: "assumption (axiom-like)",
   },
   axiom: {
     label: "<axiom>",
-    insertText: '<axiom xml:id="axiom-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</axiom>',
+    insertText:
+      '<axiom xml:id="axiom-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</axiom>',
     documentation: "axiom (axiom-like)",
   },
   biographical: {
@@ -274,7 +282,8 @@ export const ELEMENTS: CompletionItems = {
   },
   blocks: {
     label: "<blocks>",
-    insertText: "<blocks>\n\t<block>\n\t\t<p>\n\t\t\t$1\n\t\t</p>\n\t</block>\n</blocks>",
+    insertText:
+      "<blocks>\n\t<block>\n\t\t<p>\n\t\t\t$1\n\t\t</p>\n\t</block>\n</blocks>",
     documentation: "Parsons problem blocks",
   },
   caption: {
@@ -294,22 +303,26 @@ export const ELEMENTS: CompletionItems = {
   },
   chapter: {
     label: "<chapter>",
-    insertText: '<chapter xml:id="ch-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</chapter>',
+    insertText:
+      '<chapter xml:id="ch-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</chapter>',
     documentation: "chapter (division)",
   },
   choice: {
     label: "<choice>",
-    insertText: "<choice>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</choice>",
+    insertText:
+      "<choice>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</choice>",
     documentation: "Choice for multiple choice question.",
   },
   choices: {
     label: "<choices>",
-    insertText: "<choices>\n\t<choice>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t$0\n\t\t\t</p>\n\t\t</statement>\n\t</choice>\n\n</choices>",
+    insertText:
+      "<choices>\n\t<choice>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t$0\n\t\t\t</p>\n\t\t</statement>\n\t</choice>\n\n</choices>",
     documentation: "Choices for interactive multiple choice questions.",
   },
   claim: {
     label: "<claim>",
-    insertText: '<claim xml:id="claim-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</claim>',
+    insertText:
+      '<claim xml:id="claim-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</claim>',
     documentation: "claim (theorem-like).",
   },
   cline: {
@@ -329,12 +342,14 @@ export const ELEMENTS: CompletionItems = {
   },
   conjecture: {
     label: "<conjecture>",
-    insertText: '<conjecture xml:id="conj-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</conjecture>',
+    insertText:
+      '<conjecture xml:id="conj-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</conjecture>',
     documentation: "conjecture (axiom-like)",
   },
   console: {
     label: "<console>",
-    insertText: "<console>\n<input>$1\n</input>\n<output>\n$2\n</output></console>$0",
+    insertText:
+      "<console>\n<input>$1\n</input>\n<output>\n$2\n</output></console>$0",
     documentation: "console (input/output)",
   },
   convention: {
@@ -344,7 +359,8 @@ export const ELEMENTS: CompletionItems = {
   },
   corollary: {
     label: "<corollary>",
-    insertText: '<corollary xml:id="cor-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</corollary>',
+    insertText:
+      '<corollary xml:id="cor-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</corollary>',
     documentation: "corollary (theorem-like).",
   },
   creator: {
@@ -354,7 +370,8 @@ export const ELEMENTS: CompletionItems = {
   },
   definition: {
     label: "<definition>",
-    insertText: '<definition xml:id="def-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</definition>',
+    insertText:
+      '<definition xml:id="def-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</definition>',
     documentation: "definition",
   },
   documentation: {
@@ -364,7 +381,8 @@ export const ELEMENTS: CompletionItems = {
   },
   dl: {
     label: "<dl>",
-    insertText: "<dl>\n\t<li>\n\t\t<title>$1</title>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</li>\n</dl>",
+    insertText:
+      "<dl>\n\t<li>\n\t\t<title>$1</title>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</li>\n</dl>",
     documentation: "definition list",
   },
   example: {
@@ -386,7 +404,8 @@ export const ELEMENTS: CompletionItems = {
   },
   exercisegroup: {
     label: "<exercisegroup>",
-    insertText: "<exercisegroup>\n\n\t<introduction>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</introduction>\n\n\t<exercise>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t\n\t\t\t</p>\n\t\t</statement>\n\t</exercise>\n\n</exercisegroup>",
+    insertText:
+      "<exercisegroup>\n\n\t<introduction>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</introduction>\n\n\t<exercise>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t\n\t\t\t</p>\n\t\t</statement>\n\t</exercise>\n\n</exercisegroup>",
     documentation: "exercise group",
   },
   exercises: {
@@ -401,7 +420,8 @@ export const ELEMENTS: CompletionItems = {
   },
   fact: {
     label: "<fact>",
-    insertText: '<fact xml:id="fact-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</fact>',
+    insertText:
+      '<fact xml:id="fact-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$2\n\t\t</p>\n\t</statement>\n</fact>',
     documentation: "fact (theorem-like).",
   },
   feedback: {
@@ -421,7 +441,8 @@ export const ELEMENTS: CompletionItems = {
   },
   heuristic: {
     label: "<heuristic>",
-    insertText: '<heuristic xml:id="heuristic-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</heuristic>',
+    insertText:
+      '<heuristic xml:id="heuristic-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</heuristic>',
     documentation: "heuristic (axiom-like)",
   },
   hint: {
@@ -436,12 +457,14 @@ export const ELEMENTS: CompletionItems = {
   },
   hypothesis: {
     label: "<hypothesis>",
-    insertText: '<hypothesis xml:id="hyp-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</hypothesis>',
+    insertText:
+      '<hypothesis xml:id="hyp-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</hypothesis>',
     documentation: "hypothesis (axiom-like)",
   },
   identity: {
     label: "<identity>",
-    insertText: '<identity xml:id="ident-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</identity>',
+    insertText:
+      '<identity xml:id="ident-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</identity>',
     documentation: "identity (theorem-like).",
   },
   idx: {
@@ -451,12 +474,14 @@ export const ELEMENTS: CompletionItems = {
   },
   "image (external)": {
     label: '<image source="">',
-    insertText: '<image source="${1:path (no extension)}">\n\t<shortdescription>${0:(for accessibility)}</shortdescription>\n</image>',
+    insertText:
+      '<image source="${1:path (no extension)}">\n\t<shortdescription>${0:(for accessibility)}</shortdescription>\n</image>',
     documentation: "image (external)",
   },
   "image (not external)": {
     label: "<image>",
-    insertText: "<image>\n\t<shortdescription>$2</shortdescription>\n\t$0\n</image>",
+    insertText:
+      "<image>\n\t<shortdescription>$2</shortdescription>\n\t$0\n</image>",
     documentation: "image (not external)",
     sortText: "0",
   },
@@ -482,12 +507,14 @@ export const ELEMENTS: CompletionItems = {
   },
   "latex-image": {
     label: "<latex-image>",
-    insertText: "<latex-image>\n\t\\\\begin{tikzpicture}\n\t\t$0\n\t\\\\end{tikzpicture}\n</latex-image>",
+    insertText:
+      "<latex-image>\n\t\\\\begin{tikzpicture}\n\t\t$0\n\t\\\\end{tikzpicture}\n</latex-image>",
     documentation: "latex-image",
   },
   lemma: {
     label: "<lemma>",
-    insertText: '<lemma xml:id="lem-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</lemma>',
+    insertText:
+      '<lemma xml:id="lem-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</lemma>',
     documentation: "lemma (theorem-like).",
   },
   li: {
@@ -496,7 +523,7 @@ export const ELEMENTS: CompletionItems = {
     documentation: "list item (w/ p)",
     sortText: "0",
   },
- "li-dl": {
+  "li-dl": {
     label: "<li>",
     insertText: "<li>\n\t<title>$1</title>\n\t<p>\n\t\t$0\n\t</p>\n</li>",
     documentation: "list item (w title and p)",
@@ -508,12 +535,14 @@ export const ELEMENTS: CompletionItems = {
   },
   match: {
     label: "<match>",
-    insertText: '<match order="$1">\n\t<premise>$2</premise>\n\t<response>$3</response>\n</match>\n$0',
+    insertText:
+      '<match order="$1">\n\t<premise>$2</premise>\n\t<response>$3</response>\n</match>\n$0',
     documentation: "match pair for interactive Matching exercise",
   },
   matches: {
     label: "<matches>",
-    insertText: '<matches>\n\t<match order="$1">\n\t\t<premise>$2</premise>\n\t\t<response>$3</response>\n\t</match>\n\t$0\n</matches>',
+    insertText:
+      '<matches>\n\t<match order="$1">\n\t\t<premise>$2</premise>\n\t\t<response>$3</response>\n\t</match>\n\t$0\n</matches>',
     documentation: "Matches for interactive exercise",
   },
   md: {
@@ -542,7 +571,8 @@ export const ELEMENTS: CompletionItems = {
   },
   notation: {
     label: "<notation>",
-    insertText: "<notation>\n\t<usage>${1:(in math mode)}</usage>\n  <description>$2</description>\n</notation>$0",
+    insertText:
+      "<notation>\n\t<usage>${1:(in math mode)}</usage>\n  <description>$2</description>\n</notation>$0",
   },
   note: {
     label: "<note>",
@@ -587,12 +617,14 @@ export const ELEMENTS: CompletionItems = {
   },
   part: {
     label: "<part>",
-    insertText: '<part xml:id="part-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</part>',
+    insertText:
+      '<part xml:id="part-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</part>',
     documentation: "part (division)",
   },
   principle: {
     label: "<principle>",
-    insertText: '<principle xml:id="principle-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</principle>',
+    insertText:
+      '<principle xml:id="principle-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</principle>',
     documentation: "principle (axiom-like)",
   },
   problem: {
@@ -602,7 +634,8 @@ export const ELEMENTS: CompletionItems = {
   },
   program: {
     label: "<program>",
-    insertText: '<program language="$1$">\n\t<input>\n$0\n\t</input>\n</program>',
+    insertText:
+      '<program language="$1$">\n\t<input>\n$0\n\t</input>\n</program>',
     documentation: "program (program-like)",
   },
   project: {
@@ -617,7 +650,8 @@ export const ELEMENTS: CompletionItems = {
   },
   proposition: {
     label: "<proposition>",
-    insertText: '<proposition xml:id="prop-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</proposition>',
+    insertText:
+      '<proposition xml:id="prop-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</proposition>',
     documentation: "proposition (theorem-like).",
   },
   question: {
@@ -627,7 +661,8 @@ export const ELEMENTS: CompletionItems = {
   },
   "reading-questions": {
     label: "<reading-questions>",
-    insertText: '<reading-questions xml:id="rqs-$1">\n\t$0\n</reading-questions>',
+    insertText:
+      '<reading-questions xml:id="rqs-$1">\n\t$0\n</reading-questions>',
     documentation: "reading-questions (division)",
   },
   references: {
@@ -651,7 +686,8 @@ export const ELEMENTS: CompletionItems = {
   },
   sage: {
     label: "<sage>",
-    insertText: "<sage>\n\t<input>\n\t\t$1\n\t</input>\n\t<output>\n\t\t$2\n\t</output>\n</sage>$0",
+    insertText:
+      "<sage>\n\t<input>\n\t\t$1\n\t</input>\n\t<output>\n\t\t$2\n\t</output>\n</sage>$0",
     documentation: "sage math cell",
   },
   sageplot: {
@@ -661,13 +697,15 @@ export const ELEMENTS: CompletionItems = {
   },
   sbsgroup: {
     label: "<sbsgroup>",
-    insertText: '<sbsgroup widths="$1">\n\t<sidebyside>\n\t\t$0\n\t</sidebyside>\n</sbsgroup>',
+    insertText:
+      '<sbsgroup widths="$1">\n\t<sidebyside>\n\t\t$0\n\t</sidebyside>\n</sbsgroup>',
     documentation:
       "sidebyside-group: for a grid layout with multiple rows of side-by-sides.",
   },
   section: {
     label: "<section>",
-    insertText: '<section xml:id="sec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</section>',
+    insertText:
+      '<section xml:id="sec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</section>',
     documentation: "section (division)",
   },
   see: {
@@ -707,38 +745,45 @@ export const ELEMENTS: CompletionItems = {
   },
   subexercises: {
     label: "<subexercises>",
-    insertText: "<subexercises>\n\t<title>$1</title>\n\n\t<exercise>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t$2\n\t\t\t</p>\n\t\t</statement>\n\t</exercise>\n\t$0\n</subexercises>",
+    insertText:
+      "<subexercises>\n\t<title>$1</title>\n\n\t<exercise>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t$2\n\t\t\t</p>\n\t\t</statement>\n\t</exercise>\n\t$0\n</subexercises>",
     documentation: "subexercises (to group exercises)",
   },
   subsection: {
     label: "<subsection>",
-    insertText: '<subsection xml:id="subsec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</subsection>',
+    insertText:
+      '<subsection xml:id="subsec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</subsection>',
     documentation: "subsection (division)",
   },
   subsubsection: {
     label: "<subsubsection>",
-    insertText: '<subsubsection xml:id="subsubsec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</subsubsection>',
+    insertText:
+      '<subsubsection xml:id="subsubsec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</subsubsection>',
     documentation: "subsubsection (division)",
   },
   table: {
     label: "<table>",
-    insertText: "<table>\n\t<title>$1</title>\n\t<tabular>\n\t\t<row>\n\t\t\t<cell>$2</cell>$0\n\t\t</row>\n\t</tabular>\n</table>",
+    insertText:
+      "<table>\n\t<title>$1</title>\n\t<tabular>\n\t\t<row>\n\t\t\t<cell>$2</cell>$0\n\t\t</row>\n\t</tabular>\n</table>",
     documentation: "table",
   },
   tabular: {
     label: "<tabular>",
-    insertText: "<tabular>\n\t<row>\n\t\t<cell>$1</cell>$0\n\t</row>\n</tabular>",
+    insertText:
+      "<tabular>\n\t<row>\n\t\t<cell>$1</cell>$0\n\t</row>\n</tabular>",
     documentation: "tabular",
   },
   task: {
     label: "<task>",
-    insertText: "<task>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>",
+    insertText:
+      "<task>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>",
     documentation: "task (for parts of an exercise/project).",
     sortText: "0",
   },
   "task-workspace": {
     label: '<task workspace="">',
-    insertText: '<task workspace="$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>',
+    insertText:
+      '<task workspace="$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>',
     documentation: "task (for parts of an exercise in worksheet)",
   },
   technology: {
@@ -748,7 +793,8 @@ export const ELEMENTS: CompletionItems = {
   },
   theorem: {
     label: "<theorem>",
-    insertText: '<theorem xml:id="thm-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</theorem>\n',
+    insertText:
+      '<theorem xml:id="thm-$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</theorem>\n',
     documentation: "theorem (theorem-like).",
   },
   title: {
@@ -778,7 +824,8 @@ export const ELEMENTS: CompletionItems = {
   },
   webwork: {
     label: "<webwork>",
-    insertText: "<webwork>\n\t<pg-code>\n\t\t$0\n\t</pg-code>\n\n\t<statement>\n\t\t<p>\n\t\t\t\n\t\t</p>\n\t</statement>\n</webwork>",
+    insertText:
+      "<webwork>\n\t<pg-code>\n\t\t$0\n\t</pg-code>\n\n\t<statement>\n\t\t<p>\n\t\t\t\n\t\t</p>\n\t</statement>\n</webwork>",
     documentation: "WeBWorK (with pg code)",
   },
   "webwork-server": {
@@ -800,177 +847,175 @@ export const ELEMENTS: CompletionItems = {
   "&amp;": {
     label: "&amp;",
     insertText: "&amp;",
-    documentation: "ampersand character"
+    documentation: "ampersand character",
   },
   "&lt;": {
     label: "&lt;",
     insertText: "&lt;",
-    documentation: "less than character"
+    documentation: "less than character",
   },
   abbr: {
     label: "<abbr>",
     insertText: "<abbr>${1:$TM_SELECTED_TEXT}</abbr>$0",
-    documentation: "abbreviations"
+    documentation: "abbreviations",
   },
   acro: {
     label: "<acro>",
     insertText: "<acro>${1:$TM_SELECTED_TEXT}</acro>$0",
-    documentation: "acronym"
+    documentation: "acronym",
   },
   alert: {
     label: "<alert>",
     insertText: "<alert>${1:$TM_SELECTED_TEXT}</alert>$0",
-    documentation: "alert text"
+    documentation: "alert text",
   },
   articletitle: {
     label: "<articletitle>",
     insertText: "<articletitle>$1</articletitle>$0",
-    documentation: "article title"
+    documentation: "article title",
   },
   attr: {
     label: "<attr>",
     insertText: "<attr>$1</attr>$0",
-    documentation: "attribute"
+    documentation: "attribute",
   },
   c: {
     label: "<c>",
     insertText: "<c>${1:$TM_SELECTED_TEXT}</c>$0",
-    documentation: "code"
+    documentation: "code",
   },
   delete: {
     label: "<delete>",
     insertText: "<delete>${1:$TM_SELECTED_TEXT}</delete>$0",
-    documentation: "delete (strike-through) text"
+    documentation: "delete (strike-through) text",
   },
   em: {
     label: "<em>",
     insertText: "<em>${1:$TM_SELECTED_TEXT}</em>$0",
     documentation: "emphasis text",
-    sortText: "0"
+    sortText: "0",
   },
   email: {
     label: "<email>",
     insertText: "<email>$1</email>$0",
-    documentation: "email"
+    documentation: "email",
   },
   fillin: {
     label: "<fillin>",
-    insertText: "<fillin characters=\"${1:5}\" />$0",
-    documentation: "fillin"
+    insertText: '<fillin characters="${1:5}" />$0',
+    documentation: "fillin",
   },
   fn: {
     label: "<fn>",
     insertText: "<fn>$0</fn>",
-    documentation: "footnote"
+    documentation: "footnote",
   },
   foreign: {
     label: "<foreign>",
     insertText: "<foreign>${1:$TM_SELECTED_TEXT}</foreign>$0",
-    documentation: "foreign"
+    documentation: "foreign",
   },
   init: {
     label: "<init>",
     insertText: "<init>${1:$TM_SELECTED_TEXT}</init>$0",
-    documentation: "initialism"
+    documentation: "initialism",
   },
   insert: {
     label: "<insert>",
     insertText: "<insert>${1:$TM_SELECTED_TEXT}</insert>$0",
-    documentation: "insert text"
+    documentation: "insert text",
   },
   latex: {
     label: "<latex />",
     insertText: "<latex />$0",
-    documentation: "latex (fancy letters)"
+    documentation: "latex (fancy letters)",
   },
   m: {
     label: "<m>",
     insertText: "<m>${1:$TM_SELECTED_TEXT}</m>$0",
     documentation: "inline math",
-    sortText: "0"
+    sortText: "0",
   },
   pretext: {
     label: "<pretext/>",
     insertText: "<pretext />$0",
-    documentation: "pretext (fancy letters)"
+    documentation: "pretext (fancy letters)",
   },
   pubtitle: {
     label: "<pubtitle>",
     insertText: "<pubtitle>$1</pubtitle>$0",
-    documentation: "publication title"
+    documentation: "publication title",
   },
   q: {
     label: "<q>",
     insertText: "<q>${1:$TM_SELECTED_TEXT}</q>$0",
-    documentation: "quote (double)"
+    documentation: "quote (double)",
   },
   sq: {
     label: "<sq>",
     insertText: "<sq>${1:$TM_SELECTED_TEXT}</sq>$0",
-    documentation: "single quote"
+    documentation: "single quote",
   },
   stale: {
     label: "<stale>",
     insertText: "<stale>${1:$TM_SELECTED_TEXT}</stale>$0",
-    documentation: "stale text"
+    documentation: "stale text",
   },
   tag: {
     label: "<tag>",
     insertText: "<tag>${1:$TM_SELECTED_TEXT}</tag>$0",
-    documentation: "tag"
+    documentation: "tag",
   },
   tage: {
     label: "<tage>",
     insertText: "<tage>${1:$TM_SELECTED_TEXT}</tage>$0",
-    documentation: "empty tag"
+    documentation: "empty tag",
   },
   taxon: {
     label: "<taxon>",
     insertText: "<taxon>${1:$TM_SELECTED_TEXT}</taxon>$0",
-    documentation: "taxonomy"
+    documentation: "taxonomy",
   },
   term: {
     label: "<term>",
     insertText: "<term>${1:$TM_SELECTED_TEXT}</term>$0",
     documentation: "term (for defined terms)",
-    sortText: "0"
+    sortText: "0",
   },
   tex: {
     label: "<tex />",
     insertText: "<tex />$0",
-    documentation: "tex (fancy letters)"
+    documentation: "tex (fancy letters)",
   },
   url: {
     label: "<url>",
-    insertText: "<url href=\"$1\">$2</url>$0",
-    documentation: "url"
+    insertText: '<url href="$1">$2</url>$0',
+    documentation: "url",
   },
   "url-empty": {
     label: "<url />",
-    insertText: "<url href=\"$1\" />$0",
-    documentation: "url (empty)"
+    insertText: '<url href="$1" />$0',
+    documentation: "url (empty)",
   },
   "webwork-inline": {
     label: "<webwork />",
     insertText: "<webwork />$0",
-    documentation: "webwork (fancy letters)"
+    documentation: "webwork (fancy letters)",
   },
   xref: {
     label: "<xref>",
-    insertText: "<xref ref=\"$1\"/>$0",
+    insertText: '<xref ref="$1"/>$0',
     documentation: "reference",
     command: suggestCommand,
-  }
+  },
 };
 
 // the EXTRA_SNIPPETS object is used to add additional snippets from the above lists beyond what the
 //  schema suggests.  This is useful for variants of snippets.  Each key is the name of an element
 //  that can contain the values for that key.
 export const EXTRA_SNIPPETS = {
-    "worksheet": {
-        elements: [
-            "exercise-workspace",
-        ],
-        attributes: [],
-    }
+  worksheet: {
+    elements: ["exercise-workspace"],
+    attributes: [],
+  },
 };

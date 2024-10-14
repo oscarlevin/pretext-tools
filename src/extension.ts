@@ -637,31 +637,31 @@ export async function activate(context: vscode.ExtensionContext) {
   //  vscode.commands.registerCommand("pretext-tools.test", async () => {
   //    console.log("Running Experiment");
   //    utils.experiment(context);
-      // const editor = vscode.window.activeTextEditor;
-      // const document = editor?.document;
-      // const position = editor?.selection.active;
-      // if (document) {
-      //   let labels = await utils.getReferences();
-      //   console.log("Found labels: ", labels);
-      // }
-      // if (position) {
-      //   const textUntilPosition = document?.getText(
-      //     new vscode.Range(new vscode.Position(0, 0), position)
-      //   );
-      //   const openedTags = (
-      //     textUntilPosition?.match(/<(\w)+(?![^>]*\/>)/g) || []
-      //   ).map((tag) => tag.slice(1));
-      //   const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map(
-      //     (tag) => tag.slice(2)
-      //   );
-      //   const unclosedTags = openedTags.filter(
-      //     (tag) =>
-      //       openedTags.filter(x => x === tag).length > closedTags.filter(x => x === tag).length
-      //   );
-      //   const currentTag = unclosedTags[unclosedTags.length - 1];
-      //   console.log("Current XML Element: ", currentTag);
-      // }
-    //})
+  // const editor = vscode.window.activeTextEditor;
+  // const document = editor?.document;
+  // const position = editor?.selection.active;
+  // if (document) {
+  //   let labels = await utils.getReferences();
+  //   console.log("Found labels: ", labels);
+  // }
+  // if (position) {
+  //   const textUntilPosition = document?.getText(
+  //     new vscode.Range(new vscode.Position(0, 0), position)
+  //   );
+  //   const openedTags = (
+  //     textUntilPosition?.match(/<(\w)+(?![^>]*\/>)/g) || []
+  //   ).map((tag) => tag.slice(1));
+  //   const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map(
+  //     (tag) => tag.slice(2)
+  //   );
+  //   const unclosedTags = openedTags.filter(
+  //     (tag) =>
+  //       openedTags.filter(x => x === tag).length > closedTags.filter(x => x === tag).length
+  //   );
+  //   const currentTag = unclosedTags[unclosedTags.length - 1];
+  //   console.log("Current XML Element: ", currentTag);
+  // }
+  //})
   //);
 }
 

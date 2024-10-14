@@ -25,7 +25,7 @@ type Snippets = {
 };
 
 type CompletionItems = {
-  [key:string]: CompletionItem;
+  [key: string]: CompletionItem;
 };
 
 export { CompletionItems, SpellCheckScope, Snippet, Snippets };
