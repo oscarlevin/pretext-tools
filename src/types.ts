@@ -29,3 +29,10 @@ type CompletionItems = {
 };
 
 export { CompletionItems, SpellCheckScope, Snippet, Snippets };
+
+// Set up types:
+export type LabelArray = [string, string, string][];
+export type Target = {
+  label: string;
+  description: string;
+};

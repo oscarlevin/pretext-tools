@@ -1,12 +1,10 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-import { _context } from "./extension";
-// import { labels } from "./extension";
 import { elementChildren } from "./constants";
 
 function readJsonFile(relativePath: string): any {
   try {
-    const absolutePath = _context.asAbsolutePath(relativePath);
+    const absolutePath = relativePath;
     const data = fs.readFileSync(absolutePath, "utf-8");
     return JSON.parse(data);
   } catch (error) {
