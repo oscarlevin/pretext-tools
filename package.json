@@ -98,11 +98,6 @@
     ],
     "commands": [
       {
-        "command": "pretext-tools.experiment",
-        "title": "Experiment",
-        "category": "PreTeXt"
-      },
-      {
         "command": "pretext-tools.refreshTargets",
         "title": "Refresh target list",
         "category": "PreTeXt"

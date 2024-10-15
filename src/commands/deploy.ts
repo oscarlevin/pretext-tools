@@ -1,6 +1,7 @@
 import { Terminal } from "vscode";
 import * as utils from "../utils";
 import { runPretext } from "./runPtx";
+import { cli } from "../cli";
 
 export function cmdDeploy(
   runInTerminal: boolean = false,
@@ -10,6 +11,6 @@ export function cmdDeploy(
     pretextTerminal = utils.setupTerminal(pretextTerminal);
     pretextTerminal.sendText("pretext deploy");
   } else {
-    runPretext(utils.ptxExec, "deploy", "-u");
+    runPretext(cli.cmd(), "deploy", "-u");
   }
 }

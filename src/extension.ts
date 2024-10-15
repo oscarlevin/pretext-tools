@@ -1,5 +1,4 @@
 import {
-  Terminal,
   ExtensionContext,
   workspace,
   window,
@@ -9,32 +8,29 @@ import {
   commands,
 } from "vscode";
 import { formatPTX } from "./formatter";
-import { ptxExec } from "./utils";
 import * as utils from "./utils";
 
 import {
-  lastTarget,
-  pretextCommandList,
   pretextOutputChannel,
   pretextTerminal,
   ptxSBItem,
   showLog,
-  updateLastTarget,
 } from "./ui";
 import { cmdView, cmdViewCLI, cmdViewCodeChat } from "./commands/view";
 import { cmdNew } from "./commands/new";
 import { cmdDeploy } from "./commands/deploy";
 import { cmdUpdate } from "./commands/update";
 //import { ptxExperiment } from "./commands/experiment";
-import { runPretext } from "./commands/runPtx";
+import { cmdConvertToPretext, cmdLatexToPretext } from "./commands/convert";
+import { cmdBuildAny, cmdBuildLast, cmdGenerate } from "./commands/build";
+import { cmdSelectCommand } from "./commands/select";
+import { cli } from "./cli";
 // Set up types:
 import {
   activate as lspActivate,
   deactivate as lspDeactivate,
 } from "./lsp-client/main";
-import { cmdConvertToPretext, cmdLatexToPretext } from "./commands/convert";
-import { cmdBuildAny, cmdBuildLast, cmdGenerate } from "./commands/build";
-import { cmdSelectCommand } from "./commands/select";
+import { Target } from "./types";
 
 // this method is called when your extension is activated
 export async function activate(context: ExtensionContext) {
@@ -86,23 +82,23 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(ptxSBItem);
   utils.updateStatusBarItem(ptxSBItem);
 
-  console.log("PreTeXt exec command: ", utils.ptxExec);
+  //console.log("PreTeXt exec command: ", utils.ptxExec);
 
   // set ptxInstalled variable to whether ptx is installed
-  let ptxInstalled = utils.ptxExec !== "";
-  console.log("Pretext is installed is:", ptxInstalled);
+  //let ptxInstalled = utils.ptxExec !== "";
+  //console.log("Pretext is installed is:", ptxInstalled);
 
-  var targetSelection = utils.getTargets();
-  context.workspaceState.update("targetSelection", targetSelection);
-  console.log("targetSelection is:", targetSelection);
-  updateLastTarget(targetSelection[0].label);
-  pretextCommandList[0].label = "Build " + lastTarget;
-  console.log(
-    "Targets are now:" +
-      targetSelection.map(function (obj) {
-        return " " + obj.label;
-      })
-  );
+  //var targetSelection = cli.targets();
+  //context.workspaceState.update("targetSelection", targetSelection);
+  //console.log("targetSelection is:", targetSelection);
+  //updateLastTarget(targetSelection[0].label);
+  //pretextCommandList[0].label = "Build " + lastTarget;
+  //console.log(
+  //  "Targets are now:" +
+  //    targetSelection.map(function (obj: Target) {
+  //      return " " + obj.label;
+  //    })
+  //);
 
   ///////////////// Formatter //////////////////////
 
@@ -123,33 +119,17 @@ export async function activate(context: ExtensionContext) {
 
   ///////////////// Commands //////////////////////
 
-
   context.subscriptions.push(
-    commands.registerCommand("pretext-tools.experiment", utils.experiment),
+    //commands.registerCommand("pretext-tools.experiment", utils.experiment),
     commands.registerCommand(
       "pretext-tools.selectPretextCommand",
-      (runInTerminal) => {
-        cmdSelectCommand(runInTerminal);
-      }
+      cmdSelectCommand
     ),
-    commands.registerCommand("pretext-tools.buildAny", (runInTerminal) => {
-      cmdBuildAny(runInTerminal, targetSelection);
-    }),
-    commands.registerCommand("pretext-tools.buildLast", (runInTerminal) => {
-      cmdBuildLast(runInTerminal, lastTarget);
-    }),
-    commands.registerCommand(
-      "pretext-tools.generate",
-      (runInTerminal: boolean = false) => {
-        cmdGenerate(runInTerminal, targetSelection);
-      }
-    ),
-    commands.registerCommand("pretext-tools.view", (runInTerminal) => {
-      cmdView(runInTerminal);
-    }),
-    commands.registerCommand("pretext-tools.viewCLI", (runInTerminal) => {
-      cmdViewCLI(runInTerminal, targetSelection);
-    }),
+    commands.registerCommand("pretext-tools.buildAny", cmdBuildAny),
+    commands.registerCommand("pretext-tools.buildLast", cmdBuildLast),
+    commands.registerCommand("pretext-tools.generate", cmdGenerate),
+    commands.registerCommand("pretext-tools.view", cmdView),
+    commands.registerCommand("pretext-tools.viewCLI", cmdViewCLI),
     commands.registerCommand("pretext-tools.viewCodeChat", cmdViewCodeChat),
     commands.registerCommand("pretext-tools.new", cmdNew),
     commands.registerCommand("pretext-tools.deploy", cmdDeploy),
@@ -162,20 +142,22 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand("pretext-tools.showLog", showLog)
   );
 
+  //This will go away soon, so I'm not refactoring it.
   context.subscriptions.push(
     commands.registerCommand("pretext-tools.refreshTargets", () => {
       pretextOutputChannel.append("Refreshing target list.");
       console.log("Refreshing target list.");
-      targetSelection = utils.getTargets();
+      //reset targets:
+      let targetSelection = cli.targets(true);
       console.log(
         "Targets are now:" +
-          targetSelection.map(function (obj) {
+          targetSelection.map(function (obj: Target) {
             return " " + obj.label;
           })
       );
       window.showInformationMessage(
         "Refreshed list of targets.  Targets are now:" +
-          targetSelection.map(function (obj) {
+          targetSelection.map(function (obj: Target) {
             return " " + obj.label;
           })
       );

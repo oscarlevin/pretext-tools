@@ -1,6 +1,5 @@
-import { Terminal, window } from "vscode";
+import { window } from "vscode";
 import * as utils from "../utils";
-import { ptxExec } from "../utils";
 import { runPretext } from "./runPtx";
 import {
   lastTarget,
@@ -8,11 +7,10 @@ import {
   setTopCommand,
   updateLastTarget,
 } from "../ui";
+import { cli } from "../cli";
 
-export function cmdBuildAny(
-  runInTerminal: boolean = false,
-  targetSelection: any[] = []
-) {
+export function cmdBuildAny(runInTerminal: boolean = false) {
+  let targetSelection = cli.targets();
   // Show choice dialog and pass correct command to runPretext based on selection.
   window.showQuickPick(targetSelection).then((qpSelection) => {
     if (!qpSelection) {
@@ -23,29 +21,24 @@ export function cmdBuildAny(
       console.log(terminal.state);
       terminal.sendText("pretext build " + qpSelection.label);
     } else {
-      runPretext(ptxExec, "build", qpSelection.label);
+      runPretext(cli.cmd(), "build", qpSelection.label);
     }
     updateLastTarget(qpSelection.label);
     setTopCommand("Build " + lastTarget);
   });
 }
 
-export function cmdBuildLast(
-  runInTerminal: boolean = false,
-  lastTarget: string = ""
-) {
+export function cmdBuildLast(runInTerminal: boolean = false) {
   if (runInTerminal) {
     let terminal = utils.setupTerminal(pretextTerminal);
     terminal.sendText("pretext build");
   } else {
-    runPretext(ptxExec, "build", lastTarget);
+    runPretext(cli.cmd(), "build", lastTarget);
   }
 }
 
-export function cmdGenerate(
-  runInTerminal: boolean = false,
-  targetSelection: any[] = []
-) {
+export function cmdGenerate(runInTerminal: boolean = false) {
+  let targetSelection = cli.targets();
   // Show choice dialog and pass correct command to runPretext based on selection.
   window.showQuickPick(targetSelection).then((qpSelection) => {
     if (!qpSelection) {
@@ -55,7 +48,7 @@ export function cmdGenerate(
       let terminal = utils.setupTerminal(pretextTerminal);
       terminal.sendText("pretext generate -t " + qpSelection.label);
     } else {
-      runPretext(ptxExec, "generate -t", qpSelection.label);
+      runPretext(cli.cmd(), "generate -t", qpSelection.label);
     }
     // Move selected target to front of list for next command.
     targetSelection = targetSelection.filter((item) => item !== qpSelection);

@@ -3,6 +3,7 @@ import * as utils from "../utils";
 import { commands, env, ProgressLocation, Uri, window } from "vscode";
 import { ptxSBItem, pretextOutputChannel } from "../ui";
 import path = require("path");
+import { cli } from "../cli";
 
 // The main function to run pretext commands:
 export async function runPretext(
@@ -25,7 +26,7 @@ export async function runPretext(
           () => progress.report({ message: progressUpdate }),
           1000
         );
-        let fullCommand = ptxExec + " " + ptxCommand + " " + ptxOptions;
+        let fullCommand = cli.cmd() + " " + ptxCommand + " " + ptxOptions;
         let status = "ready"; //for statusbaritem
         var filePath = utils.getDir(passedPath);
         console.log("cwd = " + filePath);

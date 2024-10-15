@@ -1,9 +1,8 @@
 import { commands, extensions, window, workspace } from "vscode";
-import { Terminal } from "vscode";
 import * as utils from "../utils";
-import { ptxExec } from "../utils";
 import { runPretext } from "./runPtx";
 import { pretextTerminal } from "../ui";
+import { cli } from "../cli";
 
 export function cmdView(runInTerminal: boolean = false) {
   const selectedViewMethod: string =
@@ -44,10 +43,8 @@ export function cmdView(runInTerminal: boolean = false) {
   }
 }
 
-export function cmdViewCLI(
-  runInTerminal: boolean = false,
-  targetSelection: any[] = []
-) {
+export function cmdViewCLI(runInTerminal: boolean = false) {
+  let targetSelection = cli.targets();
   // Show choice dialog and pass correct command to runPretext based on selection.
   window.showQuickPick(targetSelection).then((qpSelection) => {
     if (!qpSelection) {
@@ -57,7 +54,7 @@ export function cmdViewCLI(
       let terminal = utils.setupTerminal(pretextTerminal);
       terminal.sendText("pretext view " + qpSelection.label);
     } else {
-      runPretext(ptxExec, "view", qpSelection.label);
+      runPretext(cli.cmd(), "view", qpSelection.label);
     }
     // Move selected target to front of list for next command.
     targetSelection = targetSelection.filter((item) => item !== qpSelection);

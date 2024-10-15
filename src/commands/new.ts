@@ -1,6 +1,6 @@
 import { window } from "vscode";
 import { runThenOpen } from "./runPtx";
-import { ptxExec } from "../utils";
+import { cli } from "../cli";
 
 export function cmdNew() {
   let viewCommand = [];
@@ -26,7 +26,7 @@ export function cmdNew() {
         if (fileUri && fileUri[0]) {
           var projectFolder = fileUri[0].fsPath;
           console.log("Selected folder: ", projectFolder);
-          runThenOpen(ptxExec, "new", qpSelection.label, projectFolder);
+          runThenOpen(cli.cmd(), "new", qpSelection.label, projectFolder);
         }
       });
   });
