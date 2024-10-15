@@ -6,6 +6,7 @@ import * as fs from "fs";
 import { SpellCheckScope } from "./types";
 import { fromXml } from "xast-util-from-xml";
 import { Schema } from "./lsp-server/schema";
+import { cli } from "./cli";
 
 export {
   getDir,
@@ -20,7 +21,16 @@ export {
   experiment,
 };
 
-async function experiment(context: vscode.ExtensionContext) {
+async function experiment() {
+  console.log("Current pythonPath:", cli._pythonPath);
+  console.log("cli.pythonPath(): ", cli.pythonPath());
+  console.log("cli._pythonPath: ", cli._pythonPath);
+  console.log("cli.pythonPath('test'): ", cli.pythonPath('test'));
+  console.log("cli._pythonPath: ", cli._pythonPath);
+  cli._pythonPath = "hello";
+  console.log("cli._pythonPath: ", cli._pythonPath);
+  console.log("cli.pythonPath(): ", cli.pythonPath());
+  console.log("cli._pythonPath: ", cli.pythonPath(null));
   return;
 }
 

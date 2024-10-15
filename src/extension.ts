@@ -123,7 +123,9 @@ export async function activate(context: ExtensionContext) {
 
   ///////////////// Commands //////////////////////
 
+
   context.subscriptions.push(
+    commands.registerCommand("pretext-tools.experiment", utils.experiment),
     commands.registerCommand(
       "pretext-tools.selectPretextCommand",
       (runInTerminal) => {
