@@ -139,6 +139,7 @@ export async function getCompletions(
             newText: snippetCompletion.insertText,
             range: range,
           };
+          snippetCompletion.kind = CompletionItemKind.TypeParameter;
           completionItems.push(snippetCompletion);
         } else {
           const snippetCompletion: CompletionItem = {
@@ -183,6 +184,7 @@ export async function getCompletions(
             newText: snippetCompletion.insertText,
             range: range,
           };
+          snippetCompletion.kind = CompletionItemKind.TypeParameter;
           completionItems.push(snippetCompletion);
         } else {
           // Give a very basic snippet completion since we haven't implemented a more specific one in ELEMENTS.

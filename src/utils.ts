@@ -160,13 +160,15 @@ function setSpellCheckConfig() {
   cSpellConfig.update("languageSettings", languageSettings);
 }
 
-function setSchema() {
+function setSchema(context: vscode.ExtensionContext) {
   let schemaPath: string | undefined = vscode.workspace
     .getConfiguration("pretext-tools")
     .get("schema.customPath");
 
   if (schemaPath === "") {
-    const extensionPath = path.resolve(__dirname);
+    //get the extensions installed path:
+    const extensionPath = context.extensionPath;
+    console.log("Extension path is: ", extensionPath);
     let schemaDir = path.join(extensionPath, "assets", "schema");
     const schemaConfig = vscode.workspace
       .getConfiguration("pretext-tools")

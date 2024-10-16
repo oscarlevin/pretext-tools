@@ -48,7 +48,7 @@ export async function activate(context: ExtensionContext) {
       console.log("PreTeXt Tools schema configuration changed");
       // Set schema for pretext files:
       try {
-        utils.setSchema();
+        utils.setSchema(context);
       } catch {
         console.log("Error setting schema");
       }
@@ -74,7 +74,7 @@ export async function activate(context: ExtensionContext) {
   // Set schema for pretext files:
   // NB this is done for the XML extension for validation.  Also done in the LSP for completions.  Eventually this will all be in the LSP.
   try {
-    utils.setSchema();
+    utils.setSchema(context);
   } catch {
     console.log("Error setting schema");
   }

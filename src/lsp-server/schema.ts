@@ -27,6 +27,7 @@ function setSchema(schemaConfig: { versionName: string; customPath: string }) {
   if (schemaPath === "") {
     const extensionPath = path.resolve(__dirname);
     let schemaDir = path.join(extensionPath, "assets", "schema");
+    console.log("in LSP, extension path is: ", extensionPath);
     switch (schemaConfig.versionName) {
       case "Stable":
         schemaPath = path.join(schemaDir, "pretext.rng");
