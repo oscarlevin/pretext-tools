@@ -35,9 +35,14 @@ import { Target } from "./types";
 // this method is called when your extension is activated
 export async function activate(context: ExtensionContext) {
   console.log('Extension "pretext-tools" is now active!');
-
+  pretextOutputChannel.appendLine('Welcome to the pretext-tools extension.');
   // Start the LSP
-  lspActivate(context);
+  try {
+    lspActivate(context);
+  } catch {
+    console.log("Error starting LSP client");
+    pretextOutputChannel.appendLine("Error starting language server.  Some features may not be available.");
+  }
 
   ///////////////// General Setup //////////////////////
   //_context = context;
@@ -163,6 +168,8 @@ export async function activate(context: ExtensionContext) {
       );
     })
   );
+
+pretextOutputChannel.appendLine("PreTeXt related commands are available through the PreTeXt status bar menu or the command pallet (CTRL+SHIFT+P).");
 }
 
 // this method is called when your extension is deactivated
