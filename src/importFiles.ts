@@ -4,7 +4,8 @@ import * as path from "path";
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as https from "https";
-import * as date from "date-and-time";
+import timestamp from "time-stamp";
+
 
 const pretextWriter = path.join(homedir(), ".ptx", "pandoc", "pretext.lua");
 
@@ -49,7 +50,7 @@ function runPlastex(inputfile: string) {
     path.dirname(inputfile),
     "imports",
     path.basename(inputfile, ".tex"),
-    date.format(now, "YYYYMMDD-HHmm")
+    timestamp()
   );
   console.log("outputDir: " + outputDir);
   // run pretext import
