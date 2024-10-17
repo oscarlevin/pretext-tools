@@ -349,11 +349,12 @@
     "esbuild-base": "node build.mjs",
     "esbuild": "npm run esbuild-base -- --sourcemap",
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
-    "watch": "npm run esbuild",
+    "watch": "npm run esbuild -- --watch",
     "test-compile": "tsc -p ./",
     "pretest": "npm run esbuild && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "package": "npm run esbuild -- --production"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
@@ -376,8 +377,6 @@
     "esbuild-node-externals": "^1.15.0",
     "fs.promises.exists": "^1.1.4",
     "glob": "^11.0.0",
-    "prettier": "^3.3.3",
-    "prettier-plugin-pretext": "^1.0.3",
     "saxes": "^6.0.0",
     "time-stamp": "^2.2.0",
     "unified": "^11.0.5",

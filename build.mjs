@@ -1,7 +1,8 @@
 // Build all parts of the plugin
 import esbuild from "esbuild";
 
-const WATCH = process.argv.includes("--watch");
+const watch = process.argv.includes("--watch");
+const production = process.argv.includes("--production");
 
 function statusUpdateFunction(entry, outfile) {
   return (result) => {
@@ -10,6 +11,26 @@ function statusUpdateFunction(entry, outfile) {
     }
   };
 }
+
+/**
+ * @type {import('esbuild').Plugin}
+ */
+const esbuildProblemMatcherPlugin = {
+  name: 'esbuild-problem-matcher',
+
+  setup(build) {
+    build.onStart(() => {
+      console.log('[watch] build started');
+    });
+    build.onEnd(result => {
+      result.errors.forEach(({ text, location }) => {
+        console.error(`✘ [ERROR] ${text}`);
+        console.error(`    ${location.file}:${location.line}:${location.column}:`);
+      });
+      console.log('[watch] build finished');
+    });
+  }
+};
 
 const extensionCompiled = statusUpdateFunction(
   "./src/extension.ts",
@@ -24,10 +45,13 @@ const buildOptions = {
   entryPoints: ["./src/extension.ts"],
   bundle: true,
   format: "cjs",
+  minify: production,
+  sourcemap: !production,
+  sourcesContent: false,
   platform: "node",
-  sourcemap: true,
-  external: ["vscode", "vscode*", "file"],
+  external: ["vscode"],
   outfile: "./out/extension.js",
+  plugins: [esbuildProblemMatcherPlugin],
 };
 
 const buildOptionsLSP = {
@@ -35,44 +59,36 @@ const buildOptionsLSP = {
   bundle: true,
   format: "cjs",
   platform: "node",
-  sourcemap: true,
-  external: ["vscode", "vscode*", "glob", "file", "prettier"],
+  minify: production,
+  sourcemap: !production,
+  sourcesContent: false,
+  external: ["vscode"],
   outfile: "./out/lsp-server.js",
+  plugins: [esbuildProblemMatcherPlugin],
+
 };
 
-const plugins = [
-  {
-    name: "my-plugin",
-    setup(build) {
-      let count = 0;
-      build.onEnd((result) => {
-        if (count++ === 0) {
-          console.log("first build:", result);
-        } else console.log("subsequent build:", result);
-      });
-    },
-  },
-];
 
-const ctx = await esbuild.context({ ...buildOptions, plugins });
 
-if (WATCH) {
+const ctx = await esbuild.context({ ...buildOptions });
+
+if (watch) {
   await ctx.watch();
 } else {
   await ctx.rebuild();
+  await ctx.dispose();
 }
 
-await ctx.dispose();
 
-const ctxLSP = await esbuild.context({ ...buildOptionsLSP, plugins });
+const ctxLSP = await esbuild.context({ ...buildOptionsLSP });
 
-if (WATCH) {
+if (watch) {
   await ctxLSP.watch();
 } else {
   await ctxLSP.rebuild();
+  await ctxLSP.dispose();
 }
 
-await ctxLSP.dispose();
 
 // Compile the base extension
 //const result = await esbuild
@@ -128,6 +144,6 @@ await ctxLSP.dispose();
 //    process.exit();
 //  });
 
-if (WATCH) {
+if (watch) {
   console.log("Watching  ...");
 }
