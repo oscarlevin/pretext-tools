@@ -20,7 +20,7 @@ let client: LanguageClient;
 export function activate(context: ExtensionContext) {
   // The server is implemented in node
   const serverModule = context.asAbsolutePath(
-    path.join("out", "lsp-server.js")
+    path.join("out", "lsp-server.js"),
   );
   // The debug options for the server
   // --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
@@ -43,7 +43,7 @@ export function activate(context: ExtensionContext) {
     documentSelector: [{ scheme: "file", language: "pretext" }],
     synchronize: {
       // Notify the server about file changes to '.clientrc files contained in the workspace
-      fileEvents: workspace.createFileSystemWatcher('**/project.ptx')
+      fileEvents: workspace.createFileSystemWatcher("**/project.ptx"),
     },
     //markdown: { isTrusted: true },
   };
@@ -53,7 +53,7 @@ export function activate(context: ExtensionContext) {
     "pretextLanguageServer",
     "PreTeXt Language Server",
     serverOptions,
-    clientOptions
+    clientOptions,
   );
 
   //context.subscriptions.push(

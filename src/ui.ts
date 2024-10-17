@@ -10,11 +10,11 @@ import { ptxCommandList } from "./constants";
 
 export const pretextOutputChannel: OutputChannel = window.createOutputChannel(
   "PreTeXt Tools",
-  "log"
+  "log",
 );
 export const ptxSBItem: StatusBarItem = window.createStatusBarItem(
   StatusBarAlignment.Left,
-  -100
+  -100,
 );
 
 export function showLog() {

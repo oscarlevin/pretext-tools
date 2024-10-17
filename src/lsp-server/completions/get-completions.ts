@@ -24,7 +24,7 @@ type CompletionType = "element" | "attribute" | "file" | "ref";
 
 async function getCompletionType(
   doc: TextDocument,
-  pos: Position
+  pos: Position,
 ): Promise<CompletionType> {
   // For now we assume that open tags are on the same line as the cursor.  TODO: fix this.
   const linePrefix = doc.getText(lineToPosition(pos));
@@ -45,7 +45,7 @@ async function getCompletionType(
 }
 
 export async function getCompletions(
-  params: TextDocumentPositionParams
+  params: TextDocumentPositionParams,
 ): Promise<CompletionItem[] | null> {
   const uri = params.textDocument.uri;
   const info = getDocumentInfo(uri);
@@ -275,7 +275,7 @@ export async function getCompletions(
  * Retrieve the full `item` details for the abbreviated completion item.
  */
 export async function getCompletionDetails(
-  item: CompletionItem
+  item: CompletionItem,
 ): Promise<CompletionItem> {
   return completionCache[item.data];
 }

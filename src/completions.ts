@@ -17,10 +17,10 @@ function readJsonFile(relativePath: string): any {
  */
 function getCurrentTag(
   document: vscode.TextDocument,
-  position: vscode.Position
+  position: vscode.Position,
 ): string | undefined {
   const textUntilPosition = document?.getText(
-    new vscode.Range(new vscode.Position(0, 0), position)
+    new vscode.Range(new vscode.Position(0, 0), position),
   );
   // Get all open and close tags from the text until the current position.
   const allTags = (
@@ -30,7 +30,7 @@ function getCurrentTag(
     textUntilPosition?.match(/<(\w)+(?![^>]*\/>)/g) || []
   ).map((tag) => tag.slice(1));
   const closedTags = (textUntilPosition?.match(/<\/\w+/g) || []).map((tag) =>
-    tag.slice(2)
+    tag.slice(2),
   );
 
   // Now walk through list of all tags, creating a stack of open tags and removing closed tags from the stack.
@@ -40,7 +40,7 @@ function getCurrentTag(
       const lastOpenTag = openTagStack.pop();
       if (lastOpenTag !== tag.slice(1)) {
         console.error(
-          `Error: Found closing tag ${tag} without matching opening tag.`
+          `Error: Found closing tag ${tag} without matching opening tag.`,
         );
       }
     } else {
@@ -80,7 +80,7 @@ async function getSnippetCompletionItems(
   node: string | undefined,
   document: vscode.TextDocument,
   position: vscode.Position,
-  trigger: string
+  trigger: string,
 ): Promise<vscode.CompletionItem[]> {
   let completionItems: vscode.CompletionItem[] = [];
   for (let [key, value] of Object.entries(snippets)) {
@@ -105,12 +105,12 @@ async function getSnippetCompletionItems(
     // remove preceding trigger character if present:
     if (
       document.getText(
-        new vscode.Range(position.translate(0, -1), position)
+        new vscode.Range(position.translate(0, -1), position),
       ) === trigger
     ) {
       snippetCompletion.range = new vscode.Range(
         position.translate(0, -1),
-        position
+        position,
       );
     }
     snippetCompletion.insertText = new vscode.SnippetString(value.body);
@@ -144,11 +144,11 @@ async function attributeCompletions(
   document: vscode.TextDocument,
   position: vscode.Position,
   token: vscode.CancellationToken,
-  context: vscode.CompletionContext
+  context: vscode.CompletionContext,
 ) {
   // First, stop completions if the previous character is a double quote.
   const charBefore = document.getText(
-    new vscode.Range(position.translate(0, -1), position)
+    new vscode.Range(position.translate(0, -1), position),
   );
   if (charBefore === '"') {
     return undefined;
@@ -168,7 +168,7 @@ async function attributeCompletions(
     element,
     document,
     position,
-    "@"
+    "@",
   );
   return attributeCompletionItems;
 }
@@ -185,11 +185,11 @@ async function elementCompletions(
   document: vscode.TextDocument,
   position: vscode.Position,
   token: vscode.CancellationToken,
-  context: vscode.CompletionContext
+  context: vscode.CompletionContext,
 ) {
   // First, stop completions if the previous character is a double quote.
   const charBefore = document.getText(
-    new vscode.Range(position.translate(0, -1), position)
+    new vscode.Range(position.translate(0, -1), position),
   );
   if (charBefore === '"') {
     return undefined;
@@ -218,7 +218,7 @@ async function elementCompletions(
     currentTag,
     document,
     position,
-    "<"
+    "<",
   );
   return elementCompletionItems;
 }
@@ -278,7 +278,7 @@ export function activateCompletions(context: vscode.ExtensionContext) {
   const attributeProvider = vscode.languages.registerCompletionItemProvider(
     "pretext",
     { provideCompletionItems: attributeCompletions },
-    "@"
+    "@",
   );
 
   // const refProvider = vscode.languages.registerCompletionItemProvider(
@@ -290,7 +290,7 @@ export function activateCompletions(context: vscode.ExtensionContext) {
   const elementProvider = vscode.languages.registerCompletionItemProvider(
     "pretext",
     { provideCompletionItems: elementCompletions },
-    "<"
+    "<",
   );
   // const inlineProvider = vscode.languages.registerCompletionItemProvider(
   //   "pretext",
@@ -300,7 +300,7 @@ export function activateCompletions(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     elementProvider,
-    attributeProvider
+    attributeProvider,
     // refProvider
     // inlineProvider
   );

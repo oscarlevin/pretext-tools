@@ -28,7 +28,7 @@ function setSchema(schemaConfig: { versionName: string; customPath: string }) {
     if (require.main) {
       var extensionPath = path.join(path.dirname(require.main.filename), "..");
     } else {
-      var extensionPath = path.resolve(__dirname, '..');
+      var extensionPath = path.resolve(__dirname, "..");
     }
     let schemaDir = path.join(extensionPath, "assets", "schema");
     switch (schemaConfig.versionName) {
@@ -40,7 +40,7 @@ function setSchema(schemaConfig: { versionName: string; customPath: string }) {
         break;
       case "Custom":
         console.log(
-          "Selected custom schema, but no path provided.  Setting to default."
+          "Selected custom schema, but no path provided.  Setting to default.",
         );
         schemaPath = path.join(schemaDir, "pretext.rng");
         break;
@@ -76,7 +76,7 @@ export class Schema {
           if (nodeName) {
             aliasMap[nodeName] = deepmerge(
               aliasMap[nodeName] || {},
-              getChildren(node)
+              getChildren(node),
             );
           }
         } else if (node.name === "element") {
@@ -84,7 +84,7 @@ export class Schema {
           if (nodeName) {
             tmpElementChildren[nodeName] = deepmerge(
               tmpElementChildren[nodeName] || {},
-              getChildren(node)
+              getChildren(node),
             );
           }
         }

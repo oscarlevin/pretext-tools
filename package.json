@@ -54,14 +54,6 @@
       {
         "language": "pretext",
         "path": "./snippets/pretext-templates.json"
-      },
-      {
-        "language": "pretext",
-        "path": "./snippets/pretext-inline.json"
-      },
-      {
-        "language": "pretext",
-        "path": "./snippets/pretext-elements.json"
       }
     ],
     "keybindings": [

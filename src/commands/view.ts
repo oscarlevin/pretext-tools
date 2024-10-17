@@ -68,7 +68,7 @@ export function cmdViewCodeChat() {
     commands.executeCommand("extension.codeChatActivate");
   } else {
     window.showErrorMessage(
-      "Unable to start CodeChat preview.  Is the 'CodeChat' extension and CodeChat_Server (through pip) installed?"
+      "Unable to start CodeChat preview.  Is the 'CodeChat' extension and CodeChat_Server (through pip) installed?",
     );
   }
 }
