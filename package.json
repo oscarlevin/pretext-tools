@@ -369,6 +369,7 @@
     "esbuild-node-externals": "^1.15.0",
     "fs.promises.exists": "^1.1.4",
     "glob": "^11.0.0",
+    "ovsx": "^0.10.0",
     "saxes": "^6.0.0",
     "time-stamp": "^2.2.0",
     "unified": "^11.0.5",
