@@ -346,7 +346,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "copyfiles -u l assets/schema/* out && node build.mjs",
+    "esbuild-base": "node build.mjs",
     "esbuild": "npm run esbuild-base -- --sourcemap",
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "watch": "npm run esbuild",
@@ -365,7 +365,6 @@
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^3.1.1",
-    "copyfiles": "^2.4.1",
     "esbuild": "^0.24.0",
     "eslint": "^9.12.0",
     "mocha": "^10.7.3",

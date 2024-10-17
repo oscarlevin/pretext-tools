@@ -25,7 +25,11 @@ export async function initializeSchema(schemaConfig: {
 function setSchema(schemaConfig: { versionName: string; customPath: string }) {
   let schemaPath: string = schemaConfig.customPath;
   if (schemaPath === "") {
-    const extensionPath = path.resolve(__dirname);
+    if (require.main) {
+      var extensionPath = path.join(path.dirname(require.main.filename), "..");
+    } else {
+      var extensionPath = path.resolve(__dirname, '..');
+    }
     let schemaDir = path.join(extensionPath, "assets", "schema");
     console.log("in LSP, extension path is: ", extensionPath);
     switch (schemaConfig.versionName) {

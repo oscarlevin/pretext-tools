@@ -4,8 +4,7 @@
  * ------------------------------------------------------------------------------------------ */
 
 import * as path from "path";
-import * as vscode from "vscode";
-import { workspace, ExtensionContext } from "vscode";
+import { ExtensionContext, workspace } from "vscode";
 
 import {
   LanguageClient,
@@ -13,6 +12,8 @@ import {
   ServerOptions,
   TransportKind,
 } from "vscode-languageclient/node";
+
+import { pretextOutputChannel } from "../ui";
 
 let client: LanguageClient;
 
@@ -23,7 +24,7 @@ export function activate(context: ExtensionContext) {
   );
   // The debug options for the server
   // --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
-  const debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
+  //const debugOptions = { execArgv: ["--nolazy", "--inspect=6019"] };
 
   // If the extension is launched in debug mode then the debug server options are used
   // Otherwise the run options are used
@@ -32,7 +33,7 @@ export function activate(context: ExtensionContext) {
     debug: {
       module: serverModule,
       transport: TransportKind.ipc,
-      options: debugOptions,
+      //options: debugOptions,
     },
   };
 
@@ -42,9 +43,9 @@ export function activate(context: ExtensionContext) {
     documentSelector: [{ scheme: "file", language: "pretext" }],
     synchronize: {
       // Notify the server about file changes to '.clientrc files contained in the workspace
-      //fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
+      fileEvents: workspace.createFileSystemWatcher('**/project.ptx')
     },
-    markdown: { isTrusted: true },
+    //markdown: { isTrusted: true },
   };
 
   // Create the language client and start the client.
@@ -64,6 +65,7 @@ export function activate(context: ExtensionContext) {
   // Start the client. This will also launch the server
   client.start();
   console.log("PreTeXt LSP Launched");
+  pretextOutputChannel.appendLine("PreTeXt LSP Launched");
 }
 
 export function deactivate(): Thenable<void> | undefined {

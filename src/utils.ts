@@ -170,6 +170,7 @@ function setSchema(context: vscode.ExtensionContext) {
     const extensionPath = context.extensionPath;
     console.log("Extension path is: ", extensionPath);
     let schemaDir = path.join(extensionPath, "assets", "schema");
+    console.log("Schema directory is: ", schemaDir);
     const schemaConfig = vscode.workspace
       .getConfiguration("pretext-tools")
       .get("schema.versionName");
