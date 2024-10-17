@@ -32,19 +32,15 @@ async function getCompletionType(
   if (match) {
     // Check to see if the current position is inside a ref attribute.
     if (match[0].match(/<xref ref="[^"]*$/)) {
-      console.log("We're in a ref attribute");
       return "ref";
       // Otherwise, see if we are in an attribute asking for a file.
     } else if (match[0].match(/(href|source)="[^"]*$/)) {
-      console.log("We're in a file attribute");
       return "file";
     } else {
-      console.log("We're inside an element, so looking for an attribute");
       return "attribute";
     }
   }
   // Otherwise we default to assume we are in an element.
-  console.log("We're in in regular text, so looking for element completions.");
   return "element";
 }
 
@@ -80,7 +76,6 @@ export async function getCompletions(
         ];
       }),
     ];
-    console.log("completionItems", completionItems);
   } else if (completionType === "ref") {
     for (let [reference, parent] of references) {
       const refCompletion: CompletionItem = {
@@ -112,7 +107,6 @@ export async function getCompletions(
         return null;
       }
       const element = match[0].slice(1, match[0].indexOf(" "));
-      console.log("element", element);
       // Build completions for attributes based on the current element.
 
       // Check if the element is in the list of known elements.
@@ -125,7 +119,6 @@ export async function getCompletions(
       // remove preceding trigger character if present:
       let range: Range;
       if (doc.getText(rangeInLine(pos, -1, 0)) === "@") {
-        console.log("trigger detected");
         range = rangeInLine(pos, -1, 0);
       } else {
         range = rangeInLine(pos);
@@ -156,7 +149,7 @@ export async function getCompletions(
       }
     } else if (completionType === "element") {
       const element = getCurrentTag(doc, pos);
-      console.log("currentTag", element);
+      //console.log("currentTag", element);
       // Build completions for elements based on the current context.
       // Check if the element is in the list of known elements.
       if (
@@ -170,7 +163,6 @@ export async function getCompletions(
       // remove preceding trigger character if present:
       let range: Range;
       if (doc.getText(rangeInLine(pos, -1, 0)) === "<") {
-        console.log("trigger detected");
         range = rangeInLine(pos, -1, 0);
       } else {
         range = rangeInLine(pos);
@@ -285,7 +277,6 @@ export async function getCompletions(
 export async function getCompletionDetails(
   item: CompletionItem
 ): Promise<CompletionItem> {
-  console.log("Trying to get more details for", item);
   return completionCache[item.data];
 }
 

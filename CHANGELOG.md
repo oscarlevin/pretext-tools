@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Completions now use a Language Server Provider, which should improve performance.
+- Completions use configurable RelaxNG schema, allowing for all possible completions given current position.
+
+### Fixed
+
+- Performance enhancements; some features still available even if pretext isn't installed.
 
 ## [0.20.2] - 2024-08-04
 

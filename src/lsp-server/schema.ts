@@ -31,7 +31,6 @@ function setSchema(schemaConfig: { versionName: string; customPath: string }) {
       var extensionPath = path.resolve(__dirname, '..');
     }
     let schemaDir = path.join(extensionPath, "assets", "schema");
-    console.log("in LSP, extension path is: ", extensionPath);
     switch (schemaConfig.versionName) {
       case "Stable":
         schemaPath = path.join(schemaDir, "pretext.rng");
@@ -60,7 +59,7 @@ export class Schema {
     let aliasMap: SchemaGroup = {};
     remove(schemaAst, { type: "text" });
     this.schema = schemaAst;
-    console.time("visit");
+    //console.time("visit");
     visit(schemaAst, (node) => {
       if (node.type === "root") {
         return CONTINUE;
@@ -91,10 +90,10 @@ export class Schema {
         }
       }
     });
-    console.timeEnd("visit");
-    console.time("resolve");
+    //console.timeEnd("visit");
+    //console.time("resolve");
     this.elementChildren = resolveRefs(tmpElementChildren, aliasMap);
-    console.timeEnd("resolve");
+    //console.timeEnd("resolve");
   }
   getSchema() {
     return this.schema;
