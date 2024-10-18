@@ -168,6 +168,8 @@ export function getAst(rngPath: string) {
     let rngDir = path.dirname(rngPath);
     let importPath = path.join(rngDir, match[1]);
     let importContent = fs.readFileSync(importPath, "utf8");
+    //remove first line (xml declaration):
+    importContent = importContent.replace(/<\?xml.*?\?>/, "");
     rngFile = rngFile.replace(match[0], importContent);
     match = importRegex.exec(rngFile);
   }
