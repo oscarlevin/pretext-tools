@@ -30,7 +30,8 @@ import {
 } from "./completions/get-completions";
 //import { formatDocument } from "./formatter";
 import { getReferences, updateReferences } from "./completions/utils";
-import { initializeSchema, Schema } from "./schema";
+import { getAst, initializeSchema, Schema } from "./schema";
+import path from "path";
 
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
@@ -116,10 +117,17 @@ connection.onInitialized(() => {
       });
   } else {
     async () => {
-      pretextSchema = await initializeSchema(globalSettings.schema);
+      pretextSchema =  await initializeSchema(globalSettings.schema);
       console.log("Schema set to: ", globalSettings.schema);
     };
   }
+
+  //// set project schema to what it always is
+  //if (require.main) {
+  //  projectSchema = new Schema(getAst(path.join(path.dirname(require.main.filename), "..", "assets", "schema", "project-ptx.rng")));
+  //} else {
+  //  throw new Error("require.main is undefined");
+  //}
 
   if (hasWorkspaceFolderCapability) {
     connection.workspace.onDidChangeWorkspaceFolders((_event) => {

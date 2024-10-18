@@ -14,7 +14,9 @@ import {
   Range,
   TextDocument,
 } from "vscode-languageserver-textdocument";
-import { references, pretextSchema } from "../main";
+import { references, pretextSchema, projectSchema } from "../main";
+import { isProjectPtx } from "../projectPtx/is-project-ptx";
+import { Schema } from "../schema";
 
 const LINK_CONTENT_NODES = new Set(["xsl", "source", "publication"]);
 
@@ -98,6 +100,15 @@ export async function getCompletions(
     ) {
       return null;
     }
+    // Set the schema based on the current file.
+    let schema: Schema;
+    if (isProjectPtx(uri)) {
+      schema = projectSchema;
+      console.log("In a project manifest file");
+    } else {
+      schema = pretextSchema;
+    }
+    console.log("Schema", schema);
     // completions act slightly different for attributes and elements
     if (completionType === "attribute") {
       // get the current open tag as "element".
@@ -111,8 +122,8 @@ export async function getCompletions(
 
       // Check if the element is in the list of known elements.
       if (
-        !pretextSchema.elementChildren[element] ||
-        !pretextSchema.elementChildren[element].attributes
+        !schema.elementChildren[element] ||
+        !schema.elementChildren[element].attributes
       ) {
         return null;
       }
@@ -123,7 +134,7 @@ export async function getCompletions(
       } else {
         range = rangeInLine(pos);
       }
-      for (let attr of pretextSchema.elementChildren[element].attributes) {
+      for (let attr of schema.elementChildren[element].attributes) {
         if (attr in ATTRIBUTES) {
           const snippetCompletion = ATTRIBUTES[attr];
           snippetCompletion.insertText = snippetCompletion.insertText || attr;
@@ -154,8 +165,8 @@ export async function getCompletions(
       // Check if the element is in the list of known elements.
       if (
         !element ||
-        !pretextSchema.elementChildren[element] ||
-        !pretextSchema.elementChildren[element].elements
+        !schema.elementChildren[element] ||
+        !schema.elementChildren[element].elements
       ) {
         return null;
       }
@@ -167,7 +178,7 @@ export async function getCompletions(
       } else {
         range = rangeInLine(pos);
       }
-      for (let elem of pretextSchema.elementChildren[element].elements) {
+      for (let elem of schema.elementChildren[element].elements) {
         if (elem in ELEMENTS) {
           const snippetCompletion = ELEMENTS[elem];
           snippetCompletion.insertText = snippetCompletion.insertText || elem;
