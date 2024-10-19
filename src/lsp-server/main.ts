@@ -33,7 +33,6 @@ import { getReferences, updateReferences } from "./completions/utils";
 import { getAst, initializeSchema, Schema } from "./schema";
 import path from "path";
 
-
 //Get path to schema:
 export const schemaDir = path.join(__dirname, "..", "assets", "schema");
 
@@ -121,12 +120,12 @@ connection.onInitialized(() => {
       });
   } else {
     async () => {
-      pretextSchema =  await initializeSchema(globalSettings.schema);
+      pretextSchema = await initializeSchema(globalSettings.schema);
       console.log("Schema set to: ", globalSettings.schema);
     };
   }
 
- projectSchema =  new Schema(getAst(path.join(schemaDir, "project-ptx.rng")));
+  projectSchema = new Schema(getAst(path.join(schemaDir, "project-ptx.rng")));
 
   if (hasWorkspaceFolderCapability) {
     connection.workspace.onDidChangeWorkspaceFolders((_event) => {

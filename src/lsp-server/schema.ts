@@ -125,7 +125,7 @@ function getChildren(elemNode: any) {
         refs.push(node.attributes.name);
         return SKIP;
       }
-    } 
+    }
   });
   return { elements: elements, attributes: attributes, refs: refs };
 }
