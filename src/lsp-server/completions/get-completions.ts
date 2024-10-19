@@ -104,11 +104,9 @@ export async function getCompletions(
     let schema: Schema;
     if (isProjectPtx(uri)) {
       schema = projectSchema;
-      console.log("In a project manifest file");
     } else {
       schema = pretextSchema;
     }
-    console.log("Schema", schema);
     // completions act slightly different for attributes and elements
     if (completionType === "attribute") {
       // get the current open tag as "element".
@@ -135,6 +133,7 @@ export async function getCompletions(
         range = rangeInLine(pos);
       }
       for (let attr of schema.elementChildren[element].attributes) {
+        console.log("Found attribute", attr);
         if (attr in ATTRIBUTES) {
           const snippetCompletion = ATTRIBUTES[attr];
           snippetCompletion.insertText = snippetCompletion.insertText || attr;
@@ -146,6 +145,7 @@ export async function getCompletions(
           snippetCompletion.kind = CompletionItemKind.TypeParameter;
           completionItems.push(snippetCompletion);
         } else {
+          console.log("attr", attr);
           const snippetCompletion: CompletionItem = {
             label: "@" + attr,
             kind: CompletionItemKind.TypeParameter,

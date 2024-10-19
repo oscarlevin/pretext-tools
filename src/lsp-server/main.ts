@@ -33,6 +33,10 @@ import { getReferences, updateReferences } from "./completions/utils";
 import { getAst, initializeSchema, Schema } from "./schema";
 import path from "path";
 
+
+//Get path to schema:
+export const schemaDir = path.join(__dirname, "..", "assets", "schema");
+
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 export let hasDiagnosticRelatedInformationCapability = false;
@@ -122,12 +126,7 @@ connection.onInitialized(() => {
     };
   }
 
-  //// set project schema to what it always is
-  //if (require.main) {
-  //  projectSchema = new Schema(getAst(path.join(path.dirname(require.main.filename), "..", "assets", "schema", "project-ptx.rng")));
-  //} else {
-  //  throw new Error("require.main is undefined");
-  //}
+ projectSchema =  new Schema(getAst(path.join(schemaDir, "project-ptx.rng")));
 
   if (hasWorkspaceFolderCapability) {
     connection.workspace.onDidChangeWorkspaceFolders((_event) => {
@@ -200,7 +199,7 @@ documents.onDidClose((e) => {
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(async (change) => {
   updateDocument(change.document);
-  console.log("changed content", change.document.uri);
+  //console.log("changed content", change.document.uri);
   if (isProjectPtx(change.document)) {
     const info = await getDocumentInfo(change.document.uri);
     if (!info) {
@@ -223,7 +222,7 @@ documents.onDidSave((e) => {
 
 connection.onDidChangeWatchedFiles((_change) => {
   // Monitored files have change in VSCode
-  connection.console.log("We received a file change event");
+  //connection.console.log("We received a file change event");
 });
 
 // This handler provides the initial list of the completion items.
