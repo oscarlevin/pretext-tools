@@ -7,14 +7,14 @@ import { documents, getDocumentInfo } from "../state";
 import * as glob from "glob";
 import * as path from "path";
 import { URI } from "vscode-uri";
-import { lineToPosition, rangeInLine, getCurrentTag } from "./utils";
+import { lineToPosition, rangeInLine, getCurrentTag, isPublicationPtx } from "./utils";
 import { ATTRIBUTES, ELEMENTS } from "./constants";
 import {
   Position,
   Range,
   TextDocument,
 } from "vscode-languageserver-textdocument";
-import { references, pretextSchema, projectSchema } from "../main";
+import { references, pretextSchema, projectSchema, publicationSchema } from "../main";
 import { isProjectPtx } from "../projectPtx/is-project-ptx";
 import { Schema } from "../schema";
 
@@ -104,6 +104,8 @@ export async function getCompletions(
     let schema: Schema;
     if (isProjectPtx(uri)) {
       schema = projectSchema;
+    } else if (isPublicationPtx(doc)) {
+      schema = publicationSchema;
     } else {
       schema = pretextSchema;
     }
