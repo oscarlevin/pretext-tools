@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Completions/snippets for project.ptx manifest file
+
 ## [0.21.0] - 2024-10-17
 
 ### Changed
