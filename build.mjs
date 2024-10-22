@@ -76,8 +76,8 @@ if (watch) {
   await ctx.watch();
 } else {
   await ctx.rebuild();
-  await ctx.dispose();
 }
+await ctx.dispose();
 
 
 const ctxLSP = await esbuild.context({ ...buildOptionsLSP });
@@ -86,8 +86,8 @@ if (watch) {
   await ctxLSP.watch();
 } else {
   await ctxLSP.rebuild();
-  await ctxLSP.dispose();
 }
+await ctxLSP.dispose();
 
 
 // Compile the base extension

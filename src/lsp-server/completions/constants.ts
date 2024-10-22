@@ -128,6 +128,7 @@ export const ATTRIBUTES: CompletionItems = {
     insertText: 'xml:id="$1"$0',
     documentation: "xml:id attribute, for references.",
   },
+  //Project.ptx attributes:
   "asy-method": {
     insertText: 'asy-method="${1|server,local|}"',
     documentation:
@@ -148,7 +149,7 @@ export const ATTRIBUTES: CompletionItems = {
   },
   format: {
     insertText:
-      'format="${1|html,pdf,latex,epub,kindle,slides,braille,custom|}"$0',
+      'format="${1|html,pdf,latex,epub,kindle,braille,revealjs,custom|}"$0',
     documentation: "format, for this particular build target.",
     label: "@format",
   },
@@ -772,6 +773,12 @@ export const ELEMENTS: CompletionItems = {
     insertText:
       "<tabular>\n\t<row>\n\t\t<cell>$1</cell>$0\n\t</row>\n</tabular>",
     documentation: "tabular",
+  },
+  target: {
+    label: "<target>",
+    insertText:
+      '<target name="$1" format="${2|html,pdf,latex,epub,kindle,braille,revealjs,custom|}" />\n$0',
+    documentation: "target (for project)",
   },
   task: {
     label: "<task>",
