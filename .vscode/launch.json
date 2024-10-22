@@ -23,7 +23,7 @@
             "type": "node",
             "request": "attach",
             "name": "Attach to LSP Only",
-            "port": 6019,
+            "port": 6009,
             "restart": true,
             "outFiles": ["${workspaceRoot}/out/lsp-server.js"]
         },

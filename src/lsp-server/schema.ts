@@ -4,6 +4,7 @@ import { fromXml } from "xast-util-from-xml";
 import { CONTINUE, SKIP, visit } from "unist-util-visit";
 import deepmerge from "deepmerge";
 import { remove } from "unist-util-remove";
+import { schemaDir } from "./main";
 
 type SchemaGroup = {
   [key: string]: {
@@ -25,12 +26,6 @@ export async function initializeSchema(schemaConfig: {
 function setSchema(schemaConfig: { versionName: string; customPath: string }) {
   let schemaPath: string = schemaConfig.customPath;
   if (schemaPath === "") {
-    if (require.main) {
-      var extensionPath = path.join(path.dirname(require.main.filename), "..");
-    } else {
-      var extensionPath = path.resolve(__dirname, "..");
-    }
-    let schemaDir = path.join(extensionPath, "assets", "schema");
     switch (schemaConfig.versionName) {
       case "Stable":
         schemaPath = path.join(schemaDir, "pretext.rng");
@@ -46,7 +41,6 @@ function setSchema(schemaConfig: { versionName: string; customPath: string }) {
         break;
     }
   }
-  console.log("Schema set to: ", schemaPath);
   return schemaPath;
 }
 
@@ -57,7 +51,8 @@ export class Schema {
   constructor(schemaAst: any) {
     let tmpElementChildren: SchemaGroup = {};
     let aliasMap: SchemaGroup = {};
-    remove(schemaAst, { type: "text" });
+    // For some reason, removing the "text" nodes causes some elements to be skipped.  So even though it is slightly faster, commenting it out for now.
+    //remove(schemaAst, { type: "text" });
     this.schema = schemaAst;
     //console.time("visit");
     visit(schemaAst, (node) => {
@@ -106,6 +101,7 @@ function getChildren(elemNode: any) {
     !elemNode.children ||
     elemNode.children.length === 0
   ) {
+    //console.log("No children found for node: ", elemNode);
     return {};
   }
   let elements: string[] = [];
@@ -122,7 +118,6 @@ function getChildren(elemNode: any) {
       }
     } else if (node.name === "attribute") {
       if (node.attributes && node.attributes.name) {
-        attributes.push(node.attributes.name);
         return SKIP;
       }
     } else if (node.name === "ref") {

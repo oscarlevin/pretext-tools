@@ -36,6 +36,10 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
 
+      - name: Update schema
+        run: |
+          node scripts/update-schema.js
+
       - name: Package
         run: vsce package ${{ inputs.level }}
 
