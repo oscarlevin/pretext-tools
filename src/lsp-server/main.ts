@@ -125,7 +125,9 @@ connection.onInitialized(() => {
     };
   }
 
-  publicationSchema = new Schema(getAst(path.join(schemaDir, "publication-schema.rng")));
+  publicationSchema = new Schema(
+    getAst(path.join(schemaDir, "publication-schema.rng")),
+  );
   projectSchema = new Schema(getAst(path.join(schemaDir, "project-ptx.rng")));
 
   if (hasWorkspaceFolderCapability) {

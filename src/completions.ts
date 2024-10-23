@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import { elementChildren } from "./constants";
+import { Snippets } from "./types";
 
 function readJsonFile(relativePath: string): any {
   try {
@@ -52,19 +53,6 @@ function getCurrentTag(
   console.log("Current XML Element: ", currentTag);
   return currentTag;
 }
-
-// Types for snippets
-type Snippet = {
-  prefix: string;
-  body: string;
-  description?: string;
-  sort?: string;
-  retrigger?: boolean;
-};
-
-type Snippets = {
-  [key: string]: Snippet;
-};
 
 /**
  * Reads a snippet file and returns a list of completion items.
