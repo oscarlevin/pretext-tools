@@ -320,6 +320,11 @@ export const ELEMENTS: CompletionItems = {
       "<choices>\n\t<choice>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t$0\n\t\t\t</p>\n\t\t</statement>\n\t</choice>\n\n</choices>",
     documentation: "Choices for interactive multiple choice questions.",
   },
+  chunking: {
+    label: "<chunking>",
+    insertText: "<chunking level=\"${1|0,1,2,3,4,5,6|}\"/>\n$0",
+    documentation: "The depth at which to split up files in an HTML build.",
+  },
   claim: {
     label: "<claim>",
     insertText:
@@ -397,6 +402,11 @@ export const ELEMENTS: CompletionItems = {
     insertText: "<exercise>\n\t$0\n</exercise>",
     documentation: "exercise",
     sortText: "0",
+  },
+  "exercise-inline": {
+    label: '<exercise-inline />',
+    insertText: '<exercise-inline statement=\"${1|yes,no|}\" hint=\"${2|yes,no|}\" answer=\"${3|yes,no|}\" solution=\"${4|yes,no|}\"/>\n$0',
+    documentation: "inline exercise visibility",
   },
   "exercise-workspace": {
     label: '<exercise workspace="">',
@@ -768,6 +778,11 @@ export const ELEMENTS: CompletionItems = {
       "<table>\n\t<title>$1</title>\n\t<tabular>\n\t\t<row>\n\t\t\t<cell>$2</cell>$0\n\t\t</row>\n\t</tabular>\n</table>",
     documentation: "table",
   },
+  tableofcontents: {
+    label: "<tableofcontents>",
+    insertText: "<tableofcontents level=\"${1|0,1,2,3,4,5,6|}\"/>\n$0",
+    documentation: "To set the depth for the table of contents",
+  },
   tabular: {
     label: "<tabular>",
     insertText:
@@ -834,6 +849,11 @@ export const ELEMENTS: CompletionItems = {
     insertText:
       "<webwork>\n\t<pg-code>\n\t\t$0\n\t</pg-code>\n\n\t<statement>\n\t\t<p>\n\t\t\t\n\t\t</p>\n\t</statement>\n</webwork>",
     documentation: "WeBWorK (with pg code)",
+  },
+  webworkEmpty: {
+    label: "<webwork />",
+    insertText: "<webwork />",
+    documentation: "WeBWorK (empty)",
   },
   "webwork-server": {
     label: '<webwork source="" />',
