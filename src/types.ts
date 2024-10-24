@@ -36,3 +36,15 @@ export type Target = {
   label: string;
   description: string;
 };
+// Types for snippets
+type Snippet = {
+  prefix: string;
+  body: string;
+  description?: string;
+  sort?: string;
+  retrigger?: boolean;
+};
+export type Snippets = {
+  [key: string]: Snippet;
+};
+export type CompletionType = "element" | "attribute" | "file" | "ref";

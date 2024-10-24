@@ -320,3 +320,10 @@ export function updateReferences(
   console.log("Done updating labels");
   return references;
 }
+
+export function isPublicationPtx(document: TextDocument): boolean {
+  // Look for a starting tag of <publication> in the file.
+  let fileContents = document.getText();
+  let regex = /<publication>/;
+  return regex.test(fileContents);
+}

@@ -7,22 +7,31 @@ import { documents, getDocumentInfo } from "../state";
 import * as glob from "glob";
 import * as path from "path";
 import { URI } from "vscode-uri";
-import { lineToPosition, rangeInLine, getCurrentTag } from "./utils";
-import { ATTRIBUTES, ELEMENTS } from "./constants";
+import {
+  lineToPosition,
+  rangeInLine,
+  getCurrentTag,
+  isPublicationPtx,
+} from "./utils";
+import { ATTRIBUTES, ELEMENTS, EXTRA_ELEMENT_SNIPPETS } from "./constants";
 import {
   Position,
   Range,
   TextDocument,
 } from "vscode-languageserver-textdocument";
-import { references, pretextSchema, projectSchema } from "../main";
+import {
+  references,
+  pretextSchema,
+  projectSchema,
+  publicationSchema,
+} from "../main";
 import { isProjectPtx } from "../projectPtx/is-project-ptx";
 import { Schema } from "../schema";
+import { CompletionType } from "../../types";
 
 const LINK_CONTENT_NODES = new Set(["xsl", "source", "publication"]);
 
 const completionCache: CompletionItem[] = [];
-
-type CompletionType = "element" | "attribute" | "file" | "ref";
 
 async function getCompletionType(
   doc: TextDocument,
@@ -104,6 +113,8 @@ export async function getCompletions(
     let schema: Schema;
     if (isProjectPtx(uri)) {
       schema = projectSchema;
+    } else if (isPublicationPtx(doc)) {
+      schema = publicationSchema;
     } else {
       schema = pretextSchema;
     }
@@ -215,6 +226,8 @@ export async function getCompletions(
         },
       };
       completionItems.push(snippetCompletion);
+      // extend completionItems with extra completions:
+      completionItems.push(...getExtraCompletions(element, range, schema));
     } else {
       return null;
     }
@@ -230,6 +243,35 @@ export async function getCompletions(
       data: i,
     };
   });
+}
+
+function getExtraCompletions(
+  element: string,
+  range: Range,
+  schema: Schema,
+): CompletionItem[] {
+  let extraCompletions: CompletionItem[] = [];
+  for (let [key, item] of Object.entries(EXTRA_ELEMENT_SNIPPETS)) {
+    //Skip if the (parent) element is not in the list of acceptable parents.
+    if (item.parents && !item.parents.includes(element)) {
+      continue;
+    }
+    if (schema.elementChildren[element].elements.includes(item.alias)) {
+      let snippetCompletion: CompletionItem = {
+        label: item.label,
+      };
+      snippetCompletion.insertText = item.insertText;
+      snippetCompletion.insertTextFormat = 2;
+      snippetCompletion.textEdit = {
+        newText: snippetCompletion.insertText,
+        range: range,
+      };
+      snippetCompletion.documentation = item.documentation;
+      snippetCompletion.kind = CompletionItemKind.TypeParameter;
+      extraCompletions.push(snippetCompletion);
+    }
+  }
+  return extraCompletions;
 }
 
 /**

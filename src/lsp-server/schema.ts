@@ -3,7 +3,6 @@ import fs from "fs";
 import { fromXml } from "xast-util-from-xml";
 import { CONTINUE, SKIP, visit } from "unist-util-visit";
 import deepmerge from "deepmerge";
-import { remove } from "unist-util-remove";
 import { schemaDir } from "./main";
 
 type SchemaGroup = {
@@ -118,6 +117,7 @@ function getChildren(elemNode: any) {
       }
     } else if (node.name === "attribute") {
       if (node.attributes && node.attributes.name) {
+        attributes.push(node.attributes.name);
         return SKIP;
       }
     } else if (node.name === "ref") {
