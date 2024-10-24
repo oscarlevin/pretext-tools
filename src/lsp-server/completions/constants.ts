@@ -8,7 +8,7 @@ const suggestCommand = {
   command: "editor.action.triggerSuggest",
 };
 
-// needs to be completed that is not here will get very basic treatment.
+// needs to be completed. what is not here will get very basic treatment.
 export const ATTRIBUTES: CompletionItems = {
   bottom: {
     label: "@bottom",
@@ -220,6 +220,22 @@ export const ATTRIBUTES: CompletionItems = {
     documentation: "xsl attribute",
     label: "@xsl",
   },
+  // Publication file attributes
+  level: {
+    insertText: 'level="${1|0,1,2,3,4,5,6,7,8,9|}"$0',
+    documentation: "level attribute, for publication file. ",
+    label: "@level",
+  },
+  textstyle: {
+    insertText: 'textstyle="${1|underline,box,shade|}"$0',
+    documentation: "textstyle attribute of fillin. ",
+    label: "@textstyle",
+  },
+  mathstyle: {
+    insertText: 'mathstyle="${1|underline,box,shade|}"$0',
+    documentation: "mathstyle attribute of fillin. ",
+    label: "@mathstyle",
+  },
 };
 
 export const ELEMENTS: CompletionItems = {
@@ -320,11 +336,6 @@ export const ELEMENTS: CompletionItems = {
       "<choices>\n\t<choice>\n\t\t<statement>\n\t\t\t<p>\n\t\t\t\t$0\n\t\t\t</p>\n\t\t</statement>\n\t</choice>\n\n</choices>",
     documentation: "Choices for interactive multiple choice questions.",
   },
-  chunking: {
-    label: "<chunking>",
-    insertText: '<chunking level="${1|0,1,2,3,4,5,6|}"/>\n$0',
-    documentation: "The depth at which to split up files in an HTML build.",
-  },
   claim: {
     label: "<claim>",
     insertText:
@@ -403,13 +414,6 @@ export const ELEMENTS: CompletionItems = {
     documentation: "exercise",
     sortText: "0",
   },
-  "exercise-inline": {
-    label: "<exercise-inline />",
-    insertText:
-      '<exercise-inline statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
-    documentation: "inline exercise visibility",
-  },
-
   exercisegroup: {
     label: "<exercisegroup>",
     insertText:
@@ -760,11 +764,6 @@ export const ELEMENTS: CompletionItems = {
       "<table>\n\t<title>$1</title>\n\t<tabular>\n\t\t<row>\n\t\t\t<cell>$2</cell>$0\n\t\t</row>\n\t</tabular>\n</table>",
     documentation: "table",
   },
-  tableofcontents: {
-    label: "<tableofcontents>",
-    insertText: '<tableofcontents level="${1|0,1,2,3,4,5,6|}"/>\n$0',
-    documentation: "To set the depth for the table of contents",
-  },
   tabular: {
     label: "<tabular>",
     insertText:
@@ -1000,6 +999,52 @@ export const ELEMENTS: CompletionItems = {
     insertText: '<xref ref="$1"/>$0',
     documentation: "reference",
     command: suggestCommand,
+  },
+  // Publication File Elements
+  chunking: {
+    label: "<chunking>",
+    insertText: '<chunking level="${1|0,1,2,3,4,5,6|}"/>\n$0',
+    documentation: "The depth at which to split up files in an HTML build.",
+  },
+  "exercise-inline": {
+    label: "<exercise-inline />",
+    insertText:
+      '<exercise-inline statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
+    documentation: "inline exercise visibility",
+  },
+  "exercise-divisional": {
+    label: "<exercise-divisional />",
+    insertText:
+      '<exercise-divisional statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
+    documentation: "divisional exercise visibility",
+  },
+  "exercise-reading": {
+    label: "<exercise-reading />",
+    insertText:
+      '<exercise-reading statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
+    documentation: "reading exercise visibility",
+  },
+  "exercise-project": {
+    label: "<exercise-project />",
+    insertText:
+      '<exercise-project statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
+    documentation: "project visibility",
+  },
+  "exercise-worksheet": {
+    label: "<exercise-worksheet />",
+    insertText:
+      '<exercise-worksheet statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
+    documentation: "worksheet exercise visibility",
+  },
+  tableofcontents: {
+    label: "<tableofcontents>",
+    insertText: '<tableofcontents level="${1|0,1,2,3,4,5,6|}"/>\n$0',
+    documentation: "To set the depth for the table of contents",
+  },
+  watermark: {
+    label: "<watermark>",
+    insertText: '<watermark scale="$1">$2</watermark>\n$0',
+    documentation: "To add a watermark to the document",
   },
 };
 

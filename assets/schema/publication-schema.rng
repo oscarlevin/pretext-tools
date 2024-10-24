@@ -72,7 +72,7 @@
           </element>
         </optional>
         <optional>
-          <element name="exercise-dividional">
+          <element name="exercise-divisional">
             <ref name="ExerciseAttributes"/>
           </element>
         </optional>
