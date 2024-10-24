@@ -8,7 +8,7 @@ const suggestCommand = {
   command: "editor.action.triggerSuggest",
 };
 
-// needs to be completed that is not here will get very basic treatment.
+// needs to be completed. what is not here will get very basic treatment.
 export const ATTRIBUTES: CompletionItems = {
   bottom: {
     label: "@bottom",
@@ -220,6 +220,22 @@ export const ATTRIBUTES: CompletionItems = {
     documentation: "xsl attribute",
     label: "@xsl",
   },
+  // Publication file attributes
+  level: {
+    insertText: 'level="${1|0,1,2,3,4,5,6,7,8,9|}"$0',
+    documentation: "level attribute, for publication file. ",
+    label: "@level",
+  },
+  textstyle: {
+    insertText: 'textstyle="${1|underline,box,shade|}"$0',
+    documentation: "textstyle attribute of fillin. ",
+    label: "@textstyle",
+  },
+  mathstyle: {
+    insertText: 'mathstyle="${1|underline,box,shade|}"$0',
+    documentation: "mathstyle attribute of fillin. ",
+    label: "@mathstyle",
+  },
 };
 
 export const ELEMENTS: CompletionItems = {
@@ -398,11 +414,6 @@ export const ELEMENTS: CompletionItems = {
     documentation: "exercise",
     sortText: "0",
   },
-  "exercise-workspace": {
-    label: '<exercise workspace="">',
-    insertText: '<exercise workspace="$1">\n\t$0\n</exercise>',
-    documentation: "exercise (in worksheet)",
-  },
   exercisegroup: {
     label: "<exercisegroup>",
     insertText:
@@ -473,13 +484,7 @@ export const ELEMENTS: CompletionItems = {
     insertText: "<idx><h>$1</h></idx>$0",
     documentation: "index entry",
   },
-  "image (external)": {
-    label: '<image source="">',
-    insertText:
-      '<image source="${1:path (no extension)}">\n\t<shortdescription>${0:(for accessibility)}</shortdescription>\n</image>',
-    documentation: "image (external)",
-  },
-  "image (not external)": {
+  image: {
     label: "<image>",
     insertText:
       "<image>\n\t<shortdescription>$2</shortdescription>\n\t$0\n</image>",
@@ -524,16 +529,7 @@ export const ELEMENTS: CompletionItems = {
     documentation: "list item (w/ p)",
     sortText: "0",
   },
-  "li-dl": {
-    label: "<li>",
-    insertText: "<li>\n\t<title>$1</title>\n\t<p>\n\t\t$0\n\t</p>\n</li>",
-    documentation: "list item (w title and p)",
-  },
-  "li-short": {
-    label: "<li>",
-    insertText: "<li>$1</li>$0",
-    documentation: "list item (short)",
-  },
+
   match: {
     label: "<match>",
     insertText:
@@ -759,8 +755,8 @@ export const ELEMENTS: CompletionItems = {
   subsubsection: {
     label: "<subsubsection>",
     insertText:
-      '<subsubsection xml:id="subsubsec-${1/^\\W*(\\w+)|[\\W|\\s]*(\\w+)|\\W+(\\w*)|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</subsubsection>',
-    documentation: "subsubsection (division)",
+      '<subsubsection xml:id="subsubsec-${1/^\\W*|[\\W|\\s]*|\\W+|\\W*/${1:/downcase}${2:+-}${2:/downcase}${3:/downcase}/gi}">\n\t<title>$1</title>\n\t$0\n</subsubsection>',
+    documentation: "subsubsection ",
   },
   table: {
     label: "<table>",
@@ -786,12 +782,6 @@ export const ELEMENTS: CompletionItems = {
       "<task>\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>",
     documentation: "task (for parts of an exercise/project).",
     sortText: "0",
-  },
-  "task-workspace": {
-    label: '<task workspace="">',
-    insertText:
-      '<task workspace="$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>',
-    documentation: "task (for parts of an exercise in worksheet)",
   },
   technology: {
     label: "<technology>",
@@ -834,6 +824,11 @@ export const ELEMENTS: CompletionItems = {
     insertText:
       "<webwork>\n\t<pg-code>\n\t\t$0\n\t</pg-code>\n\n\t<statement>\n\t\t<p>\n\t\t\t\n\t\t</p>\n\t</statement>\n</webwork>",
     documentation: "WeBWorK (with pg code)",
+  },
+  webworkEmpty: {
+    label: "<webwork />",
+    insertText: "<webwork />",
+    documentation: "WeBWorK (empty)",
   },
   "webwork-server": {
     label: '<webwork source="" />',
@@ -999,30 +994,178 @@ export const ELEMENTS: CompletionItems = {
     insertText: '<url href="$1">$2</url>$0',
     documentation: "url",
   },
-  "url-empty": {
-    label: "<url />",
-    insertText: '<url href="$1" />$0',
-    documentation: "url (empty)",
-  },
-  "webwork-inline": {
-    label: "<webwork />",
-    insertText: "<webwork />$0",
-    documentation: "webwork (fancy letters)",
-  },
   xref: {
     label: "<xref>",
     insertText: '<xref ref="$1"/>$0',
     documentation: "reference",
     command: suggestCommand,
   },
+  // Publication File Elements
+  chunking: {
+    label: "<chunking>",
+    insertText: '<chunking level="${1|0,1,2,3,4,5,6|}"/>\n$0',
+    documentation: "The depth at which to split up files in an HTML build.",
+  },
+  "exercise-inline": {
+    label: "<exercise-inline />",
+    insertText:
+      '<exercise-inline statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
+    documentation: "inline exercise visibility",
+  },
+  "exercise-divisional": {
+    label: "<exercise-divisional />",
+    insertText:
+      '<exercise-divisional statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
+    documentation: "divisional exercise visibility",
+  },
+  "exercise-reading": {
+    label: "<exercise-reading />",
+    insertText:
+      '<exercise-reading statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
+    documentation: "reading exercise visibility",
+  },
+  "exercise-project": {
+    label: "<exercise-project />",
+    insertText:
+      '<exercise-project statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
+    documentation: "project visibility",
+  },
+  "exercise-worksheet": {
+    label: "<exercise-worksheet />",
+    insertText:
+      '<exercise-worksheet statement="${1|yes,no|}" hint="${2|yes,no|}" answer="${3|yes,no|}" solution="${4|yes,no|}"/>\n$0',
+    documentation: "worksheet exercise visibility",
+  },
+  tableofcontents: {
+    label: "<tableofcontents>",
+    insertText: '<tableofcontents level="${1|0,1,2,3,4,5,6|}"/>\n$0',
+    documentation: "To set the depth for the table of contents",
+  },
+  watermark: {
+    label: "<watermark>",
+    insertText: '<watermark scale="$1">$2</watermark>\n$0',
+    documentation: "To add a watermark to the document",
+  },
 };
 
-// the EXTRA_SNIPPETS object is used to add additional snippets from the above lists beyond what the
-//  schema suggests.  This is useful for variants of snippets.  Each key is the name of an element
-//  that can contain the values for that key.
-export const EXTRA_SNIPPETS = {
-  worksheet: {
-    elements: ["exercise-workspace"],
-    attributes: [],
+const HoldsText = [
+  "alert",
+  "angles",
+  "articletitle",
+  "attribution",
+  "author",
+  "biblio",
+  "caption",
+  "cell",
+  "creator",
+  "date",
+  "dblbrackets",
+  "delete",
+  "description",
+  "em",
+  "entity",
+  "fn",
+  "foreign",
+  "h",
+  "idx",
+  "insert",
+  "instruction",
+  "intertext",
+  "li",
+  "line",
+  "minilicense",
+  "p",
+  "pubtitle",
+  "q",
+  "role",
+  "see",
+  "seealso",
+  "shortlicense",
+  "shorttitle",
+  "sq",
+  "stale",
+  "subtitle",
+  "term",
+  "title",
+  "title",
+  "url",
+  "xref",
+  "year",
+];
+
+type ExtraSnippets = {
+  [key: string]: ExtraSnippet;
+};
+
+type ExtraSnippet = {
+  alias: string;
+  parents?: string[];
+  label: string;
+  insertText: string;
+  documentation: string;
+  sortText?: string;
+};
+
+// the EXTRA_ELEMENT_SNIPPETS object is used to add additional snippets that will be added
+// to the completion items for elements.  The `alias` gives the name of the element this snippet can
+// be used in place of.  `parents` is an optional list of elements to further restric the parents the
+// snippet can be used in.
+export const EXTRA_ELEMENT_SNIPPETS: ExtraSnippets = {
+  "exercise-workspace": {
+    alias: "exercise",
+    parents: ["worksheet"],
+    label: '<exercise workspace="">',
+    insertText: '<exercise workspace="$1">\n\t$0\n</exercise>',
+    documentation: "exercise ",
+  },
+  "image-source": {
+    alias: "image",
+    label: '<image source="">',
+    insertText:
+      '<image source="${1:path }">\n\t<shortdescription>${0:}</shortdescription>\n</image>',
+    documentation: "image (with source)",
+  },
+  "li-dl": {
+    alias: "li",
+    parents: ["dl"],
+    label: "<li>",
+    insertText: "<li>\n\t<title>$1</title>\n\t<p>\n\t\t$0\n\t</p>\n</li>",
+    documentation: "list item (w title and p)",
+  },
+  "li-short": {
+    alias: "li",
+    label: "<li>",
+    insertText: "<li>$1</li>$0",
+    documentation: "list item (short)",
+  },
+  "task-workspace": {
+    alias: "task",
+    parents: ["exercise"],
+    label: '<task workspace="">',
+    insertText:
+      '<task workspace="$1">\n\t<statement>\n\t\t<p>\n\t\t\t$0\n\t\t</p>\n\t</statement>\n</task>',
+    documentation: "task (with workspace)",
+  },
+  "webwork-inline": {
+    alias: "webwork",
+    parents: HoldsText,
+    label: "<webwork />",
+    insertText: "<webwork />$0",
+    documentation: "webwork ",
+  },
+  "webwork-server": {
+    alias: "webwork",
+    parents: ["exercise"],
+    label: '<webwork source="" />',
+    insertText: '<webwork source="$1" />$0',
+    documentation: "WeBWorK (from server)",
+    sortText: "0",
+  },
+  "url-empty": {
+    alias: "url",
+    parents: HoldsText,
+    label: "<url />",
+    insertText: '<url href="$1" />$0',
+    documentation: "url ",
   },
 };
