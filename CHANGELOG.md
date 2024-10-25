@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Completions/snippets for project.ptx manifest file
+- Completions/snippets for project.ptx manifest file.
+- Completions/snippets for publication files.
+
+### Fixed
+
+- Re-enabled old-style snippets.
 
 ## [0.21.0] - 2024-10-17
 

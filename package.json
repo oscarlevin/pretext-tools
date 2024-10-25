@@ -53,6 +53,18 @@
     "snippets": [
       {
         "language": "pretext",
+        "path": "./snippets/pretext-attributes.json"
+      },
+      {
+        "language": "pretext",
+        "path": "./snippets/pretext-elements.json"
+      },
+      {
+        "language": "pretext",
+        "path": "./snippets/pretext-inline.json"
+      },
+      {
+        "language": "pretext",
         "path": "./snippets/pretext-templates.json"
       }
     ],
