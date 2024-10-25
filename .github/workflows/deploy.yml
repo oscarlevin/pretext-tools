@@ -38,7 +38,7 @@ jobs:
 
       - name: Update schema
         run: |
-          node scripts/update-schema.js
+          node ./scripts/getSchemas.js
 
       - name: Package
         run: vsce package ${{ inputs.level }}
