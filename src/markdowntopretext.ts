@@ -42,7 +42,8 @@ function escapeXml(unsafe: string) {
 }
 
 function wrap(tag: string, tokens?: Token[], join?: string): string {
-  const contents = (tokens ?? []).map(processToken).join(join ?? "\n");
+  join ??= "\n";
+  const contents = (tokens ?? []).map(processToken).join(join);
   return `<${tag}>${join}${contents}</${tag}>`;
 }
 
@@ -90,16 +91,17 @@ function processToken(token: Token): string {
       return wrap("term", token.tokens, "");
     case "em":
       return wrap("em", token.tokens, "");
+    case "del":
+      return wrap("delete", token.tokens, "");
     case "link":
     case "image":
     case "def":
     case "escape":
     case "br":
-    case "del":
-      return "TODO: " + token.type;
+      return "TODO unhandled case: " + token.type;
     default:
       console.log("Unknown token type: " + token.type);
-      return token.raw;
+      return token.raw || "Huh??";
   }
 }
 
