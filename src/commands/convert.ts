@@ -1,5 +1,6 @@
 import { Range, window } from "vscode";
 import { latexToPretext } from "../latextopretext";
+import { markdownToPretext } from "md2ptx";
 import { pretextOutputChannel } from "../ui";
 import { convertToPretext } from "../importFiles";
 
@@ -31,6 +32,24 @@ export function cmdLatexToPretext() {
     var initialText = editor.document.getText(selectionRange);
 
     var newText = latexToPretext(initialText);
+
+    editor.edit((editbuilder) => {
+      editbuilder.replace(selectionRange, newText);
+    });
+  }
+}
+
+export function cmdMarkdownToPretext() {
+  const editor = window.activeTextEditor;
+  if (editor) {
+    const selection = editor.selection;
+    const selectionRange = selection.isEmpty
+      ? editor.document.lineAt(selection.start.line).range
+      : new Range(selection.start, selection.end);
+
+    const initialText = editor.document.getText(selectionRange);
+
+    var newText = markdownToPretext(initialText);
 
     editor.edit((editbuilder) => {
       editbuilder.replace(selectionRange, newText);

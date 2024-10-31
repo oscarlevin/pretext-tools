@@ -37,6 +37,11 @@ export const ptxCommandList = [
     command: "pretext-tools.latexToPretext",
   },
   {
+    label: "Convert Markdown selection to PreTeXt",
+    description: "Convert Markdown selection to PreTeXt",
+    command: "pretext-tools.markdownToPretext",
+  },
+  {
     label: "Convert file to PreTeXt",
     description: "Convert from other formats using PlasTeX or Pandoc",
     command: "pretext-tools.convertToPretext",
