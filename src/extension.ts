@@ -7,7 +7,7 @@ import {
   TextEdit,
   commands,
 } from "vscode";
-import { formatPTX } from "./formatter";
+import { formatPretextDocument } from "./formatter";
 import * as utils from "./utils";
 
 import {
@@ -105,7 +105,7 @@ export async function activate(context: ExtensionContext) {
       "pretext",
       {
         provideDocumentFormattingEdits(document: TextDocument): TextEdit[] {
-          return formatPTX(document);
+          return formatPretextDocument(document);
         },
       },
     );

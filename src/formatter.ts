@@ -249,11 +249,10 @@ function joinLines(fullText: string): string {
   return joinedText;
 }
 
-export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
+export function formatPTX(text: string): string {
   // First clean up document so that each line is a single tag when appropriate.
-  let allText = document.getText();
 
-  allText = joinLines(allText);
+  let allText = joinLines(text);
 
   console.log("Getting ready to start formatting.");
   for (let btag of blockTags) {
@@ -374,13 +373,21 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       break;
   }
 
-  // Add document identifier line if missing:
-  if (!fixedLines[0].trim().startsWith("<?xml")) {
-    fixedLines.unshift('<?xml version="1.0" encoding="UTF-8" ?>\n');
-  }
+  //// Add document identifier line if missing:
+  //if (!fixedLines[0].trim().startsWith("<?xml")) {
+  //  fixedLines.unshift('<?xml version="1.0" encoding="UTF-8" ?>\n');
+  //}
 
   allText = fixedLines.join("\n");
 
+  return allText;
+}
+
+export function formatPretextDocument(document: vscode.TextDocument) {
+  const fullText = document.getText();
+  const allText = formatPTX(fullText);
+
+  const edits = formatPTX(fullText);
   return [
     vscode.TextEdit.replace(
       document.validateRange(new vscode.Range(0, 0, document.lineCount, 0)),
