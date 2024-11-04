@@ -75,19 +75,14 @@ export function cmdViewCodeChat() {
   }
 }
 
-
 // The main function to run pretext commands:
-function runView(
-  target: string,
-): void {
+function runView(target: string): void {
   let fullCommand = cli.cmd() + " view " + target;
   let status = "ready"; //for statusbaritem
   let capturedOutput: string[] = [];
   let capturedErrors: string[] = [];
   pretextOutputChannel.clear();
-  pretextOutputChannel.appendLine(
-    "\n\nNow running `" + fullCommand + "`...",
-  );
+  pretextOutputChannel.appendLine("\n\nNow running `" + fullCommand + "`...");
   const filePath = utils.getDir();
   const ptxRun = spawn(fullCommand, [], {
     cwd: filePath,
@@ -113,9 +108,7 @@ function runView(
   ptxRun.on("close", function (code) {
     console.log(code);
     if (ptxRun.killed) {
-      pretextOutputChannel.appendLine(
-        "...PreTeXt command terminated early.",
-      );
+      pretextOutputChannel.appendLine("...PreTeXt command terminated early.");
       console.log("Process killed");
     } else {
       pretextOutputChannel.appendLine("...PreTeXt command finished.");
@@ -138,10 +131,7 @@ function runView(
           }
         });
     } else {
-      console.log(
-        "PreTeXt command finished successfully; code =",
-        code,
-      );
+      console.log("PreTeXt command finished successfully; code =", code);
     }
     utils.updateStatusBarItem(ptxSBItem, status);
   });
