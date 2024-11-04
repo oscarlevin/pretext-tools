@@ -1,8 +1,9 @@
 import { commands, extensions, window, workspace } from "vscode";
 import * as utils from "../utils";
-import { runPretext } from "./runPtx";
-import { pretextTerminal } from "../ui";
+import { pretextOutputChannel, pretextTerminal, ptxSBItem } from "../ui";
+
 import { cli } from "../cli";
+import { spawn } from "child_process";
 
 export function cmdView(runInTerminal: boolean = false) {
   const selectedViewMethod: string =
@@ -54,7 +55,8 @@ export function cmdViewCLI(runInTerminal: boolean = false) {
       let terminal = utils.setupTerminal(pretextTerminal);
       terminal.sendText("pretext view " + qpSelection.label);
     } else {
-      runPretext(cli.cmd(), "view", qpSelection.label);
+      console.log("Viewing " + qpSelection.label);
+      runView(qpSelection.label);
     }
     // Move selected target to front of list for next command.
     targetSelection = targetSelection.filter((item) => item !== qpSelection);
@@ -71,4 +73,66 @@ export function cmdViewCodeChat() {
       "Unable to start CodeChat preview.  Is the 'CodeChat' extension and CodeChat_Server (through pip) installed?",
     );
   }
+}
+
+// The main function to run pretext commands:
+function runView(target: string): void {
+  let fullCommand = cli.cmd() + " view " + target;
+  let status = "ready"; //for statusbaritem
+  let capturedOutput: string[] = [];
+  let capturedErrors: string[] = [];
+  pretextOutputChannel.clear();
+  pretextOutputChannel.appendLine("\n\nNow running `" + fullCommand + "`...");
+  const filePath = utils.getDir();
+  const ptxRun = spawn(fullCommand, [], {
+    cwd: filePath,
+    shell: true,
+  });
+  ptxRun.stdout.on("data", function (data) {
+    console.log(`stdout: ${data}`);
+    data = utils.stripColorCodes(data.toString());
+    pretextOutputChannel.appendLine(`${data}`);
+    pretextOutputChannel.append(
+      "(this local server will remain running until you close vs-code)\n",
+    );
+    capturedOutput.push(data);
+    console.log("Using view. Status should change back");
+    utils.updateStatusBarItem(ptxSBItem, "success");
+  });
+  ptxRun.stderr.on("data", function (data) {
+    console.log(`stderr: ${data}`);
+    data = utils.stripColorCodes(data.toString());
+    capturedErrors.push(data);
+  });
+
+  ptxRun.on("close", function (code) {
+    console.log(code);
+    if (ptxRun.killed) {
+      pretextOutputChannel.appendLine("...PreTeXt command terminated early.");
+      console.log("Process killed");
+    } else {
+      pretextOutputChannel.appendLine("...PreTeXt command finished.");
+    }
+    if (code === 1) {
+      console.log("PreTeXt encountered an error; code =", code);
+      for (let error of capturedErrors) {
+        pretextOutputChannel.appendLine("Collected Errors:\n");
+        pretextOutputChannel.appendLine(error);
+      }
+      window
+        .showErrorMessage(
+          "PreTeXt encountered one or more errors",
+          "Show Log",
+          "Dismiss",
+        )
+        .then((option) => {
+          if (option === "Show Log") {
+            pretextOutputChannel.show();
+          }
+        });
+    } else {
+      console.log("PreTeXt command finished successfully; code =", code);
+    }
+    utils.updateStatusBarItem(ptxSBItem, status);
+  });
 }
