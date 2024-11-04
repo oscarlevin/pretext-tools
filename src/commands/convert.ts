@@ -3,9 +3,11 @@ import { latexToPretext } from "../latextopretext";
 import { pretextOutputChannel } from "../ui";
 import { convertToPretext } from "../importFiles";
 import { processLatexViaUnified } from "@unified-latex/unified-latex";
-import { unifiedLatexToPretext, xmlCompilePlugin } from "@unified-latex/unified-latex-to-pretext";
+import {
+  unifiedLatexToPretext,
+  xmlCompilePlugin,
+} from "@unified-latex/unified-latex-to-pretext";
 import { formatPTX } from "../formatter";
-
 
 export function cmdConvertToPretext() {
   console.log("Converting to PreTeXt");
@@ -53,13 +55,12 @@ export function cmdLatexToPretext() {
   }
 }
 
-
 function convertWithUnified(text: string) {
   const convert = (value: string) =>
     processLatexViaUnified()
-    .use(unifiedLatexToPretext, { producePretextFragment: true })
-    .use(xmlCompilePlugin)
-    .processSync ({ value })
+      .use(unifiedLatexToPretext, { producePretextFragment: true })
+      .use(xmlCompilePlugin)
+      .processSync({ value });
 
   pretextOutputChannel.append("Converting selected text to PreTeXt.\n");
   if (convert(text).messages) {

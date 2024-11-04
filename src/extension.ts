@@ -107,7 +107,7 @@ export async function activate(context: ExtensionContext) {
         provideDocumentFormattingEdits(document: TextDocument): TextEdit[] {
           return formatPretextDocument(document);
         },
-      },
+      }
     );
 
     context.subscriptions.push(formatter);
@@ -121,7 +121,7 @@ export async function activate(context: ExtensionContext) {
     //commands.registerCommand("pretext-tools.experiment", utils.experiment),
     commands.registerCommand(
       "pretext-tools.selectPretextCommand",
-      cmdSelectCommand,
+      cmdSelectCommand
     ),
     commands.registerCommand("pretext-tools.buildAny", cmdBuildAny),
     commands.registerCommand("pretext-tools.buildLast", cmdBuildLast),
@@ -135,9 +135,9 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand("pretext-tools.latexToPretext", cmdLatexToPretext),
     commands.registerCommand(
       "pretext-tools.convertToPretext",
-      cmdConvertToPretext,
+      cmdConvertToPretext
     ),
-    commands.registerCommand("pretext-tools.showLog", showLog),
+    commands.registerCommand("pretext-tools.showLog", showLog)
   );
 
   //This will go away soon, so I'm not refactoring it.
@@ -151,15 +151,15 @@ export async function activate(context: ExtensionContext) {
         "Targets are now:" +
           targetSelection.map(function (obj: Target) {
             return " " + obj.label;
-          }),
+          })
       );
       window.showInformationMessage(
         "Refreshed list of targets.  Targets are now:" +
           targetSelection.map(function (obj: Target) {
             return " " + obj.label;
-          }),
+          })
       );
-    }),
+    })
   );
 
   // Start the LSP
@@ -168,12 +168,12 @@ export async function activate(context: ExtensionContext) {
   } catch {
     console.log("Error starting LSP client");
     pretextOutputChannel.appendLine(
-      "Error starting language server.  Some features may not be available.",
+      "Error starting language server.  Some features may not be available."
     );
   }
 
   pretextOutputChannel.appendLine(
-    "PreTeXt related commands are available through the PreTeXt status bar menu or the command pallet (CTRL+SHIFT+P).",
+    "PreTeXt related commands are available through the PreTeXt status bar menu or the command pallet (CTRL+SHIFT+P)."
   );
 }
 

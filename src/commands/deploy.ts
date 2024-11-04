@@ -5,7 +5,7 @@ import { cli } from "../cli";
 
 export function cmdDeploy(
   runInTerminal: boolean = false,
-  pretextTerminal: Terminal | null = null,
+  pretextTerminal: Terminal | null = null
 ) {
   if (runInTerminal) {
     pretextTerminal = utils.setupTerminal(pretextTerminal);
