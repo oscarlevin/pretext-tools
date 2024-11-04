@@ -102,7 +102,7 @@ connection.onInitialized(() => {
     // Register for all configuration changes.
     connection.client.register(
       DidChangeConfigurationNotification.type,
-      undefined,
+      undefined
     );
     //Set schema based on configuration:
     connection.workspace
@@ -126,7 +126,7 @@ connection.onInitialized(() => {
   }
 
   publicationSchema = new Schema(
-    getAst(path.join(schemaDir, "publication-schema.rng")),
+    getAst(path.join(schemaDir, "publication-schema.rng"))
   );
   projectSchema = new Schema(getAst(path.join(schemaDir, "project-ptx.rng")));
 
