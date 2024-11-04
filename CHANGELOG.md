@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.21.2] - 2024-11-04
+
 ### Fixed
 
 - Bug: view command was not working in a codespace.
