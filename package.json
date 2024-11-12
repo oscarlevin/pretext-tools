@@ -173,6 +173,12 @@
         "description": "Converts a selected file to PreTeXt using pandoc or plastex, which must be installed separately."
       },
       {
+        "command": "pretext-tools.markdownToPretext",
+        "title": "Convert Markdown selection to PreTeXt",
+        "category": "PreTeXt",
+        "description": "Converts and replaces a selection of Markdown with PreTeXt (experimental)."
+      },
+      {
         "command": "pretext-tools.latexToPretext",
         "title": "Convert Selected LaTeX to PreTeXt",
         "category": "PreTeXt",
@@ -388,6 +394,7 @@
     "ovsx": "^0.10.0",
     "rehype-stringify": "^10.0.1",
     "saxes": "^6.0.0",
+    "md2ptx": "git+https://github.com/skiadas/md2ptx.git",
     "time-stamp": "^2.2.0",
     "unified": "^11.0.5",
     "unist-util-remove": "^4.0.0",

@@ -1,5 +1,6 @@
 import { Range, window } from "vscode";
 import { latexToPretext } from "../latextopretext";
+import { markdownToPretext } from "md2ptx";
 import { pretextOutputChannel } from "../ui";
 import { convertToPretext } from "../importFiles";
 import { processLatexViaUnified } from "@unified-latex/unified-latex";
@@ -55,6 +56,7 @@ export function cmdLatexToPretext() {
   }
 }
 
+  
 function convertWithUnified(text: string) {
   const convert = (value: string) =>
     processLatexViaUnified()
@@ -71,3 +73,23 @@ function convertWithUnified(text: string) {
   }
   return convert(text).value as string;
 }
+
+
+export function cmdMarkdownToPretext() {
+  const editor = window.activeTextEditor;
+  if (editor) {
+    const selection = editor.selection;
+    const selectionRange = selection.isEmpty
+      ? editor.document.lineAt(selection.start.line).range
+      : new Range(selection.start, selection.end);
+
+    const initialText = editor.document.getText(selectionRange);
+
+    var newText = markdownToPretext(initialText);
+
+    editor.edit((editbuilder) => {
+      editbuilder.replace(selectionRange, newText);
+    });
+  }
+
+

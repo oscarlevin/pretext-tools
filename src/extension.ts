@@ -21,7 +21,11 @@ import { cmdNew } from "./commands/new";
 import { cmdDeploy } from "./commands/deploy";
 import { cmdUpdate } from "./commands/update";
 //import { ptxExperiment } from "./commands/experiment";
-import { cmdConvertToPretext, cmdLatexToPretext } from "./commands/convert";
+import {
+  cmdConvertToPretext,
+  cmdLatexToPretext,
+  cmdMarkdownToPretext,
+} from "./commands/convert";
 import { cmdBuildAny, cmdBuildLast, cmdGenerate } from "./commands/build";
 import { cmdSelectCommand } from "./commands/select";
 import { cli } from "./cli";
@@ -137,7 +141,11 @@ export async function activate(context: ExtensionContext) {
       "pretext-tools.convertToPretext",
       cmdConvertToPretext
     ),
-    commands.registerCommand("pretext-tools.showLog", showLog)
+    commands.registerCommand(
+      "pretext-tools.markdownToPretext",
+      cmdMarkdownToPretext,
+    ),
+    commands.registerCommand("pretext-tools.showLog", showLog),
   );
 
   //This will go away soon, so I'm not refactoring it.
