@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Changed
+
+- Conversion of selected LaTeX to PreTeXt now completed via UnifiedLatex, which should be much more reliable.
+
+## [0.21.2] - 2024-11-04
+
+### Fixed
+
+- Bug: view command was not working in a codespace.
+
 ## [0.21.1] - 2024-10-25
 
 ### Added

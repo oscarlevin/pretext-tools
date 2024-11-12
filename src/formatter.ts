@@ -249,11 +249,10 @@ function joinLines(fullText: string): string {
   return joinedText;
 }
 
-export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
+export function formatPTX(text: string): string {
   // First clean up document so that each line is a single tag when appropriate.
-  let allText = document.getText();
 
-  allText = joinLines(allText);
+  let allText = joinLines(text);
 
   console.log("Getting ready to start formatting.");
   for (let btag of blockTags) {
@@ -261,7 +260,7 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       // start tag can be <tag>, <tag attr="val">, or <tag xmlns="..."> but shouldn't be self closing (no self closing tag would have xmlns in it)
       let startTag = new RegExp(
         "<" + btag + "(>|([^/]*?)>|(.*xmlns.*?)>)",
-        "g",
+        "g"
       );
       let endTag = new RegExp("<\\/" + btag + ">(.?)", "g");
       allText = allText.replace(startTag, "\n$&\n");
@@ -333,7 +332,7 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       if (breakSentences) {
         trimmedLine = trimmedLine.replace(
           /\.\s+/g,
-          ".\n" + indentChar.repeat(level),
+          ".\n" + indentChar.repeat(level)
         );
       }
       fixedLines.push(indentChar.repeat(level) + trimmedLine);
@@ -374,17 +373,25 @@ export function formatPTX(document: vscode.TextDocument): vscode.TextEdit[] {
       break;
   }
 
-  // Add document identifier line if missing:
-  if (!fixedLines[0].trim().startsWith("<?xml")) {
-    fixedLines.unshift('<?xml version="1.0" encoding="UTF-8" ?>\n');
-  }
+  //// Add document identifier line if missing:
+  //if (!fixedLines[0].trim().startsWith("<?xml")) {
+  //  fixedLines.unshift('<?xml version="1.0" encoding="UTF-8" ?>\n');
+  //}
 
   allText = fixedLines.join("\n");
 
+  return allText;
+}
+
+export function formatPretextDocument(document: vscode.TextDocument) {
+  const fullText = document.getText();
+  const allText = formatPTX(fullText);
+
+  const edits = formatPTX(fullText);
   return [
     vscode.TextEdit.replace(
       document.validateRange(new vscode.Range(0, 0, document.lineCount, 0)),
-      allText + "\n",
+      allText + "\n"
     ),
   ];
 }
