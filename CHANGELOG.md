@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.22.0] - 2024-12-06
+
 ### Added
 
 - Convert selections of markdown text to PreTeXt.
