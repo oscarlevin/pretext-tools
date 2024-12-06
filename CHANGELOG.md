@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Convert selections of markdown text to PreTeXt.
+
 ### Changed
 
 - Conversion of selected LaTeX to PreTeXt now completed via UnifiedLatex, which should be much more reliable.

@@ -91,5 +91,5 @@ export function cmdMarkdownToPretext() {
       editbuilder.replace(selectionRange, newText);
     });
   }
-
+}
 
