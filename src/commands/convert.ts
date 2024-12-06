@@ -56,7 +56,6 @@ export function cmdLatexToPretext() {
   }
 }
 
-  
 function convertWithUnified(text: string) {
   const convert = (value: string) =>
     processLatexViaUnified()
@@ -73,7 +72,6 @@ function convertWithUnified(text: string) {
   }
   return convert(text).value as string;
 }
-
 
 export function cmdMarkdownToPretext() {
   const editor = window.activeTextEditor;
@@ -92,4 +90,3 @@ export function cmdMarkdownToPretext() {
     });
   }
 }
-

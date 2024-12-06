@@ -143,9 +143,9 @@ export async function activate(context: ExtensionContext) {
     ),
     commands.registerCommand(
       "pretext-tools.markdownToPretext",
-      cmdMarkdownToPretext,
+      cmdMarkdownToPretext
     ),
-    commands.registerCommand("pretext-tools.showLog", showLog),
+    commands.registerCommand("pretext-tools.showLog", showLog)
   );
 
   //This will go away soon, so I'm not refactoring it.
