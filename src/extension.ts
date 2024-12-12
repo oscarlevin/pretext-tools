@@ -26,7 +26,7 @@ import {
   cmdLatexToPretext,
   cmdMarkdownToPretext,
 } from "./commands/convert";
-import { cmdBuildAny, cmdBuildLast, cmdGenerate } from "./commands/build";
+import { cmdBuildAny, cmdBuildFile, cmdBuildLast, cmdGenerate } from "./commands/build";
 import { cmdSelectCommand } from "./commands/select";
 import { cli } from "./cli";
 // Set up types:
@@ -129,6 +129,7 @@ export async function activate(context: ExtensionContext) {
     ),
     commands.registerCommand("pretext-tools.buildAny", cmdBuildAny),
     commands.registerCommand("pretext-tools.buildLast", cmdBuildLast),
+    commands.registerCommand("pretext-tools.buildFile", cmdBuildFile),
     commands.registerCommand("pretext-tools.generate", cmdGenerate),
     commands.registerCommand("pretext-tools.view", cmdView),
     commands.registerCommand("pretext-tools.viewCLI", cmdViewCLI),

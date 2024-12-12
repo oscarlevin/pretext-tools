@@ -127,6 +127,12 @@
         "description": "Build the most recent target (or the default target)."
       },
       {
+        "command": "pretext-tools.buildFile",
+        "title": "Build active file as standalone document",
+        "category": "PreTeXt",
+        "description": "Build active file as a standalone document."
+      },
+      {
         "command": "pretext-tools.new",
         "title": "New Project",
         "category": "PreTeXt"
