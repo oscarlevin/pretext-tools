@@ -26,7 +26,12 @@ import {
   cmdLatexToPretext,
   cmdMarkdownToPretext,
 } from "./commands/convert";
-import { cmdBuildAny, cmdBuildFile, cmdBuildLast, cmdGenerate } from "./commands/build";
+import {
+  cmdBuildAny,
+  cmdBuildFile,
+  cmdBuildLast,
+  cmdGenerate,
+} from "./commands/build";
 import { cmdSelectCommand } from "./commands/select";
 import { cli } from "./cli";
 // Set up types:

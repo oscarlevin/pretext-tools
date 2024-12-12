@@ -34,7 +34,6 @@ export function cmdBuildFile(runInTerminal: boolean = false) {
   }
 }
 
-
 export function cmdBuildAny(runInTerminal: boolean = false) {
   let targetSelection = cli.targets();
   // Show choice dialog and pass correct command to runPretext based on selection.
