@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Command to build current file as a standalone document.  Produces a PDF adjacent to the current document.
+
 ## [0.22.0] - 2024-12-06
 
 ### Added
