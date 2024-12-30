@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Commands now work with any number of projects in the workspace (including zero).  
+
 ## [0.23.0] - 2024-12-12
 
 ### Added

@@ -8,6 +8,7 @@ import {
   updateLastTarget,
 } from "../ui";
 import { cli } from "../cli";
+import { ensureProjectList, projects, projectTargetList } from "../project";
 
 export function cmdBuildFile(runInTerminal: boolean = false) {
   // get the active text editor's file name
@@ -35,34 +36,54 @@ export function cmdBuildFile(runInTerminal: boolean = false) {
 }
 
 export function cmdBuildAny(runInTerminal: boolean = false) {
-  let targetSelection = cli.targets();
+  ensureProjectList();
+  let targetSelection = projectTargetList();
   // Show choice dialog and pass correct command to runPretext based on selection.
   window.showQuickPick(targetSelection).then((qpSelection) => {
     if (!qpSelection) {
       return;
     }
     if (runInTerminal) {
-      let terminal = utils.setupTerminal(pretextTerminal);
+      let terminal = utils.setupTerminal(
+        pretextTerminal,
+        qpSelection.description
+      );
       terminal.sendText("pretext build " + qpSelection.label);
     } else {
-      runPretext(cli.cmd(), "build", qpSelection.label);
+      runPretext(
+        cli.cmd(),
+        "build",
+        qpSelection.label,
+        qpSelection.description
+      );
     }
-    updateLastTarget(qpSelection.label);
-    setTopCommand("Build " + lastTarget);
+    updateLastTarget({
+      name: qpSelection.label,
+      path: qpSelection.description,
+    });
+    setTopCommand("Build " + lastTarget.name);
   });
 }
 
 export function cmdBuildLast(runInTerminal: boolean = false) {
+  ensureProjectList();
   if (runInTerminal) {
-    let terminal = utils.setupTerminal(pretextTerminal);
+    let terminal = utils.setupTerminal(pretextTerminal, projects[0].root);
     terminal.sendText("pretext build");
   } else {
-    runPretext(cli.cmd(), "build", lastTarget);
+    let projectPath = lastTarget.path;
+    if (projectPath === "") {
+      //Fix project path if this is the first time default target is called.
+      projectPath = projects[0].root;
+      console.log("projectPath: ", projectPath);
+    }
+    runPretext(cli.cmd(), "build", lastTarget.name, projectPath);
   }
 }
 
 export function cmdGenerate(runInTerminal: boolean = false) {
-  let targetSelection = cli.targets();
+  ensureProjectList();
+  let targetSelection = projectTargetList();
   // Show choice dialog and pass correct command to runPretext based on selection.
   window.showQuickPick(targetSelection).then((qpSelection) => {
     if (!qpSelection) {

@@ -2,24 +2,20 @@ import { window, workspace } from "vscode";
 import * as utils from "./utils";
 import { execSync } from "child_process";
 import { cmdUpdate } from "./commands/update";
-import { Target } from "./types";
 
 interface CLI {
   _pythonPath: string | null | undefined;
   _pretextVersion: string | null;
   _cmd: string | null;
-  _targets: Target[] | null;
   pythonPath: (override?: string | null) => string | undefined;
   cmd: () => string;
   version: () => string;
-  targets: (refresh?: boolean) => Target[];
 }
 
 export let cli: CLI = {
   _pythonPath: null,
   _cmd: null,
   _pretextVersion: null,
-  _targets: null,
   pythonPath: function (override?: string | null) {
     if (override) {
       this._pythonPath = override;
@@ -40,15 +36,6 @@ export let cli: CLI = {
       this._pretextVersion = getPtxVersion();
     }
     return this._pretextVersion;
-  },
-  targets: function (refresh = false) {
-    if (refresh) {
-      this._targets = null;
-    }
-    if (this._targets === null) {
-      this._targets = getTargets();
-    }
-    return this._targets;
   },
 };
 
@@ -166,44 +153,4 @@ function getPtxVersion() {
     console.log("Error: ", err);
   }
   return ptxVersion;
-}
-
-/**
- * Get list of targets from project.ptx file
- * @returns Array of target names
- */
-function getTargets() {
-  // execSync returns stdout from executing the command.  We then convert to a string, split on new lines, and remove any blanks, to create an array of the target names.
-  // See also https://stackoverflow.com/questions/41001360/saving-the-output-of-a-child-process-in-a-variable-in-the-parent-in-nodejs
-  let filePath = utils.getDir();
-  try {
-    let targets = execSync(cli.cmd() + " --targets", { cwd: filePath })
-      .toString()
-      .split(/\r?\n/)
-      .filter(Boolean);
-    // Set up dictionary for quickselect:
-    if (targets.length > 0) {
-      let targetSelection = [];
-      for (let target of targets) {
-        // exclude lines that start with "Generated" as these are not targets
-        if (!target.includes("Generated")) {
-          targetSelection.push({
-            label: target,
-            description: "Build source as " + target,
-          });
-        }
-      }
-      return targetSelection;
-    } else {
-      return [
-        {
-          label: "No PreTeXt project found.",
-          description: "Change to directory containing a project.ptx file.",
-        },
-      ];
-    }
-  } catch (err) {
-    console.log("getTargets() Error: \n", err);
-    return [];
-  }
 }
