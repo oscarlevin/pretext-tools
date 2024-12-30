@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.24.0] - 2024-12-30
+
 ### Added
 
 - Commands now work with any number of projects in the workspace (including zero).  
