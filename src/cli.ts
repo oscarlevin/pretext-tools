@@ -154,4 +154,3 @@ function getPtxVersion() {
   }
   return ptxVersion;
 }
-

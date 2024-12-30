@@ -25,10 +25,10 @@ export function showLog() {
 }
 
 export function refreshProjects() {
-    pretextOutputChannel.append("Refreshing project/target list.");
-    console.log("Refreshing project/target list.");
-    //reset projects:
-    resetProjectList();
+  pretextOutputChannel.append("Refreshing project/target list.");
+  console.log("Refreshing project/target list.");
+  //reset projects:
+  resetProjectList();
 }
 
 export let pretextTerminal: Terminal;

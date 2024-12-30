@@ -87,7 +87,6 @@ export async function activate(context: ExtensionContext) {
 
   context.subscriptions.push(ptxSBItem);
   utils.updateStatusBarItem(ptxSBItem);
-  
 
   ///////////////// Formatter //////////////////////
 
@@ -137,7 +136,7 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand("pretext-tools.refreshTargets", refreshProjects)
   );
 
-  console.log("Current projects: ", projects)
+  console.log("Current projects: ", projects);
 
   // Start the LSP
   try {

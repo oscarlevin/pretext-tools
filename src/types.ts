@@ -14,7 +14,14 @@ type CompletionItems = {
   [key: string]: CompletionItem;
 };
 
-export { CompletionType, CompletionItems, SpellCheckScope, Snippet, Snippets, Project };
+export {
+  CompletionType,
+  CompletionItems,
+  SpellCheckScope,
+  Snippet,
+  Snippets,
+  Project,
+};
 
 // Set up types:
 export type LabelArray = [string, string, string][];
@@ -40,4 +47,4 @@ type CompletionType = "element" | "attribute" | "file" | "ref";
 type Project = {
   root: string;
   targets: Target[];
-}
+};

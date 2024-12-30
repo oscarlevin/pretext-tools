@@ -21,23 +21,20 @@ async function experiment() {
   return;
 }
 
-
 /**
  * Looks up the directory tree for a directory that contains a "project.ptx" folder, and returns that path, or null if no such folder exists.
  * @param path: the path of the directory to start looking in
  * @returns null if no project.ptx files is found above `path` or the path of the first parent that contains a project.ptx.
  */
-function getProjectFolder(dirPath: string): string|null {
+function getProjectFolder(dirPath: string): string | null {
   if (dirPath === "/") {
     return null;
-  }
-  else if (fs.existsSync(path.join(dirPath, "project.ptx"))) {
+  } else if (fs.existsSync(path.join(dirPath, "project.ptx"))) {
     return dirPath;
   } else {
     return getProjectFolder(path.dirname(dirPath));
   }
 }
-
 
 function getDir(myPath: string = "") {
   if (myPath !== "") {
@@ -244,7 +241,10 @@ function updateStatusBarItem(
   }
 }
 
-function setupTerminal(terminal: vscode.Terminal | null, projectPath?: string): vscode.Terminal {
+function setupTerminal(
+  terminal: vscode.Terminal | null,
+  projectPath?: string
+): vscode.Terminal {
   if (!terminal) {
     terminal = vscode.window.createTerminal("PreTeXt Terminal", projectPath);
   }
