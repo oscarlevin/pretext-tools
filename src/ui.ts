@@ -8,6 +8,7 @@ import {
 import { updateStatusBarItem } from "./utils";
 import { ptxCommandList } from "./constants";
 import { resetProjectList } from "./project";
+import { Target } from "./types";
 
 export const pretextOutputChannel: OutputChannel = window.createOutputChannel(
   "PreTeXt Tools",
@@ -38,8 +39,8 @@ export function setTopCommand(command: string) {
   pretextCommandList[0].label = command;
 }
 
-export let lastTarget: string = "";
+export let lastTarget: Target = { name: "", path: "" };
 
-export function updateLastTarget(target: string) {
+export function updateLastTarget(target: Target) {
   lastTarget = target;
 }

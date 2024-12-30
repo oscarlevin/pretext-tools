@@ -10,7 +10,7 @@ export async function runPretext(
   ptxExec: string,
   ptxCommand: string,
   ptxOptions: string,
-  passedPath: string = ""
+  projectPath: string = ""
 ): Promise<void> {
   return window.withProgress(
     {
@@ -28,9 +28,8 @@ export async function runPretext(
         );
         let fullCommand = cli.cmd() + " " + ptxCommand + " " + ptxOptions;
         let status = "ready"; //for statusbaritem
-        var filePath = utils.getDir(passedPath);
-        console.log("cwd = " + filePath);
-        if (filePath !== "" && filePath !== ".") {
+        console.log("cwd = " + projectPath);
+
           let capturedOutput: string[] = [];
           let capturedErrors: string[] = [];
           pretextOutputChannel.clear();
@@ -39,7 +38,7 @@ export async function runPretext(
           );
           progressUpdate = "Running " + fullCommand;
           var ptxRun = spawn(fullCommand, [], {
-            cwd: filePath,
+            cwd: projectPath,
             shell: true,
           });
           ptxRun.stdout.on("data", function (data) {
@@ -161,7 +160,6 @@ export async function runPretext(
             resolve();
             clearInterval(interval);
           });
-        }
       });
     }
   );

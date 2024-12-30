@@ -19,8 +19,8 @@ export { CompletionType, CompletionItems, SpellCheckScope, Snippet, Snippets, Pr
 // Set up types:
 export type LabelArray = [string, string, string][];
 export type Target = {
-  label: string;
-  description: string;
+  name: string;
+  path: string;
 };
 // Types for snippets
 type Snippet = {

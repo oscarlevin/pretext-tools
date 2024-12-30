@@ -22,6 +22,19 @@ export async function resetProjectList() {
       );
 }
 
+export function projectTargetList() {
+    let targetSelection = [];
+    for (let project of projects) {
+        for (let target of project.targets) {
+            targetSelection.push({
+                label: target.name,
+                description: target.path,
+            });
+        }
+    }
+    return targetSelection;
+}
+
 async function updateProjectList() {
     // Get list of workspace folders:
     if (workspace.workspaceFolders) {
@@ -80,7 +93,7 @@ function getTargets(projectRoot: string): Target[] {
                     return {
                         // The attributes of the target element are given as the children of the $ property
                         name: t.$.name,
-                        description: "(format: " + t.$.format + ")",
+                        path: projectRoot,
                     };
                 });
             }

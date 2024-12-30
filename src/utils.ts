@@ -244,9 +244,9 @@ function updateStatusBarItem(
   }
 }
 
-function setupTerminal(terminal: vscode.Terminal | null): vscode.Terminal {
+function setupTerminal(terminal: vscode.Terminal | null, projectPath?: string): vscode.Terminal {
   if (!terminal) {
-    terminal = vscode.window.createTerminal("PreTeXt Terminal");
+    terminal = vscode.window.createTerminal("PreTeXt Terminal", projectPath);
   }
   terminal.show();
   return terminal;

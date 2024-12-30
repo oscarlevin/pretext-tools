@@ -4,6 +4,7 @@ import { pretextOutputChannel, pretextTerminal, ptxSBItem } from "../ui";
 
 import { cli } from "../cli";
 import { spawn } from "child_process";
+import { ensureProjectList, projectTargetList } from "../project";
 
 export function cmdView(runInTerminal: boolean = false) {
   const selectedViewMethod: string =
@@ -45,7 +46,8 @@ export function cmdView(runInTerminal: boolean = false) {
 }
 
 export function cmdViewCLI(runInTerminal: boolean = false) {
-  let targetSelection = cli.targets();
+  ensureProjectList();
+  let targetSelection = projectTargetList();
   // Show choice dialog and pass correct command to runPretext based on selection.
   window.showQuickPick(targetSelection).then((qpSelection) => {
     if (!qpSelection) {
@@ -56,7 +58,7 @@ export function cmdViewCLI(runInTerminal: boolean = false) {
       terminal.sendText("pretext view " + qpSelection.label);
     } else {
       console.log("Viewing " + qpSelection.label);
-      runView(qpSelection.label);
+      runView(qpSelection.label, qpSelection.description);
     }
     // Move selected target to front of list for next command.
     targetSelection = targetSelection.filter((item) => item !== qpSelection);
@@ -76,16 +78,15 @@ export function cmdViewCodeChat() {
 }
 
 // The main function to run pretext commands:
-function runView(target: string): void {
+function runView(target: string, projectPath: string): void {
   let fullCommand = cli.cmd() + " view " + target;
   let status = "ready"; //for statusbaritem
   let capturedOutput: string[] = [];
   let capturedErrors: string[] = [];
   pretextOutputChannel.clear();
   pretextOutputChannel.appendLine("\n\nNow running `" + fullCommand + "`...");
-  const filePath = utils.getDir();
   const ptxRun = spawn(fullCommand, [], {
-    cwd: filePath,
+    cwd: projectPath,
     shell: true,
   });
   ptxRun.stdout.on("data", function (data) {
