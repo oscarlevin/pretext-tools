@@ -1,7 +1,6 @@
 import {
   ExtensionContext,
   workspace,
-  window,
   languages,
   TextDocument,
   TextEdit,
@@ -14,6 +13,7 @@ import {
   pretextOutputChannel,
   pretextTerminal,
   ptxSBItem,
+  refreshProjects,
   showLog,
 } from "./ui";
 import { cmdView, cmdViewCLI, cmdViewCodeChat } from "./commands/view";
@@ -33,13 +33,12 @@ import {
   cmdGenerate,
 } from "./commands/build";
 import { cmdSelectCommand } from "./commands/select";
-import { cli } from "./cli";
 // Set up types:
 import {
   activate as lspActivate,
   deactivate as lspDeactivate,
 } from "./lsp-client/main";
-import { Target } from "./types";
+import { projects } from "./project";
 
 // this method is called when your extension is activated
 export async function activate(context: ExtensionContext) {
@@ -88,24 +87,7 @@ export async function activate(context: ExtensionContext) {
 
   context.subscriptions.push(ptxSBItem);
   utils.updateStatusBarItem(ptxSBItem);
-
-  //console.log("PreTeXt exec command: ", utils.ptxExec);
-
-  // set ptxInstalled variable to whether ptx is installed
-  //let ptxInstalled = utils.ptxExec !== "";
-  //console.log("Pretext is installed is:", ptxInstalled);
-
-  //var targetSelection = cli.targets();
-  //context.workspaceState.update("targetSelection", targetSelection);
-  //console.log("targetSelection is:", targetSelection);
-  //updateLastTarget(targetSelection[0].label);
-  //pretextCommandList[0].label = "Build " + lastTarget;
-  //console.log(
-  //  "Targets are now:" +
-  //    targetSelection.map(function (obj: Target) {
-  //      return " " + obj.label;
-  //    })
-  //);
+  
 
   ///////////////// Formatter //////////////////////
 
@@ -151,30 +133,11 @@ export async function activate(context: ExtensionContext) {
       "pretext-tools.markdownToPretext",
       cmdMarkdownToPretext
     ),
-    commands.registerCommand("pretext-tools.showLog", showLog)
+    commands.registerCommand("pretext-tools.showLog", showLog),
+    commands.registerCommand("pretext-tools.refreshTargets", refreshProjects)
   );
 
-  //This will go away soon, so I'm not refactoring it.
-  context.subscriptions.push(
-    commands.registerCommand("pretext-tools.refreshTargets", () => {
-      pretextOutputChannel.append("Refreshing target list.");
-      console.log("Refreshing target list.");
-      //reset targets:
-      let targetSelection = cli.targets(true);
-      console.log(
-        "Targets are now:" +
-          targetSelection.map(function (obj: Target) {
-            return " " + obj.label;
-          })
-      );
-      window.showInformationMessage(
-        "Refreshed list of targets.  Targets are now:" +
-          targetSelection.map(function (obj: Target) {
-            return " " + obj.label;
-          })
-      );
-    })
-  );
+  console.log("Current projects: ", projects)
 
   // Start the LSP
   try {

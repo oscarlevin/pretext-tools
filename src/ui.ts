@@ -7,6 +7,7 @@ import {
 } from "vscode";
 import { updateStatusBarItem } from "./utils";
 import { ptxCommandList } from "./constants";
+import { resetProjectList } from "./project";
 
 export const pretextOutputChannel: OutputChannel = window.createOutputChannel(
   "PreTeXt Tools",
@@ -20,6 +21,13 @@ export const ptxSBItem: StatusBarItem = window.createStatusBarItem(
 export function showLog() {
   pretextOutputChannel.show();
   updateStatusBarItem(ptxSBItem);
+}
+
+export function refreshProjects() {
+    pretextOutputChannel.append("Refreshing project/target list.");
+    console.log("Refreshing project/target list.");
+    //reset projects:
+    resetProjectList();
 }
 
 export let pretextTerminal: Terminal;

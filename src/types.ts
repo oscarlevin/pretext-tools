@@ -10,25 +10,11 @@ type SpellCheckScope = {
   tags: "Check" | "Ignore";
 };
 
-// Types for snippets
-type Snippet = {
-  prefix: string;
-  body: string;
-  detail?: string;
-  description?: string;
-  sort?: string;
-  retrigger?: boolean;
-};
-
-type Snippets = {
-  [key: string]: Snippet;
-};
-
 type CompletionItems = {
   [key: string]: CompletionItem;
 };
 
-export { CompletionItems, SpellCheckScope, Snippet, Snippets };
+export { CompletionType, CompletionItems, SpellCheckScope, Snippet, Snippets, Project };
 
 // Set up types:
 export type LabelArray = [string, string, string][];
@@ -44,7 +30,14 @@ type Snippet = {
   sort?: string;
   retrigger?: boolean;
 };
-export type Snippets = {
+
+type Snippets = {
   [key: string]: Snippet;
 };
-export type CompletionType = "element" | "attribute" | "file" | "ref";
+
+type CompletionType = "element" | "attribute" | "file" | "ref";
+
+type Project = {
+  root: string;
+  targets: Target[];
+}
