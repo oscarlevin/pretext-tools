@@ -7,7 +7,6 @@ import { cli } from "./cli";
 
 export {
   getProjectFolder,
-  getDir,
   installPretext,
   setSchema,
   setSpellCheckConfig,
@@ -33,38 +32,6 @@ function getProjectFolder(dirPath: string): string | null {
     return dirPath;
   } else {
     return getProjectFolder(path.dirname(dirPath));
-  }
-}
-
-function getDir(myPath: string = "") {
-  if (myPath !== "") {
-    console.log("Dir ", myPath, " passed as argument");
-    return myPath;
-  }
-  if (vscode.workspace.workspaceFolders !== undefined) {
-    myPath = vscode.workspace.workspaceFolders[0].uri.fsPath;
-    console.log("Dir ", myPath, " set by workspace folder");
-    return myPath;
-  } else if (vscode.window.activeTextEditor !== undefined) {
-    myPath = path.dirname(vscode.window.activeTextEditor.document.uri.fsPath);
-    console.log("Dir ", myPath, " set by active text editor");
-    return myPath;
-  } else {
-    console.log("No active editor or workspace folder.");
-    vscode.window
-      .showOpenDialog({
-        openLabel: "Select root folder of your project...",
-        canSelectMany: false,
-        canSelectFiles: false,
-        canSelectFolders: true,
-      })
-      .then((fileUri) => {
-        if (fileUri && fileUri[0]) {
-          console.log("Selected file: " + fileUri[0].fsPath);
-          return fileUri[0].fsPath;
-        }
-      });
-    return "";
   }
 }
 
