@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.24.1] - 2025-01-06
+
 ### Fixed
 
 - Bug with `pretext deploy` command due to not setting project root correctly.
