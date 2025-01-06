@@ -35,8 +35,8 @@ export function cmdBuildFile(runInTerminal: boolean = false) {
   }
 }
 
-export function cmdBuildAny(runInTerminal: boolean = false) {
-  ensureProjectList();
+export async function cmdBuildAny(runInTerminal: boolean = false) {
+  await ensureProjectList();
   let targetSelection = projectTargetList();
   // Show choice dialog and pass correct command to runPretext based on selection.
   window.showQuickPick(targetSelection).then((qpSelection) => {
@@ -65,8 +65,8 @@ export function cmdBuildAny(runInTerminal: boolean = false) {
   });
 }
 
-export function cmdBuildLast(runInTerminal: boolean = false) {
-  ensureProjectList();
+export async function cmdBuildLast(runInTerminal: boolean = false) {
+  await ensureProjectList();
   if (runInTerminal) {
     let terminal = utils.setupTerminal(pretextTerminal, projects[0].root);
     terminal.sendText("pretext build");
@@ -81,8 +81,8 @@ export function cmdBuildLast(runInTerminal: boolean = false) {
   }
 }
 
-export function cmdGenerate(runInTerminal: boolean = false) {
-  ensureProjectList();
+export async function cmdGenerate(runInTerminal: boolean = false) {
+  await ensureProjectList();
   let targetSelection = projectTargetList();
   // Show choice dialog and pass correct command to runPretext based on selection.
   window.showQuickPick(targetSelection).then((qpSelection) => {
@@ -93,7 +93,12 @@ export function cmdGenerate(runInTerminal: boolean = false) {
       let terminal = utils.setupTerminal(pretextTerminal);
       terminal.sendText("pretext generate -t " + qpSelection.label);
     } else {
-      runPretext(cli.cmd(), "generate -t", qpSelection.label);
+      runPretext(
+        cli.cmd(),
+        "generate -t",
+        qpSelection.label,
+        qpSelection.description
+      );
     }
     // Move selected target to front of list for next command.
     targetSelection = targetSelection.filter((item) => item !== qpSelection);
