@@ -28,7 +28,7 @@ import {
   getCompletions,
   getCompletionDetails,
 } from "./completions/get-completions";
-//import { formatDocument } from "./formatter";
+import { formatDocument } from "./formatter";
 import { getReferences, updateReferences } from "./completions/utils";
 import { getAst, initializeSchema, Schema } from "./schema";
 import path from "path";
@@ -83,7 +83,7 @@ connection.onInitialize((params: InitializeParams) => {
       // executeCommandProvider: {
       //     commands: ["editor.action.addCommentLine"],
       // },
-      // documentFormattingProvider: {},
+       documentFormattingProvider: {},
     },
   };
 
@@ -267,7 +267,7 @@ connection.onDocumentSymbol(async (params): Promise<DocumentSymbol[]> => {
   return [];
 });
 
-//connection.onDocumentFormatting(formatDocument);
+connection.onDocumentFormatting(formatDocument);
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
