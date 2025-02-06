@@ -10,6 +10,11 @@ import {
 } from "@unified-latex/unified-latex-to-pretext";
 import { formatPTX } from "../formatter";
 
+import * as prettier from "prettier";
+import * as prettierPluginPretext from "prettier-plugin-pretext";
+
+
+
 export function cmdConvertToPretext() {
   console.log("Converting to PreTeXt");
   pretextOutputChannel.append("Converting to PreTeXt");
@@ -48,8 +53,11 @@ export function cmdLatexToPretext() {
       newText = newText.replace(/^<p>/, "");
     }
 
-    // Format the new text.
-    const formattedNewText = formatPTX(newText);
+
+    const formattedNewText = prettier.format(newText, {
+      parser: "ptx",
+      plugins: [prettierPluginPretext as unknown as prettier.Plugin],
+    });
     editor.edit((editbuilder) => {
       editbuilder.replace(selectionRange, formattedNewText);
     });
