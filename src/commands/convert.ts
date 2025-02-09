@@ -53,11 +53,16 @@ export function cmdLatexToPretext() {
       newText = newText.replace(/^<p>/, "");
     }
 
+    // Split consecutive tags with a space if present before formatting.
+    const formattedNewText = formatPTX(newText.replace(/(>)(<)/g, "$1 $2"));
 
-    const formattedNewText = prettier.format(newText, {
-      parser: "ptx",
-      plugins: [prettierPluginPretext as unknown as prettier.Plugin],
-    });
+    //The prettier formatter is finicky; needs correct structure to work?
+
+    //const formattedNewText = prettier.format(newText, {
+    //  parser: "ptx",
+    //  plugins: [prettierPluginPretext as unknown as prettier.Plugin],
+    //});
+
     editor.edit((editbuilder) => {
       editbuilder.replace(selectionRange, formattedNewText);
     });
@@ -78,6 +83,7 @@ function convertWithUnified(text: string) {
       console.log(message);
     }
   }
+  console.log("HERE!")
   return convert(text).value as string;
 }
 

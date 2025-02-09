@@ -218,7 +218,10 @@ function joinLines(fullText: string): string {
   let verbatim = false;
   let lines = fullText.split(/\r\n|\r|\n/g);
   // Start by adding the first two lines of the document.
-  let joinedLines = [lines[0], lines[1]];
+  let joinedLines = [lines[0].trim()];
+  if (lines.length > 1) {
+    joinedLines.push(lines[1].trim());
+  }
   // Itterate through lines, joining lines when not in a verbatim block.
   for (let i = 2; i < lines.length; i++) {
     // look for tags in a line
@@ -237,11 +240,13 @@ function joinLines(fullText: string): string {
       joinedLines.push(lines[i]);
     } else {
       // We are not inside a verbatim block.  Concatenate the line to the previous line in joinedLines
+      // Clean up the (non-verbatim) line by adding a space between consecutive tags, and trim it.
+      lines[i] = lines[i].trim();
       let lastLine = joinedLines.pop();
       if (lastLine) {
-        joinedLines.push(lastLine.trim() + " " + lines[i].trim());
+        joinedLines.push(lastLine.trim() + " " + lines[i]);
       } else {
-        joinedLines.push(lines[i].trim());
+        joinedLines.push(lines[i]);
       }
     }
   }
