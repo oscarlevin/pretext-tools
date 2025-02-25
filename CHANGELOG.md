@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Fixed
+
+- Prevent language server from crashing when invalid schema path is used.
+
 ## [0.25.0] - 2025-02-25
 
 ### Changed

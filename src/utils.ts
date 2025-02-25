@@ -144,7 +144,18 @@ function setSchema(context: vscode.ExtensionContext) {
   let schemaPath: string | undefined = vscode.workspace
     .getConfiguration("pretext-tools")
     .get("schema.customPath");
-
+  let schemaVersion: string | undefined = vscode.workspace.getConfiguration(
+    "pretext-tools"
+  ).get("schema.versionName");
+  if (schemaPath !== "" && schemaVersion !== "Custom") {
+    console.warn(
+      "Custom schema path provided, but version is not set to Custom.  Ignoring custom path."
+    );
+  }
+  if (!schemaPath || !fs.existsSync(schemaPath)) {
+    console.error(`Schema file not found at path: ${schemaPath}`);
+    schemaPath = "";
+  }
   if (schemaPath === "") {
     //get the extensions installed path:
     const extensionPath = context.extensionPath;
@@ -163,13 +174,12 @@ function setSchema(context: vscode.ExtensionContext) {
         break;
       case "Custom":
         console.log(
-          "Selected custom schema, but no path provided.  Setting to default."
+          "Selected custom schema, but no valid path provided.  Setting to default."
         );
         schemaPath = path.join(schemaDir, "pretext.rng");
         break;
     }
   }
-  console.log("Schema set to: ", schemaPath);
   const configuration = vscode.workspace.getConfiguration("xml");
   let schemas: any = configuration.get("fileAssociations");
   for (let dicts of schemas) {
@@ -180,7 +190,6 @@ function setSchema(context: vscode.ExtensionContext) {
     }
   }
   console.log("Schema set to: ", schemaPath);
-  console.log("Configuration is now: ", schemas);
   configuration.update("fileAssociations", schemas);
 }
 
