@@ -384,7 +384,7 @@
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^3.1.1",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.25.0",
     "eslint": "^9.12.0",
     "mocha": "^10.7.3",
     "typescript": "^5.6.3"
@@ -397,7 +397,7 @@
     "@unified-latex/unified-latex-util-html-like": "^1.8.0",
     "@unified-latex/unified-latex-util-parse": "^1.8.2",
     "deepmerge": "^4.3.1",
-    "esbuild-node-externals": "^1.15.0",
+    "esbuild-node-externals": "^1.18.0",
     "fs.promises.exists": "^1.1.4",
     "glob": "^11.0.0",
     "md2ptx": "git+https://github.com/skiadas/md2ptx.git",
