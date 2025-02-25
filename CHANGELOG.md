@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Changed
+
+- Formatting now handled by a prettier pretext plugin (you do not need Prettier installed).  Should produce nicer formatting.
+- Conversion of LaTeX to PreTeXt has been updated to handle theorem-like blocks.
+
 ## [0.24.1] - 2025-01-06
 
 ### Fixed
@@ -17,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Commands now work with any number of projects in the workspace (including zero).  
+- Commands now work with any number of projects in the workspace (including zero).
 
 ## [0.23.0] - 2024-12-12
 
