@@ -33,7 +33,7 @@ export async function formatDocument(
     end: doc.positionAt(origText.length),
   };
 
-  console.log("formatting with Prettier.")
+  console.log("formatting with Prettier.");
   try {
     let formatted = formatWithPrettier(origText, {
       tabWidth: params.options.tabSize,
@@ -53,7 +53,9 @@ export async function formatDocument(
   return null;
 }
 
-export async function formatRange(params: DocumentRangeFormattingParams): Promise<TextEdit[] | null> {
+export async function formatRange(
+  params: DocumentRangeFormattingParams
+): Promise<TextEdit[] | null> {
   const uri = params.textDocument.uri;
   const doc = documents.get(uri);
   if (!doc) {
@@ -63,12 +65,17 @@ export async function formatRange(params: DocumentRangeFormattingParams): Promis
   const range = params.range;
   try {
     console.log("range is", range);
-    console.log(origText.slice(doc.offsetAt(range.start), doc.offsetAt(range.end)));
-    let formatted = formatWithPrettier(origText.slice(doc.offsetAt(range.start), doc.offsetAt(range.end)), {
-      tabWidth: params.options.tabSize,
-      useTabs: !params.options.insertSpaces,
-    });
-    console.log("formatting with Prettier.")
+    console.log(
+      origText.slice(doc.offsetAt(range.start), doc.offsetAt(range.end))
+    );
+    let formatted = formatWithPrettier(
+      origText.slice(doc.offsetAt(range.start), doc.offsetAt(range.end)),
+      {
+        tabWidth: params.options.tabSize,
+        useTabs: !params.options.insertSpaces,
+      }
+    );
+    console.log("formatting with Prettier.");
     console.log("formatted", formatted);
     return [{ newText: formatted, range }];
   } catch (e) {

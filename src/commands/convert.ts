@@ -13,8 +13,6 @@ import { formatPTX } from "../formatter";
 import * as prettier from "prettier";
 import * as prettierPluginPretext from "prettier-plugin-pretext";
 
-
-
 export function cmdConvertToPretext() {
   console.log("Converting to PreTeXt");
   pretextOutputChannel.append("Converting to PreTeXt");
@@ -83,7 +81,7 @@ function convertWithUnified(text: string) {
       console.log(message);
     }
   }
-  console.log("HERE!")
+  console.log("HERE!");
   return convert(text).value as string;
 }
 

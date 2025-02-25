@@ -83,8 +83,8 @@ connection.onInitialize((params: InitializeParams) => {
       // executeCommandProvider: {
       //     commands: ["editor.action.addCommentLine"],
       // },
-       documentFormattingProvider: true,
-       documentRangeFormattingProvider: true,
+      documentFormattingProvider: true,
+      documentRangeFormattingProvider: true,
     },
   };
 
