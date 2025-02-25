@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.25.0] - 2025-02-25
+
 ### Changed
 
 - Formatting now handled by a prettier pretext plugin (you do not need Prettier installed).  Should produce nicer formatting.
