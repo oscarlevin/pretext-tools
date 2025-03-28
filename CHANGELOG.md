@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.25.2] - 2025-03-28
+
 ### Fixes
 
 - Fixed bug prevent formatter from working.
