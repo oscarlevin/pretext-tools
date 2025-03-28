@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Prevent language server from crashing when invalid schema path is used.
+- Require prettier 2.8.8 to get formatting to work with PreTeXt.
 
 ## [0.25.0] - 2025-02-25
 
