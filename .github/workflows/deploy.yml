@@ -39,6 +39,8 @@ jobs:
       - name: Update schema
         run: |
           node ./scripts/getSchemas.js
+          git add assets/schemas
+          git commit -m "update schemas" || true
 
       - name: Package
         run: vsce package ${{ inputs.level }}
