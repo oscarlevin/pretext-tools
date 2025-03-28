@@ -402,7 +402,7 @@
     "glob": "^11.0.0",
     "md2ptx": "git+https://github.com/skiadas/md2ptx.git",
     "ovsx": "^0.10.0",
-    "prettier": "2.8.8",
+    "@types/prettier": "^2.7.3",
     "prettier-plugin-pretext": "github:oscarlevin/prettier-plugin-pretext",
     "rehype-stringify": "^10.0.1",
     "saxes": "^6.0.0",
