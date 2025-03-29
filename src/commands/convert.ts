@@ -1,6 +1,6 @@
 import { Range, window } from "vscode";
 import { latexToPretext } from "../latextopretext";
-//import { markdownToPretext } from "md2ptx";
+import { markdownToPretext } from "md2ptx";
 import { pretextOutputChannel } from "../ui";
 import { convertToPretext } from "../importFiles";
 import { processLatexViaUnified } from "@unified-latex/unified-latex";
@@ -91,19 +91,19 @@ export function cmdMarkdownToPretext() {
     "Markdown to PreTeXt conversion is not yet implemented."
   );
 
-  //const editor = window.activeTextEditor;
-  //if (editor) {
-  //  const selection = editor.selection;
-  //  const selectionRange = selection.isEmpty
-  //    ? editor.document.lineAt(selection.start.line).range
-  //    : new Range(selection.start, selection.end);
+  const editor = window.activeTextEditor;
+  if (editor) {
+    const selection = editor.selection;
+    const selectionRange = selection.isEmpty
+      ? editor.document.lineAt(selection.start.line).range
+      : new Range(selection.start, selection.end);
 
-  //  const initialText = editor.document.getText(selectionRange);
+    const initialText = editor.document.getText(selectionRange);
 
-  //  var newText = markdownToPretext(initialText);
+    var newText = markdownToPretext(initialText);
 
-  //  editor.edit((editbuilder) => {
-  //    editbuilder.replace(selectionRange, newText);
-  //  });
-  //}
+    editor.edit((editbuilder) => {
+      editbuilder.replace(selectionRange, newText);
+    });
+  }
 }
