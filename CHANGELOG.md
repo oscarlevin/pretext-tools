@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.25.3] - 2025-03-30
+
 ### Fixes
 
 - Restored the markdown-to-pretext command.
