@@ -90,20 +90,20 @@ export async function activate(context: ExtensionContext) {
 
   ///////////////// Formatter //////////////////////
 
-  //try {
-  //  let formatter = languages.registerDocumentFormattingEditProvider(
-  //    "pretext",
-  //    {
-  //      provideDocumentFormattingEdits(document: TextDocument): TextEdit[] {
-  //        return formatPretextDocument(document);
-  //      },
-  //    }
-  //  );
+  try {
+    let formatter = languages.registerDocumentFormattingEditProvider(
+      "pretext",
+      {
+        provideDocumentFormattingEdits(document: TextDocument): TextEdit[] {
+          return formatPretextDocument(document);
+        },
+      }
+    );
 
-  //  context.subscriptions.push(formatter);
-  //} catch {
-  //  console.log("Error setting up formatter");
-  //}
+    context.subscriptions.push(formatter);
+  } catch {
+    console.log("Error setting up formatter");
+  }
 
   ///////////////// Commands //////////////////////
 

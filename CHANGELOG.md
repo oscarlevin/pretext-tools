@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixes
 
 - Restored the markdown-to-pretext command.
+- Reverted to non-prettier based formatting, so formatting is at least somewhat working.
 
 ## [0.25.2] - 2025-03-28
 
