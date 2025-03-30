@@ -83,8 +83,8 @@ connection.onInitialize((params: InitializeParams) => {
       // executeCommandProvider: {
       //     commands: ["editor.action.addCommentLine"],
       // },
-      documentFormattingProvider: true,
-      documentRangeFormattingProvider: true,
+      //documentFormattingProvider: true,
+      //documentRangeFormattingProvider: true,
     },
   };
 
@@ -268,9 +268,10 @@ connection.onDocumentSymbol(async (params): Promise<DocumentSymbol[]> => {
   return [];
 });
 
-connection.onDocumentFormatting(formatDocument);
 
-connection.onDocumentRangeFormatting(formatRange);
+//connection.onDocumentFormatting(formatDocument);
+
+//connection.onDocumentRangeFormatting(formatRange);
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
