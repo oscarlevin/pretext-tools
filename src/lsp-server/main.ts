@@ -268,7 +268,6 @@ connection.onDocumentSymbol(async (params): Promise<DocumentSymbol[]> => {
   return [];
 });
 
-
 //connection.onDocumentFormatting(formatDocument);
 
 //connection.onDocumentRangeFormatting(formatRange);
