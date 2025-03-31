@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Fixes
+
+- Improved formatting issues.
+
 ## [0.25.3] - 2025-03-30
 
 ### Fixes
@@ -30,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Formatting now handled by a prettier pretext plugin (you do not need Prettier installed).  Should produce nicer formatting.
+- Formatting now handled by a prettier pretext plugin (you do not need Prettier installed). Should produce nicer formatting.
 - Conversion of LaTeX to PreTeXt has been updated to handle theorem-like blocks.
 
 ## [0.24.1] - 2025-01-06
@@ -49,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Command to build current file as a standalone document.  Produces a PDF adjacent to the current document.
+- Command to build current file as a standalone document. Produces a PDF adjacent to the current document.
 
 ## [0.22.0] - 2024-12-06
 

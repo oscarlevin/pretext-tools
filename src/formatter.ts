@@ -3,6 +3,7 @@ import * as vscode from "vscode";
 const docStructure = [
   "abstract",
   "acknowledgement",
+  "affiliation",
   "appendix",
   "article",
   "author",
@@ -138,6 +139,7 @@ const lineEndTags = [
   "pubtitle",
   "row",
   "subtitle",
+  "support",
   "title",
   "usage",
   "volume",
@@ -264,18 +266,19 @@ export function formatPTX(text: string): string {
     if (allText.includes("<" + btag)) {
       // start tag can be <tag>, <tag attr="val">, or <tag xmlns="..."> but shouldn't be self closing (no self closing tag would have xmlns in it)
       let startTag = new RegExp(
-        "<" + btag + "(>|([^/]*?)>|(.*xmlns.*?)>)",
+        "<" + btag + "(>|(\\s[^\\/]*?)>|(.*xmlns.*?)>)",
         "g"
       );
-      let endTag = new RegExp("<\\/" + btag + ">(.?)", "g");
+      let endTag = new RegExp("<\\/" + btag + ">([\\s\\S]*?[.,!?;:]?)", "g");
       allText = allText.replace(startTag, "\n$&\n");
       allText = allText.replace(endTag, "\n$&\n");
     }
   }
+
   for (let tag of lineEndTags) {
     let startTag = new RegExp("<" + tag + "(.*?)>", "g");
-    let endTag = new RegExp("<\\/" + tag + ">(.?)", "g");
-    let selfCloseTag = new RegExp("<" + tag + "(.*?)/>", "g");
+    let endTag = new RegExp("<\\/" + tag + ">([\\s\\S]*?[.,!?;:]?)", "g");
+    let selfCloseTag = new RegExp("<" + tag + "(.*?)\\/>", "g");
     allText = allText.replace(startTag, "\n$&");
     allText = allText.replace(endTag, "$&\n");
     allText = allText.replace(selfCloseTag, "$&\n");
