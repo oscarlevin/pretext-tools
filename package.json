@@ -88,12 +88,6 @@
         "when": "editorTextFocus && editorLangId == 'pretext'"
       },
       {
-        "command": "pretext-tools.new",
-        "key": "ctrl+alt+n",
-        "mac": "cmd+alt+n",
-        "when": "editorTextFocus && editorLangId == 'pretext'"
-      },
-      {
         "command": "pretext-tools.selectPretextCommand",
         "key": "ctrl+alt+p",
         "mac": "cmd+alt+p",
@@ -357,6 +351,36 @@
             "markdownDescription": "To use a non-standard python installation or virtual environment, set path to python here.  If blank we will use `python -m` or `python3 -m`. **Requires restart of VS Code**"
           }
         }
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "pretext-tools-getting-started",
+        "title": "Get Started with PreTeXt",
+        "description": "Learn how to use PreTeXt Tools.",
+        "version": "0.0.1",
+        "steps": [
+          {
+            "id": "pretext-tools-getting-started-new-project",
+            "title": "Create a new project",
+            "description": "You can create a new PreTeXt project using the command palette.  This will create a new folder with a sample project.\n\n Press ``Ctrl+Shift+P`` (Windows, Linux) or ``Cmd+Shift+P`` (macOS) to open the command palette.  Type ``PreTeXt: New Project`` and select it.\n Or click the button below.\n[Create New Project](command:pretext-tools.new)",
+            "media": {"markdown": "[Create New Project](command:pretext-tools.new)."},
+            "completionEvents": ["onCommand:pretext-tools.new"]
+          },
+          {
+            "id": "pretext-tools-getting-started-open-file",
+            "title": "Open a PreTeXt source file",
+            "description": "To edit the PreTeXt source, open the [source/main.ptx](./source/main.ptx) file.  You can do this by clicking on the file in the Explorer view on the left side of the window.",
+            "media": {"markdown": "test"}
+          },
+          {
+            "id": "pretext-tools-getting-started-commands",
+            "title": "View PreTeXt commands",
+            "description": "Many PreTeXt commands are available by clicking on the  **▷PreTeXt** button at the bottom of the window.  Try clicking that now.\n[▷PreTeXt menu](command:pretext-tools.selectPretextCommand)",
+            "media": {"markdown": "README.md"},
+            "completionEvents": ["onCommand:pretext-tools.selectPretextCommand"]
+          }
+        ]
       }
     ]
   },
