@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.26.0] - 2025-04-03
+
 ### Added
 - New "Getting started with PreTeXt" walkthrough to help new users create, build, and view a PreTeXt project.
 
