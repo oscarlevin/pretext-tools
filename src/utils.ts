@@ -26,7 +26,9 @@ async function experiment() {
  * @returns null if no project.ptx files is found above `path` or the path of the first parent that contains a project.ptx.
  */
 function getProjectFolder(dirPath: string): string | null {
-  if (dirPath === "/") {
+  console.log("Checking for project.ptx in: ", dirPath);
+  if (dirPath === path.dirname(dirPath)) {
+    console.log("Reached root directory, no project.ptx found.");
     return null;
   } else if (fs.existsSync(path.join(dirPath, "project.ptx"))) {
     return dirPath;

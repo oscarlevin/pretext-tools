@@ -88,12 +88,6 @@
         "when": "editorTextFocus && editorLangId == 'pretext'"
       },
       {
-        "command": "pretext-tools.new",
-        "key": "ctrl+alt+n",
-        "mac": "cmd+alt+n",
-        "when": "editorTextFocus && editorLangId == 'pretext'"
-      },
-      {
         "command": "pretext-tools.selectPretextCommand",
         "key": "ctrl+alt+p",
         "mac": "cmd+alt+p",
@@ -357,6 +351,46 @@
             "markdownDescription": "To use a non-standard python installation or virtual environment, set path to python here.  If blank we will use `python -m` or `python3 -m`. **Requires restart of VS Code**"
           }
         }
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "pretext-tools-getting-started",
+        "title": "Get Started with PreTeXt",
+        "description": "Learn how to use PreTeXt Tools.",
+        "version": "0.0.1",
+        "steps": [
+          {
+            "id": "pretext-tools-getting-started-new-project",
+            "title": "Create a new project",
+            "description": "Follow the directions to the right, or click the button below.\n[Create New Project](command:pretext-tools.new)",
+            "media": {"markdown": "assets/walkthrough/new.md"},
+            "completionEvents": ["onCommand:pretext-tools.new"]
+          },
+          {
+            "id": "pretext-tools-getting-started-open-file",
+            "title": "Open a PreTeXt source file",
+            "media": {"markdown": "assets/walkthrough/open.md"}
+          },
+          {
+            "id": "pretext-tools-getting-started-commands",
+            "title": "View PreTeXt commands",
+            "media": {"markdown": "assets/walkthrough/commands.md"},
+            "completionEvents": ["onCommand:pretext-tools.selectPretextCommand"]
+          },
+          {
+            "id": "pretext-tools-getting-started-build",
+            "title": "Build your output",
+            "media": {"markdown": "assets/walkthrough/build.md"},
+            "completionEvents": ["onCommand:pretext-tools.buildLast"]
+          },
+          {
+            "id": "pretext-tools-getting-started-view",
+            "title": "View your output",
+            "media": {"markdown": "assets/walkthrough/view.md"},
+            "completionEvents": ["onCommand:pretext-tools.viewCli"]
+          }
+        ]
       }
     ]
   },
