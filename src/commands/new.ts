@@ -43,10 +43,15 @@ export function cmdNew() {
                   return;
                 }
               });
-              return; // Exit if the user chooses to cancel
+            return; // Exit if the user chooses to cancel
           }
           console.log("Selected folder: ", projectFolder);
-          runThenOpen(cli.cmd(), "new", qpSelection.label + " -d .", fileUri[0]);
+          runThenOpen(
+            cli.cmd(),
+            "new",
+            qpSelection.label + " -d .",
+            fileUri[0]
+          );
         }
       });
   });

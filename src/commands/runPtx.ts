@@ -169,14 +169,11 @@ export async function runThenOpen(
   folderUri: Uri
 ) {
   try {
-  await runPretext(ptxExec, ptxCommand, ptxOptions, folderUri.fsPath);
-  window.showInformationMessage("PreTeXt command completed successfully!");
-  }
-  catch (error) {
+    await runPretext(ptxExec, ptxCommand, ptxOptions, folderUri.fsPath);
+    window.showInformationMessage("PreTeXt command completed successfully!");
+  } catch (error) {
     console.error("Error running PreTeXt command: ", error);
-    window.showErrorMessage(
-      "Error running PreTeXt command: " + error
-    );
+    window.showErrorMessage("Error running PreTeXt command: " + error);
   }
   await commands.executeCommand("vscode.openFolder", folderUri);
   console.log("Opening folder: ", folderUri.fsPath);
