@@ -2,7 +2,7 @@
   "name": "pretext-tools",
   "displayName": "PreTeXt-tools",
   "description": "Language support and more for PreTeXt",
-  "version": "0.25.4",
+  "version": "0.26.0",
   "license": "See license in LICENSE",
   "icon": "logo.png",
   "publisher": "oscarlevin",
@@ -364,31 +364,49 @@
             "id": "pretext-tools-getting-started-new-project",
             "title": "Create a new project",
             "description": "Follow the directions to the right, or click the button below.\n[Create New Project](command:pretext-tools.new)",
-            "media": {"markdown": "assets/walkthrough/new.md"},
-            "completionEvents": ["onCommand:pretext-tools.new"]
+            "media": {
+              "markdown": "assets/walkthrough/new.md"
+            },
+            "completionEvents": [
+              "onCommand:pretext-tools.new"
+            ]
           },
           {
             "id": "pretext-tools-getting-started-open-file",
             "title": "Open a PreTeXt source file",
-            "media": {"markdown": "assets/walkthrough/open.md"}
+            "media": {
+              "markdown": "assets/walkthrough/open.md"
+            }
           },
           {
             "id": "pretext-tools-getting-started-commands",
             "title": "View PreTeXt commands",
-            "media": {"markdown": "assets/walkthrough/commands.md"},
-            "completionEvents": ["onCommand:pretext-tools.selectPretextCommand"]
+            "media": {
+              "markdown": "assets/walkthrough/commands.md"
+            },
+            "completionEvents": [
+              "onCommand:pretext-tools.selectPretextCommand"
+            ]
           },
           {
             "id": "pretext-tools-getting-started-build",
             "title": "Build your output",
-            "media": {"markdown": "assets/walkthrough/build.md"},
-            "completionEvents": ["onCommand:pretext-tools.buildLast"]
+            "media": {
+              "markdown": "assets/walkthrough/build.md"
+            },
+            "completionEvents": [
+              "onCommand:pretext-tools.buildLast"
+            ]
           },
           {
             "id": "pretext-tools-getting-started-view",
             "title": "View your output",
-            "media": {"markdown": "assets/walkthrough/view.md"},
-            "completionEvents": ["onCommand:pretext-tools.viewCli"]
+            "media": {
+              "markdown": "assets/walkthrough/view.md"
+            },
+            "completionEvents": [
+              "onCommand:pretext-tools.viewCli"
+            ]
           }
         ]
       }
