@@ -370,15 +370,25 @@
           {
             "id": "pretext-tools-getting-started-open-file",
             "title": "Open a PreTeXt source file",
-            "description": "To edit the PreTeXt source, open the [source/main.ptx](./source/main.ptx) file.  You can do this by clicking on the file in the Explorer view on the left side of the window.",
             "media": {"markdown": "assets/walkthrough/open.md"}
           },
           {
             "id": "pretext-tools-getting-started-commands",
             "title": "View PreTeXt commands",
-            "description": "Many PreTeXt commands are available by clicking on the  **▷PreTeXt** button at the bottom of the window.  Try clicking that now.\n[▷PreTeXt menu](command:pretext-tools.selectPretextCommand)",
             "media": {"markdown": "assets/walkthrough/commands.md"},
             "completionEvents": ["onCommand:pretext-tools.selectPretextCommand"]
+          },
+          {
+            "id": "pretext-tools-getting-started-build",
+            "title": "Build your output",
+            "media": {"markdown": "assets/walkthrough/build.md"},
+            "completionEvents": ["onCommand:pretext-tools.buildLast"]
+          },
+          {
+            "id": "pretext-tools-getting-started-view",
+            "title": "View your output",
+            "media": {"markdown": "assets/walkthrough/view.md"},
+            "completionEvents": ["onCommand:pretext-tools.viewCli"]
           }
         ]
       }
