@@ -39,6 +39,7 @@ import {
   deactivate as lspDeactivate,
 } from "./lsp-client/main";
 import { projects } from "./project";
+import { cmdInstallLaTeX, cmdInstallSage } from "./commands/install";
 
 // this method is called when your extension is activated
 export async function activate(context: ExtensionContext) {
@@ -133,7 +134,9 @@ export async function activate(context: ExtensionContext) {
       cmdMarkdownToPretext
     ),
     commands.registerCommand("pretext-tools.showLog", showLog),
-    commands.registerCommand("pretext-tools.refreshTargets", refreshProjects)
+    commands.registerCommand("pretext-tools.refreshTargets", refreshProjects),
+    commands.registerCommand("pretext-tools.installSage", cmdInstallSage),
+    commands.registerCommand("pretext-tools.installLaTeX", cmdInstallLaTeX)
   );
 
   console.log("Current projects: ", projects);

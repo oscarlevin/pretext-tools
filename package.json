@@ -183,6 +183,18 @@
         "title": "Convert Selected LaTeX to PreTeXt",
         "category": "PreTeXt",
         "description": "Converts and replaces a selection of LaTeX with PreTeXt formatted text (experimental)."
+      },
+      {
+        "command": "pretext-tools.installSage",
+        "title": "Install SageMath",
+        "category": "PreTeXt",
+        "description": "Installs SageMath in a Conda environment. This only works inside a codespace"
+      },
+      {
+        "command": "pretext-tools.installLaTeX",
+        "title": "Install LaTeX",
+        "category": "PreTeXt",
+        "description": "Installs LaTeX packages needed for PreTeXt. This only works inside a codespace"
       }
     ],
     "xmlLanguageParticipants": [
