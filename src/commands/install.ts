@@ -1,6 +1,7 @@
 import { ProgressLocation, window } from "vscode";
 import { pretextOutputChannel } from "../ui";
 const { exec } = require("child_process");
+const fs = require("fs");
 
 export async function cmdInstallSage() {
   console.log("Trying to install Sage");
@@ -11,7 +12,7 @@ export async function cmdInstallSage() {
         location: ProgressLocation.Window,
       },
       (progress) => {
-        progress.report({ message: "Running `add-sage` script" });
+        progress.report({ message: "Running `installSage` script" });
 
         return new Promise<void>((resolve) => {
           pretextOutputChannel.append(
@@ -19,7 +20,7 @@ export async function cmdInstallSage() {
           );
           try {
             exec(
-              "bash ./.github/scripts/add-sage.sh",
+              "bash ./.devcontainer/installSage.sh",
               (error: { message: any }, stdout: any, stderr: any) => {
                 if (error) {
                   pretextOutputChannel.appendLine(`Error: ${error.message}`);
@@ -34,6 +35,45 @@ export async function cmdInstallSage() {
             );
           } catch (e) {
             console.log("Unable to complete Sage install");
+            console.log(e);
+          }
+          try {
+            const devcontainerPath = "./.devcontainer/devcontainer.json";
+            fs.readFile(devcontainerPath, "utf8", (err: any, data: string) => {
+              if (err) {
+                pretextOutputChannel.appendLine(
+                  `Error reading devcontainer.json: ${err.message}`
+                );
+                return;
+              }
+              pretextOutputChannel.appendLine(
+                `Contents of devcontainer.json:\n${data}`
+              );
+              const updatedData = data.replace(
+                /\/\/\s*install sagemath:/i,
+                "install sagemath:"
+              );
+              fs.writeFile(
+                devcontainerPath,
+                updatedData,
+                "utf8",
+                (err: any) => {
+                  if (err) {
+                    pretextOutputChannel.appendLine(
+                      `Error writing to devcontainer.json: ${err.message}`
+                    );
+                    return;
+                  }
+                  pretextOutputChannel.appendLine(
+                    "Successfully updated devcontainer.json to uncomment 'install sage:'"
+                  );
+                }
+              );
+            });
+          } catch (e) {
+            console.log(
+              "Unable to save SageMath install status to devcontainer.json"
+            );
             console.log(e);
           }
           progress.report({ message: "Done" });
@@ -56,7 +96,7 @@ export async function cmdInstallLaTeX() {
         location: ProgressLocation.Window,
       },
       (progress) => {
-        progress.report({ message: "Running `add-latex` script" });
+        progress.report({ message: "Running `installLatex` script" });
 
         return new Promise<void>((resolve) => {
           pretextOutputChannel.append(
@@ -73,7 +113,7 @@ export async function cmdInstallLaTeX() {
           }
           try {
             exec(
-              "bash ./.github/scripts/add-latex.sh",
+              "bash ./.devcontainer/installLatex.sh",
               (error: { message: any }, stdout: any, stderr: any) => {
                 if (error) {
                   pretextOutputChannel.appendLine(`Error: ${error.message}`);
@@ -87,7 +127,46 @@ export async function cmdInstallLaTeX() {
               }
             );
           } catch (e) {
-            console.log("Unable to complete Sage install");
+            console.log("Unable to complete LaTeX install");
+            console.log(e);
+          }
+          try {
+            const devcontainerPath = "./.devcontainer/devcontainer.json";
+            fs.readFile(devcontainerPath, "utf8", (err: any, data: string) => {
+              if (err) {
+                pretextOutputChannel.appendLine(
+                  `Error reading devcontainer.json: ${err.message}`
+                );
+                return;
+              }
+              pretextOutputChannel.appendLine(
+                `Contents of devcontainer.json:\n${data}`
+              );
+              const updatedData = data.replace(
+                /\/\/\s*install latex:/i,
+                "install latex:"
+              );
+              fs.writeFile(
+                devcontainerPath,
+                updatedData,
+                "utf8",
+                (err: any) => {
+                  if (err) {
+                    pretextOutputChannel.appendLine(
+                      `Error writing to devcontainer.json: ${err.message}`
+                    );
+                    return;
+                  }
+                  pretextOutputChannel.appendLine(
+                    "Successfully updated devcontainer.json to uncomment 'install latex:'"
+                  );
+                }
+              );
+            });
+          } catch (e) {
+            console.log(
+              "Unable to save LaTeX install status to devcontainer.json"
+            );
             console.log(e);
           }
           progress.report({ message: "Done" });
