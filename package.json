@@ -190,13 +190,6 @@
         "category": "PreTeXt",
         "description": "Installs SageMath in a Conda environment. This only works inside a codespace",
         "enablement": "isWeb"
-      },
-      {
-        "command": "pretext-tools.installLaTeX",
-        "title": "Install LaTeX",
-        "category": "PreTeXt",
-        "description": "Installs LaTeX packages needed for PreTeXt. This only works inside a codespace",
-        "enablement": "isWeb"
       }
     ],
     "xmlLanguageParticipants": [
@@ -425,10 +418,9 @@
           {
             "id": "pretext-tools-getting-started-install-extras",
             "when": "isWeb",
-            "title": "Install LaTeX or SageMath",
-            "description": "The default codespace template does not contain LaTeX or SageMath.  You can install them using the commands below.  This will only work in a codespace.\n[Install LaTeX](command:pretext-tools.installLaTeX)\n[Install SageMath](command:pretext-tools.installSage)",
+            "title": "Install SageMath",
+            "description": "The default codespace template does not contain SageMath.  You can install it using the command below, but it is only needed if you plan to include sageplot images.  This will only work in a codespace.\n[Install SageMath](command:pretext-tools.installSage)",
             "completionEvents": [
-              "onCommand:pretext-tools.installLaTeX",
               "onCommand:pretext-tools.installSage"
             ],
             "media": {
