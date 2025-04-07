@@ -183,6 +183,13 @@
         "title": "Convert Selected LaTeX to PreTeXt",
         "category": "PreTeXt",
         "description": "Converts and replaces a selection of LaTeX with PreTeXt formatted text (experimental)."
+      },
+      {
+        "command": "pretext-tools.installSage",
+        "title": "Install SageMath",
+        "category": "PreTeXt",
+        "description": "Installs SageMath in a Conda environment. This only works inside a codespace",
+        "enablement": "isWeb"
       }
     ],
     "xmlLanguageParticipants": [
@@ -358,7 +365,7 @@
         "id": "pretext-tools-getting-started",
         "title": "Get Started with PreTeXt",
         "description": "Learn how to use PreTeXt Tools.",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "steps": [
           {
             "id": "pretext-tools-getting-started-new-project",
@@ -407,6 +414,18 @@
             "completionEvents": [
               "onCommand:pretext-tools.viewCli"
             ]
+          },
+          {
+            "id": "pretext-tools-getting-started-install-extras",
+            "when": "isWeb",
+            "title": "Install SageMath",
+            "description": "The default codespace template does not contain SageMath.  You can install it using the command below, but it is only needed if you plan to include sageplot images.  This will only work in a codespace.\n[Install SageMath](command:pretext-tools.installSage)",
+            "completionEvents": [
+              "onCommand:pretext-tools.installSage"
+            ],
+            "media": {
+              "markdown": "assets/walkthrough/installExtras.md"
+            }
           }
         ]
       }

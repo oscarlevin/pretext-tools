@@ -7,12 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Command that will run the `installSage.sh` script inside a codespace (and enable that for all future codespaces).
+
 ## [0.26.0] - 2025-04-03
 
 ### Added
+
 - New "Getting started with PreTeXt" walkthrough to help new users create, build, and view a PreTeXt project.
 
 ### Changed
+
 - New Project command now creates a new project inside the selected folder instead of creating a new "New PreTeXt Project" folder.
 
 ## [0.25.4] - 2025-03-31
