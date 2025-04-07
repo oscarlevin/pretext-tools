@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.27.0] - 2025-04-07
+
 ### Added
 
 - Command that will run the `installSage.sh` script inside a codespace (and enable that for all future codespaces).
