@@ -135,7 +135,15 @@ export async function activate(context: ExtensionContext) {
     ),
     commands.registerCommand("pretext-tools.showLog", showLog),
     commands.registerCommand("pretext-tools.refreshTargets", refreshProjects),
-    commands.registerCommand("pretext-tools.installSage", cmdInstallSage)
+    commands.registerCommand("pretext-tools.installSage", cmdInstallSage),
+    commands.registerCommand("pretext-tools.gettingStarted", () => {
+      console.log("Opening getting started walkthrough");
+      // Open the walkthrough
+      commands.executeCommand(
+        "workbench.action.openWalkthrough",
+        "oscarlevin.pretext-tools#gettingStarted"
+      );
+    })
   );
 
   console.log("Current projects: ", projects);

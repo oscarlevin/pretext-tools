@@ -190,6 +190,11 @@
         "category": "PreTeXt",
         "description": "Installs SageMath in a Conda environment. This only works inside a codespace",
         "enablement": "isWeb"
+      },
+      {
+        "command": "pretext-tools.gettingStarted",
+        "title": "Open getting started walkthrough",
+        "category": "PreTeXt"
       }
     ],
     "xmlLanguageParticipants": [
@@ -362,10 +367,14 @@
     ],
     "walkthroughs": [
       {
-        "id": "pretext-tools-getting-started",
+        "id": "gettingStarted",
         "title": "Get Started with PreTeXt",
         "description": "Learn how to use PreTeXt Tools.",
-        "version": "0.0.2",
+        "featuredFor": [
+          "pretext",
+          "project.ptx"
+        ],
+        "version": "0.0.3",
         "steps": [
           {
             "id": "pretext-tools-getting-started-new-project",
