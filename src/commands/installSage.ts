@@ -1,5 +1,7 @@
-import { ProgressLocation, window } from "vscode";
+import { ProgressLocation, window, workspace } from "vscode";
 import { pretextOutputChannel } from "../ui";
+import { spawn } from "child_process";
+import { getProjectFolder } from "../utils";
 const { exec } = require("child_process");
 const fs = require("fs");
 
@@ -7,6 +9,11 @@ export async function cmdInstallSage() {
   console.log("Trying to install Sage");
   if (process.env.CODESPACES === "true") {
     console.log("Running inside a GitHub Codespace");
+    const cwd =
+      getProjectFolder(workspace.workspaceFolders![0].uri.fsPath) ||
+      process.env.GITHUB_WORKSPACE ||
+      process.cwd();
+    console.log("cwd: ", cwd);
     window.withProgress(
       {
         location: ProgressLocation.Window,
@@ -19,26 +26,38 @@ export async function cmdInstallSage() {
             "Checking for new version of PreTeXt to install"
           );
           try {
-            exec(
-              "bash ./.devcontainer/installSage.sh",
-              (error: { message: any }, stdout: any, stderr: any) => {
-                if (error) {
-                  pretextOutputChannel.appendLine(`Error: ${error.message}`);
-                  return;
-                }
-                if (stderr) {
-                  pretextOutputChannel.appendLine(`Stderr: ${stderr}`);
-                  return;
-                }
-                pretextOutputChannel.appendLine(`Stdout: ${stdout}`);
+            let runInstall = spawn("bash ./.devcontainer/installSage.sh", {
+              cwd: cwd,
+              shell: true,
+            });
+            runInstall.stdout.on("data", function (data: any) {
+              console.log(`stdout: ${data}`);
+              data = data.toString();
+              pretextOutputChannel.appendLine(data);
+            });
+            runInstall.stderr.on("data", function (data: any) {
+              console.log(`stderr: ${data}`);
+              data = data.toString();
+              pretextOutputChannel.appendLine(data);
+            });
+            runInstall.on("close", function (code: any) {
+              console.log(`child process exited with code ${code}`);
+              if (code !== 0) {
+                pretextOutputChannel.appendLine(
+                  `Error: child process exited with code ${code}`
+                );
+                return;
               }
-            );
+              pretextOutputChannel.appendLine(
+                "Sage installation completed successfully."
+              );
+            });
           } catch (e) {
             console.log("Unable to complete Sage install");
             console.log(e);
           }
           try {
-            const devcontainerPath = "./.devcontainer/devcontainer.json";
+            const devcontainerPath = `${cwd}/.devcontainer/devcontainer.json`;
             fs.readFile(devcontainerPath, "utf8", (err: any, data: string) => {
               if (err) {
                 pretextOutputChannel.appendLine(
