@@ -95,7 +95,7 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
         console.log('getHtmlForWebview');
 		// Local path to script and css for the webview
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(
-			this.context.extensionUri, 'media', 'catScratch.js'));
+			this.context.extensionUri, 'src', 'views', 'dist'));
 
 		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(
 			this.context.extensionUri, 'media', 'reset.css'));
@@ -109,35 +109,36 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
 		// Use a nonce to whitelist which scripts can be run
 		const nonce = getNonce();
 
-		return `<!DOCTYPE html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
+        return `<!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <title>Test webview</title>
+            <script type="module" src="${scriptUri}/tiptap.js"></script>
+          </head>
+          <body>
+          <h1>Test webview</h1>
+            <div class="element"></div>
+            <script>
+                console.log("Editor content", editorContent)
+                const vscode = acquireVsCodeApi();
+                // Handle messages sent from the extension to the webview
+                window.addEventListener('message', event => {
+                    const message = event.data; // The json data that the extension sent
+                    console.log('message received', message);
+                    switch (message.type) {
+                        case 'update':
+                            console.log('update message received', message);
+                            const text = message.text;
+                            editorContent = text;
+                            console.log('editorContent', editorContent);
+                            return;
+                    }
+                });
 
-				<!--
-				Use a content security policy to only allow loading images from https or from our extension directory,
-				and only allow scripts that have a specific nonce.
-				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource}; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
-
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-				<link href="${styleResetUri}" rel="stylesheet" />
-				<link href="${styleVSCodeUri}" rel="stylesheet" />
-				<link href="${styleMainUri}" rel="stylesheet" />
-
-				<title>Cat Scratch</title>
-			</head>
-			<body>
-				<div class="notes">
-					<div class="add-button">
-						<button>Scratch!</button>
-					</div>
-				</div>
-
-				<script nonce="${nonce}" src="${scriptUri}"></script>
-			</body>
-			</html>`;
+            </script>
+          </body>
+        </html>`;
 	}
 
 	/**

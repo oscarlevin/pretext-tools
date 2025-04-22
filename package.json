@@ -143,6 +143,13 @@
         "category": "PreTeXt"
       },
       {
+        "command": "pretext-tools.viewVisualEditor",
+        "title": "Open file with Visual Editor",
+        "icon": "$(open-preview)",
+        "category": "PreTeXt",
+        "description": "Open the file in the PreTeXt Visual Editor."
+      },
+      {
         "command": "pretext-tools.viewCodeChat",
         "title": "Preview file with CodeChat",
         "icon": "$(open-preview)",
@@ -210,7 +217,8 @@
           {
             "filenamePattern": "*.ptx"
           }
-        ]
+        ],
+        "priority": "option"
       }
     ],
     "xmlLanguageParticipants": [
