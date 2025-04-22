@@ -96,6 +96,11 @@
     ],
     "commands": [
       {
+        "command": "pretext-tools.experiment",
+        "title": "PreTeXt Experiment",
+        "category": "PreTeXt"
+      },
+      {
         "command": "pretext-tools.refreshTargets",
         "title": "Refresh target list",
         "category": "PreTeXt"
@@ -195,6 +200,17 @@
         "command": "pretext-tools.gettingStarted",
         "title": "Open getting started walkthrough",
         "category": "PreTeXt"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "pretext.visualEditor",
+        "displayName": "PreTeXt Visual Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.ptx"
+          }
+        ]
       }
     ],
     "xmlLanguageParticipants": [
@@ -457,6 +473,9 @@
     "@types/mocha": "^10.0.9",
     "@types/node": "22.x",
     "@types/prettier": "^2.7.3",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@types/react-redux": "^7.1.34",
     "@types/vscode": "^1.89.0",
     "@types/xml2js": "^0.4.14",
     "@typescript-eslint/eslint-plugin": "^8.9.0",
@@ -471,6 +490,17 @@
   },
   "dependencies": {
     "@lezer/xml": "^1.0.5",
+    "@reduxjs/toolkit": "^2.7.0",
+    "@tiptap-pro/extension-file-handler": "^2.18.0",
+    "@tiptap-pro/extension-mathematics": "^2.18.0",
+    "@tiptap/core": "^2.11.7",
+    "@tiptap/extension-focus": "^2.11.7",
+    "@tiptap/extension-hard-break": "^2.11.7",
+    "@tiptap/extension-history": "^2.11.7",
+    "@tiptap/extension-text": "^2.11.7",
+    "@tiptap/pm": "^2.11.7",
+    "@tiptap/react": "^2.11.7",
+    "@tiptap/starter-kit": "^2.11.7",
     "@unified-latex/unified-latex": "^1.8.2",
     "@unified-latex/unified-latex-to-hast": "^1.8.2",
     "@unified-latex/unified-latex-to-pretext": "^1.8.2",
@@ -484,6 +514,11 @@
     "ovsx": "^0.10.0",
     "prettier": "^2.8.8",
     "prettier-plugin-pretext": "github:oscarlevin/prettier-plugin-pretext",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.9.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-redux": "^9.2.0",
     "rehype-stringify": "^10.0.1",
     "saxes": "^6.0.0",
     "time-stamp": "^2.2.0",

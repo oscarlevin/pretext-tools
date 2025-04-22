@@ -5,6 +5,7 @@ import {
   TextDocument,
   TextEdit,
   commands,
+  WebviewPanel,
 } from "vscode";
 import { formatPretextDocument } from "./formatter";
 import * as utils from "./utils";
@@ -40,6 +41,7 @@ import {
 } from "./lsp-client/main";
 import { projects } from "./project";
 import { cmdInstallSage } from "./commands/installSage";
+import { PretextVisualEditorProvider } from "./visualEditor";
 
 // this method is called when your extension is activated
 export async function activate(context: ExtensionContext) {
@@ -106,10 +108,17 @@ export async function activate(context: ExtensionContext) {
     console.log("Error setting up formatter");
   }
 
+  
+  // Visual editor
+  context.subscriptions.push(
+    PretextVisualEditorProvider.register(context)
+  );
+
+
   ///////////////// Commands //////////////////////
 
   context.subscriptions.push(
-    //commands.registerCommand("pretext-tools.experiment", utils.experiment),
+    commands.registerCommand("pretext-tools.experiment", () => {utils.experiment(context)}),
     commands.registerCommand(
       "pretext-tools.selectPretextCommand",
       cmdSelectCommand

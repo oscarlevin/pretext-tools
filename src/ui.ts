@@ -3,6 +3,7 @@ import {
   StatusBarAlignment,
   StatusBarItem,
   Terminal,
+  WebviewPanel,
   window,
 } from "vscode";
 import { updateStatusBarItem } from "./utils";
@@ -32,6 +33,8 @@ export function refreshProjects() {
 }
 
 export let pretextTerminal: Terminal;
+
+
 
 export let pretextCommandList = ptxCommandList;
 

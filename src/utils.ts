@@ -5,6 +5,9 @@ import * as fs from "fs";
 import { SpellCheckScope } from "./types";
 import { cli } from "./cli";
 
+
+export let currentPanel: vscode.WebviewPanel | undefined;
+
 export {
   getProjectFolder,
   installPretext,
@@ -16,9 +19,131 @@ export {
   experiment,
 };
 
-async function experiment() {
-  return;
+async function experiment(context: vscode.ExtensionContext) {
+  const columnToShowIn = vscode.window.activeTextEditor
+    ? (currentPanel && currentPanel.viewColumn)
+    : undefined;
+
+  //// Get the URI for output/web/index.html in the user's first workspace
+  //const workspaces = vscode.workspace.workspaceFolders;
+  //if (!workspaces) {
+  //  vscode.window.showErrorMessage(
+  //    "No workspace found. Please open a workspace and try again."
+  //  );
+  //  return;
+  //}
+  //const workspace = workspaces[0];
+  //const workspacePath = workspace.uri.fsPath;
+  //const projectFolder = getProjectFolder(workspacePath);
+  //if (!projectFolder) {
+  //  vscode.window.showErrorMessage(
+  //    "No project.ptx found in the workspace. Please open a PreTeXt project and try again."
+  //  );
+  //  return;
+  //}
+  //const outputPath = path.join(projectFolder, "output", "web", "sec-features-blocks.html");
+  //console.log("Output path is: ", outputPath);
+  //if (!fs.existsSync(outputPath)) {
+  //  vscode.window.showErrorMessage(
+  //    "No output/web/index.html found in the project. Please run a PreTeXt command to generate it."
+  //  );
+  //  return;
+  //}
+  //const outputUri = vscode.Uri.file(outputPath);
+  //const panelSrc = currentPanel?.webview.asWebviewUri(outputUri);
+  //console.log("Output URI is: ", outputUri);
+
+  console.log("Current panel is: ", currentPanel);
+  console.log("Current panel is visible? ", currentPanel?.visible);
+  console.log("Current panel is active? ", currentPanel?.active);
+  if (currentPanel) {;
+    // If we already have a panel, show it.
+    currentPanel.reveal(columnToShowIn);
+  } else {
+    // Otherwise, create a new panel.
+    currentPanel = vscode.window.createWebviewPanel(
+      'boxEditor',
+      'Box Editor',
+      columnToShowIn || vscode.ViewColumn.Beside,
+      {
+        enableScripts: true,
+        retainContextWhenHidden: true,
+      }
+    )
+    //const panelSrc = currentPanel?.webview.asWebviewUri(outputUri);
+  // silly demo to show how to update the webview
+  // every 5 seconds
+    let iteration = 0;
+    const updateWebview = () => {
+      const color = iteration++ % 2 === 0 ? 'red' : 'blue';
+      currentPanel!.title = `Box Editor - ${iteration}`;
+      //currentPanel!.webview.html = getWebviewContent(color);
+      console.log(`Webview updated to color: ${color}`);
+      currentPanel!.webview.postMessage({content: "hello"});
+    }
+
+    const scriptUri = currentPanel?.webview.asWebviewUri(
+      vscode.Uri.joinPath(context.extensionUri, 'src', 'views', 'dist' )
+    );
+      currentPanel.webview.html = getWebviewContent(scriptUri);
+
+      // Handle messages from the webview
+      currentPanel.webview.onDidReceiveMessage(
+        message => {
+          switch (message.command) {
+            case 'alert':
+              vscode.window.showErrorMessage(message.text);
+              return;
+          }
+        },
+        undefined,
+        context.subscriptions
+      );
+
+      const interval = setInterval(updateWebview, 5000);
+
+      currentPanel.onDidDispose(() => {
+        console.log("Webview closed");
+        currentPanel = undefined;
+        clearInterval(interval);
+      }, null, context.subscriptions || []);
+
+  }
 }
+
+function getWebviewContent(scriptUri: vscode.Uri): string {
+
+ return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Test webview</title>
+    <script type="module" src="${scriptUri}/tiptap.js"></script>
+  </head>
+  <body>
+  <h1>Test webview</h1>
+    <div class="element"></div>
+    <script>
+      const vscode = acquireVsCodeApi();
+      window.addEventListener('message', (event) => {
+        const message = event.data;
+        console.log("Message received: ", message);
+        if (message) {
+          const messageElement = document.createElement('p');
+          messageElement.textContent = message.content;
+          document.body.appendChild(messageElement);
+        }
+        vscode.postMessage({
+          command: 'alert',
+          text: 'Hello from the webview!'
+        });
+      });
+
+    </script>
+  </body>
+</html>`
+}
+
 
 /**
  * Looks up the directory tree for a directory that contains a "project.ptx" folder, and returns that path, or null if no such folder exists.
@@ -234,4 +359,18 @@ function stripColorCodes(input: string): string {
   // ANSI color code regex
   const regex = /\x1B\[[0-9;]*m/g;
   return input.replace(regex, "");
+}
+
+
+/**
+ * Generate a random nonce for use in webview content security policy.
+ * @returns A random nonce string.
+ */
+export function getNonce() {
+	let text = '';
+	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	for (let i = 0; i < 32; i++) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
 }
