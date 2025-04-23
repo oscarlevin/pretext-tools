@@ -45,10 +45,20 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
 
 		function updateWebview() {
             console.log('updateWebview');
+			// Send message to visual editor to update with teh current text
 			webviewPanel.webview.postMessage({
 				type: 'update',
 				text: document.getText(),
 			});
+		}
+
+		// TODO: this could be used for initial loading.
+		function loadWebview() {
+			console.log("loading webview");
+			webviewPanel.webview.postMessage({
+				type: 'load',
+				text: document.getText(),
+			})
 		}
 
 		// Hook up event handlers so that we can synchronize the webview with the text document.
@@ -60,7 +70,9 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
 		// editors (this happens for example when you split a custom editor)
 
 		const changeDocumentSubscription = vscode.workspace.onDidChangeTextDocument(e => {
-			if (e.document.uri.toString() === document.uri.toString()) {
+			// Only send updates if they come from an active text editor.
+			const fromTextEditor = (vscode.window.activeTextEditor !== undefined)
+			if (e.document.uri.toString() === document.uri.toString() && fromTextEditor) {
 				updateWebview();
 			}
 		});
@@ -71,16 +83,18 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
 			changeDocumentSubscription.dispose();
 		});
 
-		// Receive message from the webview.
+		// Receive message *from* the webview.
 		webviewPanel.webview.onDidReceiveMessage(e => {
-            console.log('webviewPanel received message', e);
+            console.log('Received message from visual editor', e);
 			switch (e.type) {
-				case 'add':
-					this.addNewScratch(document);
-					return;
-
-				case 'delete':
-					this.deleteScratch(document, e.id);
+				case 'update':
+					const edit = new vscode.WorkspaceEdit();
+					edit.replace(
+						document.uri,
+						new vscode.Range(0, 0, document.lineCount, 0),
+						e.value
+					);
+					vscode.workspace.applyEdit(edit);
 					return;
 			}
 		});
@@ -95,48 +109,25 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
         console.log('getHtmlForWebview');
 		// Local path to script and css for the webview
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(
-			this.context.extensionUri, 'src', 'views', 'dist'));
+			this.context.extensionUri, 'media', 'visualEditor.js'));
 
-		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(
-			this.context.extensionUri, 'media', 'reset.css'));
-
-		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(
-			this.context.extensionUri, 'media', 'vscode.css'));
-
-		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(
-			this.context.extensionUri, 'media', 'catScratch.css'));
+		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(
+			this.context.extensionUri, 'media', 'assets', 'visualEditor.css'));
 
 		// Use a nonce to whitelist which scripts can be run
 		const nonce = getNonce();
-
+		//TODO: Set up nonce to make this more secure.  Currently loading katex fonts doesn't work.
         return `<!doctype html>
         <html lang="en">
           <head>
             <meta charset="UTF-8" />
             <title>Test webview</title>
-            <script type="module" src="${scriptUri}/tiptap.js"></script>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link href="${styleUri}" rel="stylesheet" />
+            <script type="module" src="${scriptUri}"></script>
           </head>
           <body>
-          <h1>Test webview</h1>
-            <div class="element"></div>
-            <script>
-                console.log("Editor content", editorContent)
-                const vscode = acquireVsCodeApi();
-                // Handle messages sent from the extension to the webview
-                window.addEventListener('message', event => {
-                    const message = event.data; // The json data that the extension sent
-                    console.log('message received', message);
-                    switch (message.type) {
-                        case 'update':
-                            console.log('update message received', message);
-                            const text = message.text;
-                            editorContent = text;
-                            console.log('editorContent', editorContent);
-                            return;
-                    }
-                });
-
-            </script>
+            <div id="root"></div>
           </body>
         </html>`;
 	}
