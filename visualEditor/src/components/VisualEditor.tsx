@@ -18,19 +18,21 @@ import Term from "../extensions/Term";
 import Title from "../extensions/Title";
 import Definition from "../extensions/Definition";
 import KeyboardCommands from "../extensions/Keyboard";
+import UnknownNode from "../extensions/UnknownNode";
 import "../styles.scss";
 //import "../style_oscarlevin.css";
 import json2ptx from "../extensions/json2ptx";
+import { preprocessPtx } from "../utils";
 //import { useState } from 'react';
 
-import { useDispatch } from "react-redux";
-import { setPtxSource } from "../ptxSourceSlice";
-import { useSelector } from "react-redux";
+//import { useDispatch } from "react-redux";
+//import { setPtxSource } from "../ptxSourceSlice";
+//import { useSelector } from "react-redux";
 
 const Document = Node.create({
-  name: "document",
+  name: "ptxFragment",
   topNode: true,
-  content: "title introduction? section+",
+  content: "title? introduction? section* subsection*",
 });
 
 export function toggleMenu() {
@@ -51,6 +53,7 @@ const extensions = [
   Term,
   Title,
   Definition,
+  UnknownNode,
   Mathematics,
   Focus.configure({ mode: "deepest" }),
   History,
@@ -116,20 +119,22 @@ const vscode = acquireVsCodeApi();
 
 const VisualEditor = () => {
   //const dispatch = useDispatch();
-  const ptxSource = useSelector((state: any) => state.ptxSource.value);
+  //const ptxSource = useSelector((state: any) => state.ptxSource.value);
 
   const editor = useEditor({
     extensions,
     content: "",
-    onUpdate: debounce(({ editor }) => {
+    enableContentCheck: false,
+    onUpdate: ({ editor }) => {
       vscode.postMessage({
         type: 'update',
         value: json2ptx(editor.getJSON())
       })
-    }, 1000)
-    //dispatch(
-    //  setPtxSource({ value: json2ptx(editor.getJSON()), editor: "visual" })
-    //),
+      //console.log("HTML content: ", editor.getHTML());
+      //console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
+      //console.log("PTX content: ", json2ptx(editor.getJSON()));
+    }
+
   });
 
 
@@ -142,10 +147,15 @@ const VisualEditor = () => {
       const message = event.data; // The data that the extension sent
       switch (message.type) {
         case 'update':
-          const text = message.text;
+          console.log("Received text ", message.text);
+          const text = preprocessPtx(message.text);
+          console.log("Processed text: ", text);
 
           if (editor) { //add test to see if the contents has changed.
             editor.commands.setContent(text);
+            console.log("HTML content: ", editor.getHTML());
+            console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
+            console.log("PTX content: ", json2ptx(editor.getJSON()));
           }
           return;
       }
@@ -165,6 +175,7 @@ const VisualEditor = () => {
   //    editor.commands.setContent(ptxSource);
   //  }
   //}, [ptxSource, ptxSourceEditor, editor]);
+
 
   return (
     <>

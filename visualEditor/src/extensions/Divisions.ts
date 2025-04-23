@@ -88,9 +88,9 @@ const Section = Node.create({
 const Subsection = Node.create({
   name: "subsection",
 
-  content: "title block+",
+  content: "title? block+ unknownContent*",
 
-  group: "division",
+  group: "division unknownContent",
 
   selectable: false,
 
