@@ -15,7 +15,16 @@ function json2ptx(json: any) {
       json.type in tt2ptx
         ? tt2ptx[json.type as keyof typeof tt2ptx]
         : json.type;
-    ptx = ptx + "<" + elementName + ">\n";
+    // nodes might have attrs
+    const elementAttrs = json.attrs
+    ptx = ptx + "<" + elementName;
+    if (elementAttrs) {
+      for (const [key, value] of Object.entries(elementAttrs)) {
+         console.log(key, value)
+         ptx = ptx + " " + key + '="' + value + '"';
+      }
+    }
+    ptx = ptx + ">\n";
     // console.log("content is:"+ json.content)
     for (const fragment of json.content) {
       ptx = ptx + json2ptx(fragment);

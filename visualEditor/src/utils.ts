@@ -1,13 +1,25 @@
 // Utilities for the visual editor
 
+//export function addAttributes(){
+//  return {
+//    label: {
+//      parseHTML: (element) => element.getAttribute("label"),
+//    },
+//    "xml:id": {
+//      parseHTML: (element) => element.getAttribute("xml:id"),
+//    }
+//  }
+//}
+
+
+
 const KNOWN_TAGS = [
-  'section',
-  'subsection',
-  'introduction',
-  'title',
   'p',
-  'definition',
-  'example',
+  'subsection',
+  'section',
+  'title',
+  'theorem',
+  'term',
 ];
 
 
@@ -26,9 +38,9 @@ text = text.replace(/<([a-zA-Z0-9]+)(\s[^>\/]*)?(\/)?>/g, (match, tagName, attri
     }
     attributes = attributes ? attributes.trim() : '';
     if (selfClosing) {
-        return `<unknown label="${tagName}" ${attributes} />`; // Wrap self-closing unrecognized tags
+        return `<unknown ptxtag="${tagName}" ${attributes} />`; // Wrap self-closing unrecognized tags
     }
-    return `<unknown label="${tagName}" ${attributes}>`; // Wrap unrecognized tags
+    return `<unknown ptxtag="${tagName}" ${attributes}>`; // Wrap unrecognized tags
 });
 text = text.replace(/<\/([a-zA-Z0-9]+)>/g, (match, tagName) => {
     if (KNOWN_TAGS.includes(tagName)) {

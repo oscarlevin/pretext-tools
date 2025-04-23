@@ -1,11 +1,9 @@
-import { Node, mergeAttributes, wrappingInputRule } from '@tiptap/core'
+import { Node, mergeAttributes } from '@tiptap/core'
 
 const UnknownNode = Node.create({
   name: 'unknownNode',
 
-  content: 'unknownContent*',
-
-  group: 'unknownContent',
+  content: 'unknownNode* block*',
 
   selectable: false,
 
@@ -26,7 +24,7 @@ const UnknownNode = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['span', mergeAttributes({ class: 'unknown'}, HTMLAttributes), 0]
+    return ['div', mergeAttributes({ class: 'unknown'}, HTMLAttributes), 0]
   },
 
 

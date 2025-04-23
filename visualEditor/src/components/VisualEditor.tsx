@@ -19,6 +19,7 @@ import Title from "../extensions/Title";
 import Definition from "../extensions/Definition";
 import KeyboardCommands from "../extensions/Keyboard";
 import UnknownNode from "../extensions/UnknownNode";
+//import UnknownMark from "../extensions/UnknownMark";
 import "../styles.scss";
 //import "../style_oscarlevin.css";
 import json2ptx from "../extensions/json2ptx";
@@ -32,7 +33,7 @@ import { preprocessPtx } from "../utils";
 const Document = Node.create({
   name: "ptxFragment",
   topNode: true,
-  content: "title? introduction? section* subsection*",
+  content: "title? introduction? chapter* section* subsection*",
 });
 
 export function toggleMenu() {
@@ -53,7 +54,8 @@ const extensions = [
   Term,
   Title,
   Definition,
-  UnknownNode,
+  //UnknownNode,
+  //UnknownMark,
   Mathematics,
   Focus.configure({ mode: "deepest" }),
   History,
@@ -124,7 +126,7 @@ const VisualEditor = () => {
   const editor = useEditor({
     extensions,
     content: "",
-    enableContentCheck: false,
+    enableContentCheck: true,
     onUpdate: ({ editor }) => {
       vscode.postMessage({
         type: 'update',
@@ -138,6 +140,12 @@ const VisualEditor = () => {
   });
 
 
+  editor?.on('contentError', ({ editor, error, disableCollaboration }) => {
+    disableCollaboration();
+    console.log("Content error: ", error);
+    const emitUpdate = false;
+    editor.setEditable(false, emitUpdate);
+  });
 
   // Handle messages sent from the extension to the webview
   // We debounce these updates so that updates are only made after the user stops making changes for half a second.
@@ -147,9 +155,10 @@ const VisualEditor = () => {
       const message = event.data; // The data that the extension sent
       switch (message.type) {
         case 'update':
-          console.log("Received text ", message.text);
-          const text = preprocessPtx(message.text);
-          console.log("Processed text: ", text);
+          //console.log("Received text ", message.text);
+          //const text = preprocessPtx(message.text);
+          //console.log("Processed text: ", text);
+          const text = message.text;
 
           if (editor) { //add test to see if the contents has changed.
             editor.commands.setContent(text);

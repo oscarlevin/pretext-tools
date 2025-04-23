@@ -25,7 +25,7 @@ const Para = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes({ class: 'para', label: 'p' }, HTMLAttributes), 0]
+    return ['div', mergeAttributes({ class: 'para', ptxtag: 'p' }, HTMLAttributes), 0]
   },
 
   addInputRules() {

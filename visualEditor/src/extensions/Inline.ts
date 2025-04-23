@@ -7,7 +7,7 @@ const MyText = Text.extend({});
 const MyHardBreak = HardBreak.extend({});
 
 const Inline = Extension.create({
-  name: "inline",
+  name: "myinline",
 
   addExtensions() {
     return [MyText, MyHardBreak];

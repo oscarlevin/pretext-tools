@@ -15,7 +15,7 @@ const Title = Node.create({
     // return ['h4', {class: "heading"}, ['span', {class: "type"}, "Definition"], ['span', {class: "space"}, " " ], ['span', {class: "codenumber"}, "xx.yy"], ['span', {class: "period"}, "."], ['span', {class: "space"}, " "], ['span', {class: "title"}, 0]]
     return [
       "div",
-      mergeAttributes({ class: "title", label: "title" }, HTMLAttributes),
+      mergeAttributes({ class: "title", ptxtag: "title" }, HTMLAttributes),
       0,
     ];
   },

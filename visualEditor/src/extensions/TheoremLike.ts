@@ -34,7 +34,7 @@ const TheoremLike = Extension.create({
             return [
               "article",
               mergeAttributes(
-                { class: `${element} theorem-like`, label: element },
+                { class: `${element} theorem-like`, ptxtag: element },
                 HTMLAttributes
               ),
               0,
