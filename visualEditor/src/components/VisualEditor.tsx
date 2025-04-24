@@ -22,7 +22,7 @@ import UnknownNode from "../extensions/UnknownNode";
 //import UnknownMark from "../extensions/UnknownMark";
 import "../styles.scss";
 //import "../style_oscarlevin.css";
-import json2ptx from "../extensions/json2ptx";
+import processNode from "../extensions/json2ptx";
 import { preprocessPtx } from "../utils";
 //import { useState } from 'react';
 
@@ -130,7 +130,7 @@ const VisualEditor = () => {
     onUpdate: ({ editor }) => {
       vscode.postMessage({
         type: 'update',
-        value: json2ptx(editor.getJSON())
+        value: processNode(editor.getJSON())
       })
       //console.log("HTML content: ", editor.getHTML());
       //console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
@@ -164,7 +164,7 @@ const VisualEditor = () => {
             editor.commands.setContent(text);
             console.log("HTML content: ", editor.getHTML());
             console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
-            console.log("PTX content: ", json2ptx(editor.getJSON()));
+            console.log("PTX content: ", processNode(editor.getJSON()));
           }
           return;
       }
