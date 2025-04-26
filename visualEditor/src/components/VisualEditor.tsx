@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect } from 'react';
 import {
   useEditor,
   EditorContent,
@@ -22,8 +23,8 @@ import UnknownNode from "../extensions/UnknownNode";
 //import UnknownMark from "../extensions/UnknownMark";
 import "../styles.scss";
 //import "../style_oscarlevin.css";
-import processNode from "../extensions/json2ptx";
 import { preprocessPtx } from "../utils";
+import json2ptx from "../extensions/json2ptx";
 //import { useState } from 'react';
 
 //import { useDispatch } from "react-redux";
@@ -119,72 +120,50 @@ function debounce(
 // @ts-ignore
 const vscode = acquireVsCodeApi();
 
-const VisualEditor = () => {
-  //const dispatch = useDispatch();
-  //const ptxSource = useSelector((state: any) => state.ptxSource.value);
-
+const VisualEditor: React.FC = () => {
   const editor = useEditor({
     extensions,
     content: "",
+    onContentError(props) {
+      console.log("Content error: ", props.error);
+      props.disableCollaboration();
+      props.editor.setEditable(false, false);
+    },
     enableContentCheck: true,
     onUpdate: ({ editor }) => {
       vscode.postMessage({
         type: 'update',
-        value: processNode(editor.getJSON())
+        value: json2ptx(editor.getJSON())
       })
-      //console.log("HTML content: ", editor.getHTML());
-      //console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
-      //console.log("PTX content: ", json2ptx(editor.getJSON()));
     }
-
   });
 
-
-  editor?.on('contentError', ({ editor, error, disableCollaboration }) => {
-    disableCollaboration();
-    console.log("Content error: ", error);
-    const emitUpdate = false;
-    editor.setEditable(false, emitUpdate);
-  });
-
-  // Handle messages sent from the extension to the webview
-  // We debounce these updates so that updates are only made after the user stops making changes for half a second.
-  // TODO: don't debounce for initial load.
-  window.addEventListener('message', debounce(
-    (event) => {
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      console.log("Received message from extension");
       const message = event.data; // The data that the extension sent
       switch (message.type) {
         case 'update':
-          //console.log("Received text ", message.text);
-          //const text = preprocessPtx(message.text);
-          //console.log("Processed text: ", text);
           const text = message.text;
 
-          if (editor) { //add test to see if the contents has changed.
+          if (editor) { // TODO: Add test to see if the contents have changed.
             editor.commands.setContent(text);
             console.log("HTML content: ", editor.getHTML());
             console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
-            console.log("PTX content: ", processNode(editor.getJSON()));
+            console.log("PTX content: ", json2ptx(editor.getJSON()));
           }
           return;
       }
-    }, 500)
-  );
-  // Update our webview's content
-  //updateContent(text);
+    };
 
-  // Then persist state information.
-  // This state is returned in the call to `vscode.getState` below when a webview is reloaded.
-  //vscode.setState({ text });
+    // Add the event listener
+    window.addEventListener('message', handleMessage);
 
-
-  // Set the content of the visual editor when the code editor changes
-  //useEffect(() => {
-  //  if (editor && ptxSourceEditor === "code") {
-  //    editor.commands.setContent(ptxSource);
-  //  }
-  //}, [ptxSource, ptxSourceEditor, editor]);
-
+    // Cleanup the event listener on unmount
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []); // Empty dependency array ensures this runs only once
 
   return (
     <>
