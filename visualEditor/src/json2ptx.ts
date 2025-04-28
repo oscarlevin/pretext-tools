@@ -7,6 +7,8 @@ const tt2ptx = {
   italic: "em",
 };
 
+
+
 function json2ptx(json: any) {
   let ptx = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n";
   // Top level node is a ptxFragment, but double check this:
@@ -77,4 +79,4 @@ function processNode(json: any) {
   return ptx;
 }
 
-export default json2ptx;
+export {json2ptx};

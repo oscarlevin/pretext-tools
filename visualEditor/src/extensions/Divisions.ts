@@ -8,7 +8,7 @@ import {
 const Introduction = Node.create({
   name: "introduction",
 
-  content: "block+",
+  content: "block+ rawptx*",
 
   group: "division introduction",
 
@@ -117,8 +117,8 @@ const Section = Node.create({
 
 const Subsection = Node.create({
   name: "subsection",
-  content: "title? block+ unknownContent*",
-  group: "division unknownContent",
+  content: "title? (block|rawptx)*",
+  group: "division",
   selectable: false,
   draggable: true,
   defining: false,

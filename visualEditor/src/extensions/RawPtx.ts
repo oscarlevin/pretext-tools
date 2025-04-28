@@ -1,15 +1,23 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 
-const UnknownNode = Node.create({
-  name: 'unknownNode',
+const RawPtx = Node.create({
+  name: 'rawptx',
 
-  content: 'unknownNode* block*',
+  content: 'text*',
 
-  selectable: false,
+  marks: '',
 
-  draggable: false,
+  selectable: true,
 
-  defining: false,
+  draggable: true,
+
+  defining: true,
+
+  code: true,
+
+  //atom: true,
+
+  whitespace: 'pre',
 
 
   // This would make it so an extra delete would not delete the parent node.  Not sure how we would end up deleting it. 
@@ -18,13 +26,14 @@ const UnknownNode = Node.create({
   parseHTML() {
     return [
       {
-        tag: 'unknown',
+        tag: 'rawptx',
+        preserveWhitespace: 'full',
       },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes({ class: 'unknown'}, HTMLAttributes), 0]
+    return ['pre', mergeAttributes({ class: 'rawptx'}, HTMLAttributes), 0]
   },
 
 
@@ -45,4 +54,4 @@ const UnknownNode = Node.create({
 
 })
 
-export default UnknownNode;
+export default RawPtx;

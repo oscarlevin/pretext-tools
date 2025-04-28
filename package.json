@@ -516,6 +516,7 @@
     "@unified-latex/unified-latex-util-html-like": "^1.8.0",
     "@unified-latex/unified-latex-util-parse": "^1.8.2",
     "deepmerge": "^4.3.1",
+    "diff-js-xml": "^1.0.8",
     "esbuild-node-externals": "^1.18.0",
     "fs.promises.exists": "^1.1.4",
     "glob": "^11.0.0",
