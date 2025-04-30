@@ -1,7 +1,8 @@
 #root {
-  max-width: None;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0;
+  width: 95%;
 }
 
 .ProseMirror {

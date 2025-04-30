@@ -21,18 +21,11 @@ import Title from "../extensions/Title";
 import Definition from "../extensions/Definition";
 import KeyboardCommands from "../extensions/Keyboard";
 import RawPtx from "../extensions/RawPtx";
-//import UnknownMark from "../extensions/UnknownMark";
 import "../styles.scss";
-//import "../style_oscarlevin.css";
-import { preprocessPtx, ptxToJson } from "../utils";
+import { cleanPtx, ptxToJson } from "../utils";
 import { json2ptx } from "../json2ptx";
 import { useState } from 'react';
-
-//import { useDispatch } from "react-redux";
-//import { setPtxSource } from "../ptxSourceSlice";
-//import { useSelector } from "react-redux";
-
-import { diff, ParsedModel } from "@emmetio/xml-diff";
+import Emphasis from '../extensions/Emph';
 
 
 const Document = Node.create({
@@ -61,6 +54,7 @@ const extensions = [
   Divisions,
   Term,
   Title,
+  Emphasis,
   Definition,
   RawPtx,
   //UnknownMark,
@@ -152,17 +146,17 @@ const VisualEditor: React.FC = () => {
 
           if (editor) { // TODO: Add test to see if the contents have changed.
             try {
-              console.log("preprocessPtx: ", preprocessPtx(text));
-              console.log("xast content: ", ptxToJson(text));
-              const json = generateJSON(text, extensions);
-              console.log("generated JSON content: ", JSON.stringify(json, null, 2));
-              editor.commands.setContent(ptxToJson(text));
-              //console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
-              //console.log("HTML content: ", editor.getHTML());
-              //console.log("PTX content: ", json2ptx(editor.getJSON()));
+              //const json = ptxToJson(cleanPtx(text));
+              //console.log(json);
+              //const json = generateJSON(text, extensions);
+              //console.log("generated JSON content: ", JSON.stringify(json, null, 2));
+              editor.commands.setContent(cleanPtx(text));
+              //editor.commands.setContent(ptxJsonContent);
+              console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
+              console.log("HTML content: ", editor.getHTML());
+              console.log("PTX content: ", json2ptx(editor.getJSON()));
               //console.log("Comparing text and PTX....");
-
-              console.log("**********************************");
+              //console.log("**********************************");
               //console.log("text content: ", cleanText(text));
               //console.log("PTX content: ", cleanText(json2ptx(editor.getJSON())));
               //console.log("Same? ", cleanText(text) === cleanText(json2ptx(editor.getJSON())));

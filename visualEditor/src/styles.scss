@@ -95,7 +95,7 @@
 
   article::before,
   section::before {
-    content: attr(label);
+    content: attr(ptxtag);
     display: block;
     text-align: right;
     font-size: 50%;

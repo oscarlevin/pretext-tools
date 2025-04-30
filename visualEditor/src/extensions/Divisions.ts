@@ -132,6 +132,7 @@ const Subsection = Node.create({
   addAttributes() {
     return {
       label: {
+        default: null,
         parseHTML: (element) => element.getAttribute("label"),
       },
       "xml:id": {

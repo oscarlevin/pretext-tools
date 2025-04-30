@@ -41,23 +41,32 @@ function processNode(json: any) {
         : json.type;
       // nodes might have attrs
       const elementAttrs = json.attrs
-      ptx = ptx + "<" + elementName;
-      if (elementAttrs) {
-        for (const [key, value] of Object.entries(elementAttrs)) {
-          console.log(key, value)
-          ptx = ptx + " " + key + '="' + value + '"';
+      if (elementName === "rawptx") {
+        // rawptx nodes are special, they are the unknown tags that we strip away
+        for (const fragment of json.content) {
+          ptx = ptx + processNode(fragment);
         }
+      } else {
+        // all other nodes are processed by adding the correct tag and attributes around its content
+        ptx = ptx + "<" + elementName;
+        if (elementAttrs) {
+          for (const [key, value] of Object.entries(elementAttrs)) {
+            if (value !== null) {
+              ptx = ptx + " " + key + '="' + value + '"';
+            }
+          }
+        }
+        ptx = ptx + ">\n";
+        // console.log("content is:"+ json.content)
+        for (const fragment of json.content) {
+          ptx = ptx + processNode(fragment);
+          // console.log(fragment)
+          //   // ptx = ptx + "<"+fragment.type+">"
+          //   ptx = ptx + json2ptx(fragment.content)
+          //   // ptx = ptx + "</"+fragment.type+">\n"
+        }
+        ptx = ptx + "\n</" + elementName + ">\n";
       }
-      ptx = ptx + ">\n";
-    // console.log("content is:"+ json.content)
-    for (const fragment of json.content) {
-      ptx = ptx + processNode(fragment);
-      // console.log(fragment)
-      //   // ptx = ptx + "<"+fragment.type+">"
-      //   ptx = ptx + json2ptx(fragment.content)
-      //   // ptx = ptx + "</"+fragment.type+">\n"
-    }
-    ptx = ptx + "\n</" + elementName + ">\n";
   } else {
     // text type nodes are exactly the leaf nodes
     if (json.type === "text") {
