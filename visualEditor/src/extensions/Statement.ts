@@ -2,10 +2,13 @@ import { Node } from "@tiptap/core";
 
 const Statement = Node.create({
   name: "statement",
-  content: "p+",
+  content: "para+",
   group: "blockContent",
+  parseHTML() {
+    return [{tag: "statement"}];
+  },
   renderHTML() {
-    return ["div", { class: "statement" }, 0];
+    return ["div", { class: "statement", ptxtag: "statement" }, 0];
   },
 });
 

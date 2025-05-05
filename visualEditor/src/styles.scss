@@ -84,23 +84,38 @@
     font-style: italic;
   }
 
-  div,
+  div.para,
+  div.title,
+  div.block-component,
+  pre.rawptx,
   article,
   section {
     box-shadow: -1px 1px 3px 1px #4e4e4e;
     padding: 1ex;
-    margin: 1ex;
+    margin: 1.5ex 1ex 1ex;
     //background-color: #ffffff;
   }
 
+  div.statement,
+  div.proof {
+    padding: 1ex;
+    margin: 1.5ex 1ex 1ex;
+    border: 1px dashed #8b8b8b;
+  }
+
   article::before,
-  section::before {
+  section::before,
+  pre::before,
+  div::before {
     content: attr(ptxtag);
     display: block;
     text-align: right;
     font-size: 50%;
     height: 0ex;
-    top: 0;
+  }
+
+  .rawptx {
+    background-color: rgba(120, 120, 120, 0.2); // Mostly transparent gray
   }
 
   .para {
@@ -122,11 +137,9 @@
   }
 
   .title {
-    display: inline-block;
-    //border: dashed 1px #8b8b8b23;
     padding-top: 1ex;
-    font-size: large;
     font-weight: bold;
+    font-size: larger;
   }
 
   // .title::after {
@@ -226,5 +239,46 @@
     border: none;
     border-top: 2px solid rgba(#0d0d0d, 0.1);
     margin: 2rem 0;
+  }
+
+  div.block-component {
+    border: 3px solid hsl(250, 75%, 30%);
+    background-color: hsla(250, 75%, 30%, 0.1);
+    border-radius: 0.1rem;
+    padding: 0.5rem;
+    margin: 2ex 1ex 1ex;
+
+    .block-title {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .title {
+      display: block;
+      font-size: unset;
+      font-weight: bold;
+      text-emphasis: italic;
+      ;
+    }
+  }
+
+  span.node-view.has-focus {
+    padding: 0.25rem;
+  }
+
+  span.node-view .edit-math {
+    display: none;
+  }
+
+  span.node-view.has-focus .edit-math {
+    display: inline-block;
+  }
+
+  span.node-view .katex {
+    display: inline-block;
+  }
+
+  span.node-view.has-focus .katex {
+    display: none;
   }
 }

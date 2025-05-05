@@ -1,6 +1,7 @@
 import { Extension, Node, getAttributes, mergeAttributes } from "@tiptap/core";
 import { ReactNodeViewRenderer, } from "@tiptap/react";
-import Component from "./thmComponent";
+import { TheoremLikeComponent,  ProofComponent } from "../components/TheoremLike";
+
 
 
 
@@ -22,7 +23,7 @@ const TheoremLike = Extension.create({
       array.push(
         Node.create({
           name: element,
-          content: "title? para+",
+          content: "title? statement proof*",
           group: "block theoremLike",
           selectable: true,
           draggable: true,
@@ -64,20 +65,48 @@ const TheoremLike = Extension.create({
                 { class: `${element} theorem-like`, ptxtag: element },
                 HTMLAttributes // Include all attributes from the node
               ),
-              0,
             ];
           },
 
           addNodeView() {
-            return ReactNodeViewRenderer(Component)
+            return ReactNodeViewRenderer(TheoremLikeComponent)
           }
 
         }
         )
       );
     }
+
+    // Add proof node
+    array.push(
+      Node.create({
+        name: "proof",
+        content: "title? para+",
+        group: "block",
+        selectable: true,
+        draggable: true,
+        parseHTML() {
+          return [{ tag: "proof" }];
+        },
+        renderHTML({ HTMLAttributes }) {
+          return [
+            "article",
+            mergeAttributes(
+              { class: "proof", ptxtag: "proof" },
+              HTMLAttributes // Include all attributes from the node
+            ),
+            0,
+          ];
+        },
+        addNodeView() {
+          return ReactNodeViewRenderer(ProofComponent)
+        },
+      })
+    )
+
     return array; // Ensure an array is always returned
   },
+
 });
 
 

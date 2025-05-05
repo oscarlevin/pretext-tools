@@ -35,7 +35,7 @@ const RawPtx = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['pre', mergeAttributes({ class: 'rawptx'}, HTMLAttributes), 0]
+    return ['pre', mergeAttributes({ class: 'rawptx', ptxtag: 'rawptx'}, HTMLAttributes), 0]
   },
 
 })

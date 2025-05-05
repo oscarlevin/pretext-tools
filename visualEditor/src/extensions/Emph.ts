@@ -1,5 +1,5 @@
 import {
-Node, mergeAttributes, markInputRule, markPasteRule
+Node, mergeAttributes,
 } from "@tiptap/core";
 
 export const inputPTXRegex = /(?:^|\s)(<em>(.*?)<\/em>)$/;

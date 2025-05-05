@@ -1,17 +1,13 @@
+import { History, Focus } from "@tiptap/extensions";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
-import {
-  useEditor,
-  EditorContent,
-  FloatingMenu,
-  BubbleMenu,
-} from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import { FloatingMenu, BubbleMenu } from "@tiptap/react/menus";
 import { Node, generateJSON } from "@tiptap/core";
-import { History } from "@tiptap/extension-history";
-import { Mathematics } from "@tiptap-pro/extension-mathematics";
-import { FileHandler } from "@tiptap-pro/extension-file-handler";
+//import { Mathematics } from "@tiptap-pro/extension-mathematics";
+//import { FileHandler } from "@tiptap-pro/extension-file-handler";
+import { MathInline } from "../extensions/Math";
 import "katex/dist/katex.min.css";
-import Focus from "@tiptap/extension-focus";
 import Divisions from "../extensions/Divisions";
 import Inline from "../extensions/Inline";
 import Blocks from "../extensions/Blocks";
@@ -58,43 +54,29 @@ const extensions = [
   Definition,
   RawPtx,
   //UnknownMark,
-  Mathematics,
+  MathInline,
   Focus.configure({ mode: "deepest" }),
   History,
-  FileHandler.configure({
-    allowedMimeTypes: ["text/*"],
-    onDrop: (currentEditor, files, pos) => {
-      files.forEach((file) => {
-        const fileReader = new FileReader();
-        fileReader.readAsText(file);
-        fileReader.onload = () => {
-          const content = fileReader.result;
-          console.log(content);
-          currentEditor.chain().insertContentAt(pos, content).focus().run();
-        };
-      });
-    },
-    //onPaste: (currentEditor, files, htmlContent) => {
-    //  files.forEach((file) => {
-    //    if (htmlContent) {
-    //      console.log(htmlContent);
-    //      return false;
-    //    }
-    //    const fileReader = new FileReader();
-    //    fileReader.readAsDataURL(file);
-    //    fileReader.onload = () => {
-    //      currentEditor
-    //        .chain()
-    //        .insertContentAt(currentEditor.state.selection.anchor, {
-    //          type: "image",
-    //          attrs: { src: fileReader.result },
-    //        })
-    //        .focus()
-    //        .run();
-    //    };
-    //  });
-    //},
-  }),
+  //onPaste: (currentEditor, files, htmlContent) => {
+  //  files.forEach((file) => {
+  //    if (htmlContent) {
+  //      console.log(htmlContent);
+  //      return false;
+  //    }
+  //    const fileReader = new FileReader();
+  //    fileReader.readAsDataURL(file);
+  //    fileReader.onload = () => {
+  //      currentEditor
+  //        .chain()
+  //        .insertContentAt(currentEditor.state.selection.anchor, {
+  //          type: "image",
+  //          attrs: { src: fileReader.result },
+  //        })
+  //        .focus()
+  //        .run();
+  //    };
+  //  });
+  //},
 ];
 
 const WarningMessage: React.FC<{ isValid: boolean }> = ({ isValid }) => {

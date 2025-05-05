@@ -27,11 +27,14 @@ import { whitespace } from "hast-util-whitespace";
 import type { ElementContent, Root, RootContent } from "xast"; // Import ElementContent type
 
 const KNOWN_TAGS = [
+  'm',
   'p',
   'subsection',
   'section',
   'title',
   'theorem',
+  'statement',
+  'proof',
   'term',
   "em",
   "pre",
