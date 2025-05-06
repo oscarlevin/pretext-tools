@@ -1,4 +1,4 @@
-import { History, Focus } from "@tiptap/extensions";
+import { Focus, Gapcursor, UndoRedo } from "@tiptap/extensions";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 import { useEditor, EditorContent } from "@tiptap/react";
@@ -6,7 +6,7 @@ import { FloatingMenu, BubbleMenu } from "@tiptap/react/menus";
 import { Node, generateJSON } from "@tiptap/core";
 //import { Mathematics } from "@tiptap-pro/extension-mathematics";
 //import { FileHandler } from "@tiptap-pro/extension-file-handler";
-import { MathInline } from "../extensions/Math";
+import { MathEquation, MathInline } from "../extensions/Math";
 import "katex/dist/katex.min.css";
 import Divisions from "../extensions/Divisions";
 import Inline from "../extensions/Inline";
@@ -15,7 +15,7 @@ import CodeBlock from "@tiptap/extension-code-block";
 import Term from "../extensions/Term";
 import Title from "../extensions/Title";
 import Definition from "../extensions/Definition";
-import KeyboardCommands from "../extensions/Keyboard";
+//import KeyboardCommands from "../extensions/Keyboard";
 import RawPtx from "../extensions/RawPtx";
 import "../styles.scss";
 import { cleanPtx, ptxToJson } from "../utils";
@@ -43,7 +43,7 @@ const extensions = [
   CodeBlock.configure({
     defaultLanguage: "xml",
   }),
-  KeyboardCommands,
+  //KeyboardCommands,
   Document,
   Inline,
   Blocks,
@@ -55,8 +55,9 @@ const extensions = [
   RawPtx,
   //UnknownMark,
   MathInline,
+  MathEquation,
   Focus.configure({ mode: "deepest" }),
-  History,
+  UndoRedo,
   //onPaste: (currentEditor, files, htmlContent) => {
   //  files.forEach((file) => {
   //    if (htmlContent) {
@@ -119,6 +120,9 @@ const VisualEditor: React.FC = () => {
   });
 
   useEffect(() => {
+    // Notify VS Code that the web panel is ready
+    vscode.postMessage({ type: 'ready' });
+
     const handleMessage = (event: MessageEvent) => {
       console.log("Received message from extension");
       const message = event.data; // The data that the extension sent
@@ -128,20 +132,10 @@ const VisualEditor: React.FC = () => {
 
           if (editor) { // TODO: Add test to see if the contents have changed.
             try {
-              //const json = ptxToJson(cleanPtx(text));
-              //console.log(json);
-              //const json = generateJSON(text, extensions);
-              //console.log("generated JSON content: ", JSON.stringify(json, null, 2));
-              editor.commands.setContent(cleanPtx(text));
-              //editor.commands.setContent(ptxJsonContent);
+              editor.commands.setContent(cleanPtx(text), { emitUpdate: false });
               console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
               console.log("HTML content: ", editor.getHTML());
               console.log("PTX content: ", json2ptx(editor.getJSON()));
-              //console.log("Comparing text and PTX....");
-              //console.log("**********************************");
-              //console.log("text content: ", cleanText(text));
-              //console.log("PTX content: ", cleanText(json2ptx(editor.getJSON())));
-              //console.log("Same? ", cleanText(text) === cleanText(json2ptx(editor.getJSON())));
               if (!editor.isEditable) {
                 editor.setEditable(true, false);
               }
@@ -173,8 +167,8 @@ const VisualEditor: React.FC = () => {
     <>
       <WarningMessage isValid={isValid} />
       <EditorContent editor={editor} />
-      <FloatingMenu editor={editor}>This is the floating menu</FloatingMenu>
-      <BubbleMenu editor={editor}>This is the bubble menu</BubbleMenu>
+      <FloatingMenu editor={editor} shouldShow={null}>This is the floating menu</FloatingMenu>
+      <BubbleMenu editor={editor} shouldShow={null}>This is the bubble menu</BubbleMenu>
     </>
   );
 };

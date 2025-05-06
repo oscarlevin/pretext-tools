@@ -28,6 +28,7 @@ import type { ElementContent, Root, RootContent } from "xast"; // Import Element
 
 const KNOWN_TAGS = [
   'm',
+  'me',
   'p',
   'subsection',
   'section',

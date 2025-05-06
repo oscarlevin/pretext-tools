@@ -112,6 +112,14 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
 			}
 		});
 
+		webviewPanel.webview.onDidReceiveMessage(e => {
+			if (e.type === 'ready') {
+				updateWebview();
+			}
+		});
+
+		//// Wait for the webview to signal that it is ready
+		webviewPanel.webview.postMessage({ type: 'checkReady' });
 		updateWebview()
 	}
 

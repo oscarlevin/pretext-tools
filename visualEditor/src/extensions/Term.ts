@@ -1,8 +1,8 @@
 import {
-  Mark,
+  Node,
   mergeAttributes,
-  markInputRule,
-  markPasteRule,
+  nodeInputRule,
+  nodePasteRule,
 } from "@tiptap/core";
 
 export const inputPTXRegex = /(?:^|\s)(<term>(.*?)<\/term>)$/;
@@ -13,10 +13,11 @@ export const inputRegex = /(?:^|\s)`t\s$/;
 
 // /(?:^|\s)(`(?!\s+`)((?:[^`]+))`(?!\s+`))$/
 
-const Definition = Mark.create({
+const Definition = Node.create({
   name: "term",
-
-  group: "marks",
+  content: "text*",
+  group: "inline",
+  inline: true,
 
   parseHTML() {
     return [{ tag: "term" }];
@@ -49,15 +50,15 @@ const Definition = Mark.create({
 
   addInputRules() {
     return [
-      markInputRule({
+      nodeInputRule({
         find: inputRegex,
         type: this.type,
       }),
-      markInputRule({
+      nodeInputRule({
         find: inputPTXRegex,
         type: this.type,
       }),
-      markInputRule({
+      nodeInputRule({
         find: inputMDRegex,
         type: this.type,
       }),
@@ -65,7 +66,7 @@ const Definition = Mark.create({
   },
   addPasteRules() {
     return [
-      markPasteRule({
+      nodePasteRule({
         find: pastePTXRegex,
         type: this.type,
       }),

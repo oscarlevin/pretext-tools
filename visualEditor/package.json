@@ -10,24 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@codemirror/lang-xml": "^6.1.0",
-    "@emmetio/xml-diff": "^2.2.0",
-    "@monaco-editor/react": "^4.7.0",
-    "@reduxjs/toolkit": "^2.6.1",
-    "@tiptap/extension-code-block": "^2.11.7",
-    "@tiptap/extension-focus": "^2.11.5",
-    "@tiptap/pm": "^2.11.5",
-    "@tiptap/react": "^2.11.5",
-    "@tiptap/starter-kit": "^2.11.5",
-    "@uiw/react-codemirror": "^4.23.10",
-    "diff-js-xml": "^1.0.8",
-    "katex": "^0.16.22",
-    "primeflex": "^4.0.0",
-    "primeicons": "^7.0.0",
-    "primereact": "^10.9.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-redux": "^9.2.0"
+    "@floating-ui/dom": "^1.7.0",
+    "@tiptap/extension-code-block": "^3.0.0-beta.4",
+    "@tiptap/extensions": "^3.0.0-beta.4",
+    "@tiptap/pm": "^3.0.0-beta.4",
+    "@tiptap/react": "^3.0.0-beta.4",
+    "@tiptap/starter-kit": "^3.0.0-beta.4",
+    "katex": "^0.16.22"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

@@ -262,23 +262,29 @@
     }
   }
 
-  span.node-view.has-focus {
+  .node-view.has-focus {
     padding: 0.25rem;
   }
 
-  span.node-view .edit-math {
+  .node-view .edit-math {
     display: none;
   }
 
-  span.node-view.has-focus .edit-math {
+  .node-view.has-focus .edit-math {
     display: inline-block;
   }
 
-  span.node-view .katex {
+  .node-view .katex {
     display: inline-block;
   }
 
-  span.node-view.has-focus .katex {
+  .node-view.has-focus .katex {
     display: none;
+  }
+
+  .node-view.display {
+    display: block;
+    text-align: center;
+    width: 100%;
   }
 }
