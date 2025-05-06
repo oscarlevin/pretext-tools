@@ -3,7 +3,7 @@ import { Focus, Gapcursor, UndoRedo } from "@tiptap/extensions";
 import { useEffect } from 'react';
 import { useEditor, EditorContent } from "@tiptap/react";
 import { FloatingMenu, BubbleMenu } from "@tiptap/react/menus";
-import { Node, generateJSON } from "@tiptap/core";
+import { Editor, Node, generateJSON } from "@tiptap/core";
 //import { Mathematics } from "@tiptap-pro/extension-mathematics";
 //import { FileHandler } from "@tiptap-pro/extension-file-handler";
 import { MathEquation, MathInline } from "../extensions/Math";
@@ -22,6 +22,8 @@ import { cleanPtx, ptxToJson } from "../utils";
 import { json2ptx } from "../json2ptx";
 import { useState } from 'react';
 import Emphasis from '../extensions/Emph';
+import { MenuBar } from "./MenuBar";
+import { getCursorPos } from "../extensions/getCursorPos";
 
 
 const Document = Node.create({
@@ -93,6 +95,73 @@ const WarningMessage: React.FC<{ isValid: boolean }> = ({ isValid }) => {
     return null;
   }
 };
+
+
+const InfoMessage = ({ editor }: { editor: Editor }) => {
+  const [cursorInfo, setCursorInfo] = useState({
+    pos: 0,
+    parentType: "",
+    depth: 0,
+    prevNodeIsText: false,
+    nextNodeIsText: false,
+    prevNodeSize: 0,
+    nextNodeSize: 0,
+    inTextNode: false,
+    location: "",
+    parentTypeAlt: "",
+  });
+
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateCursorInfo = () => {
+      const cursor = getCursorPos(editor);
+      const altCursor = editor.state.selection.$anchor;
+      const location = `Line: ${altCursor.start()} Column: ${altCursor.parentOffset}`;
+      setCursorInfo({
+        pos: cursor.pos(),
+        parentType: cursor.parentType(),
+        depth: cursor.depth(),
+        prevNodeIsText: cursor.prevNodeIsText(),
+        nextNodeIsText: cursor.nextNodeIsText(),
+        prevNodeSize: cursor.prevNodeSize(),
+        nextNodeSize: cursor.nextNodeSize(),
+        inTextNode: cursor.inTextNode(),
+        location,
+        parentTypeAlt: altCursor.parent.type.name,
+      });
+    };
+
+    updateCursorInfo();
+
+    editor.on("selectionUpdate", updateCursorInfo);
+
+    return () => {
+      editor.off("selectionUpdate", updateCursorInfo);
+    };
+  }, [editor]);
+
+
+
+  return (
+    <div className="info">
+      <p>Debugging Info:</p>
+      <ul>
+        <li>Position: {cursorInfo.pos}</li>
+        <li>Parent Type: {cursorInfo.parentType}</li>
+        <li>Depth: {cursorInfo.depth}</li>
+        <li>Node before is text? {cursorInfo.prevNodeIsText ? "Yes" : "No"}</li>
+        <li>Node after is text? {cursorInfo.nextNodeIsText ? "Yes" : "No"}</li>
+        <li>Previous node size: {cursorInfo.prevNodeSize}</li>
+        <li>Next node size: {cursorInfo.nextNodeSize}</li>
+        <li>In text node? {cursorInfo.inTextNode ? "Yes" : "No"}</li>
+        <li>Location: {cursorInfo.location}</li>
+        <li>Parent type: {cursorInfo.parentTypeAlt}</li>
+      </ul>
+    </div>
+  );
+};
+
 
 // @ts-ignore
 const vscode = acquireVsCodeApi();
@@ -166,9 +235,11 @@ const VisualEditor: React.FC = () => {
   return (
     <>
       <WarningMessage isValid={isValid} />
+      <MenuBar editor={editor} />
       <EditorContent editor={editor} />
       <FloatingMenu editor={editor} shouldShow={null}>This is the floating menu</FloatingMenu>
       <BubbleMenu editor={editor} shouldShow={null}>This is the bubble menu</BubbleMenu>
+      <InfoMessage editor={editor} />
     </>
   );
 };
