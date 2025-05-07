@@ -41,12 +41,25 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
   return (
     <div className="control-group">
       <div className="button-group">
+
         <button
-          onClick={() => editor.chain().focus().selectParentNode().setNode('term').run()}
-          //disabled={!editor.can().chain().focus().toggleWrap("term").run()}
-          className={editor.isActive("term") ? "is-active" : ""}
+          onClick={() => editor.chain().focus().toggleWrap('title').run()}
+          className={editor.isActive("title") ? "is-active" : ""}
         >
-          Term
+          Title
+        </button>
+        <button
+          onClick={() => editor.chain().focus().insertContent('<theorem><title> </title><statement><p> </p></statement></theorem>').run()}
+          //disabled={!editor.can().chain().focus().toggleWrap("theorem").run()}
+          className={editor.isActive("theorem") ? "is-active" : ""}
+        >
+          Theorem
+        </button>
+        <button
+          onClick={() => editor.chain().focus().insertContent('<proof><p></p></proof>').run()}
+          className={editor.isActive("proof") ? "is-active" : ""}
+        >
+          Proof
         </button>
         {/*<button
           onClick={() => editor.chain().focus().toggleBold().run()}

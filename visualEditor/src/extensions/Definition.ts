@@ -3,7 +3,7 @@ import { Node, mergeAttributes, wrappingInputRule } from '@tiptap/core'
 const Definition = Node.create({
   name: 'definition',
 
-  content: 'title? para+',
+  content: 'title? p+',
 
   group: 'block definitionLike',
 

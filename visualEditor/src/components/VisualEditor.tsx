@@ -2,7 +2,6 @@ import { Focus, Gapcursor, UndoRedo } from "@tiptap/extensions";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 import { useEditor, EditorContent } from "@tiptap/react";
-import { FloatingMenu, BubbleMenu } from "@tiptap/react/menus";
 import { Editor, Node, generateJSON } from "@tiptap/core";
 //import { Mathematics } from "@tiptap-pro/extension-mathematics";
 //import { FileHandler } from "@tiptap-pro/extension-file-handler";
@@ -12,17 +11,17 @@ import Divisions from "../extensions/Divisions";
 import Inline from "../extensions/Inline";
 import Blocks from "../extensions/Blocks";
 import CodeBlock from "@tiptap/extension-code-block";
-import Term from "../extensions/Term";
 import Title from "../extensions/Title";
 import Definition from "../extensions/Definition";
-//import KeyboardCommands from "../extensions/Keyboard";
+//import KeyboardCommands from "../extensions/Keyboard"; 
 import RawPtx from "../extensions/RawPtx";
 import "../styles.scss";
 import { cleanPtx, ptxToJson } from "../utils";
 import { json2ptx } from "../json2ptx";
 import { useState } from 'react';
-import Emphasis from '../extensions/Emph';
 import { MenuBar } from "./MenuBar";
+import { PtxBubbleMenu } from "./BubbleMenu";
+//import { PtxFloatingMenu } from "./FloatingMenu";
 import { getCursorPos } from "../extensions/getCursorPos";
 
 
@@ -50,16 +49,14 @@ const extensions = [
   Inline,
   Blocks,
   Divisions,
-  Term,
   Title,
-  Emphasis,
   Definition,
   RawPtx,
-  //UnknownMark,
   MathInline,
   MathEquation,
   Focus.configure({ mode: "deepest" }),
   UndoRedo,
+  Gapcursor,
   //onPaste: (currentEditor, files, htmlContent) => {
   //  files.forEach((file) => {
   //    if (htmlContent) {
@@ -181,6 +178,8 @@ const VisualEditor: React.FC = () => {
     },
     enableContentCheck: true,
     onUpdate: ({ editor }) => {
+      console.log("VisualEditor: onUpdate");
+      console.log(JSON.stringify(editor.getJSON(), null, 2));
       vscode.postMessage({
         type: 'update',
         value: json2ptx(editor.getJSON())
@@ -237,9 +236,8 @@ const VisualEditor: React.FC = () => {
       <WarningMessage isValid={isValid} />
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
-      <FloatingMenu editor={editor} shouldShow={null}>This is the floating menu</FloatingMenu>
-      <BubbleMenu editor={editor} shouldShow={null}>This is the bubble menu</BubbleMenu>
-      <InfoMessage editor={editor} />
+      <PtxBubbleMenu editor={editor} />
+      {/*<InfoMessage editor={editor} />*/}
     </>
   );
 };

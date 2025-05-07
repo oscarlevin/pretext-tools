@@ -1,8 +1,6 @@
-import { Extension, Node, getAttributes, mergeAttributes } from "@tiptap/core";
+import { Extension, Node, mergeAttributes, wrappingInputRule } from "@tiptap/core";
 import { ReactNodeViewRenderer, } from "@tiptap/react";
-import { TheoremLikeComponent,  ProofComponent } from "../components/TheoremLike";
-
-
+import { TheoremLikeComponent, ProofComponent } from "../components/TheoremLike";
 
 
 const TheoremLikeElements = [
@@ -32,16 +30,6 @@ const TheoremLike = Extension.create({
             return [
               {
                 tag: element,
-                getAttrs: (e) => {
-                  const attributes: { [key: string]: string } = {};
-                  for (const attr of e.attributes) {
-                    if (attr.name) {
-                      attributes[attr.name] = e.getAttribute(attr.name) ?? "";
-                    }
-                  }
-                  // Return all attributes as node attributes
-                  return attributes;
-                },
               },
             ];
           },
@@ -58,6 +46,7 @@ const TheoremLike = Extension.create({
               }
             }
           },
+
           renderHTML({ HTMLAttributes }) {
             return [
               "article",
@@ -67,10 +56,25 @@ const TheoremLike = Extension.create({
               ),
             ];
           },
-
           addNodeView() {
             return ReactNodeViewRenderer(TheoremLikeComponent)
-          }
+          },
+          addInputRules() {
+            return [
+              wrappingInputRule({
+                find: new RegExp(`^#${element}\\s$`, "i"),
+                type: this.type,
+              }),
+              wrappingInputRule({
+                find: new RegExp(`(?:^)(<${element}>(\\s))$`, "i"),
+                type: this.type,
+              }),
+              wrappingInputRule({
+                find: new RegExp(`(?:^)(${element}:(\\s))$`, "i"),
+                type: this.type,
+              }),
+            ];
+          },
 
         }
         )
@@ -81,7 +85,7 @@ const TheoremLike = Extension.create({
     array.push(
       Node.create({
         name: "proof",
-        content: "title? para+",
+        content: "title? p+",
         group: "block",
         selectable: true,
         draggable: true,
@@ -101,6 +105,22 @@ const TheoremLike = Extension.create({
         addNodeView() {
           return ReactNodeViewRenderer(ProofComponent)
         },
+        addInputRules() {
+          return [
+            wrappingInputRule({
+              find: new RegExp(`^#proof\\s$`, "i"),
+              type: this.type,
+            }),
+            wrappingInputRule({
+              find: new RegExp(`(?:^)(<proof>(\\s))$`, "i"),
+              type: this.type,
+            }),
+            wrappingInputRule({
+              find: new RegExp(`(?:^)(proof:(\\s))$`, "i"),
+              type: this.type,
+            }),
+          ];
+        },
       })
     )
 
@@ -113,4 +133,4 @@ const TheoremLike = Extension.create({
 export default TheoremLike;
 
 
-    // return ['h4', {class: "heading"}, ['span', {class: "type"}, "Definition"], ['span', {class: "space"}, " " ], ['span', {class: "codenumber"}, "xx.yy"], ['span', {class: "period"}, "."], ['span', {class: "space"}, " "], ['span', {class: "title"}, 0]]
+// return ['h4', {class: "heading"}, ['span', {class: "type"}, "Definition"], ['span', {class: "space"}, " " ], ['span', {class: "codenumber"}, "xx.yy"], ['span', {class: "period"}, "."], ['span', {class: "space"}, " "], ['span', {class: "title"}, 0]]

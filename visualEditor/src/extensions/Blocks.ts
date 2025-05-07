@@ -1,21 +1,22 @@
-import {Extension, Node, mergeAttributes, wrappingInputRule } from '@tiptap/core'
+import { Extension, Node, mergeAttributes, wrappingInputRule } from '@tiptap/core'
 import TheoremLike from './TheoremLike'
 import AxiomLike from './AxiomLike'
 import Statement from './Statement'
 
 
 const Para = Node.create({
-  name: 'para',
+  name: 'p',
 
   content: 'inline*',
 
   group: 'block',
 
-//   selectable: false,
+  //   selectable: false,
 
   draggable: true,
 
   defining: false,
+  priority: 1000,
 
   parseHTML() {
     return [
@@ -26,7 +27,7 @@ const Para = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes({ class: 'para', ptxtag: 'p' }, HTMLAttributes), 0]
+    return ['div', mergeAttributes({ class: 'p', ptxtag: 'p' }, HTMLAttributes), 0]
   },
 
   addInputRules() {
@@ -46,10 +47,10 @@ const Blocks = Extension.create({
 
   addExtensions() {
     return [
-        Para,
-        TheoremLike,
-        AxiomLike,
-        Statement,
+      Para,
+      TheoremLike,
+      AxiomLike,
+      Statement,
     ]
   },
 })

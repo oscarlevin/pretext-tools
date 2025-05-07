@@ -24,7 +24,7 @@ const AxiomLike = Extension.create({
       array.push(
         Node.create({
           name: element,
-          content: "title? para+",
+          content: "title? p+",
           group: "block axiomLike",
           selectable: true,
           draggable: true,
@@ -49,18 +49,18 @@ const AxiomLike = Extension.create({
             return {
               [`set${element.charAt(0).toUpperCase() + element.slice(1)}`]:
                 (attributes: Record<string, any>) =>
-                ({
-                  commands,
-                }: {
-                  commands: {
-                    setWrap: (
-                      name: string,
-                      attributes: Record<string, any>
-                    ) => boolean;
-                  };
-                }) => {
-                  return commands.setWrap(this.name, attributes);
-                },
+                  ({
+                    commands,
+                  }: {
+                    commands: {
+                      setWrap: (
+                        name: string,
+                        attributes: Record<string, any>
+                      ) => boolean;
+                    };
+                  }) => {
+                    return commands.setWrap(this.name, attributes);
+                  },
               // [`toggle${element.charAt(0).toUpperCase() + element.slice(1)}`]: (attributes: Record<string, any>) =>
               //   ({ commands }: { commands: { toggleWrap: (name: string, attributes: Record<string, any>) => boolean } }) => {
               //     return commands.toggleWrap(this.name, attributes)

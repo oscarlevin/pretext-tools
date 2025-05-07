@@ -38,6 +38,7 @@ const KNOWN_TAGS = [
   'proof',
   'term',
   "em",
+  "alert",
   "pre",
 ];
 

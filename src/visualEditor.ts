@@ -28,7 +28,7 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
 
 	constructor(
 		private readonly context: vscode.ExtensionContext
-	) {console.log('PretextVisualEditorProvider constructor');}
+	) { console.log('PretextVisualEditorProvider constructor'); }
 
 	/**
 	 * Called when our custom editor is opened.
@@ -45,7 +45,7 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
 		webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview);
 
 		function updateWebview() {
-            console.log('updateWebview');
+			console.log('updateWebview');
 			// Send message to visual editor to update with the current text
 			webviewPanel.webview.postMessage({
 				type: 'update',
@@ -84,22 +84,27 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
 			}
 			timeout = setTimeout(() => {
 				if (e.document.uri.toString() === document.uri.toString() && fromTextEditor) {
-				updateWebview();
-				return;
-			}}, 500);
+					updateWebview();
+					return;
+				}
+			}, 500);
 		});
 
 		// Make sure we get rid of the listener when our editor is closed.
 		webviewPanel.onDidDispose(() => {
-            console.log('webviewPanel disposed');
+			console.log('webviewPanel disposed');
 			changeDocumentSubscription.dispose();
 		});
 
 		// Receive message *from* the webview.
 		webviewPanel.webview.onDidReceiveMessage(e => {
-            console.log('Received message from visual editor', e);
+			console.log('Received message from visual editor', e);
 			switch (e.type) {
 				case 'update':
+					if (e.value === '') {
+						console.error('Error getting text');
+						return;
+					}
 					const edit = new vscode.WorkspaceEdit();
 					const newText = formatPTX(e.value);
 					edit.replace(
@@ -127,7 +132,7 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
 	 * Get the static html used for the editor webviews.
 	 */
 	private getHtmlForWebview(webview: vscode.Webview): string {
-        console.log('getHtmlForWebview');
+		console.log('getHtmlForWebview');
 		// Local path to script and css for the webview
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(
 			this.context.extensionUri, 'media', 'visualEditor.js'));
@@ -138,7 +143,7 @@ export class PretextVisualEditorProvider implements vscode.CustomTextEditorProvi
 		// Use a nonce to whitelist which scripts can be run
 		const nonce = getNonce();
 		//TODO: Set up nonce to make this more secure.  Currently loading katex fonts doesn't work.
-        return `<!doctype html>
+		return `<!doctype html>
         <html lang="en">
           <head>
             <meta charset="UTF-8" />
