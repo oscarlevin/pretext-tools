@@ -1,8 +1,4 @@
-import {
-  Extension,
-  Node,
-  mergeAttributes,
-} from "@tiptap/core";
+import { Extension, Node, mergeAttributes } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import {
   TheoremLikeComponent,
