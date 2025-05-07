@@ -1,7 +1,6 @@
 import { toggleMenu } from "../components/VisualEditor";
 import { getCursorPos } from "./getCursorPos";
 import { Extension } from "@tiptap/core";
-import { defaultContent } from "../defaultContent";
 
 const KeyboardCommands = Extension.create({
   name: "keyboardCommands",
@@ -80,8 +79,6 @@ const KeyboardCommands = Extension.create({
           //           return true
         }
       },
-      "Mod-b": () =>
-        this.editor.chain().focus().setContent(defaultContent).run(),
       "Mod-q": () => this.editor.commands.blur(),
       // Escape moves focus to parent node.
       Escape: () => this.editor.commands.selectParentNode(),

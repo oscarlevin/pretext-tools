@@ -1,4 +1,4 @@
-import { Editor, useCurrentEditor, useEditorState } from "@tiptap/react";
+import { Editor, useEditorState } from "@tiptap/react";
 //import { defaultContent } from "../defaultContent";
 
 export const MenuBar = ({ editor }: { editor: Editor }) => {

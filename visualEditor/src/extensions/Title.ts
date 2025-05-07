@@ -1,4 +1,5 @@
 import { Node, mergeAttributes, textblockTypeInputRule } from "@tiptap/core";
+import { generateInputRules } from "../utils";
 
 const Title = Node.create({
   name: "title",
@@ -41,6 +42,7 @@ const Title = Node.create({
         find: new RegExp(`#t\\s$`),
         type: this.type,
       }),
+      ...generateInputRules("title", this.type),
     ];
   },
 });

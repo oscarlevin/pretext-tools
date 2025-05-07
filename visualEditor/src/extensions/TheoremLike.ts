@@ -2,7 +2,6 @@ import {
   Extension,
   Node,
   mergeAttributes,
-  wrappingInputRule,
 } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import {
