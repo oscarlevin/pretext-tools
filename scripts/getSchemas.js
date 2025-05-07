@@ -1,9 +1,10 @@
 // This will download the latest versions of the schemas from the pretext repository and the pretext-cli repository and put them in assets/schema.
 // We can run this before every release.
 
-const fs = require('fs');
-const path = require('path');
-const https = require('https');
+import fs from "fs";
+import path from "path";
+import https from "https";
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const pretextSchemas = ["https://raw.githubusercontent.com/PreTeXtBook/pretext-cli/refs/heads/main/schema/project-ptx.rng", "https://raw.githubusercontent.com/PreTeXtBook/pretext/refs/heads/master/schema/publication-schema.rng", "https://raw.githubusercontent.com/PreTeXtBook/pretext-cli/refs/heads/main/schema/project-ptx.rng", "https://raw.githubusercontent.com/PreTeXtBook/pretext/refs/heads/master/schema/pretext-dev.rng"];
 

@@ -6,8 +6,8 @@
   "license": "See license in LICENSE",
   "publisher": "oscarlevin",
   "repository": "https://github.com/oscarlevin/pretext-tools",
-  "type": "module",
   "private": true,
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],
