@@ -464,6 +464,9 @@
       }
     ]
   },
+  "workspaces": [
+    "visualEditor/*"
+  ],
   "scripts": {
     "vscode:prepublish": "npm run esbuild-base -- --minify",
     "esbuild-base": "node build.mjs",
@@ -487,12 +490,14 @@
     "@types/xml2js": "^0.4.14",
     "@typescript-eslint/eslint-plugin": "^8.9.0",
     "@typescript-eslint/parser": "^8.9.0",
+    "@vitejs/plugin-react": "^4.4.1",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^3.1.1",
     "esbuild": "^0.25.0",
     "eslint": "^9.12.0",
     "mocha": "^10.7.3",
+    "sass-embedded": "^1.87.0",
     "typescript": "^5.6.3",
     "vite": "^6.3.4"
   },
