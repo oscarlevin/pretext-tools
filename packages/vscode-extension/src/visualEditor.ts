@@ -141,12 +141,13 @@ export class PretextVisualEditorProvider
 		console.log("getHtmlForWebview");
 		// Local path to script and css for the webview
 		const scriptUri = webview.asWebviewUri(
-			vscode.Uri.joinPath(this.context.extensionUri, "media", "visualEditor.js")
+			vscode.Uri.joinPath(this.context.extensionUri, "out", "media", "visualEditor.js")
 		);
 
 		const styleUri = webview.asWebviewUri(
 			vscode.Uri.joinPath(
 				this.context.extensionUri,
+				"out",
 				"media",
 				"assets",
 				"visualEditor.css"

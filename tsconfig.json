@@ -4,10 +4,11 @@
     "target": "esnext",
     "outDir": "out",
     "lib": [
-      "es2022"
+      "es2022",
+      "WebWorker"
     ],
     "sourceMap": true,
-    "rootDir": "packages/vscode-extension/src",
+    "rootDir": ".",
     "strict": true /* enable all strict type-checking options */,
     /* Additional Checks */
     // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
