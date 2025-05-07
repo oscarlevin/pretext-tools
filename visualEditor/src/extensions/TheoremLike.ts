@@ -1,8 +1,15 @@
-import { Extension, Node, mergeAttributes, wrappingInputRule } from "@tiptap/core";
-import { ReactNodeViewRenderer, } from "@tiptap/react";
-import { TheoremLikeComponent, ProofComponent } from "../components/TheoremLike";
+import {
+  Extension,
+  Node,
+  mergeAttributes,
+  wrappingInputRule,
+} from "@tiptap/core";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+import {
+  TheoremLikeComponent,
+  ProofComponent,
+} from "../components/TheoremLike";
 import { blockAttributes, generateInputRules } from "../utils";
-
 
 const TheoremLikeElements = [
   "theorem",
@@ -48,14 +55,12 @@ const TheoremLike = Extension.create({
             ];
           },
           addNodeView() {
-            return ReactNodeViewRenderer(TheoremLikeComponent)
+            return ReactNodeViewRenderer(TheoremLikeComponent);
           },
           addInputRules() {
-            return generateInputRules(element, this.type,);
+            return generateInputRules(element, this.type);
           },
-
-        }
-        )
+        })
       );
     }
 
@@ -81,21 +86,18 @@ const TheoremLike = Extension.create({
           ];
         },
         addNodeView() {
-          return ReactNodeViewRenderer(ProofComponent)
+          return ReactNodeViewRenderer(ProofComponent);
         },
         addInputRules() {
-          return generateInputRules("proof", this.type,);
+          return generateInputRules("proof", this.type);
         },
       })
-    )
+    );
 
     return array; // Ensure an array is always returned
   },
-
 });
 
-
 export default TheoremLike;
-
 
 // return ['h4', {class: "heading"}, ['span', {class: "type"}, "Definition"], ['span', {class: "space"}, " " ], ['span', {class: "codenumber"}, "xx.yy"], ['span', {class: "period"}, "."], ['span', {class: "space"}, " "], ['span', {class: "title"}, 0]]

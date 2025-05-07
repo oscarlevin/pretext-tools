@@ -34,8 +34,6 @@ export function refreshProjects() {
 
 export let pretextTerminal: Terminal;
 
-
-
 export let pretextCommandList = ptxCommandList;
 
 export function setTopCommand(command: string) {

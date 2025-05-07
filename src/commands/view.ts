@@ -139,13 +139,13 @@ function runView(target: string, projectPath: string): void {
 }
 
 export async function cmdViewVisualEditor() {
-    await commands.executeCommand(
-      'vscode.openWith',
-      window.activeTextEditor?.document.uri,
-      'pretext.visualEditor',
-      {
-        viewColumn: ViewColumn.Beside,
-        preserveFocus: true,
-      }
-    );
+  await commands.executeCommand(
+    "vscode.openWith",
+    window.activeTextEditor?.document.uri,
+    "pretext.visualEditor",
+    {
+      viewColumn: ViewColumn.Beside,
+      preserveFocus: true,
+    }
+  );
 }

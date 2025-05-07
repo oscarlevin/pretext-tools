@@ -12,7 +12,6 @@ const MyText = Text.extend({});
 
 const MyHardBreak = HardBreak.extend({});
 
-
 const Term = Mark.create({
   name: "term",
   group: "inline",
@@ -108,9 +107,6 @@ const Alert = Mark.create({
     ];
   },
 });
-
-
-
 
 const Inline = Extension.create({
   name: "myinline",

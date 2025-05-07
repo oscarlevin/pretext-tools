@@ -1,14 +1,12 @@
 import { Extension, Node, mergeAttributes } from "@tiptap/core";
-import { ReactNodeViewRenderer, } from "@tiptap/react";
-import { TheoremLikeComponent, ProofComponent } from "../components/TheoremLike";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+import {
+  TheoremLikeComponent,
+  ProofComponent,
+} from "../components/TheoremLike";
 import { generateInputRules } from "../utils";
 
-
-const ExampleLikeElements = [
-  "example",
-  "question",
-  "problem"
-];
+const ExampleLikeElements = ["example", "question", "problem"];
 
 const ExampleLike = Extension.create({
   name: "exampleLike",
@@ -41,8 +39,8 @@ const ExampleLike = Extension.create({
               },
               component: {
                 parseHTML: (element) => element.getAttribute("component"),
-              }
-            }
+              },
+            };
           },
 
           renderHTML({ HTMLAttributes }) {
@@ -55,14 +53,12 @@ const ExampleLike = Extension.create({
             ];
           },
           addNodeView() {
-            return ReactNodeViewRenderer(TheoremLikeComponent)
+            return ReactNodeViewRenderer(TheoremLikeComponent);
           },
           addInputRules() {
-            return generateInputRules(element, this.type,);
+            return generateInputRules(element, this.type);
           },
-
-        }
-        )
+        })
       );
     }
 
@@ -93,8 +89,8 @@ const ExampleLike = Extension.create({
               },
               component: {
                 parseHTML: (element) => element.getAttribute("component"),
-              }
-            }
+              },
+            };
           },
 
           renderHTML({ HTMLAttributes }) {
@@ -108,19 +104,16 @@ const ExampleLike = Extension.create({
             ];
           },
           addNodeView() {
-            return ReactNodeViewRenderer(ProofComponent)
+            return ReactNodeViewRenderer(ProofComponent);
           },
           addInputRules() {
-            return generateInputRules("proof", this.type,);
+            return generateInputRules("proof", this.type);
           },
         })
       );
     }
     return array; // Ensure an array is always returned
   },
-
 });
 
-
 export default ExampleLike;
-

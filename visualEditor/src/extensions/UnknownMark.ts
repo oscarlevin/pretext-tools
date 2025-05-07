@@ -1,8 +1,4 @@
-import {
-  Mark,
-  mergeAttributes,
-} from "@tiptap/core";
-
+import { Mark, mergeAttributes } from "@tiptap/core";
 
 // /(?:^|\s)(`(?!\s+`)((?:[^`]+))`(?!\s+`))$/
 
@@ -18,8 +14,6 @@ const UnknownMark = Mark.create({
   renderHTML({ HTMLAttributes }) {
     return ["span", mergeAttributes({ class: "unknown" }, HTMLAttributes), 0];
   },
-
-
 });
 
 export default UnknownMark;

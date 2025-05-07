@@ -12,7 +12,7 @@ const Statement = Node.create({
     return ["div", { class: "statement", ptxtag: "statement" }, 0];
   },
   addInputRules() {
-    return generateInputRules("statement", this.type,);
+    return generateInputRules("statement", this.type);
   },
 });
 

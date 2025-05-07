@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Extension,
-  Node,
-  mergeAttributes,
-} from "@tiptap/core";
+import { Extension, Node, mergeAttributes } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import { TheoremLikeComponent } from "../components/TheoremLike";
 import { generateInputRules } from "../utils";
@@ -51,7 +47,7 @@ const AxiomLike = Extension.create({
             return ReactNodeViewRenderer(TheoremLikeComponent);
           },
           addInputRules() {
-            return generateInputRules(element, this.type,);
+            return generateInputRules(element, this.type);
           },
         })
       );
@@ -62,8 +58,6 @@ const AxiomLike = Extension.create({
 });
 
 export default AxiomLike;
-
-
 
 //addCommands() {
 //  return {

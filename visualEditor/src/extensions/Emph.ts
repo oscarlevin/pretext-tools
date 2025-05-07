@@ -1,6 +1,4 @@
-import {
-Node, mergeAttributes,
-} from "@tiptap/core";
+import { Node, mergeAttributes } from "@tiptap/core";
 
 export const inputPTXRegex = /(?:^|\s)(<em>(.*?)<\/em>)$/;
 export const pastePTXRegex = /(?:^|\s)(<em>(.*?)<\/em>)/g;
@@ -24,26 +22,25 @@ const Emphasis = Node.create({
     return ["span", mergeAttributes({ class: "em" }, HTMLAttributes), 0];
   },
 });
-  // The following works, but since we will have so many, we probably just want to use the toggleMark('term') command directly.
-  // addCommands() {
-  //   return {
-  //     setTerm: () => ({ commands }) => {
-  //       return commands.setMark(this.name)
-  //     },
-  //     toggleTerm: () => ({ commands }) => {
-  //       return commands.toggleMark(this.name)
-  //     },
-  //     unsetTerm: () => ({ commands }) => {
-  //       return commands.unsetMark(this.name)
-  //     },
-  //   }
-  // },
+// The following works, but since we will have so many, we probably just want to use the toggleMark('term') command directly.
+// addCommands() {
+//   return {
+//     setTerm: () => ({ commands }) => {
+//       return commands.setMark(this.name)
+//     },
+//     toggleTerm: () => ({ commands }) => {
+//       return commands.toggleMark(this.name)
+//     },
+//     unsetTerm: () => ({ commands }) => {
+//       return commands.unsetMark(this.name)
+//     },
+//   }
+// },
 
-  // addKeyboardShortcuts() {
-  //   return {   
-  //     'Mod-d': () => this.editor.commands.toggleTerm()
-  //   }
-  // },
-
+// addKeyboardShortcuts() {
+//   return {
+//     'Mod-d': () => this.editor.commands.toggleTerm()
+//   }
+// },
 
 export default Emphasis;

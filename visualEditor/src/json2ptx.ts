@@ -7,10 +7,8 @@ const tt2ptx = {
   italic: "em",
 };
 
-
-
 function json2ptx(json: any) {
-  let ptx = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n";
+  let ptx = '<?xml version="1.0" encoding="UTF-8"?>\n\n';
   // Top level node is a ptxFragment, but double check this:
   if (json.type !== "ptxFragment") {
     console.log("Top level node is not a ptxFragment");
@@ -26,10 +24,9 @@ function json2ptx(json: any) {
     console.log("More than one child in json.content");
     return "";
   }
-  ptx +=  processNode(json.content[0]);
+  ptx += processNode(json.content[0]);
   return ptx;
 }
-
 
 function processNode(json: any) {
   let ptx = "";
@@ -39,34 +36,34 @@ function processNode(json: any) {
       json.type in tt2ptx
         ? tt2ptx[json.type as keyof typeof tt2ptx]
         : json.type;
-      // nodes might have attrs
-      const elementAttrs = json.attrs
-      if (elementName === "rawptx") {
-        // rawptx nodes are special, they are the unknown tags that we strip away
-        for (const fragment of json.content) {
-          ptx = ptx + processNode(fragment);
-        }
-      } else {
-        // all other nodes are processed by adding the correct tag and attributes around its content
-        ptx = ptx + "<" + elementName;
-        if (elementAttrs) {
-          for (const [key, value] of Object.entries(elementAttrs)) {
-            if (value !== null) {
-              ptx = ptx + " " + key + '="' + value + '"';
-            }
+    // nodes might have attrs
+    const elementAttrs = json.attrs;
+    if (elementName === "rawptx") {
+      // rawptx nodes are special, they are the unknown tags that we strip away
+      for (const fragment of json.content) {
+        ptx = ptx + processNode(fragment);
+      }
+    } else {
+      // all other nodes are processed by adding the correct tag and attributes around its content
+      ptx = ptx + "<" + elementName;
+      if (elementAttrs) {
+        for (const [key, value] of Object.entries(elementAttrs)) {
+          if (value !== null) {
+            ptx = ptx + " " + key + '="' + value + '"';
           }
         }
-        ptx = ptx + ">\n";
-        // console.log("content is:"+ json.content)
-        for (const fragment of json.content) {
-          ptx = ptx + processNode(fragment);
-          // console.log(fragment)
-          //   // ptx = ptx + "<"+fragment.type+">"
-          //   ptx = ptx + json2ptx(fragment.content)
-          //   // ptx = ptx + "</"+fragment.type+">\n"
-        }
-        ptx = ptx + "\n</" + elementName + ">\n";
       }
+      ptx = ptx + ">\n";
+      // console.log("content is:"+ json.content)
+      for (const fragment of json.content) {
+        ptx = ptx + processNode(fragment);
+        // console.log(fragment)
+        //   // ptx = ptx + "<"+fragment.type+">"
+        //   ptx = ptx + json2ptx(fragment.content)
+        //   // ptx = ptx + "</"+fragment.type+">\n"
+      }
+      ptx = ptx + "\n</" + elementName + ">\n";
+    }
   } else {
     // text type nodes are exactly the leaf nodes
     if (json.type === "text") {
@@ -88,4 +85,4 @@ function processNode(json: any) {
   return ptx;
 }
 
-export {json2ptx};
+export { json2ptx };

@@ -5,7 +5,6 @@ import * as fs from "fs";
 import { SpellCheckScope } from "./types";
 import { cli } from "./cli";
 
-
 export let currentPanel: vscode.WebviewPanel | undefined;
 
 export {
@@ -21,7 +20,7 @@ export {
 
 async function experiment(context: vscode.ExtensionContext) {
   const columnToShowIn = vscode.window.activeTextEditor
-    ? (currentPanel && currentPanel.viewColumn)
+    ? currentPanel && currentPanel.viewColumn
     : undefined;
 
   //// Get the URI for output/web/index.html in the user's first workspace
@@ -56,64 +55,66 @@ async function experiment(context: vscode.ExtensionContext) {
   console.log("Current panel is: ", currentPanel);
   console.log("Current panel is visible? ", currentPanel?.visible);
   console.log("Current panel is active? ", currentPanel?.active);
-  if (currentPanel) {;
+  if (currentPanel) {
     // If we already have a panel, show it.
     currentPanel.reveal(columnToShowIn);
   } else {
     // Otherwise, create a new panel.
     currentPanel = vscode.window.createWebviewPanel(
-      'boxEditor',
-      'Box Editor',
+      "boxEditor",
+      "Box Editor",
       columnToShowIn || vscode.ViewColumn.Beside,
       {
         enableScripts: true,
         retainContextWhenHidden: true,
       }
-    )
+    );
     //const panelSrc = currentPanel?.webview.asWebviewUri(outputUri);
-  // silly demo to show how to update the webview
-  // every 5 seconds
+    // silly demo to show how to update the webview
+    // every 5 seconds
     let iteration = 0;
     const updateWebview = () => {
-      const color = iteration++ % 2 === 0 ? 'red' : 'blue';
+      const color = iteration++ % 2 === 0 ? "red" : "blue";
       currentPanel!.title = `Box Editor - ${iteration}`;
       //currentPanel!.webview.html = getWebviewContent(color);
       console.log(`Webview updated to color: ${color}`);
-      currentPanel!.webview.postMessage({content: "hello"});
-    }
+      currentPanel!.webview.postMessage({ content: "hello" });
+    };
 
     const scriptUri = currentPanel?.webview.asWebviewUri(
-      vscode.Uri.joinPath(context.extensionUri, 'src', 'views', 'dist' )
+      vscode.Uri.joinPath(context.extensionUri, "src", "views", "dist")
     );
-      currentPanel.webview.html = getWebviewContent(scriptUri);
+    currentPanel.webview.html = getWebviewContent(scriptUri);
 
-      // Handle messages from the webview
-      currentPanel.webview.onDidReceiveMessage(
-        message => {
-          switch (message.command) {
-            case 'alert':
-              vscode.window.showErrorMessage(message.text);
-              return;
-          }
-        },
-        undefined,
-        context.subscriptions
-      );
+    // Handle messages from the webview
+    currentPanel.webview.onDidReceiveMessage(
+      (message) => {
+        switch (message.command) {
+          case "alert":
+            vscode.window.showErrorMessage(message.text);
+            return;
+        }
+      },
+      undefined,
+      context.subscriptions
+    );
 
-      const interval = setInterval(updateWebview, 5000);
+    const interval = setInterval(updateWebview, 5000);
 
-      currentPanel.onDidDispose(() => {
+    currentPanel.onDidDispose(
+      () => {
         console.log("Webview closed");
         currentPanel = undefined;
         clearInterval(interval);
-      }, null, context.subscriptions || []);
-
+      },
+      null,
+      context.subscriptions || []
+    );
   }
 }
 
 function getWebviewContent(scriptUri: vscode.Uri): string {
-
- return `<!doctype html>
+  return `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -141,9 +142,8 @@ function getWebviewContent(scriptUri: vscode.Uri): string {
 
     </script>
   </body>
-</html>`
+</html>`;
 }
-
 
 /**
  * Looks up the directory tree for a directory that contains a "project.ptx" folder, and returns that path, or null if no such folder exists.
@@ -361,16 +361,16 @@ function stripColorCodes(input: string): string {
   return input.replace(regex, "");
 }
 
-
 /**
  * Generate a random nonce for use in webview content security policy.
  * @returns A random nonce string.
  */
 export function getNonce() {
-	let text = '';
-	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	for (let i = 0; i < 32; i++) {
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
-	}
-	return text;
+  let text = "";
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (let i = 0; i < 32; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
 }

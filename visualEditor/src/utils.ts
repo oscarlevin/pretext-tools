@@ -12,7 +12,6 @@
 //}
 //import { formatPTX } from "../../src/formatter";
 
-
 //export function cleanText(text: string) {
 //  return formatPTX(text
 //    .split("\n")
@@ -29,9 +28,9 @@ import { wrappingInputRule } from "@tiptap/core";
 import { KNOWN_TAGS } from "./knownTags";
 
 /*
-* Clean up incoming PreTeXt source to ensure all tags are ones that the visual editor can handle.
-* Tags that are not recognized are wrapped with the <rawptx> placeholder, that can be rendered back to the original.
-*/
+ * Clean up incoming PreTeXt source to ensure all tags are ones that the visual editor can handle.
+ * Tags that are not recognized are wrapped with the <rawptx> placeholder, that can be rendered back to the original.
+ */
 export function cleanPtx(origXml: string) {
   // We use xast to parse the XML into a AST
   const tree = fromXml(origXml);
@@ -50,7 +49,7 @@ export function cleanPtx(origXml: string) {
         ],
       };
       // replace the node with the rawptx node
-      if (typeof index !== 'number' || !parent) return;
+      if (typeof index !== "number" || !parent) return;
       parent.children.splice(index, 1, rawptxNode);
       // Stop processing children of this node
       return SKIP;
@@ -63,12 +62,11 @@ export function cleanPtx(origXml: string) {
   return newXml;
 }
 
-
 export function ptxToJson(xml: string) {
   let json = {};
   const tree = fromXml(xml);
   console.log(JSON.stringify(buildJsonFromTree(tree), null, 2));
-  return json
+  return json;
 }
 
 function buildJsonFromTree(tree: Root | RootContent) {
@@ -88,12 +86,12 @@ function buildJsonFromTree(tree: Root | RootContent) {
         content: node.children
           .filter((child) => buildJsonFromTree(child) !== undefined)
           .map((child) => buildJsonFromTree(child)),
-      }
+      };
     } else if (node.type === "text" && !whitespace(node)) {
       ret = {
         type: "text",
         text: node.value.trim(),
-      }
+      };
     }
     return SKIP;
   });
@@ -110,10 +108,9 @@ export function blockAttributes() {
     },
     component: {
       parseHTML: (element: HTMLElement) => element.getAttribute("component"),
-    }
-  }
+    },
+  };
 }
-
 
 export function generateInputRules(prefix: string, nodeType: any) {
   return [

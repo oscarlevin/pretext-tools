@@ -1,5 +1,4 @@
-
-const defaultContent:string = `
+const defaultContent: string = `
   <title>My Document</title>
   <introduction>
   <p>

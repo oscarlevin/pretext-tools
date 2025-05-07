@@ -137,8 +137,8 @@ const Subsection = Node.create({
       },
       "xml:id": {
         parseHTML: (element) => element.getAttribute("xml:id"),
-      }
-    }
+      },
+    };
   },
   renderHTML({ HTMLAttributes }) {
     return [
