@@ -1,11 +1,12 @@
 {
-  "name": "pretext-visual-editor",
+  "name": "visual-editor",
   "private": true,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
+    "watch": "vite build --watch",
     "lint": "eslint .",
     "preview": "vite preview"
   },

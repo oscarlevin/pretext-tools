@@ -2,25 +2,24 @@
   "name": "pretext-tools-monorepo",
   "displayName": "PreTeXt-tools-monorepo",
   "description": "Monorepo for PreTeXt tools",
-  "version": "0.27.1",
+  "version": "0.0.1",
   "license": "See license in LICENSE",
   "publisher": "oscarlevin",
   "repository": "https://github.com/oscarlevin/pretext-tools",
   "type": "module",
+  "private": true,
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "node build.mjs",
-    "esbuild": "npm run esbuild-base -- --sourcemap",
-    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
-    "watch": "npm run --workspace=pretext-tools watch",
-    "test-compile": "tsc -p ./",
-    "pretest": "npm run esbuild && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "vscode-test",
-    "package": "npm run esbuild -- --production"
+    "vscode:prepublish": "npm run build:all",
+    "build:extension": "npm run --workspace=vscode-extension esbuild -- --sourcemap",
+    "build:visual-editor": "npm run --workspace=visual-editor build",
+    "build:all": "npm run build:extension && npm run build:visual-editor",
+    "watch:extension": "npm run --workspace=vscode-extension watch",
+    "watch:visual-editor": "npm run --workspace=visual-editor watch",
+    "watch:all": "npm-run-all --parallel watch:extension watch:visual-editor",
+    "lint": "eslint packages/ --ext ts"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
@@ -40,6 +39,7 @@
     "esbuild": "^0.25.0",
     "eslint": "^9.12.0",
     "mocha": "^10.7.3",
+    "npm-run-all": "^4.1.5",
     "sass-embedded": "^1.87.0",
     "typescript": "^5.6.3",
     "vite": "^6.3.4",

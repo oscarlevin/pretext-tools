@@ -50,7 +50,7 @@ const buildOptions = {
   sourcesContent: false,
   platform: "node",
   external: ["vscode"],
-  outfile: "./out/extension.js",
+  outfile: "../../extension/out/extension.js",
   plugins: [esbuildProblemMatcherPlugin],
 };
 
@@ -63,7 +63,7 @@ const buildOptionsLSP = {
   sourcemap: !production,
   sourcesContent: false,
   external: ["vscode"],
-  outfile: "./out/lsp-server.js",
+  outfile: "../../extension/out/lsp-server.js",
   plugins: [esbuildProblemMatcherPlugin],
 
 };

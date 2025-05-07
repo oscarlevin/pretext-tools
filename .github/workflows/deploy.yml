@@ -30,9 +30,6 @@ jobs:
           npm install
           npm install -g @vscode/vsce
           npm install -g ovsx
-          cd visualEditor
-          npm install
-          cd ../
 
       - name: Set up git user
         run: |
@@ -46,17 +43,23 @@ jobs:
           git commit -m "update schemas" || true
 
       - name: Package
-        run: vsce package ${{ inputs.level }}
+        run: |
+          cd extension
+          vsce package ${{ inputs.level }}
 
       - name: Deploy to VSMarketplace
-        run: vsce publish -p ${{ secrets.VS_MARKETPLACE_TOKEN }}
+        run: |
+          cd extension
+          vsce publish -p ${{ secrets.VS_MARKETPLACE_TOKEN }}
 
       - name: Deploy to Open VSX
-        run: ovsx publish -p ${{ secrets.OPEN_VSX_TOKEN }}
+        run: |
+          cd extension
+          ovsx publish -p ${{ secrets.OPEN_VSX_TOKEN }}
 
       - name: setup variables and update changelog
         run: |
-          value=$(jq -r '.version' package.json | tr -d '"')
+          value=$(jq -r '.version' extension/package.json | tr -d '"')
           echo "VERSION=$value" >> "$GITHUB_ENV"
           newline="\\n## [${value}] - $(date +'%Y-%m-%d')"
           sed '/## \[UNRELEASED\]/a\'"$newline" CHANGELOG.md > CHANGELOG.md.tmp
