@@ -7,7 +7,10 @@
     "compounds": [
         {
             "name": "Run Extension + LSP",
-            "configurations": ["Run Extension Only", "Attach to LSP Only"]
+            "configurations": [
+                "Run Extension Only",
+                "Attach to LSP Only"
+            ]
         }
     ],
     "configurations": [
@@ -15,8 +18,12 @@
             "name": "Run Extension Only",
             "type": "extensionHost",
             "request": "launch",
-            "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
-            "outFiles": ["${workspaceFolder}/out/**/*.js"],
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}/extension"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/extension/out/**/*.js"
+            ],
             "preLaunchTask": "${defaultBuildTask}"
         },
         {
@@ -25,7 +32,9 @@
             "name": "Attach to LSP Only",
             "port": 6009,
             "restart": true,
-            "outFiles": ["${workspaceRoot}/out/lsp-server.js"]
+            "outFiles": [
+                "${workspaceRoot}/extension/out/lsp-server.js"
+            ]
         },
         {
             "name": "Extension Tests",
@@ -33,9 +42,11 @@
             "request": "launch",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+                "--extensionTestsPath=${workspaceFolder}/extension/out/test/suite/index"
             ],
-            "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
+            "outFiles": [
+                "${workspaceFolder}/extension/out/test/**/*.js"
+            ],
             "preLaunchTask": "${defaultBuildTask}"
         }
     ]
