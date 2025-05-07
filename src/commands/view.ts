@@ -1,4 +1,4 @@
-import { commands, extensions, window, workspace } from "vscode";
+import { commands, extensions, ViewColumn, window, workspace } from "vscode";
 import * as utils from "../utils";
 import { pretextOutputChannel, pretextTerminal, ptxSBItem } from "../ui";
 
@@ -136,4 +136,16 @@ function runView(target: string, projectPath: string): void {
     }
     utils.updateStatusBarItem(ptxSBItem, status);
   });
+}
+
+export async function cmdViewVisualEditor() {
+  await commands.executeCommand(
+    "vscode.openWith",
+    window.activeTextEditor?.document.uri,
+    "pretext.visualEditor",
+    {
+      viewColumn: ViewColumn.Beside,
+      preserveFocus: true,
+    }
+  );
 }

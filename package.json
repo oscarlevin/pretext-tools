@@ -96,6 +96,11 @@
     ],
     "commands": [
       {
+        "command": "pretext-tools.experiment",
+        "title": "PreTeXt Experiment",
+        "category": "PreTeXt"
+      },
+      {
         "command": "pretext-tools.refreshTargets",
         "title": "Refresh target list",
         "category": "PreTeXt"
@@ -136,6 +141,13 @@
         "title": "View",
         "icon": "$(open-preview)",
         "category": "PreTeXt"
+      },
+      {
+        "command": "pretext-tools.viewVisualEditor",
+        "title": "Open file with Visual Editor",
+        "icon": "$(open-preview)",
+        "category": "PreTeXt",
+        "description": "Open the file in the PreTeXt Visual Editor."
       },
       {
         "command": "pretext-tools.viewCodeChat",
@@ -195,6 +207,18 @@
         "command": "pretext-tools.gettingStarted",
         "title": "Open getting started walkthrough",
         "category": "PreTeXt"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "pretext.visualEditor",
+        "displayName": "PreTeXt Visual Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.ptx"
+          }
+        ],
+        "priority": "option"
       }
     ],
     "xmlLanguageParticipants": [
@@ -457,6 +481,8 @@
     "@types/mocha": "^10.0.9",
     "@types/node": "22.x",
     "@types/prettier": "^2.7.3",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
     "@types/vscode": "^1.89.0",
     "@types/xml2js": "^0.4.14",
     "@typescript-eslint/eslint-plugin": "^8.9.0",
@@ -467,10 +493,13 @@
     "esbuild": "^0.25.0",
     "eslint": "^9.12.0",
     "mocha": "^10.7.3",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vite": "^6.3.2"
   },
   "dependencies": {
     "@lezer/xml": "^1.0.5",
+    "@tiptap/extension-hard-break": "^3.0.0-beta.4",
+    "@tiptap/extension-text": "^3.0.0-beta.4",
     "@unified-latex/unified-latex": "^1.8.2",
     "@unified-latex/unified-latex-to-hast": "^1.8.2",
     "@unified-latex/unified-latex-to-pretext": "^1.8.2",
@@ -484,6 +513,11 @@
     "ovsx": "^0.10.0",
     "prettier": "^2.8.8",
     "prettier-plugin-pretext": "github:oscarlevin/prettier-plugin-pretext",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.9.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-redux": "^9.2.0",
     "rehype-stringify": "^10.0.1",
     "saxes": "^6.0.0",
     "time-stamp": "^2.2.0",

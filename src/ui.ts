@@ -3,6 +3,7 @@ import {
   StatusBarAlignment,
   StatusBarItem,
   Terminal,
+  WebviewPanel,
   window,
 } from "vscode";
 import { updateStatusBarItem } from "./utils";

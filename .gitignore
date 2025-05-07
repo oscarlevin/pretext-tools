@@ -63,3 +63,5 @@ out
 *.vsix
 .editorconfig
 .access-token
+
+.npmrc

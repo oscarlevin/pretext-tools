@@ -5,6 +5,7 @@ import {
   TextDocument,
   TextEdit,
   commands,
+  WebviewPanel,
 } from "vscode";
 import { formatPretextDocument } from "./formatter";
 import * as utils from "./utils";
@@ -16,7 +17,12 @@ import {
   refreshProjects,
   showLog,
 } from "./ui";
-import { cmdView, cmdViewCLI, cmdViewCodeChat } from "./commands/view";
+import {
+  cmdView,
+  cmdViewCLI,
+  cmdViewCodeChat,
+  cmdViewVisualEditor,
+} from "./commands/view";
 import { cmdNew } from "./commands/new";
 import { cmdDeploy } from "./commands/deploy";
 import { cmdUpdate } from "./commands/update";
@@ -40,6 +46,7 @@ import {
 } from "./lsp-client/main";
 import { projects } from "./project";
 import { cmdInstallSage } from "./commands/installSage";
+import { PretextVisualEditorProvider } from "./visualEditor";
 
 // this method is called when your extension is activated
 export async function activate(context: ExtensionContext) {
@@ -106,10 +113,15 @@ export async function activate(context: ExtensionContext) {
     console.log("Error setting up formatter");
   }
 
+  // Visual editor
+  context.subscriptions.push(PretextVisualEditorProvider.register(context));
+
   ///////////////// Commands //////////////////////
 
   context.subscriptions.push(
-    //commands.registerCommand("pretext-tools.experiment", utils.experiment),
+    commands.registerCommand("pretext-tools.experiment", () => {
+      utils.experiment(context);
+    }),
     commands.registerCommand(
       "pretext-tools.selectPretextCommand",
       cmdSelectCommand
@@ -121,6 +133,10 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand("pretext-tools.view", cmdView),
     commands.registerCommand("pretext-tools.viewCLI", cmdViewCLI),
     commands.registerCommand("pretext-tools.viewCodeChat", cmdViewCodeChat),
+    commands.registerCommand(
+      "pretext-tools.viewVisualEditor",
+      cmdViewVisualEditor
+    ),
     commands.registerCommand("pretext-tools.new", cmdNew),
     commands.registerCommand("pretext-tools.deploy", cmdDeploy),
     commands.registerCommand("pretext-tools.updatePTX", cmdUpdate),
