@@ -51,11 +51,11 @@ if (watch) {
 await ctx.dispose();
 
 // Add Vite build step for the visualEditor React app
-try {
-  console.log("Building visualEditor React app with Vite...");
-  execSync("vite build", { cwd: "./visualEditor", stdio: "inherit" });
-  console.log("visualEditor React app built successfully.");
-} catch (error) {
-  console.error("Error building visualEditor React app:", error);
-  process.exit(1);
-}
+//try {
+//  //console.log("Building visualEditor React app with Vite...");
+//  //execSync("vite build", { cwd: "./visualEditor", stdio: "inherit" });
+//  //console.log("visualEditor React app built successfully.");
+//} catch (error) {
+//  console.error("Error building visualEditor React app:", error);
+//  process.exit(1);
+//}
