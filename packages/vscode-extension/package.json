@@ -464,9 +464,6 @@
       }
     ]
   },
-  "workspaces": [
-    "visualEditor/*"
-  ],
   "scripts": {
     "vscode:prepublish": "npm run esbuild-base -- --minify",
     "esbuild-base": "node build.mjs",
@@ -479,65 +476,8 @@
     "test": "vscode-test",
     "package": "npm run esbuild -- --production"
   },
-  "devDependencies": {
-    "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.9",
-    "@types/node": "22.x",
-    "@types/prettier": "^2.7.3",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
-    "@types/vscode": "^1.89.0",
-    "@types/xml2js": "^0.4.14",
-    "@typescript-eslint/eslint-plugin": "^8.9.0",
-    "@typescript-eslint/parser": "^8.9.0",
-    "@vitejs/plugin-react": "^4.4.1",
-    "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1",
-    "@vscode/vsce": "^3.1.1",
-    "esbuild": "^0.25.0",
-    "eslint": "^9.12.0",
-    "mocha": "^10.7.3",
-    "sass-embedded": "^1.87.0",
-    "typescript": "^5.6.3",
-    "vite": "^6.3.4"
-  },
-  "dependencies": {
-    "@lezer/xml": "^1.0.5",
-    "@tiptap/extension-hard-break": "^3.0.0-beta.4",
-    "@tiptap/extension-text": "^3.0.0-beta.4",
-    "@unified-latex/unified-latex": "^1.8.2",
-    "@unified-latex/unified-latex-to-hast": "^1.8.2",
-    "@unified-latex/unified-latex-to-pretext": "^1.8.2",
-    "@unified-latex/unified-latex-util-html-like": "^1.8.0",
-    "@unified-latex/unified-latex-util-parse": "^1.8.2",
-    "deepmerge": "^4.3.1",
-    "esbuild-node-externals": "^1.18.0",
-    "fs.promises.exists": "^1.1.4",
-    "glob": "^11.0.0",
-    "md2ptx": "github:skiadas/md2ptx",
-    "ovsx": "^0.10.0",
-    "prettier": "^2.8.8",
-    "prettier-plugin-pretext": "github:oscarlevin/prettier-plugin-pretext",
-    "primeicons": "^7.0.0",
-    "primereact": "^10.9.4",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-redux": "^9.2.0",
-    "rehype-stringify": "^10.0.1",
-    "saxes": "^6.0.0",
-    "time-stamp": "^2.2.0",
-    "unified": "^11.0.5",
-    "unist-util-remove": "^4.0.0",
-    "unist-util-visit": "^5.0.0",
-    "vscode-languageclient": "^9.0.1",
-    "vscode-languageserver": "^9.0.1",
-    "vscode-languageserver-textdocument": "^1.0.12",
-    "vscode-uri": "^3.0.8",
-    "xast-util-from-xml": "^4.0.0",
-    "xast-util-to-string": "^3.0.0",
-    "xast-util-to-xml": "^4.0.0",
-    "xml2js": "^0.6.2"
-  },
+  "devDependencies": {},
+  "dependencies": {},
   "prettier": {
     "tabWidth": 2
   }
