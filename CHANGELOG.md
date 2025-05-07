@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.28.0] - 2025-05-07
+
 ## Added
 
 - Experimental *Visual Editor* for PreTeXt documents.
