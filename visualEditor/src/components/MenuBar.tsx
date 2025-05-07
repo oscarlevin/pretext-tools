@@ -42,7 +42,7 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
     <div className="control-group">
       <div className="button-group">
 
-        <button
+        {/*<button
           onClick={() => editor.chain().focus().toggleWrap('title').run()}
           className={editor.isActive("title") ? "is-active" : ""}
         >
@@ -60,7 +60,7 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
           className={editor.isActive("proof") ? "is-active" : ""}
         >
           Proof
-        </button>
+        </button>*/}
         {/*<button
           onClick={() => editor.chain().focus().toggleBold().run()}
           disabled={!editorState.canBold}
