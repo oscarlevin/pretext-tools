@@ -1,10 +1,8 @@
-import { Focus, Gapcursor, UndoRedo } from "@tiptap/extensions";
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Focus, Gapcursor, UndoRedo } from "@tiptap/extensions";
 import { useEffect } from 'react';
 import { useEditor, EditorContent } from "@tiptap/react";
-import { Editor, Node, generateJSON } from "@tiptap/core";
-//import { Mathematics } from "@tiptap-pro/extension-mathematics";
-//import { FileHandler } from "@tiptap-pro/extension-file-handler";
+import { Editor, Node } from "@tiptap/core";
 import { MathEquation, MathInline } from "../extensions/Math";
 import "katex/dist/katex.min.css";
 import Divisions from "../extensions/Divisions";
@@ -13,16 +11,16 @@ import Blocks from "../extensions/Blocks";
 import CodeBlock from "@tiptap/extension-code-block";
 import Title from "../extensions/Title";
 import Definition from "../extensions/Definition";
-//import KeyboardCommands from "../extensions/Keyboard"; 
 import RawPtx from "../extensions/RawPtx";
 import "../styles.scss";
-import { cleanPtx, ptxToJson } from "../utils";
+import { cleanPtx } from "../utils";
 import { json2ptx } from "../json2ptx";
 import { useState } from 'react';
 import { MenuBar } from "./MenuBar";
 import { PtxBubbleMenu } from "./BubbleMenu";
 //import { PtxFloatingMenu } from "./FloatingMenu";
 import { getCursorPos } from "../extensions/getCursorPos";
+import KeyboardCommands from "../extensions/Keyboard";
 
 
 const Document = Node.create({
@@ -44,7 +42,7 @@ const extensions = [
   CodeBlock.configure({
     defaultLanguage: "xml",
   }),
-  //KeyboardCommands,
+  KeyboardCommands,
   Document,
   Inline,
   Blocks,
@@ -168,6 +166,7 @@ const VisualEditor: React.FC = () => {
 
   const [isValid, setIsValid] = useState(true);
 
+
   const editor = useEditor({
     extensions,
     content: "",
@@ -217,6 +216,21 @@ const VisualEditor: React.FC = () => {
             }
           }
           return;
+        case 'load':
+          const initialText = message.text;
+          if (editor) {
+            try {
+              editor.commands.setContent(cleanPtx(initialText), { emitUpdate: false });
+              setIsValid(true);
+            } catch (error) {
+              console.error("Error setting content: ", error);
+              setIsValid(false);
+            }
+            // Always set editor to non-editable mode when first loading content
+            if (editor.isEditable) {
+              editor.setEditable(false, false);
+            }
+          }
       }
     };
 
@@ -229,10 +243,26 @@ const VisualEditor: React.FC = () => {
     };
   }, []); // Empty dependency array ensures this runs only once
 
+  const [isEditable, setIsEditable] = useState(false);
 
+  useEffect(() => {
+    if (editor) {
+      editor.setEditable(isEditable, false);
+    }
+  }
+    , [editor, isEditable]);
 
   return (
     <>
+      <div className="control-group">
+        <p>Warning: The PreTeXt Visual Editor is still experimental.  Do not edit files you don't have backups for; editing with the visual editor may modify your original PreTeXt file in unexpected ways.
+          <br />
+          <label>
+            <input type="checkbox" checked={isEditable} onChange={() => setIsEditable(!isEditable)} />
+            Enable editing
+          </label>
+        </p>
+      </div>
       <WarningMessage isValid={isValid} />
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />

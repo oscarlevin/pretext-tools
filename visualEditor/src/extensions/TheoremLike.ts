@@ -1,6 +1,7 @@
 import { Extension, Node, mergeAttributes, wrappingInputRule } from "@tiptap/core";
 import { ReactNodeViewRenderer, } from "@tiptap/react";
 import { TheoremLikeComponent, ProofComponent } from "../components/TheoremLike";
+import { blockAttributes, generateInputRules } from "../utils";
 
 
 const TheoremLikeElements = [
@@ -34,17 +35,7 @@ const TheoremLike = Extension.create({
             ];
           },
           addAttributes() {
-            return {
-              label: {
-                parseHTML: (element) => element.getAttribute("label"),
-              },
-              "xml:id": {
-                parseHTML: (element) => element.getAttribute("xml:id"),
-              },
-              component: {
-                parseHTML: (element) => element.getAttribute("component"),
-              }
-            }
+            return blockAttributes();
           },
 
           renderHTML({ HTMLAttributes }) {
@@ -60,20 +51,7 @@ const TheoremLike = Extension.create({
             return ReactNodeViewRenderer(TheoremLikeComponent)
           },
           addInputRules() {
-            return [
-              wrappingInputRule({
-                find: new RegExp(`^#${element}\\s$`, "i"),
-                type: this.type,
-              }),
-              wrappingInputRule({
-                find: new RegExp(`(?:^)(<${element}>(\\s))$`, "i"),
-                type: this.type,
-              }),
-              wrappingInputRule({
-                find: new RegExp(`(?:^)(${element}:(\\s))$`, "i"),
-                type: this.type,
-              }),
-            ];
+            return generateInputRules(element, this.type,);
           },
 
         }
@@ -85,7 +63,7 @@ const TheoremLike = Extension.create({
     array.push(
       Node.create({
         name: "proof",
-        content: "title? p+",
+        content: "title? BasicBlock+",
         group: "block",
         selectable: true,
         draggable: true,
@@ -106,20 +84,7 @@ const TheoremLike = Extension.create({
           return ReactNodeViewRenderer(ProofComponent)
         },
         addInputRules() {
-          return [
-            wrappingInputRule({
-              find: new RegExp(`^#proof\\s$`, "i"),
-              type: this.type,
-            }),
-            wrappingInputRule({
-              find: new RegExp(`(?:^)(<proof>(\\s))$`, "i"),
-              type: this.type,
-            }),
-            wrappingInputRule({
-              find: new RegExp(`(?:^)(proof:(\\s))$`, "i"),
-              type: this.type,
-            }),
-          ];
+          return generateInputRules("proof", this.type,);
         },
       })
     )

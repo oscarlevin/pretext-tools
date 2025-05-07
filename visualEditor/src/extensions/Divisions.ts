@@ -8,7 +8,7 @@ import {
 const Introduction = Node.create({
   name: "introduction",
 
-  content: "block+ rawptx*",
+  content: "(BasicBlock|block|rawptx)*",
 
   group: "division introduction",
 
@@ -49,7 +49,7 @@ const Introduction = Node.create({
 const Chapter = Node.create({
   name: "chapter",
 
-  content: "title ((introduction?|section+)|block+)",
+  content: "title ((introduction?|section+)|(BasicBlock|block|rawptx)+)",
 
   group: "division",
 
@@ -86,7 +86,7 @@ const Chapter = Node.create({
 });
 const Section = Node.create({
   name: "section",
-  content: "title ((introduction?|subsection+)|block+)",
+  content: "title ((introduction?|subsection+)|(BasicBlock|block|rawptx)+)",
   group: "division",
   selectable: true,
   draggable: true,
@@ -117,7 +117,7 @@ const Section = Node.create({
 
 const Subsection = Node.create({
   name: "subsection",
-  content: "title? (block|rawptx)*",
+  content: "title (BasicBlock|block|rawptx)+",
   group: "division",
   selectable: false,
   draggable: true,

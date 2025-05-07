@@ -3,8 +3,10 @@ import {
   Extension,
   Node,
   mergeAttributes,
-  wrappingInputRule,
 } from "@tiptap/core";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+import { TheoremLikeComponent } from "../components/TheoremLike";
+import { generateInputRules } from "../utils";
 
 const AxiomLikeElements = [
   "assumption",
@@ -24,7 +26,7 @@ const AxiomLike = Extension.create({
       array.push(
         Node.create({
           name: element,
-          content: "title? p+",
+          content: "title? statement",
           group: "block axiomLike",
           selectable: true,
           draggable: true,
@@ -45,37 +47,11 @@ const AxiomLike = Extension.create({
               0,
             ];
           },
-          addCommands() {
-            return {
-              [`set${element.charAt(0).toUpperCase() + element.slice(1)}`]:
-                (attributes: Record<string, any>) =>
-                  ({
-                    commands,
-                  }: {
-                    commands: {
-                      setWrap: (
-                        name: string,
-                        attributes: Record<string, any>
-                      ) => boolean;
-                    };
-                  }) => {
-                    return commands.setWrap(this.name, attributes);
-                  },
-              // [`toggle${element.charAt(0).toUpperCase() + element.slice(1)}`]: (attributes: Record<string, any>) =>
-              //   ({ commands }: { commands: { toggleWrap: (name: string, attributes: Record<string, any>) => boolean } }) => {
-              //     return commands.toggleWrap(this.name, attributes)
-              //   },
-            };
+          addNodeView() {
+            return ReactNodeViewRenderer(TheoremLikeComponent);
           },
           addInputRules() {
-            return [
-              wrappingInputRule({
-                find: new RegExp(
-                  `^!${element.charAt(0).toUpperCase() + element.slice(1)}\\s$`
-                ),
-                type: this.type,
-              }),
-            ];
+            return generateInputRules(element, this.type,);
           },
         })
       );
@@ -86,3 +62,28 @@ const AxiomLike = Extension.create({
 });
 
 export default AxiomLike;
+
+
+
+//addCommands() {
+//  return {
+//    [`set${element.charAt(0).toUpperCase() + element.slice(1)}`]:
+//      (attributes: Record<string, any>) =>
+//        ({
+//          commands,
+//        }: {
+//          commands: {
+//            setWrap: (
+//              name: string,
+//              attributes: Record<string, any>
+//            ) => boolean;
+//          };
+//        }) => {
+//          return commands.setWrap(this.name, attributes);
+//        },
+// [`toggle${element.charAt(0).toUpperCase() + element.slice(1)}`]: (attributes: Record<string, any>) =>
+//   ({ commands }: { commands: { toggleWrap: (name: string, attributes: Record<string, any>) => boolean } }) => {
+//     return commands.toggleWrap(this.name, attributes)
+//   },
+//  };
+//},

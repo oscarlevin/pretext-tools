@@ -1,20 +1,16 @@
-import { Node, mergeAttributes, wrappingInputRule } from '@tiptap/core'
+import { Node, mergeAttributes } from '@tiptap/core'
+import { generateInputRules } from '../utils'
+import { ReactNodeViewRenderer } from '@tiptap/react'
+import { TheoremLikeComponent } from '../components/TheoremLike'
 
 const Definition = Node.create({
   name: 'definition',
-
-  content: 'title? p+',
-
+  content: 'title? statement',
   group: 'block definitionLike',
-
   selectable: true,
-
   draggable: true,
-
   defining: false,
-
-
-  // This would make it so an extra delete would not delete the parent node.  Not sure how we would end up deleting it. 
+  // This would make it so an extra delete would not delete the parent node.  Not sure how we would end up deleting it.
   // isolating: true,
 
   parseHTML() {
@@ -24,27 +20,15 @@ const Definition = Node.create({
       },
     ]
   },
-
   renderHTML({ HTMLAttributes }) {
     return ['article', mergeAttributes({ class: 'definition definition-like', label: 'definition' }, HTMLAttributes), 0]
   },
-
-
-  addInputRules() {
-    return [
-      wrappingInputRule({
-        find: new RegExp(`^!def\\s$`),
-        type: this.type,
-      }),
-    ]
+  addNodeView() {
+    return ReactNodeViewRenderer(TheoremLikeComponent)
   },
-
-  // addKeyboardShortcuts() {
-  //   return {
-  //     'Mod-d': this.editor.commands.insertContent('<definition><title>Definition</title><p></p></definition>'),
-  //   }
-  // }
-
+  addInputRules() {
+    return generateInputRules('definition', this.type)
+  },
 })
 
 export default Definition;

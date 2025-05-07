@@ -22,25 +22,11 @@
 
 import { fromXml } from "xast-util-from-xml";
 import { toXml } from "xast-util-to-xml";
-import { SKIP, visit} from "unist-util-visit";
+import { SKIP, visit } from "unist-util-visit";
 import { whitespace } from "hast-util-whitespace";
 import type { ElementContent, Root, RootContent } from "xast"; // Import ElementContent type
-
-const KNOWN_TAGS = [
-  'm',
-  'me',
-  'p',
-  'subsection',
-  'section',
-  'title',
-  'theorem',
-  'statement',
-  'proof',
-  'term',
-  "em",
-  "alert",
-  "pre",
-];
+import { wrappingInputRule } from "@tiptap/core";
+import { KNOWN_TAGS } from "./knownTags";
 
 /*
 * Clean up incoming PreTeXt source to ensure all tags are ones that the visual editor can handle.
@@ -59,12 +45,12 @@ export function cleanPtx(origXml: string) {
         attributes: {},
         children: [
           //{type: "text", value: '\n'},
-          {type: "text", value: toXml(node)},
+          { type: "text", value: toXml(node) },
           //{type: "text", value: '\n'},
         ],
       };
       // replace the node with the rawptx node
-      if (typeof index !== 'number' || !parent ) return;
+      if (typeof index !== 'number' || !parent) return;
       parent.children.splice(index, 1, rawptxNode);
       // Stop processing children of this node
       return SKIP;
@@ -85,7 +71,7 @@ export function ptxToJson(xml: string) {
   return json
 }
 
-function buildJsonFromTree(tree: Root | RootContent ) {
+function buildJsonFromTree(tree: Root | RootContent) {
   let ret;
   visit(tree, (node) => {
     if (node.type === "root" && node.children) {
@@ -104,12 +90,44 @@ function buildJsonFromTree(tree: Root | RootContent ) {
           .map((child) => buildJsonFromTree(child)),
       }
     } else if (node.type === "text" && !whitespace(node)) {
-        ret = {
-          type: "text",
-          text: node.value.trim(),
-        }
+      ret = {
+        type: "text",
+        text: node.value.trim(),
+      }
     }
     return SKIP;
   });
   return ret;
+}
+
+export function blockAttributes() {
+  return {
+    label: {
+      parseHTML: (element: HTMLElement) => element.getAttribute("label"),
+    },
+    "xml:id": {
+      parseHTML: (element: HTMLElement) => element.getAttribute("xml:id"),
+    },
+    component: {
+      parseHTML: (element: HTMLElement) => element.getAttribute("component"),
+    }
+  }
+}
+
+
+export function generateInputRules(prefix: string, nodeType: any) {
+  return [
+    wrappingInputRule({
+      find: new RegExp(`^#${prefix}\\s$`, "i"),
+      type: nodeType,
+    }),
+    wrappingInputRule({
+      find: new RegExp(`(?:^)(<${prefix}>(\\s))$`, "i"),
+      type: nodeType,
+    }),
+    wrappingInputRule({
+      find: new RegExp(`(?:^)(${prefix}:(\\s))$`, "i"),
+      type: nodeType,
+    }),
+  ];
 }

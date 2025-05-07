@@ -2,6 +2,7 @@ import { Extension, Node, mergeAttributes, wrappingInputRule } from '@tiptap/cor
 import TheoremLike from './TheoremLike'
 import AxiomLike from './AxiomLike'
 import Statement from './Statement'
+import ExampleLike from './ExampleLike'
 
 
 const Para = Node.create({
@@ -9,7 +10,7 @@ const Para = Node.create({
 
   content: 'inline*',
 
-  group: 'block',
+  group: 'BasicBlock',
 
   //   selectable: false,
 
@@ -49,6 +50,7 @@ const Blocks = Extension.create({
     return [
       Para,
       TheoremLike,
+      ExampleLike,
       AxiomLike,
       Statement,
     ]
