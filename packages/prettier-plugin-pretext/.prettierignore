@@ -1,0 +1,11 @@
+/.github/
+/coverage/
+/dist/
+/.eslintcache
+/.*ignore
+/yarn.lock
+/LICENSE
+
+/src/types.ts
+/test/fixture.xml
+/test/__snapshots__/*
