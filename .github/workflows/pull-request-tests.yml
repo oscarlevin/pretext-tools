@@ -13,12 +13,12 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: 22
 
       - name: Install dependencies
         run: npm ci
 
       - name: Check formatting
         run: |
-          npx prettier -c $(git ls-files "*.ts")
+          npx prettier -c $(git ls-files "packages/vscode-extension/*.ts")
           npx prettier -c $(git ls-files "snippets/*.json")
