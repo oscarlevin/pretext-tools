@@ -63,7 +63,6 @@
     "md2ptx": "github:skiadas/md2ptx",
     "ovsx": "^0.10.0",
     "prettier": "^2.8.8",
-    "prettier-plugin-pretext": "github:oscarlevin/prettier-plugin-pretext",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.4",
     "react": "^19.1.0",
