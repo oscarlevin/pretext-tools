@@ -28,6 +28,7 @@ import { cmdDeploy } from "./commands/deploy";
 import { cmdUpdate } from "./commands/update";
 //import { ptxExperiment } from "./commands/experiment";
 import {
+  cmdConvertFlextextToPretext,
   cmdConvertToPretext,
   cmdLatexToPretext,
   cmdMarkdownToPretext,
@@ -140,6 +141,7 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand("pretext-tools.new", cmdNew),
     commands.registerCommand("pretext-tools.deploy", cmdDeploy),
     commands.registerCommand("pretext-tools.updatePTX", cmdUpdate),
+    commands.registerCommand("pretext-tools.ftToPtx", cmdConvertFlextextToPretext),
     commands.registerCommand("pretext-tools.latexToPretext", cmdLatexToPretext),
     commands.registerCommand(
       "pretext-tools.convertToPretext",

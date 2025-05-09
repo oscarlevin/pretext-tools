@@ -9,6 +9,8 @@ import {
   xmlCompilePlugin,
 } from "@unified-latex/unified-latex-to-pretext";
 import { formatPTX } from "../formatter";
+// @ts-ignore
+import { FlexTeXtConvert } from "../../../../../FrankenMarkUp/src/main";
 
 import * as prettier from "prettier";
 import * as prettierPluginPretext from "prettier-plugin-pretext";
@@ -88,7 +90,7 @@ function convertWithUnified(text: string) {
 export function cmdMarkdownToPretext() {
   // Give warning that this function is currently unvailable.
   pretextOutputChannel.appendLine(
-    "Markdown to PreTeXt conversion is not yet implemented."
+    "Markdown to PreTeXt conversion is still very experiemental.  Use with care."
   );
 
   const editor = window.activeTextEditor;
@@ -107,3 +109,27 @@ export function cmdMarkdownToPretext() {
     });
   }
 }
+
+export function cmdConvertFlextextToPretext() {
+  pretextOutputChannel.appendLine(
+    "Flextext to PreTeXt conversion is still very experiemental.  Use with care."
+  );
+  const editor = window.activeTextEditor;
+  console.log("editor is", editor);
+  if (editor) {
+    const selection = editor.selection;
+    const selectionRange = selection.isEmpty
+      ? editor.document.lineAt(selection.start.line).range
+      : new Range(selection.start, selection.end);
+    console.log("selectionRange is", selectionRange);
+    const initialText = editor.document.getText(selectionRange);
+
+    var newText = FlexTeXtConvert(initialText);
+
+    //editor.edit((editbuilder) => {
+    //  editbuilder.replace(selectionRange, newText);
+    //});
+  }
+}
+
+
