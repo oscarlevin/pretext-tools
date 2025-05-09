@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## Changed
+
+- Switched (again) to use prettier for formatting instead of custom formatter.
+
 ## [0.28.0] - 2025-05-07
 
 ## Added

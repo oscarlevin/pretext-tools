@@ -8,7 +8,7 @@ import * as prettier from "prettier";
 import * as prettierPluginPretext from "prettier-plugin-pretext";
 import { documents } from "./state";
 
-function formatWithPrettier(text: string, options: prettier.Options): string {
+async function formatWithPrettier(text: string, options: prettier.Options): Promise<string> {
   const ret = prettier.format(text, {
     parser: "ptx",
     plugins: [prettierPluginPretext as unknown as prettier.Plugin],
@@ -35,7 +35,7 @@ export async function formatDocument(
 
   console.log("formatting with Prettier.");
   try {
-    let formatted = formatWithPrettier(origText, {
+    let formatted = await formatWithPrettier(origText, {
       tabWidth: params.options.tabSize,
       useTabs: !params.options.insertSpaces,
     });
@@ -68,7 +68,7 @@ export async function formatRange(
     console.log(
       origText.slice(doc.offsetAt(range.start), doc.offsetAt(range.end))
     );
-    let formatted = formatWithPrettier(
+    let formatted = await formatWithPrettier(
       origText.slice(doc.offsetAt(range.start), doc.offsetAt(range.end)),
       {
         tabWidth: params.options.tabSize,
