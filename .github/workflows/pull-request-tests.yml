@@ -19,6 +19,4 @@ jobs:
         run: npm ci
 
       - name: Check formatting
-        run: |
-          npx prettier -c $(git ls-files "packages/vscode-extension/*.ts")
-          npx prettier -c $(git ls-files "packages/vscode-extnesion/snippets/*.json")
+        run: npx prettier -c $(git ls-files "packages/vscode-extension/*.ts")
