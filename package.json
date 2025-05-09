@@ -22,7 +22,6 @@
     "lint": "eslint packages/ --ext ts"
   },
   "devDependencies": {
-    "@rollup/rollup-win32-x64-msvc": "^4.40.2",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.9",
     "@types/node": "22.x",
