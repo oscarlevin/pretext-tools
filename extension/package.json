@@ -197,6 +197,12 @@
         "description": "Converts and replaces a selection of LaTeX with PreTeXt formatted text (experimental)."
       },
       {
+        "command": "pretext-tools.ftToPtx",
+        "title": "Convert current editor contents to PreTeXt",
+        "category": "PreTeXt",
+        "description": "Converts and replaces your FlexTeXt to PreTeXt formatted text (experimental)."
+      },
+      {
         "command": "pretext-tools.installSage",
         "title": "Install SageMath",
         "category": "PreTeXt",

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## Added
+
+- Convert document to proper PreTeXt from "FrankenMarkUp" (or FlexTeXt?).
+
 ## Changed
 
 - Switched (again) to use prettier for formatting instead of custom formatter.

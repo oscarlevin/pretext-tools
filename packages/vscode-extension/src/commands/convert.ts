@@ -1,4 +1,4 @@
-import { Range, window } from "vscode";
+import { commands, Range, window } from "vscode";
 import { latexToPretext } from "../latextopretext";
 import { markdownToPretext } from "md2ptx";
 import { pretextOutputChannel } from "../ui";
@@ -9,9 +9,12 @@ import {
   xmlCompilePlugin,
 } from "@unified-latex/unified-latex-to-pretext";
 import { formatPTX } from "../formatter";
+// @ts-ignore
+import { FlexTeXtConvert } from "../../../../../FrankenMarkUp/src/main";
 
 import * as prettier from "prettier";
 import * as prettierPluginPretext from "prettier-plugin-pretext";
+import { formatWithPrettier } from "../lsp-server/formatter";
 
 export function cmdConvertToPretext() {
   console.log("Converting to PreTeXt");
@@ -88,7 +91,7 @@ function convertWithUnified(text: string) {
 export function cmdMarkdownToPretext() {
   // Give warning that this function is currently unvailable.
   pretextOutputChannel.appendLine(
-    "Markdown to PreTeXt conversion is not yet implemented."
+    "Markdown to PreTeXt conversion is still very experiemental.  Use with care."
   );
 
   const editor = window.activeTextEditor;
@@ -107,3 +110,31 @@ export function cmdMarkdownToPretext() {
     });
   }
 }
+
+export async function cmdConvertFlextextToPretext() {
+  pretextOutputChannel.appendLine(
+    "Flextext to PreTeXt conversion is still very experiemental.  Use with care."
+  );
+  const editor = window.activeTextEditor;
+  console.log("editor is", editor);
+  if (editor) {
+    const selection = editor.selection;
+    const selectionRange = selection.isEmpty
+      ? new Range(editor.document.positionAt(0), editor.document.positionAt(editor.document.getText().length))
+      : new Range(selection.start, selection.end);
+    console.log("selectionRange is", selectionRange);
+    const initialText = editor.document.getText(selectionRange);
+
+    var newText = FlexTeXtConvert(initialText);
+
+    editor.edit((editbuilder) => {
+      editbuilder.replace(selectionRange, newText);
+    });
+    // Call default formatter to format the text.
+    commands.executeCommand("editor.action.formatDocument");
+
+    console.log("Formatted text");
+  }
+}
+
+

@@ -8,7 +8,7 @@ import * as prettier from "prettier";
 import * as prettierPluginPretext from "prettier-plugin-pretext";
 import { documents } from "./state";
 
-async function formatWithPrettier(text: string, options: prettier.Options): Promise<string> {
+export async function formatWithPrettier(text: string, options: prettier.Options): Promise<string> {
   const ret = prettier.format(text, {
     parser: "ptx",
     plugins: [prettierPluginPretext as unknown as prettier.Plugin],
