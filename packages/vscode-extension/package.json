@@ -2,7 +2,7 @@
   "name": "vscode-extension",
   "displayName": "PreTeXt-tools",
   "description": "Language support and more for PreTeXt",
-  "version": "0.27.1",
+  "version": "0.28.0",
   "license": "See license in LICENSE",
   "icon": "logo.png",
   "publisher": "oscarlevin",
