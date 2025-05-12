@@ -10,11 +10,8 @@ import {
 } from "@unified-latex/unified-latex-to-pretext";
 import { formatPTX } from "../formatter";
 // @ts-ignore
-import { FlexTeXtConvert } from "../../../../../FrankenMarkUp/src/main";
+import { FlexTeXtConvert } from "frankenmarkup";
 
-import * as prettier from "prettier";
-import * as prettierPluginPretext from "prettier-plugin-pretext";
-import { formatWithPrettier } from "../lsp-server/formatter";
 
 export function cmdConvertToPretext() {
   console.log("Converting to PreTeXt");
