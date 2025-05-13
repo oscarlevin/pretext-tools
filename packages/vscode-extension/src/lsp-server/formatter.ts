@@ -13,6 +13,7 @@ export async function formatWithPrettier(text: string, options: prettier.Options
     parser: "ptx",
     plugins: [prettierPluginPretext as unknown as prettier.Plugin],
   });
+  console.log("The parser is", prettier.getSupportInfo().languages);
   return ret;
 }
 

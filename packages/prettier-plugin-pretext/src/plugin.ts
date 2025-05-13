@@ -27,4 +27,4 @@ const plugin: Plugin = {
     },
 };
 
-export = plugin;
+export default plugin;
