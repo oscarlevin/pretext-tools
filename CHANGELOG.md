@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.28.1] - 2025-05-12
+
 ## Added
 
 - Convert document to proper PreTeXt from "FrankenMarkUp" (or FlexTeXt?).
