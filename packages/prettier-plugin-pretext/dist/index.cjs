@@ -8,6 +8,10 @@ var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -24,6 +28,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // ../../node_modules/chevrotain/lib/src/version.js
 var require_version = __commonJS({
@@ -8763,6 +8768,13 @@ var require_api2 = __commonJS({
   }
 });
 
+// src/plugin.ts
+var plugin_exports = {};
+__export(plugin_exports, {
+  default: () => plugin_default
+});
+module.exports = __toCommonJS(plugin_exports);
+
 // src/parser.ts
 var import_parser = __toESM(require_api2());
 var parser = {
@@ -8804,12 +8816,12 @@ var parser_default = parser;
 
 // node_modules/prettier/doc.mjs
 var __defProp2 = Object.defineProperty;
-var __export = (target, all) => {
+var __export2 = (target, all) => {
   for (var name in all)
     __defProp2(target, name, { get: all[name], enumerable: true });
 };
 var public_exports = {};
-__export(public_exports, {
+__export2(public_exports, {
   builders: () => builders,
   printer: () => printer,
   utils: () => utils
@@ -10629,5 +10641,5 @@ var plugin = {
     singleAttributePerLine: false
   }
 };
-module.exports = plugin;
+var plugin_default = plugin;
 //# sourceMappingURL=index.cjs.map

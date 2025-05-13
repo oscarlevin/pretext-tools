@@ -4,9 +4,6 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
 var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
@@ -8766,51 +8763,96 @@ var require_api2 = __commonJS({
 });
 
 // src/parser.ts
-var import_parser, parser, parser_default;
-var init_parser = __esm({
-  "src/parser.ts"() {
-    "use strict";
-    import_parser = __toESM(require_api2());
-    parser = {
-      parse(text) {
-        const { lexErrors, parseErrors, cst } = (0, import_parser.parse)(text);
-        if (lexErrors.length > 0) {
-          const lexError = lexErrors[0];
-          const error = new Error(lexError.message);
-          error.loc = {
-            start: { line: lexError.line, column: lexError.column },
-            end: {
-              line: lexError.line,
-              column: lexError.column + lexError.length
-            }
-          };
-          throw error;
+var import_parser = __toESM(require_api2());
+var parser = {
+  parse(text) {
+    const { lexErrors, parseErrors, cst } = (0, import_parser.parse)(text);
+    if (lexErrors.length > 0) {
+      const lexError = lexErrors[0];
+      const error = new Error(lexError.message);
+      error.loc = {
+        start: { line: lexError.line, column: lexError.column },
+        end: {
+          line: lexError.line,
+          column: lexError.column + lexError.length
         }
-        if (parseErrors.length > 0) {
-          const parseError = parseErrors[0];
-          const error = new Error(parseError.message);
-          const { token } = parseError;
-          error.loc = {
-            start: { line: token.startLine, column: token.startColumn },
-            end: { line: token.endLine, column: token.endColumn }
-          };
-          throw error;
-        }
-        return cst;
-      },
-      astFormat: "ptx",
-      locStart(node) {
-        return node.location.startOffset;
-      },
-      locEnd(node) {
-        return node.location.endOffset;
-      }
-    };
-    parser_default = parser;
+      };
+      throw error;
+    }
+    if (parseErrors.length > 0) {
+      const parseError = parseErrors[0];
+      const error = new Error(parseError.message);
+      const { token } = parseError;
+      error.loc = {
+        start: { line: token.startLine, column: token.startColumn },
+        end: { line: token.endLine, column: token.endColumn }
+      };
+      throw error;
+    }
+    return cst;
+  },
+  astFormat: "ptx",
+  locStart(node) {
+    return node.location.startOffset;
+  },
+  locEnd(node) {
+    return node.location.endOffset;
   }
-});
+};
+var parser_default = parser;
 
 // node_modules/prettier/doc.mjs
+var __defProp2 = Object.defineProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp2(target, name, { get: all[name], enumerable: true });
+};
+var public_exports = {};
+__export(public_exports, {
+  builders: () => builders,
+  printer: () => printer,
+  utils: () => utils
+});
+var DOC_TYPE_STRING = "string";
+var DOC_TYPE_ARRAY = "array";
+var DOC_TYPE_CURSOR = "cursor";
+var DOC_TYPE_INDENT = "indent";
+var DOC_TYPE_ALIGN = "align";
+var DOC_TYPE_TRIM = "trim";
+var DOC_TYPE_GROUP = "group";
+var DOC_TYPE_FILL = "fill";
+var DOC_TYPE_IF_BREAK = "if-break";
+var DOC_TYPE_INDENT_IF_BREAK = "indent-if-break";
+var DOC_TYPE_LINE_SUFFIX = "line-suffix";
+var DOC_TYPE_LINE_SUFFIX_BOUNDARY = "line-suffix-boundary";
+var DOC_TYPE_LINE = "line";
+var DOC_TYPE_LABEL = "label";
+var DOC_TYPE_BREAK_PARENT = "break-parent";
+var VALID_OBJECT_DOC_TYPES = /* @__PURE__ */ new Set([
+  DOC_TYPE_CURSOR,
+  DOC_TYPE_INDENT,
+  DOC_TYPE_ALIGN,
+  DOC_TYPE_TRIM,
+  DOC_TYPE_GROUP,
+  DOC_TYPE_FILL,
+  DOC_TYPE_IF_BREAK,
+  DOC_TYPE_INDENT_IF_BREAK,
+  DOC_TYPE_LINE_SUFFIX,
+  DOC_TYPE_LINE_SUFFIX_BOUNDARY,
+  DOC_TYPE_LINE,
+  DOC_TYPE_LABEL,
+  DOC_TYPE_BREAK_PARENT
+]);
+var at = (isOptionalObject, object, index) => {
+  if (isOptionalObject && (object === void 0 || object === null)) {
+    return;
+  }
+  if (Array.isArray(object) || typeof object === "string") {
+    return object[index < 0 ? object.length + index : index];
+  }
+  return object.at(index);
+};
+var at_default = at;
 function getDocType(doc) {
   if (typeof doc === "string") {
     return DOC_TYPE_STRING;
@@ -8826,6 +8868,8 @@ function getDocType(doc) {
     return type;
   }
 }
+var get_doc_type_default = getDocType;
+var disjunctionListFormat = (list) => new Intl.ListFormat("en-US", { type: "disjunction" }).format(list);
 function getDocErrorMessage(doc) {
   const type = doc === null ? "null" : typeof doc;
   if (type !== "string" && type !== "object") {
@@ -8845,6 +8889,15 @@ Expected it to be 'string' or 'object'.`;
   return `Unexpected doc.type '${doc.type}'.
 Expected it to be ${EXPECTED_TYPE_VALUES}.`;
 }
+var InvalidDocError = class extends Error {
+  name = "InvalidDocError";
+  constructor(doc) {
+    super(getDocErrorMessage(doc));
+    this.doc = doc;
+  }
+};
+var invalid_doc_error_default = InvalidDocError;
+var traverseDocOnExitStackMarker = {};
 function traverseDoc(doc, onEnter, onExit, shouldTraverseConditionalGroups) {
   const docsStack = [doc];
   while (docsStack.length > 0) {
@@ -8903,6 +8956,7 @@ function traverseDoc(doc, onEnter, onExit, shouldTraverseConditionalGroups) {
     }
   }
 }
+var traverse_doc_default = traverseDoc;
 function mapDoc(doc, cb) {
   if (typeof doc === "string") {
     return cb(doc);
@@ -9192,6 +9246,53 @@ function canBreakFn(doc) {
 function canBreak(doc) {
   return findInDoc(doc, canBreakFn, false);
 }
+var noop = () => {
+};
+var assertDoc = true ? noop : function(doc) {
+  traverse_doc_default(doc, (doc2) => {
+    if (checked.has(doc2)) {
+      return false;
+    }
+    if (typeof doc2 !== "string") {
+      checked.add(doc2);
+    }
+  });
+};
+var assertDocArray = true ? noop : function(docs, optional = false) {
+  if (optional && !docs) {
+    return;
+  }
+  if (!Array.isArray(docs)) {
+    throw new TypeError("Unexpected doc array.");
+  }
+  for (const doc of docs) {
+    assertDoc(doc);
+  }
+};
+var assertDocFillParts = true ? noop : (
+  /**
+   * @param {Doc[]} parts
+   */
+  function(parts) {
+    assertDocArray(parts);
+    if (parts.length > 1 && isEmptyDoc(at_default(
+      /* isOptionalObject */
+      false,
+      parts,
+      -1
+    ))) {
+      parts = parts.slice(0, -1);
+    }
+    for (const [i, doc] of parts.entries()) {
+      if (i % 2 === 1 && !isValidSeparator(doc)) {
+        const type = get_doc_type_default(doc);
+        throw new Error(
+          `Unexpected non-line-break doc at ${i}. Doc type is ${type}.`
+        );
+      }
+    }
+  }
+);
 function indent(contents) {
   assertDoc(contents);
   return { type: DOC_TYPE_INDENT, contents };
@@ -9256,6 +9357,20 @@ function lineSuffix(contents) {
   assertDoc(contents);
   return { type: DOC_TYPE_LINE_SUFFIX, contents };
 }
+var lineSuffixBoundary = { type: DOC_TYPE_LINE_SUFFIX_BOUNDARY };
+var breakParent = { type: DOC_TYPE_BREAK_PARENT };
+var trim = { type: DOC_TYPE_TRIM };
+var hardlineWithoutBreakParent = { type: DOC_TYPE_LINE, hard: true };
+var literallineWithoutBreakParent = {
+  type: DOC_TYPE_LINE,
+  hard: true,
+  literal: true
+};
+var line = { type: DOC_TYPE_LINE };
+var softline = { type: DOC_TYPE_LINE, soft: true };
+var hardline = [hardlineWithoutBreakParent, breakParent];
+var literalline = [literallineWithoutBreakParent, breakParent];
+var cursor = { type: DOC_TYPE_CURSOR };
 function join(separator, docs) {
   assertDoc(separator);
   assertDocArray(docs);
@@ -9284,6 +9399,19 @@ function label(label2, contents) {
   assertDoc(contents);
   return label2 ? { type: DOC_TYPE_LABEL, label: label2, contents } : contents;
 }
+var stringReplaceAll = (isOptionalObject, original, pattern, replacement) => {
+  if (isOptionalObject && (original === void 0 || original === null)) {
+    return;
+  }
+  if (original.replaceAll) {
+    return original.replaceAll(pattern, replacement);
+  }
+  if (pattern.global) {
+    return original.replace(pattern, replacement);
+  }
+  return original.split(pattern).join(replacement);
+};
+var string_replace_all_default = stringReplaceAll;
 function convertEndOfLineToChars(value) {
   switch (value) {
     case "cr":
@@ -9294,12 +9422,17 @@ function convertEndOfLineToChars(value) {
       return "\n";
   }
 }
+var emoji_regex_default = () => {
+  return /[#*0-9]\uFE0F?\u20E3|[\xA9\xAE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B\u2328\u23CF\u23ED-\u23EF\u23F1\u23F2\u23F8-\u23FA\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB\u25FC\u25FE\u2600-\u2604\u260E\u2611\u2614\u2615\u2618\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638-\u263A\u2640\u2642\u2648-\u2653\u265F\u2660\u2663\u2665\u2666\u2668\u267B\u267E\u267F\u2692\u2694-\u2697\u2699\u269B\u269C\u26A0\u26A7\u26AA\u26B0\u26B1\u26BD\u26BE\u26C4\u26C8\u26CF\u26D1\u26E9\u26F0-\u26F5\u26F7\u26F8\u26FA\u2702\u2708\u2709\u270F\u2712\u2714\u2716\u271D\u2721\u2733\u2734\u2744\u2747\u2757\u2763\u27A1\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B55\u3030\u303D\u3297\u3299]\uFE0F?|[\u261D\u270C\u270D](?:\uD83C[\uDFFB-\uDFFF]|\uFE0F)?|[\u270A\u270B](?:\uD83C[\uDFFB-\uDFFF])?|[\u23E9-\u23EC\u23F0\u23F3\u25FD\u2693\u26A1\u26AB\u26C5\u26CE\u26D4\u26EA\u26FD\u2705\u2728\u274C\u274E\u2753-\u2755\u2795-\u2797\u27B0\u27BF\u2B50]|\u26D3\uFE0F?(?:\u200D\uD83D\uDCA5)?|\u26F9(?:\uD83C[\uDFFB-\uDFFF]|\uFE0F)?(?:\u200D[\u2640\u2642]\uFE0F?)?|\u2764\uFE0F?(?:\u200D(?:\uD83D\uDD25|\uD83E\uDE79))?|\uD83C(?:[\uDC04\uDD70\uDD71\uDD7E\uDD7F\uDE02\uDE37\uDF21\uDF24-\uDF2C\uDF36\uDF7D\uDF96\uDF97\uDF99-\uDF9B\uDF9E\uDF9F\uDFCD\uDFCE\uDFD4-\uDFDF\uDFF5\uDFF7]\uFE0F?|[\uDF85\uDFC2\uDFC7](?:\uD83C[\uDFFB-\uDFFF])?|[\uDFC4\uDFCA](?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDFCB\uDFCC](?:\uD83C[\uDFFB-\uDFFF]|\uFE0F)?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDCCF\uDD8E\uDD91-\uDD9A\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF43\uDF45-\uDF4A\uDF4C-\uDF7C\uDF7E-\uDF84\uDF86-\uDF93\uDFA0-\uDFC1\uDFC5\uDFC6\uDFC8\uDFC9\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF8-\uDFFF]|\uDDE6\uD83C[\uDDE8-\uDDEC\uDDEE\uDDF1\uDDF2\uDDF4\uDDF6-\uDDFA\uDDFC\uDDFD\uDDFF]|\uDDE7\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEF\uDDF1-\uDDF4\uDDF6-\uDDF9\uDDFB\uDDFC\uDDFE\uDDFF]|\uDDE8\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDEE\uDDF0-\uDDF7\uDDFA-\uDDFF]|\uDDE9\uD83C[\uDDEA\uDDEC\uDDEF\uDDF0\uDDF2\uDDF4\uDDFF]|\uDDEA\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDED\uDDF7-\uDDFA]|\uDDEB\uD83C[\uDDEE-\uDDF0\uDDF2\uDDF4\uDDF7]|\uDDEC\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEE\uDDF1-\uDDF3\uDDF5-\uDDFA\uDDFC\uDDFE]|\uDDED\uD83C[\uDDF0\uDDF2\uDDF3\uDDF7\uDDF9\uDDFA]|\uDDEE\uD83C[\uDDE8-\uDDEA\uDDF1-\uDDF4\uDDF6-\uDDF9]|\uDDEF\uD83C[\uDDEA\uDDF2\uDDF4\uDDF5]|\uDDF0\uD83C[\uDDEA\uDDEC-\uDDEE\uDDF2\uDDF3\uDDF5\uDDF7\uDDFC\uDDFE\uDDFF]|\uDDF1\uD83C[\uDDE6-\uDDE8\uDDEE\uDDF0\uDDF7-\uDDFB\uDDFE]|\uDDF2\uD83C[\uDDE6\uDDE8-\uDDED\uDDF0-\uDDFF]|\uDDF3\uD83C[\uDDE6\uDDE8\uDDEA-\uDDEC\uDDEE\uDDF1\uDDF4\uDDF5\uDDF7\uDDFA\uDDFF]|\uDDF4\uD83C\uDDF2|\uDDF5\uD83C[\uDDE6\uDDEA-\uDDED\uDDF0-\uDDF3\uDDF7-\uDDF9\uDDFC\uDDFE]|\uDDF6\uD83C\uDDE6|\uDDF7\uD83C[\uDDEA\uDDF4\uDDF8\uDDFA\uDDFC]|\uDDF8\uD83C[\uDDE6-\uDDEA\uDDEC-\uDDF4\uDDF7-\uDDF9\uDDFB\uDDFD-\uDDFF]|\uDDF9\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDED\uDDEF-\uDDF4\uDDF7\uDDF9\uDDFB\uDDFC\uDDFF]|\uDDFA\uD83C[\uDDE6\uDDEC\uDDF2\uDDF3\uDDF8\uDDFE\uDDFF]|\uDDFB\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDEE\uDDF3\uDDFA]|\uDDFC\uD83C[\uDDEB\uDDF8]|\uDDFD\uD83C\uDDF0|\uDDFE\uD83C[\uDDEA\uDDF9]|\uDDFF\uD83C[\uDDE6\uDDF2\uDDFC]|\uDF44(?:\u200D\uD83D\uDFEB)?|\uDF4B(?:\u200D\uD83D\uDFE9)?|\uDFC3(?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D(?:[\u2640\u2642]\uFE0F?(?:\u200D\u27A1\uFE0F?)?|\u27A1\uFE0F?))?|\uDFF3\uFE0F?(?:\u200D(?:\u26A7\uFE0F?|\uD83C\uDF08))?|\uDFF4(?:\u200D\u2620\uFE0F?|\uDB40\uDC67\uDB40\uDC62\uDB40(?:\uDC65\uDB40\uDC6E\uDB40\uDC67|\uDC73\uDB40\uDC63\uDB40\uDC74|\uDC77\uDB40\uDC6C\uDB40\uDC73)\uDB40\uDC7F)?)|\uD83D(?:[\uDC3F\uDCFD\uDD49\uDD4A\uDD6F\uDD70\uDD73\uDD76-\uDD79\uDD87\uDD8A-\uDD8D\uDDA5\uDDA8\uDDB1\uDDB2\uDDBC\uDDC2-\uDDC4\uDDD1-\uDDD3\uDDDC-\uDDDE\uDDE1\uDDE3\uDDE8\uDDEF\uDDF3\uDDFA\uDECB\uDECD-\uDECF\uDEE0-\uDEE5\uDEE9\uDEF0\uDEF3]\uFE0F?|[\uDC42\uDC43\uDC46-\uDC50\uDC66\uDC67\uDC6B-\uDC6D\uDC72\uDC74-\uDC76\uDC78\uDC7C\uDC83\uDC85\uDC8F\uDC91\uDCAA\uDD7A\uDD95\uDD96\uDE4C\uDE4F\uDEC0\uDECC](?:\uD83C[\uDFFB-\uDFFF])?|[\uDC6E\uDC70\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4\uDEB5](?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDD74\uDD90](?:\uD83C[\uDFFB-\uDFFF]|\uFE0F)?|[\uDC00-\uDC07\uDC09-\uDC14\uDC16-\uDC25\uDC27-\uDC3A\uDC3C-\uDC3E\uDC40\uDC44\uDC45\uDC51-\uDC65\uDC6A\uDC79-\uDC7B\uDC7D-\uDC80\uDC84\uDC88-\uDC8E\uDC90\uDC92-\uDCA9\uDCAB-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDDA4\uDDFB-\uDE2D\uDE2F-\uDE34\uDE37-\uDE41\uDE43\uDE44\uDE48-\uDE4A\uDE80-\uDEA2\uDEA4-\uDEB3\uDEB7-\uDEBF\uDEC1-\uDEC5\uDED0-\uDED2\uDED5-\uDED7\uDEDC-\uDEDF\uDEEB\uDEEC\uDEF4-\uDEFC\uDFE0-\uDFEB\uDFF0]|\uDC08(?:\u200D\u2B1B)?|\uDC15(?:\u200D\uD83E\uDDBA)?|\uDC26(?:\u200D(?:\u2B1B|\uD83D\uDD25))?|\uDC3B(?:\u200D\u2744\uFE0F?)?|\uDC41\uFE0F?(?:\u200D\uD83D\uDDE8\uFE0F?)?|\uDC68(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D(?:[\uDC68\uDC69]\u200D\uD83D(?:\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?)|[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?)|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]))|\uD83C(?:\uDFFB(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFC-\uDFFF])))?|\uDFFC(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB\uDFFD-\uDFFF])))?|\uDFFD(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])))?|\uDFFE(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB-\uDFFD\uDFFF])))?|\uDFFF(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB-\uDFFE])))?))?|\uDC69(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?[\uDC68\uDC69]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D(?:[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?|\uDC69\u200D\uD83D(?:\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?))|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]))|\uD83C(?:\uDFFB(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFC-\uDFFF])))?|\uDFFC(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB\uDFFD-\uDFFF])))?|\uDFFD(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])))?|\uDFFE(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB-\uDFFD\uDFFF])))?|\uDFFF(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB-\uDFFE])))?))?|\uDC6F(?:\u200D[\u2640\u2642]\uFE0F?)?|\uDD75(?:\uD83C[\uDFFB-\uDFFF]|\uFE0F)?(?:\u200D[\u2640\u2642]\uFE0F?)?|\uDE2E(?:\u200D\uD83D\uDCA8)?|\uDE35(?:\u200D\uD83D\uDCAB)?|\uDE36(?:\u200D\uD83C\uDF2B\uFE0F?)?|\uDE42(?:\u200D[\u2194\u2195]\uFE0F?)?|\uDEB6(?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D(?:[\u2640\u2642]\uFE0F?(?:\u200D\u27A1\uFE0F?)?|\u27A1\uFE0F?))?)|\uD83E(?:[\uDD0C\uDD0F\uDD18-\uDD1F\uDD30-\uDD34\uDD36\uDD77\uDDB5\uDDB6\uDDBB\uDDD2\uDDD3\uDDD5\uDEC3-\uDEC5\uDEF0\uDEF2-\uDEF8](?:\uD83C[\uDFFB-\uDFFF])?|[\uDD26\uDD35\uDD37-\uDD39\uDD3D\uDD3E\uDDB8\uDDB9\uDDCD\uDDCF\uDDD4\uDDD6-\uDDDD](?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDDDE\uDDDF](?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDD0D\uDD0E\uDD10-\uDD17\uDD20-\uDD25\uDD27-\uDD2F\uDD3A\uDD3F-\uDD45\uDD47-\uDD76\uDD78-\uDDB4\uDDB7\uDDBA\uDDBC-\uDDCC\uDDD0\uDDE0-\uDDFF\uDE70-\uDE7C\uDE80-\uDE89\uDE8F-\uDEC2\uDEC6\uDECE-\uDEDC\uDEDF-\uDEE9]|\uDD3C(?:\u200D[\u2640\u2642]\uFE0F?|\uD83C[\uDFFB-\uDFFF])?|\uDDCE(?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D(?:[\u2640\u2642]\uFE0F?(?:\u200D\u27A1\uFE0F?)?|\u27A1\uFE0F?))?|\uDDD1(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1|\uDDD1\u200D\uD83E\uDDD2(?:\u200D\uD83E\uDDD2)?|\uDDD2(?:\u200D\uD83E\uDDD2)?))|\uD83C(?:\uDFFB(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFC-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFC(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB\uDFFD-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFD(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFE(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB-\uDFFD\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFF(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB-\uDFFE]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?))?|\uDEF1(?:\uD83C(?:\uDFFB(?:\u200D\uD83E\uDEF2\uD83C[\uDFFC-\uDFFF])?|\uDFFC(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB\uDFFD-\uDFFF])?|\uDFFD(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])?|\uDFFE(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB-\uDFFD\uDFFF])?|\uDFFF(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB-\uDFFE])?))?)/g;
+};
 function isFullWidth(x) {
   return x === 12288 || x >= 65281 && x <= 65376 || x >= 65504 && x <= 65510;
 }
 function isWide(x) {
   return x >= 4352 && x <= 4447 || x === 8986 || x === 8987 || x === 9001 || x === 9002 || x >= 9193 && x <= 9196 || x === 9200 || x === 9203 || x === 9725 || x === 9726 || x === 9748 || x === 9749 || x >= 9776 && x <= 9783 || x >= 9800 && x <= 9811 || x === 9855 || x >= 9866 && x <= 9871 || x === 9875 || x === 9889 || x === 9898 || x === 9899 || x === 9917 || x === 9918 || x === 9924 || x === 9925 || x === 9934 || x === 9940 || x === 9962 || x === 9970 || x === 9971 || x === 9973 || x === 9978 || x === 9981 || x === 9989 || x === 9994 || x === 9995 || x === 10024 || x === 10060 || x === 10062 || x >= 10067 && x <= 10069 || x === 10071 || x >= 10133 && x <= 10135 || x === 10160 || x === 10175 || x === 11035 || x === 11036 || x === 11088 || x === 11093 || x >= 11904 && x <= 11929 || x >= 11931 && x <= 12019 || x >= 12032 && x <= 12245 || x >= 12272 && x <= 12287 || x >= 12289 && x <= 12350 || x >= 12353 && x <= 12438 || x >= 12441 && x <= 12543 || x >= 12549 && x <= 12591 || x >= 12593 && x <= 12686 || x >= 12688 && x <= 12773 || x >= 12783 && x <= 12830 || x >= 12832 && x <= 12871 || x >= 12880 && x <= 42124 || x >= 42128 && x <= 42182 || x >= 43360 && x <= 43388 || x >= 44032 && x <= 55203 || x >= 63744 && x <= 64255 || x >= 65040 && x <= 65049 || x >= 65072 && x <= 65106 || x >= 65108 && x <= 65126 || x >= 65128 && x <= 65131 || x >= 94176 && x <= 94180 || x === 94192 || x === 94193 || x >= 94208 && x <= 100343 || x >= 100352 && x <= 101589 || x >= 101631 && x <= 101640 || x >= 110576 && x <= 110579 || x >= 110581 && x <= 110587 || x === 110589 || x === 110590 || x >= 110592 && x <= 110882 || x === 110898 || x >= 110928 && x <= 110930 || x === 110933 || x >= 110948 && x <= 110951 || x >= 110960 && x <= 111355 || x >= 119552 && x <= 119638 || x >= 119648 && x <= 119670 || x === 126980 || x === 127183 || x === 127374 || x >= 127377 && x <= 127386 || x >= 127488 && x <= 127490 || x >= 127504 && x <= 127547 || x >= 127552 && x <= 127560 || x === 127568 || x === 127569 || x >= 127584 && x <= 127589 || x >= 127744 && x <= 127776 || x >= 127789 && x <= 127797 || x >= 127799 && x <= 127868 || x >= 127870 && x <= 127891 || x >= 127904 && x <= 127946 || x >= 127951 && x <= 127955 || x >= 127968 && x <= 127984 || x === 127988 || x >= 127992 && x <= 128062 || x === 128064 || x >= 128066 && x <= 128252 || x >= 128255 && x <= 128317 || x >= 128331 && x <= 128334 || x >= 128336 && x <= 128359 || x === 128378 || x === 128405 || x === 128406 || x === 128420 || x >= 128507 && x <= 128591 || x >= 128640 && x <= 128709 || x === 128716 || x >= 128720 && x <= 128722 || x >= 128725 && x <= 128727 || x >= 128732 && x <= 128735 || x === 128747 || x === 128748 || x >= 128756 && x <= 128764 || x >= 128992 && x <= 129003 || x === 129008 || x >= 129292 && x <= 129338 || x >= 129340 && x <= 129349 || x >= 129351 && x <= 129535 || x >= 129648 && x <= 129660 || x >= 129664 && x <= 129673 || x >= 129679 && x <= 129734 || x >= 129742 && x <= 129756 || x >= 129759 && x <= 129769 || x >= 129776 && x <= 129784 || x >= 131072 && x <= 196605 || x >= 196608 && x <= 262141;
 }
+var _isNarrowWidth = (codePoint) => !(isFullWidth(codePoint) || isWide(codePoint));
+var notAsciiRegex = /[^\x20-\x7F]/u;
 function getStringWidth(text) {
   if (!text) {
     return 0;
@@ -9321,6 +9454,11 @@ function getStringWidth(text) {
   }
   return width;
 }
+var get_string_width_default = getStringWidth;
+var MODE_BREAK = Symbol("MODE_BREAK");
+var MODE_FLAT = Symbol("MODE_FLAT");
+var CURSOR_PLACEHOLDER = Symbol("cursor");
+var DOC_FILL_PRINTED_LENGTH = Symbol("DOC_FILL_PRINTED_LENGTH");
 function rootIndent() {
   return { value: "", length: 0, queue: [] };
 }
@@ -9815,197 +9953,45 @@ function printDocToString(doc, options) {
   }
   return { formatted: out.join("") };
 }
-var __defProp2, __export, public_exports, DOC_TYPE_STRING, DOC_TYPE_ARRAY, DOC_TYPE_CURSOR, DOC_TYPE_INDENT, DOC_TYPE_ALIGN, DOC_TYPE_TRIM, DOC_TYPE_GROUP, DOC_TYPE_FILL, DOC_TYPE_IF_BREAK, DOC_TYPE_INDENT_IF_BREAK, DOC_TYPE_LINE_SUFFIX, DOC_TYPE_LINE_SUFFIX_BOUNDARY, DOC_TYPE_LINE, DOC_TYPE_LABEL, DOC_TYPE_BREAK_PARENT, VALID_OBJECT_DOC_TYPES, at, at_default, get_doc_type_default, disjunctionListFormat, InvalidDocError, invalid_doc_error_default, traverseDocOnExitStackMarker, traverse_doc_default, noop, assertDoc, assertDocArray, assertDocFillParts, lineSuffixBoundary, breakParent, trim, hardlineWithoutBreakParent, literallineWithoutBreakParent, line, softline, hardline, literalline, cursor, stringReplaceAll, string_replace_all_default, emoji_regex_default, _isNarrowWidth, notAsciiRegex, get_string_width_default, MODE_BREAK, MODE_FLAT, CURSOR_PLACEHOLDER, DOC_FILL_PRINTED_LENGTH, builders, printer, utils;
-var init_doc = __esm({
-  "node_modules/prettier/doc.mjs"() {
-    __defProp2 = Object.defineProperty;
-    __export = (target, all) => {
-      for (var name in all)
-        __defProp2(target, name, { get: all[name], enumerable: true });
-    };
-    public_exports = {};
-    __export(public_exports, {
-      builders: () => builders,
-      printer: () => printer,
-      utils: () => utils
-    });
-    DOC_TYPE_STRING = "string";
-    DOC_TYPE_ARRAY = "array";
-    DOC_TYPE_CURSOR = "cursor";
-    DOC_TYPE_INDENT = "indent";
-    DOC_TYPE_ALIGN = "align";
-    DOC_TYPE_TRIM = "trim";
-    DOC_TYPE_GROUP = "group";
-    DOC_TYPE_FILL = "fill";
-    DOC_TYPE_IF_BREAK = "if-break";
-    DOC_TYPE_INDENT_IF_BREAK = "indent-if-break";
-    DOC_TYPE_LINE_SUFFIX = "line-suffix";
-    DOC_TYPE_LINE_SUFFIX_BOUNDARY = "line-suffix-boundary";
-    DOC_TYPE_LINE = "line";
-    DOC_TYPE_LABEL = "label";
-    DOC_TYPE_BREAK_PARENT = "break-parent";
-    VALID_OBJECT_DOC_TYPES = /* @__PURE__ */ new Set([
-      DOC_TYPE_CURSOR,
-      DOC_TYPE_INDENT,
-      DOC_TYPE_ALIGN,
-      DOC_TYPE_TRIM,
-      DOC_TYPE_GROUP,
-      DOC_TYPE_FILL,
-      DOC_TYPE_IF_BREAK,
-      DOC_TYPE_INDENT_IF_BREAK,
-      DOC_TYPE_LINE_SUFFIX,
-      DOC_TYPE_LINE_SUFFIX_BOUNDARY,
-      DOC_TYPE_LINE,
-      DOC_TYPE_LABEL,
-      DOC_TYPE_BREAK_PARENT
-    ]);
-    at = (isOptionalObject, object, index) => {
-      if (isOptionalObject && (object === void 0 || object === null)) {
-        return;
-      }
-      if (Array.isArray(object) || typeof object === "string") {
-        return object[index < 0 ? object.length + index : index];
-      }
-      return object.at(index);
-    };
-    at_default = at;
-    get_doc_type_default = getDocType;
-    disjunctionListFormat = (list) => new Intl.ListFormat("en-US", { type: "disjunction" }).format(list);
-    InvalidDocError = class extends Error {
-      name = "InvalidDocError";
-      constructor(doc) {
-        super(getDocErrorMessage(doc));
-        this.doc = doc;
-      }
-    };
-    invalid_doc_error_default = InvalidDocError;
-    traverseDocOnExitStackMarker = {};
-    traverse_doc_default = traverseDoc;
-    noop = () => {
-    };
-    assertDoc = true ? noop : function(doc) {
-      traverse_doc_default(doc, (doc2) => {
-        if (checked.has(doc2)) {
-          return false;
-        }
-        if (typeof doc2 !== "string") {
-          checked.add(doc2);
-        }
-      });
-    };
-    assertDocArray = true ? noop : function(docs, optional = false) {
-      if (optional && !docs) {
-        return;
-      }
-      if (!Array.isArray(docs)) {
-        throw new TypeError("Unexpected doc array.");
-      }
-      for (const doc of docs) {
-        assertDoc(doc);
-      }
-    };
-    assertDocFillParts = true ? noop : (
-      /**
-       * @param {Doc[]} parts
-       */
-      function(parts) {
-        assertDocArray(parts);
-        if (parts.length > 1 && isEmptyDoc(at_default(
-          /* isOptionalObject */
-          false,
-          parts,
-          -1
-        ))) {
-          parts = parts.slice(0, -1);
-        }
-        for (const [i, doc] of parts.entries()) {
-          if (i % 2 === 1 && !isValidSeparator(doc)) {
-            const type = get_doc_type_default(doc);
-            throw new Error(
-              `Unexpected non-line-break doc at ${i}. Doc type is ${type}.`
-            );
-          }
-        }
-      }
-    );
-    lineSuffixBoundary = { type: DOC_TYPE_LINE_SUFFIX_BOUNDARY };
-    breakParent = { type: DOC_TYPE_BREAK_PARENT };
-    trim = { type: DOC_TYPE_TRIM };
-    hardlineWithoutBreakParent = { type: DOC_TYPE_LINE, hard: true };
-    literallineWithoutBreakParent = {
-      type: DOC_TYPE_LINE,
-      hard: true,
-      literal: true
-    };
-    line = { type: DOC_TYPE_LINE };
-    softline = { type: DOC_TYPE_LINE, soft: true };
-    hardline = [hardlineWithoutBreakParent, breakParent];
-    literalline = [literallineWithoutBreakParent, breakParent];
-    cursor = { type: DOC_TYPE_CURSOR };
-    stringReplaceAll = (isOptionalObject, original, pattern, replacement) => {
-      if (isOptionalObject && (original === void 0 || original === null)) {
-        return;
-      }
-      if (original.replaceAll) {
-        return original.replaceAll(pattern, replacement);
-      }
-      if (pattern.global) {
-        return original.replace(pattern, replacement);
-      }
-      return original.split(pattern).join(replacement);
-    };
-    string_replace_all_default = stringReplaceAll;
-    emoji_regex_default = () => {
-      return /[#*0-9]\uFE0F?\u20E3|[\xA9\xAE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B\u2328\u23CF\u23ED-\u23EF\u23F1\u23F2\u23F8-\u23FA\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB\u25FC\u25FE\u2600-\u2604\u260E\u2611\u2614\u2615\u2618\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638-\u263A\u2640\u2642\u2648-\u2653\u265F\u2660\u2663\u2665\u2666\u2668\u267B\u267E\u267F\u2692\u2694-\u2697\u2699\u269B\u269C\u26A0\u26A7\u26AA\u26B0\u26B1\u26BD\u26BE\u26C4\u26C8\u26CF\u26D1\u26E9\u26F0-\u26F5\u26F7\u26F8\u26FA\u2702\u2708\u2709\u270F\u2712\u2714\u2716\u271D\u2721\u2733\u2734\u2744\u2747\u2757\u2763\u27A1\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B55\u3030\u303D\u3297\u3299]\uFE0F?|[\u261D\u270C\u270D](?:\uD83C[\uDFFB-\uDFFF]|\uFE0F)?|[\u270A\u270B](?:\uD83C[\uDFFB-\uDFFF])?|[\u23E9-\u23EC\u23F0\u23F3\u25FD\u2693\u26A1\u26AB\u26C5\u26CE\u26D4\u26EA\u26FD\u2705\u2728\u274C\u274E\u2753-\u2755\u2795-\u2797\u27B0\u27BF\u2B50]|\u26D3\uFE0F?(?:\u200D\uD83D\uDCA5)?|\u26F9(?:\uD83C[\uDFFB-\uDFFF]|\uFE0F)?(?:\u200D[\u2640\u2642]\uFE0F?)?|\u2764\uFE0F?(?:\u200D(?:\uD83D\uDD25|\uD83E\uDE79))?|\uD83C(?:[\uDC04\uDD70\uDD71\uDD7E\uDD7F\uDE02\uDE37\uDF21\uDF24-\uDF2C\uDF36\uDF7D\uDF96\uDF97\uDF99-\uDF9B\uDF9E\uDF9F\uDFCD\uDFCE\uDFD4-\uDFDF\uDFF5\uDFF7]\uFE0F?|[\uDF85\uDFC2\uDFC7](?:\uD83C[\uDFFB-\uDFFF])?|[\uDFC4\uDFCA](?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDFCB\uDFCC](?:\uD83C[\uDFFB-\uDFFF]|\uFE0F)?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDCCF\uDD8E\uDD91-\uDD9A\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF43\uDF45-\uDF4A\uDF4C-\uDF7C\uDF7E-\uDF84\uDF86-\uDF93\uDFA0-\uDFC1\uDFC5\uDFC6\uDFC8\uDFC9\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF8-\uDFFF]|\uDDE6\uD83C[\uDDE8-\uDDEC\uDDEE\uDDF1\uDDF2\uDDF4\uDDF6-\uDDFA\uDDFC\uDDFD\uDDFF]|\uDDE7\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEF\uDDF1-\uDDF4\uDDF6-\uDDF9\uDDFB\uDDFC\uDDFE\uDDFF]|\uDDE8\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDEE\uDDF0-\uDDF7\uDDFA-\uDDFF]|\uDDE9\uD83C[\uDDEA\uDDEC\uDDEF\uDDF0\uDDF2\uDDF4\uDDFF]|\uDDEA\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDED\uDDF7-\uDDFA]|\uDDEB\uD83C[\uDDEE-\uDDF0\uDDF2\uDDF4\uDDF7]|\uDDEC\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEE\uDDF1-\uDDF3\uDDF5-\uDDFA\uDDFC\uDDFE]|\uDDED\uD83C[\uDDF0\uDDF2\uDDF3\uDDF7\uDDF9\uDDFA]|\uDDEE\uD83C[\uDDE8-\uDDEA\uDDF1-\uDDF4\uDDF6-\uDDF9]|\uDDEF\uD83C[\uDDEA\uDDF2\uDDF4\uDDF5]|\uDDF0\uD83C[\uDDEA\uDDEC-\uDDEE\uDDF2\uDDF3\uDDF5\uDDF7\uDDFC\uDDFE\uDDFF]|\uDDF1\uD83C[\uDDE6-\uDDE8\uDDEE\uDDF0\uDDF7-\uDDFB\uDDFE]|\uDDF2\uD83C[\uDDE6\uDDE8-\uDDED\uDDF0-\uDDFF]|\uDDF3\uD83C[\uDDE6\uDDE8\uDDEA-\uDDEC\uDDEE\uDDF1\uDDF4\uDDF5\uDDF7\uDDFA\uDDFF]|\uDDF4\uD83C\uDDF2|\uDDF5\uD83C[\uDDE6\uDDEA-\uDDED\uDDF0-\uDDF3\uDDF7-\uDDF9\uDDFC\uDDFE]|\uDDF6\uD83C\uDDE6|\uDDF7\uD83C[\uDDEA\uDDF4\uDDF8\uDDFA\uDDFC]|\uDDF8\uD83C[\uDDE6-\uDDEA\uDDEC-\uDDF4\uDDF7-\uDDF9\uDDFB\uDDFD-\uDDFF]|\uDDF9\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDED\uDDEF-\uDDF4\uDDF7\uDDF9\uDDFB\uDDFC\uDDFF]|\uDDFA\uD83C[\uDDE6\uDDEC\uDDF2\uDDF3\uDDF8\uDDFE\uDDFF]|\uDDFB\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDEE\uDDF3\uDDFA]|\uDDFC\uD83C[\uDDEB\uDDF8]|\uDDFD\uD83C\uDDF0|\uDDFE\uD83C[\uDDEA\uDDF9]|\uDDFF\uD83C[\uDDE6\uDDF2\uDDFC]|\uDF44(?:\u200D\uD83D\uDFEB)?|\uDF4B(?:\u200D\uD83D\uDFE9)?|\uDFC3(?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D(?:[\u2640\u2642]\uFE0F?(?:\u200D\u27A1\uFE0F?)?|\u27A1\uFE0F?))?|\uDFF3\uFE0F?(?:\u200D(?:\u26A7\uFE0F?|\uD83C\uDF08))?|\uDFF4(?:\u200D\u2620\uFE0F?|\uDB40\uDC67\uDB40\uDC62\uDB40(?:\uDC65\uDB40\uDC6E\uDB40\uDC67|\uDC73\uDB40\uDC63\uDB40\uDC74|\uDC77\uDB40\uDC6C\uDB40\uDC73)\uDB40\uDC7F)?)|\uD83D(?:[\uDC3F\uDCFD\uDD49\uDD4A\uDD6F\uDD70\uDD73\uDD76-\uDD79\uDD87\uDD8A-\uDD8D\uDDA5\uDDA8\uDDB1\uDDB2\uDDBC\uDDC2-\uDDC4\uDDD1-\uDDD3\uDDDC-\uDDDE\uDDE1\uDDE3\uDDE8\uDDEF\uDDF3\uDDFA\uDECB\uDECD-\uDECF\uDEE0-\uDEE5\uDEE9\uDEF0\uDEF3]\uFE0F?|[\uDC42\uDC43\uDC46-\uDC50\uDC66\uDC67\uDC6B-\uDC6D\uDC72\uDC74-\uDC76\uDC78\uDC7C\uDC83\uDC85\uDC8F\uDC91\uDCAA\uDD7A\uDD95\uDD96\uDE4C\uDE4F\uDEC0\uDECC](?:\uD83C[\uDFFB-\uDFFF])?|[\uDC6E\uDC70\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4\uDEB5](?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDD74\uDD90](?:\uD83C[\uDFFB-\uDFFF]|\uFE0F)?|[\uDC00-\uDC07\uDC09-\uDC14\uDC16-\uDC25\uDC27-\uDC3A\uDC3C-\uDC3E\uDC40\uDC44\uDC45\uDC51-\uDC65\uDC6A\uDC79-\uDC7B\uDC7D-\uDC80\uDC84\uDC88-\uDC8E\uDC90\uDC92-\uDCA9\uDCAB-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDDA4\uDDFB-\uDE2D\uDE2F-\uDE34\uDE37-\uDE41\uDE43\uDE44\uDE48-\uDE4A\uDE80-\uDEA2\uDEA4-\uDEB3\uDEB7-\uDEBF\uDEC1-\uDEC5\uDED0-\uDED2\uDED5-\uDED7\uDEDC-\uDEDF\uDEEB\uDEEC\uDEF4-\uDEFC\uDFE0-\uDFEB\uDFF0]|\uDC08(?:\u200D\u2B1B)?|\uDC15(?:\u200D\uD83E\uDDBA)?|\uDC26(?:\u200D(?:\u2B1B|\uD83D\uDD25))?|\uDC3B(?:\u200D\u2744\uFE0F?)?|\uDC41\uFE0F?(?:\u200D\uD83D\uDDE8\uFE0F?)?|\uDC68(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D(?:[\uDC68\uDC69]\u200D\uD83D(?:\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?)|[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?)|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]))|\uD83C(?:\uDFFB(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFC-\uDFFF])))?|\uDFFC(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB\uDFFD-\uDFFF])))?|\uDFFD(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])))?|\uDFFE(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB-\uDFFD\uDFFF])))?|\uDFFF(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?\uDC68\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D\uDC68\uD83C[\uDFFB-\uDFFE])))?))?|\uDC69(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:\uDC8B\u200D\uD83D)?[\uDC68\uDC69]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D(?:[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?|\uDC69\u200D\uD83D(?:\uDC66(?:\u200D\uD83D\uDC66)?|\uDC67(?:\u200D\uD83D[\uDC66\uDC67])?))|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]))|\uD83C(?:\uDFFB(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFC-\uDFFF])))?|\uDFFC(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB\uDFFD-\uDFFF])))?|\uDFFD(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])))?|\uDFFE(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB-\uDFFD\uDFFF])))?|\uDFFF(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D\uD83D(?:[\uDC68\uDC69]|\uDC8B\u200D\uD83D[\uDC68\uDC69])\uD83C[\uDFFB-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83D[\uDC68\uDC69]\uD83C[\uDFFB-\uDFFE])))?))?|\uDC6F(?:\u200D[\u2640\u2642]\uFE0F?)?|\uDD75(?:\uD83C[\uDFFB-\uDFFF]|\uFE0F)?(?:\u200D[\u2640\u2642]\uFE0F?)?|\uDE2E(?:\u200D\uD83D\uDCA8)?|\uDE35(?:\u200D\uD83D\uDCAB)?|\uDE36(?:\u200D\uD83C\uDF2B\uFE0F?)?|\uDE42(?:\u200D[\u2194\u2195]\uFE0F?)?|\uDEB6(?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D(?:[\u2640\u2642]\uFE0F?(?:\u200D\u27A1\uFE0F?)?|\u27A1\uFE0F?))?)|\uD83E(?:[\uDD0C\uDD0F\uDD18-\uDD1F\uDD30-\uDD34\uDD36\uDD77\uDDB5\uDDB6\uDDBB\uDDD2\uDDD3\uDDD5\uDEC3-\uDEC5\uDEF0\uDEF2-\uDEF8](?:\uD83C[\uDFFB-\uDFFF])?|[\uDD26\uDD35\uDD37-\uDD39\uDD3D\uDD3E\uDDB8\uDDB9\uDDCD\uDDCF\uDDD4\uDDD6-\uDDDD](?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDDDE\uDDDF](?:\u200D[\u2640\u2642]\uFE0F?)?|[\uDD0D\uDD0E\uDD10-\uDD17\uDD20-\uDD25\uDD27-\uDD2F\uDD3A\uDD3F-\uDD45\uDD47-\uDD76\uDD78-\uDDB4\uDDB7\uDDBA\uDDBC-\uDDCC\uDDD0\uDDE0-\uDDFF\uDE70-\uDE7C\uDE80-\uDE89\uDE8F-\uDEC2\uDEC6\uDECE-\uDEDC\uDEDF-\uDEE9]|\uDD3C(?:\u200D[\u2640\u2642]\uFE0F?|\uD83C[\uDFFB-\uDFFF])?|\uDDCE(?:\uD83C[\uDFFB-\uDFFF])?(?:\u200D(?:[\u2640\u2642]\uFE0F?(?:\u200D\u27A1\uFE0F?)?|\u27A1\uFE0F?))?|\uDDD1(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1|\uDDD1\u200D\uD83E\uDDD2(?:\u200D\uD83E\uDDD2)?|\uDDD2(?:\u200D\uD83E\uDDD2)?))|\uD83C(?:\uDFFB(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFC-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFC(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB\uDFFD-\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFD(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFE(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB-\uDFFD\uDFFF]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?|\uDFFF(?:\u200D(?:[\u2695\u2696\u2708]\uFE0F?|\u2764\uFE0F?\u200D(?:\uD83D\uDC8B\u200D)?\uD83E\uDDD1\uD83C[\uDFFB-\uDFFE]|\uD83C[\uDF3E\uDF73\uDF7C\uDF84\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E(?:[\uDDAF\uDDBC\uDDBD](?:\u200D\u27A1\uFE0F?)?|[\uDDB0-\uDDB3]|\uDD1D\u200D\uD83E\uDDD1\uD83C[\uDFFB-\uDFFF])))?))?|\uDEF1(?:\uD83C(?:\uDFFB(?:\u200D\uD83E\uDEF2\uD83C[\uDFFC-\uDFFF])?|\uDFFC(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB\uDFFD-\uDFFF])?|\uDFFD(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])?|\uDFFE(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB-\uDFFD\uDFFF])?|\uDFFF(?:\u200D\uD83E\uDEF2\uD83C[\uDFFB-\uDFFE])?))?)/g;
-    };
-    _isNarrowWidth = (codePoint) => !(isFullWidth(codePoint) || isWide(codePoint));
-    notAsciiRegex = /[^\x20-\x7F]/u;
-    get_string_width_default = getStringWidth;
-    MODE_BREAK = Symbol("MODE_BREAK");
-    MODE_FLAT = Symbol("MODE_FLAT");
-    CURSOR_PLACEHOLDER = Symbol("cursor");
-    DOC_FILL_PRINTED_LENGTH = Symbol("DOC_FILL_PRINTED_LENGTH");
-    builders = {
-      join,
-      line,
-      softline,
-      hardline,
-      literalline,
-      group,
-      conditionalGroup,
-      fill,
-      lineSuffix,
-      lineSuffixBoundary,
-      cursor,
-      breakParent,
-      ifBreak,
-      trim,
-      indent,
-      indentIfBreak,
-      align,
-      addAlignmentToDoc,
-      markAsRoot,
-      dedentToRoot,
-      dedent,
-      hardlineWithoutBreakParent,
-      literallineWithoutBreakParent,
-      label,
-      // TODO: Remove this in v4
-      concat: (parts) => parts
-    };
-    printer = { printDocToString };
-    utils = {
-      willBreak,
-      traverseDoc: traverse_doc_default,
-      findInDoc,
-      mapDoc,
-      removeLines,
-      stripTrailingHardline,
-      replaceEndOfLine,
-      canBreak
-    };
-  }
-});
+var builders = {
+  join,
+  line,
+  softline,
+  hardline,
+  literalline,
+  group,
+  conditionalGroup,
+  fill,
+  lineSuffix,
+  lineSuffixBoundary,
+  cursor,
+  breakParent,
+  ifBreak,
+  trim,
+  indent,
+  indentIfBreak,
+  align,
+  addAlignmentToDoc,
+  markAsRoot,
+  dedentToRoot,
+  dedent,
+  hardlineWithoutBreakParent,
+  literallineWithoutBreakParent,
+  label,
+  // TODO: Remove this in v4
+  concat: (parts) => parts
+};
+var printer = { printDocToString };
+var utils = {
+  willBreak,
+  traverseDoc: traverse_doc_default,
+  findInDoc,
+  mapDoc,
+  removeLines,
+  stripTrailingHardline,
+  replaceEndOfLine,
+  canBreak
+};
 
 // src/print-utils.ts
 function printIToken(path) {
@@ -10024,13 +10010,9 @@ function isFragment(item) {
   }
   return false;
 }
-var init_print_utils = __esm({
-  "src/print-utils.ts"() {
-    "use strict";
-  }
-});
 
 // src/print-children.ts
+var { fill: fill2, group: group2, hardline: hardline2, indent: indent2, join: join2, line: line2, literalline: literalline2, softline: softline2 } = builders;
 function printChildrenWhenWhitespaceDoesNotMatter(path, print) {
   const node = path.getNode();
   if (node == null || node.name !== "element") {
@@ -10108,55 +10090,40 @@ function printChildrenWhenWhitespaceDoesNotMatter(path, print) {
   fragments.sort((left, right) => left.offset - right.offset);
   return fragments;
 }
-var fill2, group2, hardline2, indent2, join2, line2, literalline2, softline2;
-var init_print_children = __esm({
-  "src/print-children.ts"() {
-    "use strict";
-    init_doc();
-    init_print_utils();
-    ({ fill: fill2, group: group2, hardline: hardline2, indent: indent2, join: join2, line: line2, literalline: literalline2, softline: softline2 } = builders);
-  }
-});
 
 // src/pretext/special-nodes.ts
-var PRE_ELEMENTS, INDENTABLE_PRE_ELEMENTS, PAR_ELEMENTS, BREAK_AROUND_ELEMENTS;
-var init_special_nodes = __esm({
-  "src/pretext/special-nodes.ts"() {
-    "use strict";
-    PRE_ELEMENTS = /* @__PURE__ */ new Set(["cline", "input", "output", "prompt"]);
-    INDENTABLE_PRE_ELEMENTS = /* @__PURE__ */ new Set([
-      "latex-image",
-      "latex-image-preamble",
-      "macros",
-      "asymptote"
-    ]);
-    PAR_ELEMENTS = /* @__PURE__ */ new Set([
-      "p",
-      "line",
-      "biblio",
-      "li",
-      "idx",
-      "h",
-      "description",
-      "shortdescription",
-      "caption",
-      "cell",
-      "q",
-      "title",
-      "pubtitle",
-      "fn",
-      "me"
-    ]);
-    BREAK_AROUND_ELEMENTS = /* @__PURE__ */ new Set([
-      "ol",
-      "ul",
-      "dl",
-      "q",
-      "title",
-      "pubtitle"
-    ]);
-  }
-});
+var PRE_ELEMENTS = /* @__PURE__ */ new Set(["cline", "input", "output", "prompt"]);
+var INDENTABLE_PRE_ELEMENTS = /* @__PURE__ */ new Set([
+  "latex-image",
+  "latex-image-preamble",
+  "macros",
+  "asymptote"
+]);
+var PAR_ELEMENTS = /* @__PURE__ */ new Set([
+  "p",
+  "line",
+  "biblio",
+  "li",
+  "idx",
+  "h",
+  "description",
+  "shortdescription",
+  "caption",
+  "cell",
+  "q",
+  "title",
+  "pubtitle",
+  "fn",
+  "me"
+]);
+var BREAK_AROUND_ELEMENTS = /* @__PURE__ */ new Set([
+  "ol",
+  "ul",
+  "dl",
+  "q",
+  "title",
+  "pubtitle"
+]);
 
 // src/indentible-pre.ts
 function getLeadingWhitespace(str, tabWidth = 4) {
@@ -10233,13 +10200,21 @@ function indentablePreToLines(rawText, tabWidth = 4) {
   }
   return lines.slice(leadingBlankLines, lines.length - trailingBlankLines);
 }
-var init_indentible_pre = __esm({
-  "src/indentible-pre.ts"() {
-    "use strict";
-  }
-});
 
 // src/printer.ts
+var {
+  fill: fill3,
+  group: group3,
+  hardline: hardline3,
+  indent: indent3,
+  join: join3,
+  line: line3,
+  literalline: literalline3,
+  softline: softline3,
+  breakParent: breakParent2
+} = builders;
+var ignoreStartComment = "<!-- prettier-ignore-start -->";
+var ignoreEndComment = "<!-- prettier-ignore-end -->";
 function isLine(item) {
   return item === line3 || item === hardline3 || item === softline3;
 }
@@ -10265,424 +10240,396 @@ function isWhitespaceIgnorable(node) {
 function replaceNewlinesWithLiteralLines(content) {
   return content.split(/(\n)/g).map((value, idx) => idx % 2 === 0 ? value : literalline3);
 }
-var fill3, group3, hardline3, indent3, join3, line3, literalline3, softline3, breakParent2, ignoreStartComment, ignoreEndComment, printer2, printer_default;
-var init_printer = __esm({
-  "src/printer.ts"() {
-    "use strict";
-    init_doc();
-    init_print_children();
-    init_print_utils();
-    init_special_nodes();
-    init_indentible_pre();
-    ({
-      fill: fill3,
-      group: group3,
-      hardline: hardline3,
-      indent: indent3,
-      join: join3,
-      line: line3,
-      literalline: literalline3,
-      softline: softline3,
-      breakParent: breakParent2
-    } = builders);
-    ignoreStartComment = "<!-- prettier-ignore-start -->";
-    ignoreEndComment = "<!-- prettier-ignore-end -->";
-    printer2 = {
-      print(path, opts, print) {
-        const node = path.getValue();
-        switch (node.name) {
-          case "attribute": {
-            const { Name, EQUALS, STRING } = node.children;
-            return [Name[0].image, EQUALS[0].image, STRING[0].image];
-          }
-          case "chardata": {
-            const { SEA_WS, TEXT } = node.children;
-            const [{ image }] = SEA_WS || TEXT;
-            return image.split(/(\n)/g).map(
-              (value, index) => index % 2 === 0 ? value : literalline3
+var printer2 = {
+  print(path, opts, print) {
+    const node = path.getValue();
+    switch (node.name) {
+      case "attribute": {
+        const { Name, EQUALS, STRING } = node.children;
+        return [Name[0].image, EQUALS[0].image, STRING[0].image];
+      }
+      case "chardata": {
+        const { SEA_WS, TEXT } = node.children;
+        const [{ image }] = SEA_WS || TEXT;
+        return image.split(/(\n)/g).map(
+          (value, index) => index % 2 === 0 ? value : literalline3
+        );
+      }
+      case "content": {
+        const nodePath = path;
+        let fragments = nodePath.call((childrenPath) => {
+          let response = [];
+          const children = childrenPath.getValue();
+          if (children.CData) {
+            response = response.concat(
+              childrenPath.map(printIToken, "CData")
             );
           }
-          case "content": {
-            const nodePath = path;
-            let fragments = nodePath.call((childrenPath) => {
-              let response = [];
-              const children = childrenPath.getValue();
-              if (children.CData) {
-                response = response.concat(
-                  childrenPath.map(printIToken, "CData")
-                );
-              }
-              if (children.Comment) {
-                response = response.concat(
-                  childrenPath.map(printIToken, "Comment")
-                );
-              }
-              if (children.chardata) {
-                response = response.concat(
-                  childrenPath.map(
-                    (charDataPath) => ({
-                      offset: charDataPath.getValue().location.startOffset,
-                      printed: print(charDataPath)
-                    }),
-                    "chardata"
-                  )
-                );
-              }
-              if (children.element) {
-                response = response.concat(
-                  childrenPath.map(
-                    (elementPath) => ({
-                      offset: elementPath.getValue().location.startOffset,
-                      printed: print(elementPath)
-                    }),
-                    "element"
-                  )
-                );
-              }
-              if (children.PROCESSING_INSTRUCTION) {
-                response = response.concat(
-                  childrenPath.map(
-                    printIToken,
-                    "PROCESSING_INSTRUCTION"
-                  )
-                );
-              }
-              if (children.reference) {
-                response = response.concat(
-                  childrenPath.map((referencePath) => {
-                    const referenceNode = referencePath.getValue();
-                    return {
-                      offset: referenceNode.location.startOffset,
-                      printed: (referenceNode.children.CharRef || referenceNode.children.EntityRef)[0].image
-                    };
-                  }, "reference")
-                );
-              }
-              return response;
-            }, "children");
-            const { Comment } = node.children;
-            if (hasIgnoreRanges(Comment)) {
-              Comment.sort(
-                (left, right) => left.startOffset - right.startOffset
-              );
-              const ignoreRanges = [];
-              let ignoreStart = null;
-              Comment.forEach((comment) => {
-                if (comment.image === ignoreStartComment) {
-                  ignoreStart = comment;
-                } else if (ignoreStart && comment.image === ignoreEndComment) {
-                  ignoreRanges.push({
-                    start: ignoreStart.startOffset,
-                    end: comment.endOffset
-                  });
-                  ignoreStart = null;
-                }
-              });
-              fragments = fragments.filter(
-                (fragment) => ignoreRanges.every(
-                  ({ start, end }) => fragment.offset < start || fragment.offset > end
-                )
-              );
-              ignoreRanges.forEach(({ start, end }) => {
-                const content = opts.originalText.slice(start, end + 1);
-                fragments.push({
-                  offset: start,
-                  printed: replaceNewlinesWithLiteralLines(content)
-                });
-              });
-            }
-            fragments.sort((left, right) => left.offset - right.offset);
-            return group3(fragments.map(({ printed }) => printed));
+          if (children.Comment) {
+            response = response.concat(
+              childrenPath.map(printIToken, "Comment")
+            );
           }
-          case "docTypeDecl": {
-            const { DocType, Name, externalID, CLOSE } = node.children;
-            const parts = [DocType[0].image, " ", Name[0].image];
-            if (externalID) {
-              parts.push(
-                " ",
-                path.call(print, "children", "externalID", 0)
-              );
-            }
-            return group3([...parts, CLOSE[0].image]);
+          if (children.chardata) {
+            response = response.concat(
+              childrenPath.map(
+                (charDataPath) => ({
+                  offset: charDataPath.getValue().location.startOffset,
+                  printed: print(charDataPath)
+                }),
+                "chardata"
+              )
+            );
           }
-          case "document": {
-            const { docTypeDecl, element, misc, prolog } = node.children;
-            const fragments = [];
-            if (docTypeDecl) {
+          if (children.element) {
+            response = response.concat(
+              childrenPath.map(
+                (elementPath) => ({
+                  offset: elementPath.getValue().location.startOffset,
+                  printed: print(elementPath)
+                }),
+                "element"
+              )
+            );
+          }
+          if (children.PROCESSING_INSTRUCTION) {
+            response = response.concat(
+              childrenPath.map(
+                printIToken,
+                "PROCESSING_INSTRUCTION"
+              )
+            );
+          }
+          if (children.reference) {
+            response = response.concat(
+              childrenPath.map((referencePath) => {
+                const referenceNode = referencePath.getValue();
+                return {
+                  offset: referenceNode.location.startOffset,
+                  printed: (referenceNode.children.CharRef || referenceNode.children.EntityRef)[0].image
+                };
+              }, "reference")
+            );
+          }
+          return response;
+        }, "children");
+        const { Comment } = node.children;
+        if (hasIgnoreRanges(Comment)) {
+          Comment.sort(
+            (left, right) => left.startOffset - right.startOffset
+          );
+          const ignoreRanges = [];
+          let ignoreStart = null;
+          Comment.forEach((comment) => {
+            if (comment.image === ignoreStartComment) {
+              ignoreStart = comment;
+            } else if (ignoreStart && comment.image === ignoreEndComment) {
+              ignoreRanges.push({
+                start: ignoreStart.startOffset,
+                end: comment.endOffset
+              });
+              ignoreStart = null;
+            }
+          });
+          fragments = fragments.filter(
+            (fragment) => ignoreRanges.every(
+              ({ start, end }) => fragment.offset < start || fragment.offset > end
+            )
+          );
+          ignoreRanges.forEach(({ start, end }) => {
+            const content = opts.originalText.slice(start, end + 1);
+            fragments.push({
+              offset: start,
+              printed: replaceNewlinesWithLiteralLines(content)
+            });
+          });
+        }
+        fragments.sort((left, right) => left.offset - right.offset);
+        return group3(fragments.map(({ printed }) => printed));
+      }
+      case "docTypeDecl": {
+        const { DocType, Name, externalID, CLOSE } = node.children;
+        const parts = [DocType[0].image, " ", Name[0].image];
+        if (externalID) {
+          parts.push(
+            " ",
+            path.call(print, "children", "externalID", 0)
+          );
+        }
+        return group3([...parts, CLOSE[0].image]);
+      }
+      case "document": {
+        const { docTypeDecl, element, misc, prolog } = node.children;
+        const fragments = [];
+        if (docTypeDecl) {
+          fragments.push({
+            offset: docTypeDecl[0].location.startOffset,
+            printed: path.call(print, "children", "docTypeDecl", 0)
+          });
+        }
+        if (prolog) {
+          fragments.push({
+            offset: prolog[0].location.startOffset,
+            printed: path.call(print, "children", "prolog", 0)
+          });
+        }
+        if (misc) {
+          misc.forEach((node2) => {
+            if (node2.children.PROCESSING_INSTRUCTION) {
               fragments.push({
-                offset: docTypeDecl[0].location.startOffset,
-                printed: path.call(print, "children", "docTypeDecl", 0)
+                offset: node2.location.startOffset,
+                printed: node2.children.PROCESSING_INSTRUCTION[0].image
               });
-            }
-            if (prolog) {
+            } else if (node2.children.Comment) {
               fragments.push({
-                offset: prolog[0].location.startOffset,
-                printed: path.call(print, "children", "prolog", 0)
+                offset: node2.location.startOffset,
+                printed: node2.children.Comment[0].image
               });
             }
-            if (misc) {
-              misc.forEach((node2) => {
-                if (node2.children.PROCESSING_INSTRUCTION) {
-                  fragments.push({
-                    offset: node2.location.startOffset,
-                    printed: node2.children.PROCESSING_INSTRUCTION[0].image
-                  });
-                } else if (node2.children.Comment) {
-                  fragments.push({
-                    offset: node2.location.startOffset,
-                    printed: node2.children.Comment[0].image
-                  });
-                }
-              });
-            }
-            if (element) {
-              fragments.push({
-                offset: element[0].location.startOffset,
-                printed: path.call(print, "children", "element", 0)
-              });
-            }
-            fragments.sort((left, right) => left.offset - right.offset);
-            const ret = [
+          });
+        }
+        if (element) {
+          fragments.push({
+            offset: element[0].location.startOffset,
+            printed: path.call(print, "children", "element", 0)
+          });
+        }
+        fragments.sort((left, right) => left.offset - right.offset);
+        const ret = [
+          join3(
+            hardline3,
+            fragments.map(({ printed }) => printed)
+          ),
+          hardline3
+        ];
+        return ret;
+      }
+      case "element": {
+        const {
+          OPEN,
+          Name,
+          attribute,
+          START_CLOSE,
+          content,
+          SLASH_OPEN,
+          END_NAME,
+          END,
+          SLASH_CLOSE
+        } = node.children;
+        const tagName = Name[0].image.trim();
+        const parts = [OPEN[0].image, Name[0].image];
+        if (attribute) {
+          const separator = opts.singleAttributePerLine ? hardline3 : line3;
+          parts.push(
+            indent3([
+              line3,
               join3(
-                hardline3,
-                fragments.map(({ printed }) => printed)
-              ),
-              hardline3
-            ];
-            return ret;
+                separator,
+                path.map(print, "children", "attribute")
+              )
+            ])
+          );
+        }
+        const space = line3;
+        if (SLASH_CLOSE) {
+          return group3([...parts, " ", SLASH_CLOSE[0].image]);
+        }
+        if (Object.keys(content[0].children).length === 0) {
+          return group3([...parts, space, "/>"]);
+        }
+        const openTag = group3([
+          ...parts,
+          attribute ? softline3 : "",
+          START_CLOSE[0].image
+        ]);
+        const closeTag = group3([
+          SLASH_OPEN[0].image,
+          END_NAME[0].image,
+          END[0].image
+        ]);
+        if (PRE_ELEMENTS.has(tagName)) {
+          const startOffset = START_CLOSE[0].endOffset + 1;
+          const endOffset = SLASH_OPEN[0].startOffset - 1;
+          const originalText = opts.originalText.slice(
+            startOffset,
+            endOffset + 1
+          );
+          const verbDoc = originalText.split(/(\n)/g).map((t) => t === "\n" ? literalline3 : t);
+          return group3([openTag, verbDoc, closeTag]);
+        }
+        if (INDENTABLE_PRE_ELEMENTS.has(tagName)) {
+          const startOffset = START_CLOSE[0].endOffset + 1;
+          const endOffset = SLASH_OPEN[0].startOffset - 1;
+          const originalText = opts.originalText.slice(
+            startOffset,
+            endOffset
+          );
+          const verbDoc = join3(
+            hardline3,
+            indentablePreToLines(originalText, opts.tabWidth)
+          );
+          return group3([
+            openTag,
+            indent3([softline3, verbDoc]),
+            softline3,
+            closeTag
+          ]);
+        }
+        if (isWhitespaceIgnorable(content[0])) {
+          const inParMode = PAR_ELEMENTS.has(tagName);
+          const fragments = printChildrenWhenWhitespaceDoesNotMatter(
+            path,
+            print
+          );
+          if (fragments.length === 0) {
+            return group3([...parts, "/>"]);
           }
-          case "element": {
-            const {
-              OPEN,
-              Name,
-              attribute,
-              START_CLOSE,
-              content,
-              SLASH_OPEN,
-              END_NAME,
-              END,
-              SLASH_CLOSE
-            } = node.children;
-            const tagName = Name[0].image.trim();
-            const parts = [OPEN[0].image, Name[0].image];
-            if (attribute) {
-              const separator = opts.singleAttributePerLine ? hardline3 : line3;
-              parts.push(
-                indent3([
-                  line3,
-                  join3(
-                    separator,
-                    path.map(print, "children", "attribute")
-                  )
-                ])
-              );
-            }
-            const space = line3;
-            if (SLASH_CLOSE) {
-              return group3([...parts, " ", SLASH_CLOSE[0].image]);
-            }
-            if (Object.keys(content[0].children).length === 0) {
-              return group3([...parts, space, "/>"]);
-            }
-            const openTag = group3([
-              ...parts,
-              attribute ? softline3 : "",
-              START_CLOSE[0].image
-            ]);
-            const closeTag = group3([
-              SLASH_OPEN[0].image,
-              END_NAME[0].image,
-              END[0].image
-            ]);
-            if (PRE_ELEMENTS.has(tagName)) {
-              const startOffset = START_CLOSE[0].endOffset + 1;
-              const endOffset = SLASH_OPEN[0].startOffset - 1;
-              const originalText = opts.originalText.slice(
-                startOffset,
-                endOffset + 1
-              );
-              const verbDoc = originalText.split(/(\n)/g).map((t) => t === "\n" ? literalline3 : t);
-              return group3([openTag, verbDoc, closeTag]);
-            }
-            if (INDENTABLE_PRE_ELEMENTS.has(tagName)) {
-              const startOffset = START_CLOSE[0].endOffset + 1;
-              const endOffset = SLASH_OPEN[0].startOffset - 1;
-              const originalText = opts.originalText.slice(
-                startOffset,
-                endOffset
-              );
-              const verbDoc = join3(
-                hardline3,
-                indentablePreToLines(originalText, opts.tabWidth)
-              );
-              return group3([
-                openTag,
-                indent3([softline3, verbDoc]),
-                softline3,
-                closeTag
-              ]);
-            }
-            if (isWhitespaceIgnorable(content[0])) {
-              const inParMode = PAR_ELEMENTS.has(tagName);
-              const fragments = printChildrenWhenWhitespaceDoesNotMatter(
-                path,
-                print
-              );
-              if (fragments.length === 0) {
-                return group3([...parts, "/>"]);
-              }
-              if (fragments.length === 1 && (content[0].children.chardata || []).filter(
-                (chardata) => chardata.children.TEXT
-              ).length === 1) {
-                return group3([
-                  openTag,
-                  [fragments[0].printed],
-                  closeTag
-                ]);
-              }
-              const docsAndFrags = fragments.flatMap(
-                (node2, i) => {
-                  const tagName2 = node2.tagName;
-                  const prevNode = fragments[i - 1];
-                  if (!prevNode) {
-                    return [softline3, node2];
-                  }
-                  if (node2.startLine - prevNode.endLine >= 2) {
-                    return [hardline3, hardline3, node2];
-                  }
-                  if (inParMode && !BREAK_AROUND_ELEMENTS.has(tagName2 || "") && node2.offset - prevNode.endOffset <= 1) {
-                    return [node2];
-                  }
-                  if (BREAK_AROUND_ELEMENTS.has(tagName2 || "")) {
-                    return [node2];
-                  }
-                  return [line3, node2.printed];
-                }
-              );
-              let prevItem;
-              const docsAndFragsWithLines = [];
-              for (const item of docsAndFrags) {
-                if (!prevItem) {
-                  docsAndFragsWithLines.push(item);
-                  prevItem = item;
-                  continue;
-                }
-                if (isFragment(item) && BREAK_AROUND_ELEMENTS.has(item.tagName || "")) {
-                  if (isLine(prevItem)) {
-                    if (prevItem === line3) {
-                      docsAndFragsWithLines.pop();
-                      docsAndFragsWithLines.push(hardline3);
-                    }
-                  } else {
-                    docsAndFragsWithLines.push(hardline3);
-                  }
-                  docsAndFragsWithLines.push(item, hardline3);
-                  prevItem = item;
-                  continue;
-                }
-                docsAndFragsWithLines.push(item);
-                prevItem = item;
-              }
-              const docs = docsAndFragsWithLines.map(
-                (item) => isFragment(item) ? item.printed : item
-              );
-              if (inParMode) {
-                return group3([
-                  openTag,
-                  indent3([softline3, fill3(docs)]),
-                  softline3,
-                  closeTag
-                ]);
-              }
-              const ret = group3([
-                openTag,
-                indent3(docs),
-                hardline3,
-                closeTag
-              ]);
-              return ret;
-            }
+          if (fragments.length === 1 && (content[0].children.chardata || []).filter(
+            (chardata) => chardata.children.TEXT
+          ).length === 1) {
             return group3([
               openTag,
-              indent3(path.call(print, "children", "content", 0)),
+              [fragments[0].printed],
               closeTag
             ]);
           }
-          case "externalID": {
-            const { Public, PubIDLiteral, System, SystemLiteral } = node.children;
-            if (System) {
-              return group3([
-                System[0].image,
-                indent3([line3, SystemLiteral[0].image])
-              ]);
+          const docsAndFrags = fragments.flatMap(
+            (node2, i) => {
+              const tagName2 = node2.tagName;
+              const prevNode = fragments[i - 1];
+              if (!prevNode) {
+                return [softline3, node2];
+              }
+              if (node2.startLine - prevNode.endLine >= 2) {
+                return [hardline3, hardline3, node2];
+              }
+              if (inParMode && !BREAK_AROUND_ELEMENTS.has(tagName2 || "") && node2.offset - prevNode.endOffset <= 1) {
+                return [node2];
+              }
+              if (BREAK_AROUND_ELEMENTS.has(tagName2 || "")) {
+                return [node2];
+              }
+              return [line3, node2.printed];
             }
+          );
+          let prevItem;
+          const docsAndFragsWithLines = [];
+          for (const item of docsAndFrags) {
+            if (!prevItem) {
+              docsAndFragsWithLines.push(item);
+              prevItem = item;
+              continue;
+            }
+            if (isFragment(item) && BREAK_AROUND_ELEMENTS.has(item.tagName || "")) {
+              if (isLine(prevItem)) {
+                if (prevItem === line3) {
+                  docsAndFragsWithLines.pop();
+                  docsAndFragsWithLines.push(hardline3);
+                }
+              } else {
+                docsAndFragsWithLines.push(hardline3);
+              }
+              docsAndFragsWithLines.push(item, hardline3);
+              prevItem = item;
+              continue;
+            }
+            docsAndFragsWithLines.push(item);
+            prevItem = item;
+          }
+          const docs = docsAndFragsWithLines.map(
+            (item) => isFragment(item) ? item.printed : item
+          );
+          if (inParMode) {
             return group3([
-              group3([
-                Public[0].image,
-                indent3([line3, PubIDLiteral[0].image])
-              ]),
-              indent3([line3, SystemLiteral[0].image])
+              openTag,
+              indent3([softline3, fill3(docs)]),
+              softline3,
+              closeTag
             ]);
           }
-          case "prolog": {
-            const { XMLDeclOpen, attribute, SPECIAL_CLOSE } = node.children;
-            const parts = [XMLDeclOpen[0].image];
-            if (attribute) {
-              parts.push(
-                indent3([
-                  softline3,
-                  join3(
-                    line3,
-                    path.map(print, "children", "attribute")
-                  )
-                ])
-              );
-            }
-            const space = opts.xmlSelfClosingSpace ? line3 : softline3;
-            return [group3([...parts, space, SPECIAL_CLOSE[0].image]), hardline3];
-          }
-          default: {
-            console.log("default", node);
-            throw new Error("Unknown node type: " + node.name);
-          }
+          const ret = group3([
+            openTag,
+            indent3(docs),
+            hardline3,
+            closeTag
+          ]);
+          return ret;
         }
+        return group3([
+          openTag,
+          indent3(path.call(print, "children", "content", 0)),
+          closeTag
+        ]);
       }
-    };
-    printer_default = printer2;
+      case "externalID": {
+        const { Public, PubIDLiteral, System, SystemLiteral } = node.children;
+        if (System) {
+          return group3([
+            System[0].image,
+            indent3([line3, SystemLiteral[0].image])
+          ]);
+        }
+        return group3([
+          group3([
+            Public[0].image,
+            indent3([line3, PubIDLiteral[0].image])
+          ]),
+          indent3([line3, SystemLiteral[0].image])
+        ]);
+      }
+      case "prolog": {
+        const { XMLDeclOpen, attribute, SPECIAL_CLOSE } = node.children;
+        const parts = [XMLDeclOpen[0].image];
+        if (attribute) {
+          parts.push(
+            indent3([
+              softline3,
+              join3(
+                line3,
+                path.map(print, "children", "attribute")
+              )
+            ])
+          );
+        }
+        const space = opts.xmlSelfClosingSpace ? line3 : softline3;
+        return [group3([...parts, space, SPECIAL_CLOSE[0].image]), hardline3];
+      }
+      default: {
+        console.log("default", node);
+        throw new Error("Unknown node type: " + node.name);
+      }
+    }
   }
-});
+};
+var printer_default = printer2;
 
 // src/plugin.ts
-var require_plugin = __commonJS({
-  "src/plugin.ts"(exports2, module2) {
-    init_parser();
-    init_printer();
-    var plugin = {
-      languages: [
-        {
-          name: "PTX",
-          parsers: ["ptx"],
-          extensions: [".xml", ".ptx"],
-          vscodeLanguageIds: ["xml", "ptx"],
-          linguistLanguageId: 399
-        }
-      ],
-      parsers: {
-        ptx: parser_default
-      },
-      printers: {
-        ptx: printer_default
-      },
-      options: {},
-      defaultOptions: {
-        printWidth: 80,
-        tabWidth: 2,
-        useTabs: false,
-        singleAttributePerLine: false
-      }
-    };
-    module2.exports = plugin;
+var plugin = {
+  languages: [
+    {
+      name: "PTX",
+      parsers: ["ptx"],
+      extensions: [".xml", ".ptx"],
+      vscodeLanguageIds: ["xml", "ptx"],
+      linguistLanguageId: 399
+    }
+  ],
+  parsers: {
+    ptx: parser_default
+  },
+  printers: {
+    ptx: printer_default
+  },
+  options: {},
+  defaultOptions: {
+    printWidth: 80,
+    tabWidth: 2,
+    useTabs: false,
+    singleAttributePerLine: false
   }
-});
-export default require_plugin();
+};
+var plugin_default = plugin;
+export {
+  plugin_default as default
+};
 //# sourceMappingURL=index.mjs.map

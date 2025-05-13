@@ -5,6 +5,7 @@ import {
   TextEdit,
 } from "vscode-languageserver/node";
 import * as prettier from "prettier";
+import parser from "prettier-plugin-pretext";
 import * as prettierPluginPretext from "prettier-plugin-pretext";
 import { documents } from "./state";
 
