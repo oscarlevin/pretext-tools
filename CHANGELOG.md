@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
-## [0.28.3] - 2025-05-13
+## Changed
 
-## [0.28.2] - 2025-05-13
+- Use "classic" formatting within the LSP.
+- Improved the "Convert to PreTeXt" function.
 
 ## [0.28.1] - 2025-05-12
 
