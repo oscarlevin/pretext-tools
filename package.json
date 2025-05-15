@@ -57,7 +57,7 @@
     "@unified-latex/unified-latex-util-parse": "^1.8.2",
     "deepmerge": "^4.3.1",
     "esbuild-node-externals": "^1.18.0",
-    "frankenmarkup": "github:oscarlevin/FrankenMarkUp",
+    "frankenmarkup": "github:davidfarmer/FrankenMarkUp",
     "fs.promises.exists": "^1.1.4",
     "glob": "^11.0.0",
     "md2ptx": "github:skiadas/md2ptx",

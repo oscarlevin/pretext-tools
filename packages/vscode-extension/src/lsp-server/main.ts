@@ -155,19 +155,31 @@ interface LspSettings {
     versionName: string;
     customPath: string;
   };
+  formatter: {
+    breakSentences: boolean;
+    blankLines: 'few' | 'some' | 'many';
+  }
 }
 
 const schemaConfigSection = "pretext-tools.schema";
+const formatterConfigSection = "pretext-tools.formatter";
 // The global settings, used when the `workspace/configuration` request is not supported by the client.
 const defaultSettings: LspSettings = {
   schema: { versionName: "Stable", customPath: "" },
+  formatter: { blankLines: "some", breakSentences: true },
 };
-let globalSettings: LspSettings = defaultSettings;
+export let globalSettings: LspSettings = defaultSettings;
 
 connection.onDidChangeConfiguration((change) => {
   //clearAllDocumentInfo();
   console.log("changed configuration", change);
   if (hasConfigurationCapability) {
+    connection.workspace.getConfiguration(formatterConfigSection).then((formatterConfig) => {
+      if (formatterConfig && globalSettings.formatter.breakSentences !== formatterConfig.breakSentences) {
+        globalSettings.formatter = formatterConfig;
+        console.log("Formatter set to", formatterConfig);
+      }
+    });
     // Only update schema if that is the configuration that changed:
     connection.workspace
       .getConfiguration(schemaConfigSection)

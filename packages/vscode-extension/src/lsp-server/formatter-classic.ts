@@ -1,6 +1,7 @@
 //import * as vscode from "vscode";
 import { DocumentFormattingParams, DocumentRangeFormattingParams, Range, TextEdit } from "vscode-languageserver/node";
 import { documents } from "./state";
+import { globalSettings } from "./main";
 
 const docStructure = [
   "abstract",
@@ -289,8 +290,9 @@ export function formatPTX(text: string): string {
   //const breakSentences = vscode.workspace
   //  .getConfiguration("pretext-tools")
   //  .get("formatter.breakSentences");
-  //console.log("extraLineBreaks is", breakSentences);
-  const breakSentences = true;
+  const breakSentences = globalSettings.formatter.breakSentences;
+  console.log("extraLineBreaks is ", breakSentences);
+  
 
   // Determine the number of spaces or tabs each indent is in current editor.
   //let editorTabSize = vscode.window.activeTextEditor?.options.tabSize;
