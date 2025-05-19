@@ -2,7 +2,7 @@
     "name": "prettier-plugin-pretext",
     "version": "2.0.0",
     "description": "A Prettier plugin for PreTeXt XML",
-    "main": "dist/plugin.js",
+    "main": "dist/index.cjs",
     "scripts": {
         "lint": "eslint --cache .",
         "build": "tsc -p tsconfig.build.json && node build.mjs",

@@ -141,7 +141,10 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand("pretext-tools.new", cmdNew),
     commands.registerCommand("pretext-tools.deploy", cmdDeploy),
     commands.registerCommand("pretext-tools.updatePTX", cmdUpdate),
-    commands.registerCommand("pretext-tools.ftToPtx", cmdConvertFlextextToPretext),
+    commands.registerCommand(
+      "pretext-tools.ftToPtx",
+      cmdConvertFlextextToPretext
+    ),
     commands.registerCommand("pretext-tools.latexToPretext", cmdLatexToPretext),
     commands.registerCommand(
       "pretext-tools.convertToPretext",

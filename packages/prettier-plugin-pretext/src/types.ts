@@ -21,7 +21,6 @@ export type Fragment = {
     tagName?: string | null;
 };
 
-
 // Override the children property of the content CST node because it is missing
 // the PROCESSING_INSTRUCTION property.
 interface ContentCstNodeExt extends Omit<ContentCstNode, "children"> {

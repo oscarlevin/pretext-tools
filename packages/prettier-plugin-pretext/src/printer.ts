@@ -385,7 +385,6 @@ const printer: Printer = {
                     );
 
                     if (fragments.length === 0) {
-
                         return group([...parts, "/>"]);
                     }
 
@@ -535,7 +534,10 @@ const printer: Printer = {
 
                 const space = opts.xmlSelfClosingSpace ? line : softline;
                 // Added hardline to separate the prolog from the content
-                return [group([...parts, space, SPECIAL_CLOSE[0].image]), hardline];
+                return [
+                    group([...parts, space, SPECIAL_CLOSE[0].image]),
+                    hardline,
+                ];
             }
 
             default: {

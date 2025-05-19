@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## Changed
+
+- Formatter respects editor tabSize and insertSpaces settings.
+
 ## [0.29.1] - 2025-05-16
 
 ## Changed

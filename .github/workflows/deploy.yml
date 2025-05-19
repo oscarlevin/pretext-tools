@@ -67,8 +67,8 @@ jobs:
 
       - name: Commit
         run: |
-          git add CHANGELOG.md
-          git commit -m "update changelog"
+          git add .
+          git commit -m "update version and changelog"
 
       - name: push commit
         run: |

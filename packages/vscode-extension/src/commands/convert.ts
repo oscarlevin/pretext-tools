@@ -12,7 +12,6 @@ import { formatPTX } from "../formatter";
 // @ts-ignore
 import { FlexTeXtConvert } from "frankenmarkup";
 
-
 export function cmdConvertToPretext() {
   console.log("Converting to PreTeXt");
   pretextOutputChannel.append("Converting to PreTeXt");
@@ -117,7 +116,10 @@ export async function cmdConvertFlextextToPretext() {
   if (editor) {
     const selection = editor.selection;
     const selectionRange = selection.isEmpty
-      ? new Range(editor.document.positionAt(0), editor.document.positionAt(editor.document.getText().length))
+      ? new Range(
+          editor.document.positionAt(0),
+          editor.document.positionAt(editor.document.getText().length)
+        )
       : new Range(selection.start, selection.end);
     console.log("selectionRange is", selectionRange);
     const initialText = editor.document.getText(selectionRange);
@@ -133,5 +135,3 @@ export async function cmdConvertFlextextToPretext() {
     console.log("Formatted text");
   }
 }
-
-
