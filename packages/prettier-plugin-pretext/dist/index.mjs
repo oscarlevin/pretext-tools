@@ -10592,7 +10592,10 @@ var printer2 = {
           );
         }
         const space = opts.xmlSelfClosingSpace ? line3 : softline3;
-        return [group3([...parts, space, SPECIAL_CLOSE[0].image]), hardline3];
+        return [
+          group3([...parts, space, SPECIAL_CLOSE[0].image]),
+          hardline3
+        ];
       }
       default: {
         console.log("default", node);
