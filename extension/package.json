@@ -471,7 +471,7 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "cd ../ && npm run build:all"
+    "vscode:prepublish": "cd ../ && npm run build:all && cd extension"
   },
   "devDependencies": {},
   "dependencies": {},

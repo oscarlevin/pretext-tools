@@ -6,13 +6,13 @@ import prettier from "prettier";
 import plugin from "../src/plugin";
 
 const code = fs.existsSync(process.argv[2])
-  ? fs.readFileSync(process.argv[2], "utf-8")
-  : process.argv.slice(2).join(" ").replace(/\\n/g, "\n");
+    ? fs.readFileSync(process.argv[2], "utf-8")
+    : process.argv.slice(2).join(" ").replace(/\\n/g, "\n");
 
 const options = {
-  parser: "ptx",
-  plugins: [plugin as any as string],
-  xmlWhitespaceSensitivity: "ignore"
+    parser: "ptx",
+    plugins: [plugin as any as string],
+    xmlWhitespaceSensitivity: "ignore",
 };
 
 console.log(prettier.format(code, options));

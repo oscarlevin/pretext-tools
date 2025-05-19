@@ -1,5 +1,10 @@
 //import * as vscode from "vscode";
-import { DocumentFormattingParams, DocumentRangeFormattingParams, Range, TextEdit } from "vscode-languageserver/node";
+import {
+  DocumentFormattingParams,
+  DocumentRangeFormattingParams,
+  Range,
+  TextEdit,
+} from "vscode-languageserver/node";
 import { documents } from "./state";
 import { globalSettings } from "./main";
 
@@ -292,14 +297,11 @@ export function formatPTX(text: string): string {
   //  .get("formatter.breakSentences");
   const breakSentences = globalSettings.formatter.breakSentences;
   console.log("extraLineBreaks is ", breakSentences);
-  
 
   // Determine the number of spaces or tabs each indent is in current editor.
-  //let editorTabSize = vscode.window.activeTextEditor?.options.tabSize;
-  let editorTabSize = 2; // default to 2 spaces
+  let editorTabSize = globalSettings.editor.tabSize;
   console.log("editorTabSize is", editorTabSize);
-  //let editorInsertSpaces = vscode.window.activeTextEditor?.options.insertSpaces;
-  let editorInsertSpaces = true; // default to spaces
+  let editorInsertSpaces = globalSettings.editor.insertSpaces;
   console.log("editorInsertSpaces is", editorInsertSpaces);
   // Set indent character to \t or a number of ss based on editor settings.
   let indentChar = "\t";
@@ -400,8 +402,6 @@ export function formatPTX(text: string): string {
   return allText;
 }
 
-
-
 export async function formatDocument(
   params: DocumentFormattingParams
 ): Promise<TextEdit[] | null> {
@@ -427,8 +427,6 @@ export async function formatDocument(
   return null;
 }
 
-
-
 export async function formatRange(
   params: DocumentRangeFormattingParams
 ): Promise<TextEdit[] | null> {
@@ -446,7 +444,7 @@ export async function formatRange(
     console.log(
       origText.slice(doc.offsetAt(range.start), doc.offsetAt(range.end))
     );
-    let formatted = formatPTX(origText)
+    let formatted = formatPTX(origText);
     console.log("formatted", formatted);
     return [{ newText: formatted, range }];
   } catch (e) {
@@ -454,4 +452,3 @@ export async function formatRange(
   }
   return null;
 }
-

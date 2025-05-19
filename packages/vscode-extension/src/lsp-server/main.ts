@@ -157,16 +157,24 @@ interface LspSettings {
   };
   formatter: {
     breakSentences: boolean;
-    blankLines: 'few' | 'some' | 'many';
-  }
+    blankLines: "few" | "some" | "many";
+  };
+  editor: {
+    tabSize: number;
+    insertSpaces: boolean;
+  };
 }
 
 const schemaConfigSection = "pretext-tools.schema";
 const formatterConfigSection = "pretext-tools.formatter";
+const editorConfigSection = "editor";
+const tabSizeConfigSection = "editor.tabSize";
+const insertSpacesConfigSection = "editor.insertSpaces";
 // The global settings, used when the `workspace/configuration` request is not supported by the client.
 const defaultSettings: LspSettings = {
   schema: { versionName: "Stable", customPath: "" },
   formatter: { blankLines: "some", breakSentences: true },
+  editor: { tabSize: 2, insertSpaces: true },
 };
 export let globalSettings: LspSettings = defaultSettings;
 
@@ -174,12 +182,24 @@ connection.onDidChangeConfiguration((change) => {
   //clearAllDocumentInfo();
   console.log("changed configuration", change);
   if (hasConfigurationCapability) {
-    connection.workspace.getConfiguration(formatterConfigSection).then((formatterConfig) => {
-      if (formatterConfig && globalSettings.formatter.breakSentences !== formatterConfig.breakSentences) {
-        globalSettings.formatter = formatterConfig;
-        console.log("Formatter set to", formatterConfig);
-      }
-    });
+    connection.workspace
+      .getConfiguration(formatterConfigSection)
+      .then((formatterConfig) => {
+        if (formatterConfig && globalSettings.formatter !== formatterConfig) {
+          globalSettings.formatter = formatterConfig;
+          console.log("Formatter set to", formatterConfig);
+        }
+      });
+    connection.workspace
+      .getConfiguration(editorConfigSection)
+      .then((editorConfig) => {
+        //console.log("editorConfig", editorConfig);
+        //console.log("globalSettings.editor", globalSettings.editor);
+        if (editorConfig && globalSettings.editor !== editorConfig) {
+          console.log("Editor config changed to", editorConfig);
+          globalSettings.editor = editorConfig;
+        }
+      });
     // Only update schema if that is the configuration that changed:
     connection.workspace
       .getConfiguration(schemaConfigSection)

@@ -7,10 +7,7 @@ import { Options } from "../src/types";
 import plugin from "../src/plugin";
 
 const fixture = fs.readFileSync(path.join(__dirname, "./fixture.ptx"), "utf-8");
-const example = fs.readFileSync(
-    path.join(__dirname, "./example.ptx"),
-    "utf-8"
-);
+const example = fs.readFileSync(path.join(__dirname, "./example.ptx"), "utf-8");
 const example2 = fs.readFileSync(
     path.join(__dirname, "./example2.ptx"),
     "utf-8"
@@ -42,12 +39,10 @@ test("basic pretext source", async () => {
     expect(formatted).toMatchSnapshot();
 });
 
-
 test("basic pretext source 2", async () => {
     const formatted = await format(example2);
     expect(formatted).toMatchSnapshot();
 });
-
 
 test("bracketSameLine => true", async () => {
     const formatted = await format(fixture, {
@@ -58,7 +53,7 @@ test("bracketSameLine => true", async () => {
 });
 
 test("xmlSelfClosingSpace => false", async () => {
-    const formatted =await format(fixture, {
+    const formatted = await format(fixture, {
         xmlSelfClosingSpace: false,
     });
 
@@ -87,8 +82,7 @@ test("example3", async () => {
     expect(formatted).toMatchSnapshot();
 });
 
-test("new", async  () => {
+test("new", async () => {
     const formatted = await format(example4);
     expect(formatted).toMatchSnapshot();
 });
-
