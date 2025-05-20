@@ -1,4 +1,4 @@
-import { Node, mergeAttributes } from "@tiptap/core";
+import { Node, mergeAttributes, nodeInputRule, wrappingInputRule, } from "@tiptap/core";
 import katex from "katex";
 
 const MathInline = Node.create({
@@ -15,7 +15,28 @@ const MathInline = Node.create({
   renderHTML({ HTMLAttributes }) {
     return ["span", mergeAttributes({ class: "inlineMath" }, HTMLAttributes)];
   },
-
+  addInputRules() {
+    return [
+      //nodeInputRule({
+      //  find: new RegExp('(?:^|\\s)<m>(\\s)', "i"),
+      //  type: this.type,
+      //}),
+      nodeInputRule({
+        // Match $...$ but not $$...$$
+        find: new RegExp('(?:^|\\s)$(\\s)'),
+        type: this.type,
+      }),
+      nodeInputRule({
+        // Matches \( ... \)
+        find: /(?:^|\s)(\\\((.*?)\\\))$/,
+        type: this.type,
+      }),
+      wrappingInputRule({
+        find: new RegExp(`(?:^|\\s)(<m>(\\s))`),
+        type: this.type,
+      }),
+    ];
+  },
   addNodeView() {
     return ({ node, HTMLAttributes }) => {
       const dom = document.createElement("span");
@@ -64,7 +85,23 @@ const MathEquation = Node.create({
   renderHTML({ HTMLAttributes }) {
     return ["div", mergeAttributes({ class: "displayMath" }, HTMLAttributes)];
   },
-
+  addInputRules() {
+    return [
+      nodeInputRule({
+        find: /(?:^|\s)(<me>(.*?)<\/me>)$/,
+        type: this.type,
+      }),
+      nodeInputRule({
+        find: /(?:^|\s)(\$\$(.*?)\$\$)$/,
+        type: this.type,
+      }),
+      nodeInputRule({
+        // Matches \( ... \)
+        find: /(?:^|\s)(\\\[(.*?)\\\])$/,
+        type: this.type,
+      }),
+    ];
+  },
   addNodeView() {
     return ({ node, HTMLAttributes }) => {
       const dom = document.createElement("div");

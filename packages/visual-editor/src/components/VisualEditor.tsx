@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Focus, Gapcursor, UndoRedo } from "@tiptap/extensions";
+import { Focus, Gapcursor } from "@tiptap/extensions";
 import { useEffect } from 'react';
 import { useEditor, EditorContent } from "@tiptap/react";
 import { Editor, Node } from "@tiptap/core";
@@ -9,6 +9,7 @@ import Divisions from "../extensions/Divisions";
 import Inline from "../extensions/Inline";
 import Blocks from "../extensions/Blocks";
 import CodeBlock from "@tiptap/extension-code-block";
+import { BulletList, OrderedList, ListItem } from "@tiptap/extension-list";
 import Title from "../extensions/Title";
 import Definition from "../extensions/Definition";
 import RawPtx from "../extensions/RawPtx";
@@ -16,7 +17,7 @@ import "../styles.scss";
 import { cleanPtx } from "../utils";
 import { json2ptx } from "../json2ptx";
 import { useState } from 'react';
-import { MenuBar } from "./MenuBar";
+//import { MenuBar } from "./MenuBar";
 import { PtxBubbleMenu } from "./BubbleMenu";
 //import { PtxFloatingMenu } from "./FloatingMenu";
 import { getCursorPos } from "../extensions/getCursorPos";
@@ -52,8 +53,11 @@ const extensions = [
   RawPtx,
   MathInline,
   MathEquation,
+  BulletList,
+  OrderedList,
+  ListItem,
   Focus.configure({ mode: "deepest" }),
-  UndoRedo,
+  //UndoRedo,
   Gapcursor,
   //onPaste: (currentEditor, files, htmlContent) => {
   //  files.forEach((file) => {
@@ -92,6 +96,7 @@ const WarningMessage: React.FC<{ isValid: boolean }> = ({ isValid }) => {
 };
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const InfoMessage = ({ editor }: { editor: Editor }) => {
   const [cursorInfo, setCursorInfo] = useState({
     pos: 0,
@@ -158,7 +163,7 @@ const InfoMessage = ({ editor }: { editor: Editor }) => {
 };
 
 
-// @ts-ignore
+// @ts-expect-error No types for acquireVsCodeApi
 const vscode = acquireVsCodeApi();
 
 
@@ -195,40 +200,44 @@ const VisualEditor: React.FC = () => {
       const message = event.data; // The data that the extension sent
       switch (message.type) {
         case 'update':
-          const text = message.text;
+          {
+            const text = message.text;
 
-          if (editor) { // TODO: Add test to see if the contents have changed.
-            try {
-              editor.commands.setContent(cleanPtx(text), { emitUpdate: false });
-              console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
-              console.log("HTML content: ", editor.getHTML());
-              console.log("PTX content: ", json2ptx(editor.getJSON()));
-              if (!editor.isEditable) {
-                editor.setEditable(true, false);
+            if (editor) { // TODO: Add test to see if the contents have changed.
+              try {
+                editor.commands.setContent(cleanPtx(text), { emitUpdate: false });
+                console.log("JSON content: ", JSON.stringify(editor.getJSON(), null, 2));
+                console.log("HTML content: ", editor.getHTML());
+                console.log("PTX content: ", json2ptx(editor.getJSON()));
+                if (!editor.isEditable) {
+                  editor.setEditable(true, false);
+                }
+                setIsValid(true);
+              } catch (error) {
+                console.error("Error setting content: ", error);
+                setIsValid(false);
+                if (editor.isEditable) {
+                  editor.setEditable(false, false);
+                }
               }
-              setIsValid(true);
-            } catch (error) {
-              console.error("Error setting content: ", error);
-              setIsValid(false);
+            }
+            return;
+          }
+        case 'load':
+          {
+            const initialText = message.text;
+            if (editor) {
+              try {
+                editor.commands.setContent(cleanPtx(initialText), { emitUpdate: false });
+                setIsValid(true);
+              } catch (error) {
+                console.error("Error setting content: ", error);
+                setIsValid(false);
+              }
+              // Always set editor to non-editable mode when first loading content
               if (editor.isEditable) {
                 editor.setEditable(false, false);
               }
-            }
-          }
-          return;
-        case 'load':
-          const initialText = message.text;
-          if (editor) {
-            try {
-              editor.commands.setContent(cleanPtx(initialText), { emitUpdate: false });
-              setIsValid(true);
-            } catch (error) {
-              console.error("Error setting content: ", error);
-              setIsValid(false);
-            }
-            // Always set editor to non-editable mode when first loading content
-            if (editor.isEditable) {
-              editor.setEditable(false, false);
             }
           }
       }
@@ -264,7 +273,7 @@ const VisualEditor: React.FC = () => {
         </p>
       </div>
       <WarningMessage isValid={isValid} />
-      <MenuBar editor={editor} />
+      {/*<MenuBar editor={editor} />*/}
       <EditorContent editor={editor} />
       <PtxBubbleMenu editor={editor} />
       {/*<InfoMessage editor={editor} />*/}

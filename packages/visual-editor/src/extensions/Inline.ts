@@ -6,6 +6,7 @@ import {
   mergeAttributes,
 } from "@tiptap/core";
 import { Text } from "@tiptap/extension-text";
+import Code from "@tiptap/extension-code";
 import { HardBreak } from "@tiptap/extension-hard-break";
 
 const MyText = Text.extend({});
@@ -108,11 +109,82 @@ const Alert = Mark.create({
   },
 });
 
+const Quote = Mark.create({
+  name: "q",
+  group: "inline",
+
+  parseHTML() {
+    return [{ tag: "q" }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ["span", mergeAttributes({ class: "q" }, HTMLAttributes), 0];
+  },
+  addInputRules() {
+    return [
+      markInputRule({
+        find: /(?:^|\s)(<q>(.*?)<\/q>)$/,
+        type: this.type,
+      }),
+      markInputRule({
+        find: /(?:^|\s)("(.*?)")$/,
+        type: this.type,
+      }),
+    ];
+  },
+  addPasteRules() {
+    return [
+      markPasteRule({
+        find: /(?:^|\s)(<q>(.*?)<\/q>)/g,
+        type: this.type,
+      }),
+      markPasteRule({
+        find: /(?:^|\s)("(.*?)")/g,
+        type: this.type,
+      }),
+    ];
+  },
+});
+
+
+const InlineCode = Code.extend({
+  name: "c",
+
+  parseHTML() {
+    return [{ tag: "c" }];
+  },
+
+  addInputRules() {
+    return [
+      markInputRule({
+        find: /(?:^|\s)(<c>(.*?)<\/c>)$/,
+        type: this.type
+      }),
+      markInputRule({
+        find: /(?:^|\s)(`(.*?)`)$/,
+        type: this.type,
+      }),
+    ];
+  },
+  addPasteRules() {
+    return [
+      markPasteRule({
+        find: /(?:^|\s)(<c>(.*?)<\/c>)/g,
+        type: this.type,
+      }),
+      markPasteRule({
+        find: /(?:^|\s)(`(.*?)`)/g,
+        type: this.type,
+      }),
+    ];
+  },
+});
+
+
 const Inline = Extension.create({
   name: "myinline",
-
+  // @ts-expect-error not sure what this issue is.
   addExtensions() {
-    return [MyText, MyHardBreak, Term, Emph, Alert];
+    return [MyText, MyHardBreak, Term, Emph, Alert, Quote, InlineCode];
   },
 });
 

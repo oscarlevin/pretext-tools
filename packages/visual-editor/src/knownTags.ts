@@ -23,6 +23,8 @@ const exampleLikeElements = ["example", "question", "problem"];
 
 const solutionLikeElements = ["solution", "answer", "hint"];
 
+const listElements = ["ol", "ul", "li"];
+
 export const KNOWN_TAGS = [
   "p",
   "m",
@@ -35,8 +37,11 @@ export const KNOWN_TAGS = [
   ...axiomLikeElements,
   ...exampleLikeElements,
   ...solutionLikeElements,
+  ...listElements,
   "term",
   "em",
   "alert",
+  "q",
+  "c",
   "pre",
 ];

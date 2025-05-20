@@ -96,6 +96,14 @@
     color: #bd1b1b;
   }
 
+  .q::after {
+    content: '"';
+  }
+
+  .q::before {
+    content: '"';
+  }
+
   .p,
   .title,
   .block-component,

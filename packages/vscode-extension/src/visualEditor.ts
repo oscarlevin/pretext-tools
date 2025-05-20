@@ -14,8 +14,7 @@ import { formatPTX } from "./formatter";
  * - Synchronizing changes between a text document and a custom editor.
  */
 export class PretextVisualEditorProvider
-  implements vscode.CustomTextEditorProvider
-{
+  implements vscode.CustomTextEditorProvider {
   public static register(context: vscode.ExtensionContext): vscode.Disposable {
     const provider = new PretextVisualEditorProvider(context);
     const providerRegistration = vscode.window.registerCustomEditorProvider(
@@ -170,8 +169,13 @@ export class PretextVisualEditorProvider
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link href="${styleUri}" rel="stylesheet" />
             <script type="module" src="${scriptUri}"></script>
+            <style>
+            :root {
+            color-scheme: light;
+            }
+            </style>
           </head>
-          <body>
+          <body class="vscode-light">
             <div id="root"></div>
           </body>
         </html>`;

@@ -6,18 +6,10 @@ import React, { useEffect } from "react";
 export const PtxBubbleMenu = ({ editor }: { editor: Editor }) => {
     //const { editor } = useCurrentEditor();
 
-    if (!editor) {
-        return null;
-    }
 
-    const [showMenu, setShowMenu] = React.useState(true)
-    const [isEditable, setIsEditable] = React.useState(true)
+    const [showMenu] = React.useState(true)
+    const [isEditable] = React.useState(true)
 
-    useEffect(() => {
-        if (editor) {
-            editor.setEditable(isEditable)
-        }
-    }, [isEditable, editor])
     // Read the current editor's state, and re-render the component when it changes
     const editorState = useEditorState({
         editor,
@@ -29,9 +21,23 @@ export const PtxBubbleMenu = ({ editor }: { editor: Editor }) => {
                 canEm: ctx.editor.can().chain().focus().toggleMark('em').run(),
                 isAlert: ctx.editor.isActive('alert'),
                 canAlert: ctx.editor.can().chain().focus().toggleMark('alert').run(),
+                isCode: ctx.editor.isActive('code'),
+                canCode: ctx.editor.can().chain().focus().toggleMark('c').run(),
+                isQuote: ctx.editor.isActive('q'),
+                canQuote: ctx.editor.can().chain().focus().toggleMark('q').run(),
             }
         },
     })
+
+    useEffect(() => {
+        if (editor) {
+            editor.setEditable(isEditable)
+        }
+    }, [isEditable, editor])
+
+    if (!editor) {
+        return null;
+    }
 
     return (
         <>
@@ -60,8 +66,20 @@ export const PtxBubbleMenu = ({ editor }: { editor: Editor }) => {
                         >
                             &lt;alert&gt;
                         </button>
-
-
+                        <button
+                            onClick={() => editor.chain().focus().toggleMark('c').run()}
+                            disabled={!editorState.canCode}
+                            className={editorState.isCode ? 'is-active' : ''}
+                        >
+                            &lt;c&gt;
+                        </button>
+                        <button
+                            onClick={() => editor.chain().focus().toggleMark('q').run()}
+                            disabled={!editorState.canQuote}
+                            className={editorState.isQuote ? 'is-active' : ''}
+                        >
+                            &lt;q&gt;
+                        </button>
                     </div>
                 </BubbleMenu>
             )}

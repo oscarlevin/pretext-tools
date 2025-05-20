@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Utilities for the visual editor
 
 //export function addAttributes(){
@@ -63,7 +64,7 @@ export function cleanPtx(origXml: string) {
 }
 
 export function ptxToJson(xml: string) {
-  let json = {};
+  const json = {};
   const tree = fromXml(xml);
   console.log(JSON.stringify(buildJsonFromTree(tree), null, 2));
   return json;
@@ -76,16 +77,16 @@ function buildJsonFromTree(tree: Root | RootContent) {
       ret = {
         type: "ptxFragment",
         content: node.children
-          .filter((child) => buildJsonFromTree(child) !== undefined)
-          .map((child) => buildJsonFromTree(child)),
+          .filter((child: any) => buildJsonFromTree(child) !== undefined)
+          .map((child: any) => buildJsonFromTree(child)),
       };
     } else if (node.type === "element") {
       ret = {
         type: node.name,
         attrs: node.attributes,
         content: node.children
-          .filter((child) => buildJsonFromTree(child) !== undefined)
-          .map((child) => buildJsonFromTree(child)),
+          .filter((child: any) => buildJsonFromTree(child) !== undefined)
+          .map((child: any) => buildJsonFromTree(child)),
       };
     } else if (node.type === "text" && !whitespace(node)) {
       ret = {

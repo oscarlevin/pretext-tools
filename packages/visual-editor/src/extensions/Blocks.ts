@@ -14,7 +14,7 @@ const Para = Node.create({
 
   content: "inline*",
 
-  group: "BasicBlock",
+  group: "paragraph BasicBlock",
 
   //   selectable: false,
 
