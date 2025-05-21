@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.30.1] - 2025-05-21
+
 ## Fixed
 
 - View command now finds targets correctly.
