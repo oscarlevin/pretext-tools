@@ -47,7 +47,7 @@ export function cmdView(runInTerminal: boolean = false) {
 
 export function cmdViewCLI(runInTerminal: boolean = false) {
   ensureProjectList();
-  let targetSelection = projectTargetList();
+  let targetSelection = projectTargetList({});
   // Show choice dialog and pass correct command to runPretext based on selection.
   window.showQuickPick(targetSelection).then((qpSelection) => {
     if (!qpSelection) {

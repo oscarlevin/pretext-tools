@@ -10,7 +10,9 @@ export async function cmdDeploy(
 ) {
   // First get a list of possible projects to deploy.
   await ensureProjectList();
-  let projectRoots = projects.map((p) => p.root);
+  let projectRoots = projects
+    .filter((p) => !p.systemDefault)
+    .map((p) => p.root);
   console.log("projectRoots: ", projectRoots);
   let projectPath = "."; // default to current directory
   if (projectRoots.length === 0) {

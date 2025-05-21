@@ -49,4 +49,5 @@ type CompletionType = "element" | "attribute" | "file" | "ref";
 type Project = {
   root: string;
   targets: Target[];
+  systemDefault?: boolean;
 };

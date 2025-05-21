@@ -84,6 +84,7 @@ async function updateProjectList() {
       projects.push({
         root: ptxDir,
         targets: getTargets(ptxDir),
+        systemDefault: true,
       });
     }
   }
