@@ -20,10 +20,23 @@ export async function resetProjectList() {
   window.showInformationMessage("Refreshed projects and targets.");
 }
 
-export function projectTargetList() {
+export function projectTargetList({
+  standalones,
+}: {
+  standalones?: boolean;
+}): { label: string; description: string }[] {
   let targetSelection = [];
   for (let project of projects) {
     for (let target of project.targets) {
+      // If standalones is true, only show standalone targets
+      if (standalones && !target.standalone) {
+        continue;
+      }
+      // If standalones is false, only show non-standalone targets
+      if (!standalones && target.standalone) {
+        continue;
+      }
+      // If no standalones is specified, show all targets
       targetSelection.push({
         label: target.name,
         description: target.path,
@@ -62,6 +75,18 @@ async function updateProjectList() {
       });
     }
   }
+  // Always include the default standalone targets from ~/.ptx
+  // These should always be standalone targets and we can expect that they will have sensible default output locations.
+  const homeDir = process.env.HOME || process.env.USERPROFILE;
+  if (homeDir) {
+    const ptxDir = path.join(homeDir, ".ptx");
+    if (fs.existsSync(ptxDir)) {
+      projects.push({
+        root: ptxDir,
+        targets: getTargets(ptxDir),
+      });
+    }
+  }
   return;
 }
 
@@ -95,6 +120,7 @@ function getTargets(projectRoot: string): Target[] {
             // The attributes of the target element are given as the children of the $ property
             name: t.$.name,
             path: projectRoot,
+            standalone: (t.$.standalone && t.$.standalone !== "no") || false,
           };
         });
       }

@@ -1,3 +1,5 @@
+// Note: this file is no longer being used, since the corresponding functions have been moved the the LSP server.
+
 import * as vscode from "vscode";
 
 const docStructure = [
