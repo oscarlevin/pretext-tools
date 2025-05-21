@@ -196,6 +196,7 @@ const verbatimTags = [
   "sageplot",
   "asymptote",
   "macros",
+  "prefigure",
   "program",
   "input",
   "output",

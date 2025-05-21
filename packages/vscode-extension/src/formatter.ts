@@ -195,6 +195,7 @@ const verbatimTags = [
   "output",
   "prompt",
   "pre",
+  "prefigure",
   "pg-code",
   "tikzpicture",
   "tikz",
