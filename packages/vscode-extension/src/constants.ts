@@ -3,13 +3,18 @@
 export const ptxCommandList = [
   {
     label: "Build default target",
-    description: "",
+    description: "(first target of project.ptx)",
     command: "pretext-tools.buildLast",
   },
   {
     label: "Build another target...",
     description: "select target",
     command: "pretext-tools.buildAny",
+  },
+  {
+    label: "Build current file",
+    description: "as standalone document",
+    command: "pretext-tools.buildFile",
   },
   {
     label: "Preview file with CodeChat",
@@ -32,7 +37,12 @@ export const ptxCommandList = [
     command: "pretext-tools.refreshTargets",
   },
   {
-    label: "Convert selection to PreTeXt",
+    label: "Convert mixed text in current file to PreTeXt",
+    description: "",
+    command: "pretext-tools.convertToPretext",
+  },
+  {
+    label: "Convert LaTeX selection to PreTeXt",
     description: "Convert selection",
     command: "pretext-tools.latexToPretext",
   },

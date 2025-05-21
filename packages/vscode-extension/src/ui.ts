@@ -38,9 +38,15 @@ export let pretextCommandList = ptxCommandList;
 
 export function setTopCommand(command: string) {
   pretextCommandList[0].label = command;
+  pretextCommandList[0].description = "";
 }
 
-export let lastTarget: Target = { name: "", path: "" };
+export let lastTarget: Target = {
+  name: "",
+  path: "",
+  standalone: false,
+  filename: "",
+};
 
 export function updateLastTarget(target: Target) {
   lastTarget = target;

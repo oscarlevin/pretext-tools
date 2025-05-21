@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## Added
+
+- Build current document available from pretext menu; allows selection of output format.
+- Allows include system default targets (must be configured in `~/.ptx` by the CLI).
+- "Covert mixed text to PreTeXT" command added to pretext menu.
+
 ## [0.29.2] - 2025-05-19
 
 ## Changed

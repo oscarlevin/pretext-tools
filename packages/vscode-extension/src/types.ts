@@ -28,6 +28,8 @@ export type LabelArray = [string, string, string][];
 export type Target = {
   name: string;
   path: string;
+  standalone?: boolean;
+  filename?: string;
 };
 // Types for snippets
 type Snippet = {
