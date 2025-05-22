@@ -4,6 +4,9 @@ import { getProjectFolder } from "./utils";
 import * as path from "path";
 import * as fs from "fs";
 import { parseString } from "xml2js";
+import { cli } from "./cli";
+
+const DEFAULTMANIFEST = "standalone-project.ptx";
 
 export let projects: Project[] = [];
 
@@ -54,7 +57,7 @@ async function updateProjectList() {
       if (root && !projects.some((p) => p.root === root)) {
         projects.push({
           root: root,
-          targets: getTargets(root),
+          targets: getTargets({ projectRoot: root }),
         });
       }
     }
@@ -71,7 +74,7 @@ async function updateProjectList() {
     if (root) {
       projects.push({
         root: root,
-        targets: getTargets(root),
+        targets: getTargets({ projectRoot: root }),
       });
     }
   }
@@ -79,11 +82,12 @@ async function updateProjectList() {
   // These should always be standalone targets and we can expect that they will have sensible default output locations.
   const homeDir = process.env.HOME || process.env.USERPROFILE;
   if (homeDir) {
-    const ptxDir = path.join(homeDir, ".ptx");
+    const ptxDir = path.join(homeDir, ".ptx", cli.version());
+    console.log("Looking for default project in ", ptxDir);
     if (fs.existsSync(ptxDir)) {
       projects.push({
         root: ptxDir,
-        targets: getTargets(ptxDir),
+        targets: getTargets({ projectRoot: ptxDir, manifest: DEFAULTMANIFEST }),
         systemDefault: true,
       });
     }
@@ -96,8 +100,14 @@ async function updateProjectList() {
  * @param projectRoot The root directory of the project.
  * @returns An array of Target objects.
  */
-function getTargets(projectRoot: string): Target[] {
-  const projectManifest = path.join(projectRoot, "project.ptx");
+function getTargets({
+  projectRoot,
+  manifest,
+}: {
+  projectRoot: string;
+  manifest?: string;
+}): Target[] {
+  const projectManifest = manifest || path.join(projectRoot, "project.ptx");
   console.log("Project manifest is ", projectManifest);
   if (fs.existsSync(projectManifest)) {
     // Parse the project.ptx xml and look for target elements

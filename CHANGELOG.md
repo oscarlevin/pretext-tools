@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## Fixed
+
+- Updated location of standalone-project.ptx to match next CLI release.
+
 ## [0.30.1] - 2025-05-21
 
 ## Fixed
