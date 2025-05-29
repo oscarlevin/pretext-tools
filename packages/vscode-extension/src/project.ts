@@ -6,7 +6,7 @@ import * as fs from "fs";
 import { parseString } from "xml2js";
 import { cli } from "./cli";
 
-const DEFAULTMANIFEST = "standalone-project.ptx";
+const DEFAULTMANIFEST = "project.ptx";
 
 export let projects: Project[] = [];
 
@@ -85,9 +85,10 @@ async function updateProjectList() {
     const ptxDir = path.join(homeDir, ".ptx", cli.version());
     console.log("Looking for default project in ", ptxDir);
     if (fs.existsSync(ptxDir)) {
+      console.log("Found default project in ", ptxDir);
       projects.push({
         root: ptxDir,
-        targets: getTargets({ projectRoot: ptxDir, manifest: DEFAULTMANIFEST }),
+        targets: getTargets({ projectRoot: ptxDir }),
         systemDefault: true,
       });
     }
@@ -107,7 +108,11 @@ function getTargets({
   projectRoot: string;
   manifest?: string;
 }): Target[] {
-  const projectManifest = manifest || path.join(projectRoot, "project.ptx");
+  console.log("Getting targets for project root: ", projectRoot);
+  if (manifest) {
+    console.error("You tried to set a manifest, but this is no longer supported.  Your manifest was: ", manifest);
+  }
+  const projectManifest = path.join(projectRoot, "project.ptx");
   console.log("Project manifest is ", projectManifest);
   if (fs.existsSync(projectManifest)) {
     // Parse the project.ptx xml and look for target elements
