@@ -7,21 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Fixed
+
+- Building standalone/current document bug that didn't show possible default targets.
+
 ## [0.31.0] - 2025-05-23
 
-## Fixed
+### Fixed
 
 - Updated location of standalone-project.ptx to match next CLI release.
 
 ## [0.30.1] - 2025-05-21
 
-## Fixed
+### Fixed
 
 - View command now finds targets correctly.
 
 ## [0.30.0] - 2025-05-21
 
-## Added
+### Added
 
 - Build current document available from pretext menu; allows selection of output format.
 - Allows include system default targets (must be configured in `~/.ptx` by the CLI).
@@ -29,46 +33,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.29.2] - 2025-05-19
 
-## Changed
+### Changed
 
 - Formatter respects editor tabSize and insertSpaces settings.
 
 ## [0.29.1] - 2025-05-16
 
-## Changed
+### Changed
 
 - Updated converter
 
 ## [0.29.0] - 2025-05-15
 
-## Changed
+### Changed
 
 - Use "classic" formatting within the LSP.
 - Improved the "Convert to PreTeXt" function.
 
 ## [0.28.1] - 2025-05-12
 
-## Added
+### Added
 
 - Convert document to proper PreTeXt from "FrankenMarkUp" (or FlexTeXt?).
 
-## Changed
+### Changed
 
 - Switched (again) to use prettier for formatting instead of custom formatter.
 
 ## [0.28.0] - 2025-05-07
 
-## Added
+### Added
 
 - Experimental *Visual Editor* for PreTeXt documents.
 
 ## [0.27.1] - 2025-04-10
 
-## Added
+### Added
 
 - Command to open the PreTeXt getting started walkthrough.
 
-## Fixed
+### Fixed
 
 - Fixed bug that prevented `installSage.sh` from running in a codespace.
 
