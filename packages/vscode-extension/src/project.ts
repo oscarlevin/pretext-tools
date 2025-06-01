@@ -110,7 +110,10 @@ function getTargets({
 }): Target[] {
   console.log("Getting targets for project root: ", projectRoot);
   if (manifest) {
-    console.error("You tried to set a manifest, but this is no longer supported.  Your manifest was: ", manifest);
+    console.error(
+      "You tried to set a manifest, but this is no longer supported.  Your manifest was: ",
+      manifest
+    );
   }
   const projectManifest = path.join(projectRoot, "project.ptx");
   console.log("Project manifest is ", projectManifest);

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.31.1] - 2025-05-29
+
 ### Fixed
 
 - Building standalone/current document bug that didn't show possible default targets.
