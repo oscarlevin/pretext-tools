@@ -37,9 +37,9 @@ export const ptxCommandList = [
     command: "pretext-tools.refreshTargets",
   },
   {
-    label: "Convert mixed text in current file to PreTeXt",
+    label: "Convert mixed text to PreTeXt",
     description: "",
-    command: "pretext-tools.convertToPretext",
+    command: "pretext-tools.ftToPtx",
   },
   {
     label: "Convert LaTeX selection to PreTeXt",
@@ -52,7 +52,7 @@ export const ptxCommandList = [
     command: "pretext-tools.markdownToPretext",
   },
   {
-    label: "Convert file to PreTeXt",
+    label: "Convert external file to PreTeXt",
     description: "Convert from other formats using PlasTeX or Pandoc",
     command: "pretext-tools.convertToPretext",
   },

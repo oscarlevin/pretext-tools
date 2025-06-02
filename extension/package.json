@@ -198,7 +198,7 @@
       },
       {
         "command": "pretext-tools.ftToPtx",
-        "title": "Convert current editor contents to PreTeXt",
+        "title": "Convert mixed text in editor or selection to PreTeXt",
         "category": "PreTeXt",
         "description": "Converts and replaces your FlexTeXt to PreTeXt formatted text (experimental)."
       },

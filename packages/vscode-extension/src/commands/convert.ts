@@ -117,9 +117,9 @@ export async function cmdConvertFlextextToPretext() {
     const selection = editor.selection;
     const selectionRange = selection.isEmpty
       ? new Range(
-          editor.document.positionAt(0),
-          editor.document.positionAt(editor.document.getText().length)
-        )
+        editor.document.positionAt(0),
+        editor.document.positionAt(editor.document.getText().length)
+      )
       : new Range(selection.start, selection.end);
     console.log("selectionRange is", selectionRange);
     const initialText = editor.document.getText(selectionRange);
