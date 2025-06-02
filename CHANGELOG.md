@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.31.2] - 2025-06-02
+
 ### Fixed
 
 - The pretext button menu used the wrong function for the "convert mixed content" command.
