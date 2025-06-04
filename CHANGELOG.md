@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.32.0] - 2025-06-04
+
 ### Added
 
 - Support for hint, answer, and solution in latex to pretext inline converter.
