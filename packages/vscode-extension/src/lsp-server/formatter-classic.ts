@@ -442,10 +442,14 @@ export async function formatRange(
 
   try {
     console.log("range is", range);
+    const rangeSlice = origText.slice(
+      doc.offsetAt(range.start),
+      doc.offsetAt(range.end)
+    );
     console.log(
       origText.slice(doc.offsetAt(range.start), doc.offsetAt(range.end))
     );
-    let formatted = formatPTX(origText);
+    let formatted = formatPTX(rangeSlice);
     console.log("formatted", formatted);
     return [{ newText: formatted, range }];
   } catch (e) {

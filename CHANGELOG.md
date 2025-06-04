@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Support for hint, answer, and solution in latex to pretext inline converter.
+
+### Fixed
+
+- Format selection was formatting the entire document and replacing the selection with it.
+- Convert mixed content to pretext was formatting the entire document after converting a selection.
+
 ## [0.31.2] - 2025-06-02
 
 ### Fixed
