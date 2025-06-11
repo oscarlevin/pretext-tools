@@ -155,14 +155,20 @@ export async function cmdConvertFlextextToPretext() {
   console.log("editor is", editor);
   if (editor) {
     const selection = editor.selection;
-    const selectionRange = selection.isEmpty
-      ? new Range(
-          editor.document.positionAt(0),
-          editor.document.positionAt(editor.document.getText().length)
-        )
-      : new Range(selection.start, selection.end);
+    let selectionRange: Range;
+    let fullDocument = false;
+    if (selection.isEmpty) {
+      fullDocument = true;
+      selectionRange = new Range(
+        editor.document.positionAt(0),
+        editor.document.positionAt(editor.document.getText().length)
+      );
+    } else {
+      selectionRange = new Range(selection.start, selection.end);
+    }
     console.log("selectionRange is", selectionRange);
     const initialText = editor.document.getText(selectionRange);
+    console.log("initialText is", initialText);
 
     var newText = FlexTeXtConvert(initialText);
 
@@ -170,8 +176,12 @@ export async function cmdConvertFlextextToPretext() {
       editbuilder.replace(selectionRange, newText);
     });
     // Call default formatter to format just the replaced selection.
-    commands.executeCommand("editor.action.formatSelection");
-
+    if (fullDocument) {
+      commands.executeCommand("editor.action.formatDocument");
+    } else {
+      commands.executeCommand("editor.action.formatSelection");
+    }
+    pretextOutputChannel.appendLine("FlexTeXt converted to PreTeXt.");
     console.log("Formatted text");
   }
 }
