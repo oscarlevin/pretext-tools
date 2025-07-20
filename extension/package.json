@@ -6,7 +6,7 @@
   "license": "See license in LICENSE",
   "icon": "logo.png",
   "publisher": "oscarlevin",
-  "repository": "https://github.com/oscarlevin/pretext-tools",
+  "repository": "https://github.com/PreTeXtBook/pretext-tools",
   "engines": {
     "vscode": "^1.89.0"
   },
