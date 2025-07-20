@@ -29,7 +29,7 @@ import { cmdDeploy } from "./commands/deploy";
 import { cmdUpdate } from "./commands/update";
 //import { ptxExperiment } from "./commands/experiment";
 import {
-  cmdConvertFlextextToPretext,
+  cmdConvertMixedtextToPretext,
   cmdConvertToPretext,
   cmdLatexToPretext,
   cmdMarkdownToPretext,
@@ -45,12 +45,12 @@ import { cmdSelectCommand } from "./commands/select";
 import {
   activate as lspActivate,
   deactivate as lspDeactivate,
+  lspFormat,
+  lspFormatText,
 } from "./lsp-client/main";
 import { projects } from "./project";
 import { cmdInstallSage } from "./commands/installSage";
 import { PretextVisualEditorProvider } from "./visualEditor";
-import { cli } from "./cli";
-import { client } from "./lsp-client/main";
 
 // this method is called when your extension is activated
 export async function activate(context: ExtensionContext) {
@@ -159,16 +159,17 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand("pretext-tools.new", cmdNew),
     commands.registerCommand("pretext-tools.deploy", cmdDeploy),
     commands.registerCommand("pretext-tools.updatePTX", cmdUpdate),
-    //commands.registerCommand("pretext-tools.formatPretextDocument", (doc) => {
-    //  if (doc) {
-    //    return formatDocument(doc);
-    //  } else {
-    //    console.log("No document provided to format");
-    //  }
-    //}),
+    commands.registerCommand("pretext-tools.formatPretextDocument", () => {
+      const activeEditor = window.activeTextEditor;
+      if (activeEditor) {
+        return lspFormat(activeEditor);
+      } else {
+        console.log("No document provided to format");
+      }
+    }),
     commands.registerCommand(
       "pretext-tools.ftToPtx",
-      cmdConvertFlextextToPretext
+      cmdConvertMixedtextToPretext
     ),
     commands.registerCommand("pretext-tools.latexToPretext", cmdLatexToPretext),
     commands.registerCommand(

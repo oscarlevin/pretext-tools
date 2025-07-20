@@ -29,7 +29,7 @@ import {
   getCompletionDetails,
 } from "./completions/get-completions";
 //import { formatDocument, formatRange } from "./formatter";
-import { formatDocument, formatRange } from "./formatter-classic";
+import { formatDocument, formatRange, formatText } from "./formatter-classic";
 import { getReferences, updateReferences } from "./completions/utils";
 import { getAst, initializeSchema, Schema } from "./schema";
 import path from "path";
@@ -282,6 +282,14 @@ connection.onCodeAction((params) => {
 });
 connection.onExecuteCommand(async (params) => {
   console.log("asked to execute", params.command);
+  if (params.command === "formatText") {
+    console.log("Formatting text", params.arguments);
+    if (params.arguments && params.arguments[0] && typeof params.arguments[0].text === "string") {
+      const newText = await formatText({text: params.arguments[0].text});
+      console.log("New text:", newText);
+      // Need to send back the nextText.
+    }
+  }
   if (params.command === "formatDocument") {
     console.log("formatting document", params.arguments);
     if (

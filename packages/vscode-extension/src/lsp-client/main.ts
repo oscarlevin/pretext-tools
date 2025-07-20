@@ -4,7 +4,7 @@
  * ------------------------------------------------------------------------------------------ */
 
 import * as path from "path";
-import { ExtensionContext, workspace } from "vscode";
+import { ExtensionContext, TextEditor, window, workspace } from "vscode";
 
 import {
   LanguageClient,
@@ -15,7 +15,28 @@ import {
 
 import { pretextOutputChannel } from "../ui";
 
-export let client: LanguageClient;
+let client: LanguageClient;
+
+export function lspFormat(editor: TextEditor) {
+  if (editor) {
+    client.sendRequest('workspace/executeCommand', {
+      command: 'formatDocument',
+      arguments: [{ uri: editor.document.uri.toString() }],
+    });
+  } else {
+    console.log("No active editor found to format document.");
+  }
+}
+
+export function lspFormatText(text: string) {
+  client.sendRequest('workspace/executeCommand', {
+    command: 'formatText',
+    arguments: [{ text: text }]
+  })
+  //Need to get the text back from the LSP.
+  console.log("Done!")
+}
+
 
 export function activate(context: ExtensionContext) {
   // The server is implemented in node

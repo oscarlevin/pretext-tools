@@ -16,6 +16,7 @@ import { formatPTX } from "../formatter";
 import { FlexTeXtConvert } from "frankenmarkup";
 import { get } from "http";
 import { Environment, Macro } from "@unified-latex/unified-latex-types";
+import { lspFormatText } from "../lsp-client/main";
 
 export function cmdConvertToPretext() {
   console.log("Converting to PreTeXt");
@@ -147,9 +148,9 @@ export function cmdMarkdownToPretext() {
   }
 }
 
-export async function cmdConvertFlextextToPretext() {
+export async function cmdConvertMixedtextToPretext() {
   pretextOutputChannel.appendLine(
-    "Flextext to PreTeXt conversion is still very experiemental.  Use with care."
+    "Mixed text to PreTeXt conversion is still very experiemental.  Use with care."
   );
   const editor = window.activeTextEditor;
   console.log("editor is", editor);
@@ -170,8 +171,8 @@ export async function cmdConvertFlextextToPretext() {
     const initialText = editor.document.getText(selectionRange);
     console.log("initialText is", initialText);
 
-    var newText = FlexTeXtConvert(initialText);
-
+    const newText = FlexTeXtConvert(initialText);
+    const formattedNewText = lspFormatText(newText);
     editor.edit((editbuilder) => {
       editbuilder.replace(selectionRange, newText);
     });
