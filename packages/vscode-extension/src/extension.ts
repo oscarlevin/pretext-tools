@@ -6,6 +6,7 @@ import {
   TextEdit,
   commands,
   WebviewPanel,
+  window,
 } from "vscode";
 import { formatPretextDocument } from "./formatter";
 import * as utils from "./utils";
@@ -48,6 +49,8 @@ import {
 import { projects } from "./project";
 import { cmdInstallSage } from "./commands/installSage";
 import { PretextVisualEditorProvider } from "./visualEditor";
+import { cli } from "./cli";
+import { client } from "./lsp-client/main";
 
 // this method is called when your extension is activated
 export async function activate(context: ExtensionContext) {
@@ -119,9 +122,25 @@ export async function activate(context: ExtensionContext) {
 
   ///////////////// Commands //////////////////////
 
+  // Import or define the client instance for LSP communication
+
+
   context.subscriptions.push(
     commands.registerCommand("pretext-tools.experiment", () => {
-      utils.experiment(context);
+      console.log("Running PreTeXt experiment command");
+      // Example: Triggering a custom command from the client
+      // This is cool.  It will allow us to complete custom things throught the LSP.
+      // This is formatting
+      const activeEditor = window.activeTextEditor;
+      if (activeEditor) {
+        client.sendRequest('workspace/executeCommand', {
+          command: 'formatDocument',
+          arguments: [{ uri: activeEditor.document.uri.toString() }],
+        });
+      } else {
+        console.log("No active editor found to format document.");
+      }
+      //utils.experiment(context);
     }),
     commands.registerCommand(
       "pretext-tools.selectPretextCommand",
@@ -141,6 +160,13 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand("pretext-tools.new", cmdNew),
     commands.registerCommand("pretext-tools.deploy", cmdDeploy),
     commands.registerCommand("pretext-tools.updatePTX", cmdUpdate),
+    //commands.registerCommand("pretext-tools.formatPretextDocument", (doc) => {
+    //  if (doc) {
+    //    return formatDocument(doc);
+    //  } else {
+    //    console.log("No document provided to format");
+    //  }
+    //}),
     commands.registerCommand(
       "pretext-tools.ftToPtx",
       cmdConvertFlextextToPretext

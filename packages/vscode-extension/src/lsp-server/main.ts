@@ -280,8 +280,21 @@ connection.onHover(async (params) => {
 connection.onCodeAction((params) => {
   return [{ title: "My Custom Action" }];
 });
-connection.onExecuteCommand((params) => {
+connection.onExecuteCommand(async (params) => {
   console.log("asked to execute", params.command);
+  if (params.command === "formatDocument") {
+    console.log("formatting document", params.arguments);
+    if (params.arguments && params.arguments[0] && typeof params.arguments[0].uri === "string") {
+      const uri = params.arguments[0].uri;
+      console.log("uri is", uri);
+      const edits = await formatDocument({
+        textDocument: { uri },
+        options: { tabSize: globalSettings.editor.tabSize, insertSpaces: globalSettings.editor.insertSpaces }
+      });
+      console.log("edits for", uri, edits);
+      connection.sendRequest("workspace/applyEdit", { edit: { changes: { [uri]: edits } } });
+    }
+  }
 });
 
 connection.onNotification((...args) => {

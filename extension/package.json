@@ -98,7 +98,8 @@
       {
         "command": "pretext-tools.experiment",
         "title": "PreTeXt Experiment",
-        "category": "PreTeXt"
+        "category": "PreTeXt",
+        "enablement": "config.pretext-tools.experimentalFeatures"
       },
       {
         "command": "pretext-tools.refreshTargets",
@@ -179,6 +180,21 @@
         "description": "Checks for and installs the newest version of PreTeXt"
       },
       {
+        "command": "pretext-tools.format",
+        "title": "Format PreTeXt",
+        "icon": "$(pencil)",
+        "category": "PreTeXt",
+        "description": "Formats the PreTeXt source file using the PreTeXt formatter.",
+        "enablement": "config.pretext-tools.experimentalFeatures"
+      },
+      {
+        "command": "pretext-tools.spellCheck",
+        "title": "Spell Check PreTeXt",
+        "icon": "$(check)",
+        "category": "PreTeXt",
+        "description": "Spell checks the PreTeXt source file using Code Spell Checker."
+      },
+      {
         "command": "pretext-tools.convertToPretext",
         "title": "Convert file to PreTeXt",
         "category": "PreTeXt",
@@ -207,7 +223,7 @@
         "title": "Install SageMath",
         "category": "PreTeXt",
         "description": "Installs SageMath in a Conda environment. This only works inside a codespace",
-        "enablement": "isWeb"
+        "enablement": "isWeb && config.pretext-tools.experimentalFeatures"
       },
       {
         "command": "pretext-tools.gettingStarted",
@@ -241,9 +257,9 @@
         }
       ],
       "xml.validation.xInclude.enabled": true,
-      "cSpell.enableFiletypes": [
-        "pretext"
-      ]
+      "cSpell.enabledFileTypes": {
+        "pretext": true
+      }
     },
     "menus": {},
     "configuration": [
@@ -391,6 +407,12 @@
             "type": "string",
             "default": "",
             "markdownDescription": "To use a non-standard python installation or virtual environment, set path to python here.  If blank we will use `python -m` or `python3 -m`. **Requires restart of VS Code**"
+          },
+          "pretext-tools.experimentalFeatures": {
+            "order": 30,
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Enable experimental features.  Test out the latest features of PreTeXt Tools.  These may not be stable and may change in future releases."
           }
         }
       }

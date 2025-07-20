@@ -406,8 +406,11 @@ export function formatPTX(text: string): string {
 export async function formatDocument(
   params: DocumentFormattingParams
 ): Promise<TextEdit[] | null> {
+  console.log("formatting document with PreTeXt's classic formatter.");
   const uri = params.textDocument.uri;
   const doc = documents.get(uri);
+  console.log("formatting document", uri);
+  console.log("doc is", doc);
   if (!doc) {
     return null;
   }
