@@ -124,7 +124,6 @@ export async function activate(context: ExtensionContext) {
 
   // Import or define the client instance for LSP communication
 
-
   context.subscriptions.push(
     commands.registerCommand("pretext-tools.experiment", () => {
       console.log("Running PreTeXt experiment command");
@@ -133,8 +132,8 @@ export async function activate(context: ExtensionContext) {
       // This is formatting
       const activeEditor = window.activeTextEditor;
       if (activeEditor) {
-        client.sendRequest('workspace/executeCommand', {
-          command: 'formatDocument',
+        client.sendRequest("workspace/executeCommand", {
+          command: "formatDocument",
           arguments: [{ uri: activeEditor.document.uri.toString() }],
         });
       } else {

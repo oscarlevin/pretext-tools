@@ -16,29 +16,31 @@ function statusUpdateFunction(entry, outfile) {
  * @type {import('esbuild').Plugin}
  */
 const esbuildProblemMatcherPlugin = {
-  name: 'esbuild-problem-matcher',
+  name: "esbuild-problem-matcher",
 
   setup(build) {
     build.onStart(() => {
-      console.log('[watch] build started');
+      console.log("[watch] build started");
     });
-    build.onEnd(result => {
+    build.onEnd((result) => {
       result.errors.forEach(({ text, location }) => {
         console.error(`✘ [ERROR] ${text}`);
-        console.error(`    ${location.file}:${location.line}:${location.column}:`);
+        console.error(
+          `    ${location.file}:${location.line}:${location.column}:`
+        );
       });
-      console.log('[watch] build finished');
+      console.log("[watch] build finished");
     });
-  }
+  },
 };
 
 const extensionCompiled = statusUpdateFunction(
   "./src/extension.ts",
-  "./out/extension.js",
+  "./out/extension.js"
 );
 const lspServerCompiled = statusUpdateFunction(
   "./src/lsp-server/main.ts",
-  "./out/lsp-server.js",
+  "./out/lsp-server.js"
 );
 
 const buildOptions = {
@@ -65,10 +67,7 @@ const buildOptionsLSP = {
   external: ["vscode"],
   outfile: "../../extension/out/lsp-server.js",
   plugins: [esbuildProblemMatcherPlugin],
-
 };
-
-
 
 const ctx = await esbuild.context({ ...buildOptions });
 
@@ -79,7 +78,6 @@ if (watch) {
 }
 await ctx.dispose();
 
-
 const ctxLSP = await esbuild.context({ ...buildOptionsLSP });
 
 if (watch) {
@@ -88,7 +86,6 @@ if (watch) {
   await ctxLSP.rebuild();
 }
 await ctxLSP.dispose();
-
 
 // Compile the base extension
 //const result = await esbuild

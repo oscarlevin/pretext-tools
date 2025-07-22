@@ -53,7 +53,8 @@ export function cmdViewCLI(runInTerminal: boolean = false) {
     if (!qpSelection) {
       return;
     }
-    if (runInTerminal) {
+    const isCodespace = !!process.env.CODESPACES;
+    if (runInTerminal || isCodespace) {
       let terminal = utils.setupTerminal(pretextTerminal);
       terminal.sendText("pretext view " + qpSelection.label);
     } else {

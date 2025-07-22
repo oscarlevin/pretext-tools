@@ -10,7 +10,7 @@ A Visual Studio Code extension to make writing PreTeXt documents easier.
 - Defines the PreTeXt language, automatically selecting it for `.ptx` files.
 - Syntax highlighting and indentation based on XML, plus some additions like recognizing math as LaTeX.
 - Schema support via the [vscode-xml](https://github.com/redhat-developer/vscode-xml) extension (which also provides many xml tools).
-- A large collection of snippets for most PreTeXt elements.  Smart completions based on the schema.
+- A large collection of snippets for most PreTeXt elements. Smart completions based on the schema.
 - A front-end for the [PreTeXt-CLI](https://github.com/PreTeXtBook/pretext-cli), with commands available through a statusbar menu, keyboard shortcuts (Ctrl+Alt+P for command menu, Ctrl-Alt-B to build, Ctrl-Alt-V to view, etc.), and the command pallet (search for PreTeXT).
 - Support for the CodeChat extension to view output, as well as via the PreTeXt-CLI.
 - Use pandoc to convert almost any file format to PreTeXt.
@@ -64,7 +64,7 @@ If you have PreTeXt-CLI installed in a virtual environment, or have a non-standa
 
 ### Formatting
 
-Using the command pallet, you can request to "Format Document With..." and select "pretext-tools" as the formatter.  You can also set this as the default from that menu.  In settings, you can specify to "Split Sentences" which will take long paragraphs and start new lines after each period.  You can also specify whether you want no, some, or lots of blank lines inserted in the settings. 
+Using the command pallet, you can request to "Format Document With..." and select "pretext-tools" as the formatter. You can also set this as the default from that menu. In settings, you can specify to "Split Sentences" which will take long paragraphs and start new lines after each period. You can also specify whether you want no, some, or lots of blank lines inserted in the settings.
 
 Consider setting "Format on Save" to keep your document nicely formatted always.
 
