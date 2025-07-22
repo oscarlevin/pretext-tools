@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.32.4] - 2025-07-22
+
 - Fixed bug that once again prevented `view` command in codespaces when using the pretext button.
 
 ## [0.32.3] - 2025-07-08
