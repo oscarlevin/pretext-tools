@@ -153,7 +153,6 @@ export async function cmdConvertMixedtextToPretext() {
     "Mixed text to PreTeXt conversion is still very experiemental.  Use with care."
   );
   const editor = window.activeTextEditor;
-  console.log("editor is", editor);
   if (editor) {
     const selection = editor.selection;
     let selectionRange: Range;
@@ -167,22 +166,12 @@ export async function cmdConvertMixedtextToPretext() {
     } else {
       selectionRange = new Range(selection.start, selection.end);
     }
-    console.log("selectionRange is", selectionRange);
     const initialText = editor.document.getText(selectionRange);
-    console.log("initialText is", initialText);
-
     const newText = FlexTeXtConvert(initialText);
-    const formattedNewText = lspFormatText(newText);
+    const formattedNewText = await lspFormatText(newText);
     editor.edit((editbuilder) => {
-      editbuilder.replace(selectionRange, newText);
+      editbuilder.replace(selectionRange, formattedNewText);
     });
-    // Call default formatter to format just the replaced selection.
-    if (fullDocument) {
-      commands.executeCommand("editor.action.formatDocument");
-    } else {
-      commands.executeCommand("editor.action.formatSelection");
-    }
-    pretextOutputChannel.appendLine("FlexTeXt converted to PreTeXt.");
-    console.log("Formatted text");
+    pretextOutputChannel.appendLine("Mixed text converted to PreTeXt.");
   }
 }

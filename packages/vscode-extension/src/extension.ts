@@ -45,7 +45,7 @@ import { cmdSelectCommand } from "./commands/select";
 import {
   activate as lspActivate,
   deactivate as lspDeactivate,
-  lspFormat,
+  lspFormatDocument,
   lspFormatText,
 } from "./lsp-client/main";
 import { projects } from "./project";
@@ -100,23 +100,6 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(ptxSBItem);
   utils.updateStatusBarItem(ptxSBItem);
 
-  ///////////////// Formatter //////////////////////
-
-  // try {
-  //   let formatter = languages.registerDocumentFormattingEditProvider(
-  //     "pretext",
-  //     {
-  //       provideDocumentFormattingEdits(document: TextDocument): TextEdit[] {
-  //         return formatPretextDocument(document);
-  //       },
-  //     }
-  //   );
-
-  //   context.subscriptions.push(formatter);
-  // } catch {
-  //   console.log("Error setting up formatter");
-  // }
-
   // Visual editor
   context.subscriptions.push(PretextVisualEditorProvider.register(context));
 
@@ -127,18 +110,8 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand("pretext-tools.experiment", () => {
       console.log("Running PreTeXt experiment command");
-      // Example: Triggering a custom command from the client
-      // This is cool.  It will allow us to complete custom things throught the LSP.
-      // This is formatting
-      const activeEditor = window.activeTextEditor;
-      if (activeEditor) {
-        client.sendRequest("workspace/executeCommand", {
-          command: "formatDocument",
-          arguments: [{ uri: activeEditor.document.uri.toString() }],
-        });
-      } else {
-        console.log("No active editor found to format document.");
-      }
+      // Notify that no experiment command is currently available
+      pretextOutputChannel.appendLine("No experiment command is implemented.");
       //utils.experiment(context);
     }),
     commands.registerCommand(
@@ -162,7 +135,7 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand("pretext-tools.formatPretextDocument", () => {
       const activeEditor = window.activeTextEditor;
       if (activeEditor) {
-        return lspFormat(activeEditor);
+        return lspFormatDocument(activeEditor);
       } else {
         console.log("No document provided to format");
       }

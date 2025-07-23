@@ -281,24 +281,23 @@ connection.onCodeAction((params) => {
   return [{ title: "My Custom Action" }];
 });
 connection.onExecuteCommand(async (params) => {
-  console.log("asked to execute", params.command);
+  // Handle commands sent from the client
   if (params.command === "formatText") {
-    console.log("Formatting text", params.arguments);
-    if (params.arguments && params.arguments[0] && typeof params.arguments[0].text === "string") {
-      const newText = await formatText({text: params.arguments[0].text});
-      console.log("New text:", newText);
-      // Need to send back the nextText.
+    if (
+      params.arguments &&
+      params.arguments[0] &&
+      typeof params.arguments[0].text === "string"
+    ) {
+      const newText = await formatText({ text: params.arguments[0].text });
+      return newText;
     }
-  }
-  if (params.command === "formatDocument") {
-    console.log("formatting document", params.arguments);
+  } else if (params.command === "formatDocument") {
     if (
       params.arguments &&
       params.arguments[0] &&
       typeof params.arguments[0].uri === "string"
     ) {
       const uri = params.arguments[0].uri;
-      console.log("uri is", uri);
       const edits = await formatDocument({
         textDocument: { uri },
         options: {
@@ -306,7 +305,6 @@ connection.onExecuteCommand(async (params) => {
           insertSpaces: globalSettings.editor.insertSpaces,
         },
       });
-      console.log("edits for", uri, edits);
       connection.sendRequest("workspace/applyEdit", {
         edit: { changes: { [uri]: edits } },
       });

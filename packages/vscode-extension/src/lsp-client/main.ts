@@ -4,7 +4,7 @@
  * ------------------------------------------------------------------------------------------ */
 
 import * as path from "path";
-import { ExtensionContext, TextEditor, window, workspace } from "vscode";
+import { ExtensionContext, TextEditor, workspace } from "vscode";
 
 import {
   LanguageClient,
@@ -17,10 +17,10 @@ import { pretextOutputChannel } from "../ui";
 
 let client: LanguageClient;
 
-export function lspFormat(editor: TextEditor) {
+export function lspFormatDocument(editor: TextEditor) {
   if (editor) {
-    client.sendRequest('workspace/executeCommand', {
-      command: 'formatDocument',
+    client.sendRequest("workspace/executeCommand", {
+      command: "formatDocument",
       arguments: [{ uri: editor.document.uri.toString() }],
     });
   } else {
@@ -28,15 +28,20 @@ export function lspFormat(editor: TextEditor) {
   }
 }
 
-export function lspFormatText(text: string) {
-  client.sendRequest('workspace/executeCommand', {
-    command: 'formatText',
-    arguments: [{ text: text }]
-  })
-  //Need to get the text back from the LSP.
-  console.log("Done!")
+export async function lspFormatText(text: string): Promise<string> {
+  const result = await client.sendRequest("workspace/executeCommand", {
+    command: "formatText",
+    arguments: [{ text: text }],
+  });
+  console.log("Formatted text in thenable:", result);
+  if (typeof result === "string") {
+    return result;
+  } else {
+    throw new Error(
+      "Expected string result from formatText, got: " + typeof result
+    );
+  }
 }
-
 
 export function activate(context: ExtensionContext) {
   // The server is implemented in node
