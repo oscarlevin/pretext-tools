@@ -29,7 +29,7 @@ import {
   getCompletionDetails,
 } from "./completions/get-completions";
 //import { formatDocument, formatRange } from "./formatter";
-import { formatDocument, formatRange } from "./formatter-classic";
+import { formatDocument, formatRange, formatText } from "./formatter-classic";
 import { getReferences, updateReferences } from "./completions/utils";
 import { getAst, initializeSchema, Schema } from "./schema";
 import path from "path";
@@ -281,16 +281,23 @@ connection.onCodeAction((params) => {
   return [{ title: "My Custom Action" }];
 });
 connection.onExecuteCommand(async (params) => {
-  console.log("asked to execute", params.command);
-  if (params.command === "formatDocument") {
-    console.log("formatting document", params.arguments);
+  // Handle commands sent from the client
+  if (params.command === "formatText") {
+    if (
+      params.arguments &&
+      params.arguments[0] &&
+      typeof params.arguments[0].text === "string"
+    ) {
+      const newText = await formatText({ text: params.arguments[0].text });
+      return newText;
+    }
+  } else if (params.command === "formatDocument") {
     if (
       params.arguments &&
       params.arguments[0] &&
       typeof params.arguments[0].uri === "string"
     ) {
       const uri = params.arguments[0].uri;
-      console.log("uri is", uri);
       const edits = await formatDocument({
         textDocument: { uri },
         options: {
@@ -298,7 +305,6 @@ connection.onExecuteCommand(async (params) => {
           insertSpaces: globalSettings.editor.insertSpaces,
         },
       });
-      console.log("edits for", uri, edits);
       connection.sendRequest("workspace/applyEdit", {
         edit: { changes: { [uri]: edits } },
       });

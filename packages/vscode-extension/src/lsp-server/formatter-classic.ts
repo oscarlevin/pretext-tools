@@ -460,3 +460,20 @@ export async function formatRange(
   }
   return null;
 }
+
+export async function formatText(params: {
+  text: string;
+}): Promise<string | null> {
+  const origText = params.text;
+  console.log("formatting with PreTeXt's classic formatter.");
+
+  try {
+    console.log(`formatting: ${origText}`);
+    let formatted = formatPTX(origText);
+    console.log("formatted", formatted);
+    return formatted;
+  } catch (e) {
+    console.log("Could not format range", e);
+  }
+  return null;
+}
