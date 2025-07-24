@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.33.0] - 2025-07-24
+
 ### Changed
 
 - Consolidate convert to PreTeXt functions into two commands, one for external files, another for the current editor/selection.
