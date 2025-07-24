@@ -70,9 +70,9 @@ Consider setting "Format on Save" to keep your document nicely formatted always.
 
 ### Converting to PreTeXt
 
-You can convert selected LaTeX to PreTeXt using the `PreTeXt: Convert LaTeX to PreTeXt` command from the command pallet. This is experimental, and will not work for all LaTeX. It is also not guaranteed to produce valid PreTeXt, but it should get you close.
-
-If you have pandoc installed, you can convert almost any format of document to pretext using the `PreTeXt: Convert To PreText` command from the command pallet.
+While we are still trying to find a better solution for converting documents to PreTeXt, you can use some tools to attempt this conversion already.  
+- To convert the contents of the current active editor, or selected text, `PreTeXt: Convert to PreTeXt` from the command palette or the PreTeXt toolbar menu.  You will be prompted to choose the format of the incoming text.
+- To convert an entire LaTeX file, using Pandoc (which must be installed separately) or PlasTeX, select `PreTeXt: Convert external file to PreTeXt`.  Note that depending on the LaTeX source file, the PlasTeX-based conversion might fail silently.
 
 ## Change log
 
