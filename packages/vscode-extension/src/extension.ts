@@ -1,9 +1,4 @@
-import {
-  ExtensionContext,
-  workspace,
-  commands,
-  window,
-} from "vscode";
+import { ExtensionContext, workspace, commands, window } from "vscode";
 import * as utils from "./utils";
 
 import {
@@ -110,7 +105,10 @@ export async function activate(context: ExtensionContext) {
       //console.log("Experiment command executed.");
       //utils.experiment(context);
     }),
-    commands.registerCommand("pretext-tools.experimentConvert", cmdExperimentConvert),
+    commands.registerCommand(
+      "pretext-tools.experimentConvert",
+      cmdExperimentConvert
+    ),
     commands.registerCommand(
       "pretext-tools.selectPretextCommand",
       cmdSelectCommand
@@ -138,10 +136,7 @@ export async function activate(context: ExtensionContext) {
       }
     }),
     commands.registerCommand("pretext-tools.convertText", cmdConvertText),
-    commands.registerCommand(
-      "pretext-tools.convertFile",
-      cmdConvertFile
-    ),
+    commands.registerCommand("pretext-tools.convertFile", cmdConvertFile),
     commands.registerCommand("pretext-tools.showLog", showLog),
     commands.registerCommand("pretext-tools.refreshTargets", refreshProjects),
     //commands.registerCommand("pretext-tools.installSage", cmdInstallSage),

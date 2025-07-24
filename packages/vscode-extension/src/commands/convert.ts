@@ -33,7 +33,6 @@ export function cmdConvertFile() {
     });
 }
 
-
 export async function cmdConvertText() {
   const editor = window.activeTextEditor;
   if (!editor) {
@@ -51,24 +50,26 @@ export async function cmdConvertText() {
   pretextOutputChannel.appendLine(
     "Converting selected text to PreTeXt format."
   );
-  window.showQuickPick(["LaTeX", "Markdown", "Mixed text"], {
-    placeHolder: "Which format is the selected text?",
-  }).then(async (qpSelection) => {
-    if (!qpSelection) {
-      return;
-    }
-    switch (qpSelection) {
-      case "LaTeX":
-        convertedText = await cmdLatexToPretext(initialText, selectionRange);
-        break;
-      case "Markdown":
-        convertedText = await markdownToPretext(initialText);
-        break;
-      case "Mixed text":
-        convertedText = await cmdConvertMixedtextToPretext(initialText);
-        break;
-    }
-  })
+  window
+    .showQuickPick(["LaTeX", "Markdown", "Mixed text"], {
+      placeHolder: "Which format is the selected text?",
+    })
+    .then(async (qpSelection) => {
+      if (!qpSelection) {
+        return;
+      }
+      switch (qpSelection) {
+        case "LaTeX":
+          convertedText = await cmdLatexToPretext(initialText, selectionRange);
+          break;
+        case "Markdown":
+          convertedText = await markdownToPretext(initialText);
+          break;
+        case "Mixed text":
+          convertedText = await cmdConvertMixedtextToPretext(initialText);
+          break;
+      }
+    })
     .then(() => {
       if (convertedText) {
         editor.edit((editBuilder) => {
@@ -77,7 +78,6 @@ export async function cmdConvertText() {
       }
     });
 }
-
 
 async function cmdLatexToPretext(initialText: string, selectionRange: Range) {
   //var newText = latexToPretext(initialText);
@@ -174,8 +174,8 @@ export async function cmdExperimentConvert() {
   pretextOutputChannel.appendLine(
     "Experimental conversion functions are designed for testing and may not work as expected."
   );
-  window.showQuickPick(
-    [
+  window
+    .showQuickPick([
       {
         label: "Use mdast",
         description: "Preprocess selected text with Markdown AST",
@@ -184,28 +184,29 @@ export async function cmdExperimentConvert() {
       {
         label: "Use xast",
         description: "Convert selected text to PreTeXt format",
-        function: "useXast"
+        function: "useXast",
       },
-    ]
-  ).then(async (selection) => {
-    if (!selection) {
-      return;
-    }
-    switch (selection.function) {
-      case "useMdast":
-        convertedText = await convertPmdWithMdast(initialText);
-        break;
-      case "useXast":
-        convertedText = await convertPmdWithXast(initialText);
-        break;
-    }
-  }).then(() => {
-    if (convertedText) {
-      editor.edit((editbuilder) => {
-        editbuilder.replace(selectionRange, convertedText);
-      });
-    }
-  });
+    ])
+    .then(async (selection) => {
+      if (!selection) {
+        return;
+      }
+      switch (selection.function) {
+        case "useMdast":
+          convertedText = await convertPmdWithMdast(initialText);
+          break;
+        case "useXast":
+          convertedText = await convertPmdWithXast(initialText);
+          break;
+      }
+    })
+    .then(() => {
+      if (convertedText) {
+        editor.edit((editbuilder) => {
+          editbuilder.replace(selectionRange, convertedText);
+        });
+      }
+    });
 }
 
 async function convertPmdWithMdast(initialText: string) {
@@ -228,7 +229,6 @@ async function convertPmdWithMdast(initialText: string) {
   // Format the converted text
   return lspFormatText(convertedText);
 }
-
 
 async function convertPmdWithXast(initialText: string) {
   console.log("initialText is", initialText);
