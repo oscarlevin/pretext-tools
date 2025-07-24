@@ -102,6 +102,12 @@
         "enablement": "config.pretext-tools.experimentalFeatures"
       },
       {
+        "command": "pretext-tools.experimentConvert",
+        "title": "Experimental Convert Functions",
+        "category": "PreTeXt",
+        "enablement": "config.pretext-tools.experimentalFeatures"
+      },
+      {
         "command": "pretext-tools.refreshTargets",
         "title": "Refresh target list",
         "category": "PreTeXt"
@@ -195,35 +201,16 @@
         "description": "Spell checks the PreTeXt source file using Code Spell Checker."
       },
       {
-        "command": "pretext-tools.convertToPretext",
-        "title": "Convert file to PreTeXt",
+        "command": "pretext-tools.convertFile",
+        "title": "Convert external file to PreTeXt",
         "category": "PreTeXt",
-        "description": "Converts a selected file to PreTeXt using pandoc or plastex, which must be installed separately."
+        "description": "Converts a selected external file to PreTeXt using plastex or pandoc (if installed)."
       },
       {
-        "command": "pretext-tools.markdownToPretext",
-        "title": "Convert Markdown selection to PreTeXt",
+        "command": "pretext-tools.convertText",
+        "title": "Convert to PreTeXt",
         "category": "PreTeXt",
-        "description": "Converts and replaces a selection of Markdown with PreTeXt (experimental)."
-      },
-      {
-        "command": "pretext-tools.latexToPretext",
-        "title": "Convert Selected LaTeX to PreTeXt",
-        "category": "PreTeXt",
-        "description": "Converts and replaces a selection of LaTeX with PreTeXt formatted text (experimental)."
-      },
-      {
-        "command": "pretext-tools.ftToPtx",
-        "title": "Convert mixed text in editor or selection to PreTeXt",
-        "category": "PreTeXt",
-        "description": "Converts and replaces your FlexTeXt to PreTeXt formatted text (experimental)."
-      },
-      {
-        "command": "pretext-tools.installSage",
-        "title": "Install SageMath",
-        "category": "PreTeXt",
-        "description": "Installs SageMath in a Conda environment. This only works inside a codespace",
-        "enablement": "isWeb && config.pretext-tools.experimentalFeatures"
+        "description": "Convert and replace contents of open file or a selection of text to PreTeXT.  You will be asked to specify the format of the input."
       },
       {
         "command": "pretext-tools.gettingStarted",

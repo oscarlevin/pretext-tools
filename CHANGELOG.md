@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Changed
+
+- Consolidate convert to PreTeXt functions into two commands, one for external files, another for the current editor/selection.
+
+### Added
+
+- Experimental functions, available via a setting, to help with development.
+
 ## [0.32.4] - 2025-07-22
 
 - Fixed bug that once again prevented `view` command in codespaces when using the pretext button.
