@@ -1,14 +1,9 @@
 import {
   ExtensionContext,
   workspace,
-  languages,
-  TextDocument,
-  TextEdit,
   commands,
-  WebviewPanel,
   window,
 } from "vscode";
-import { formatPretextDocument } from "./formatter";
 import * as utils from "./utils";
 
 import {
@@ -29,10 +24,9 @@ import { cmdDeploy } from "./commands/deploy";
 import { cmdUpdate } from "./commands/update";
 //import { ptxExperiment } from "./commands/experiment";
 import {
-  cmdConvertMixedtextToPretext,
-  cmdConvertToPretext,
-  cmdLatexToPretext,
-  cmdMarkdownToPretext,
+  cmdConvertFile,
+  cmdExperimentConvert,
+  cmdConvertText,
 } from "./commands/convert";
 import {
   cmdBuildAny,
@@ -49,7 +43,7 @@ import {
   lspFormatText,
 } from "./lsp-client/main";
 import { projects } from "./project";
-import { cmdInstallSage } from "./commands/installSage";
+//import { cmdInstallSage } from "./commands/installSage";
 import { PretextVisualEditorProvider } from "./visualEditor";
 
 // this method is called when your extension is activated
@@ -112,8 +106,11 @@ export async function activate(context: ExtensionContext) {
       console.log("Running PreTeXt experiment command");
       // Notify that no experiment command is currently available
       pretextOutputChannel.appendLine("No experiment command is implemented.");
+      //cmdConvertMixedTextToPretextViaXast();
+      //console.log("Experiment command executed.");
       //utils.experiment(context);
     }),
+    commands.registerCommand("pretext-tools.experimentConvert", cmdExperimentConvert),
     commands.registerCommand(
       "pretext-tools.selectPretextCommand",
       cmdSelectCommand
@@ -140,22 +137,14 @@ export async function activate(context: ExtensionContext) {
         console.log("No document provided to format");
       }
     }),
+    commands.registerCommand("pretext-tools.convertText", cmdConvertText),
     commands.registerCommand(
-      "pretext-tools.ftToPtx",
-      cmdConvertMixedtextToPretext
-    ),
-    commands.registerCommand("pretext-tools.latexToPretext", cmdLatexToPretext),
-    commands.registerCommand(
-      "pretext-tools.convertToPretext",
-      cmdConvertToPretext
-    ),
-    commands.registerCommand(
-      "pretext-tools.markdownToPretext",
-      cmdMarkdownToPretext
+      "pretext-tools.convertFile",
+      cmdConvertFile
     ),
     commands.registerCommand("pretext-tools.showLog", showLog),
     commands.registerCommand("pretext-tools.refreshTargets", refreshProjects),
-    commands.registerCommand("pretext-tools.installSage", cmdInstallSage),
+    //commands.registerCommand("pretext-tools.installSage", cmdInstallSage),
     commands.registerCommand("pretext-tools.gettingStarted", () => {
       console.log("Opening getting started walkthrough");
       // Open the walkthrough

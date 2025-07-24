@@ -33,7 +33,6 @@ export async function lspFormatText(text: string): Promise<string> {
     command: "formatText",
     arguments: [{ text: text }],
   });
-  console.log("Formatted text in thenable:", result);
   if (typeof result === "string") {
     return result;
   } else {
